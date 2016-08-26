@@ -4,11 +4,20 @@
 <style type="text/css">
 
 
+
 .h5 {
 	font-size: 12px;
 	color: #358CB7;
 	font-family: Arial, Helvetica, sans-serif;
 }
+.h2 {
+	font-size: 20px;
+	color: #0090ff;
+	font-family: Arial, Helvetica, sans-serif;
+	letter-spacing: 0px;
+	font-variant: normal;
+}
+
 
 .h6 {
 	font-size: 14px;
@@ -192,6 +201,20 @@ body
 }
 
 
-
+#entry_colOne {
+	float:left;
+	width:33%;
+	height:100%;
+}
+#entry_colTwo{
+	float:left;
+	width:33%;
+	height:100%;
+}
+#entry_colThree {
+	float:left;
+	width:33%;
+	height:100%;
+}
 
 </style>
