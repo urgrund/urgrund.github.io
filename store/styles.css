@@ -1,0 +1,220 @@
+@charset "utf-8";
+/* CSS Document */
+
+<style type="text/css">
+
+
+
+.h5 {
+	font-size: 12px;
+	color: #358CB7;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.h2 {
+	font-size: 20px;
+	color: #0090ff;
+	font-family: Arial, Helvetica, sans-serif;
+	letter-spacing: 0px;
+	font-variant: normal;
+}
+
+
+.h6 {
+	font-size: 14px;
+	color: #0090ff;
+	font-family: Arial, Helvetica, sans-serif;
+	letter-spacing: 0px;
+	font-variant: normal;
+}
+.h7 {
+	font-size: 12px;
+	color: #0090ff;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.h8 {
+	font-size: 12px;
+	color: rgb(131, 131, 131);
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.toptxt {
+	color: #999;
+	text-align: center;
+}
+
+
+p.sst
+{		
+	font-size: 12px;		
+	word-wrap:break-word;
+	margin-top:auto;
+	width:300px;
+	text-align:center;
+	color: #666;
+	font-family: Arial, Helvetica, sans-serif;	
+}
+
+	
+a.btn:link,
+a.btn:visited,
+a.btn:active {
+	color: #000;
+	text-decoration:none;
+}
+
+a.btn:hover {
+	color: #0090FF;
+	text-decoration:none;
+}
+
+
+
+
+	
+a.lnk:link,
+a.lnk:visited,
+a.lnk:active {
+	color: #0090FF;
+	text-decoration:none;
+}
+
+a.lnk:hover {
+	color: #A6D9FF;
+	text-decoration:none;
+}
+
+
+
+
+
+
+body
+{
+	margin-left: auto;
+	margin-right: auto;
+	color: #767676;
+	background-color: #373737;
+	background-repeat:no-repeat;
+	background-attachment:fixed;
+	background-position:center;
+	text-align: center;
+}
+
+
+
+#topbox
+{
+	padding: 10px;
+	text-align: center;
+}
+
+#topboxcenter
+{
+	padding: 10px;
+	text-align: center;
+}
+
+
+
+#entry
+{
+	text-align: left;
+	width: 1120px;
+	background: url(icon/grad.png);
+	background-size:100% 100%;
+	background-repeat:no-repeat;
+	background-color:#000;
+	margin:0 auto;
+	padding: 10;	
+}
+
+#entryLeft
+{
+	float: left;
+	padding: 5px;
+	padding-bottom:100%;
+	margin-bottom:-100%;
+	width: 150px;
+	text-align: center;
+	border-right-style: solid;
+	border-right-width: 2px;
+	border-right-color: #373737;
+}
+
+#entryRight
+{
+	float: left;
+	padding: 5px;
+	padding-bottom:100%;
+	margin-bottom:-100%;
+	text-align: left;
+}
+
+#entryBox
+{
+	float: left;
+	padding-bottom:100%;
+	margin-bottom:-100%;
+	width: 320px;
+}
+
+#entryDesc
+{
+	float: left;
+	padding-bottom:100%;
+	margin-bottom:-100%;
+	width: 600px;
+}
+
+#entryProj
+{
+	float: left;
+	text-align: justified;
+	padding-bottom:100%;
+	margin-bottom:-100%;
+	width: 900px;
+}
+
+	
+#ss {	
+    width: 300px;
+}
+
+#picwide {	
+    width: 900px;
+}
+
+#pictall {	
+    width: 450px;
+}
+
+#sscell {
+	float: left;
+	padding: 5px;
+	text-align: center;
+}
+
+
+#sscontainer {
+	height: 190px;
+	overflow:hidden;
+}
+
+
+#entry_colOne {
+	float:left;
+	width:33%;
+	height:100%;
+}
+#entry_colTwo{
+	float:left;
+	width:33%;
+	height:100%;
+}
+#entry_colThree {
+	float:left;
+	width:33%;
+	height:100%;
+}
+
+</style>
