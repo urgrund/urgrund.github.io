@@ -1,0 +1,650 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Matt Bell - Online Portfolio</title>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50998923-1', 'matthewbellservices.com');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+
+<script language="JavaScript" SRC="jsscript.js"></script>
+<link href="styles.css" rel="stylesheet" type="text/css" />
+<link href="lightbox.css" rel="stylesheet" type="text/css"dd />
+
+
+<body>
+
+
+
+<!--This is the top div and links -->
+<div id ="entry">
+<div id ="topbox">
+               
+      <span class="h8 toptxt">
+        Hey there, my name is Matt Bell and welcome to my online portfolio! <br/>
+      </span>
+                                    
+       <a class="btn" href="http://www.linkedin.com/in/mattbell007"><img src="icon/in.png"/></a>
+       <a class="btn" href="doc/MatthewBell_Resume.docx"><img src="icon/msword.png"/></a>
+       <a class="btn" href="doc/MatthewBell_Resume.pdf"><img src="icon/pdf.png"/></a>
+            
+       <br/>
+                    
+     <span class="h6">
+        <a class="lnk" href="about.html">[ About Me ]</a> -
+        <a class="lnk" href="index.html">[ Professional ]</a> -
+        <a class="lnk" href="project.html">[ Project ]</a>                                        
+     </span>                               
+                 
+	  
+    </div>
+</div>
+
+
+
+
+
+<br/>
+
+
+
+
+
+
+
+
+
+<!--       ENTRY/////////////////////////////////////////////////////////     -->
+<div id="entry">
+    
+    <div id="entryLeft"> 
+		<img src="logo/cme.jpg" /> 
+        <span class="h6">Curse of Mermos<br />2014
+		</span>
+	</div>
+    
+    
+    <div id="entryRight">
+
+        <div id="entryProj">
+        <span class="h6">Curse of Mermos - student project</span><br/>
+          <span class="h8 toptxt">I acted as instructor and technical director/artist (particles, lighting, animiation, shaders, performance).  Result of 4 months creating a fun and fast paced hack 'n slash title.  As the instructor of the course I assissted in the production aspects of the project and practiced common industry methods for development making the classroom environment an indy studio simulation. <a class="lnk" href="http://store.steampowered.com/app/352160/">Was released on Steam!</a></span><br />
+   	  </div>
+        <div style="clear: both;"></div>
+	    <br />
+      <!--       ROW     -->
+         <div id="cme1">          
+           		 <script>image("ss/cme/cme_01.jpg", "cme1")</script>           
+           		 <script>image("ss/cme/cme_02.jpg", "cme1")</script>
+           		 <script>image("ss/cme/cme_03.jpg", "cme1")</script>
+        </div>   
+      <div style="clear: both;"></div>       
+    
+      <br /> <br /><br />
+
+
+
+
+  <div id="entryProj">
+        <span class="h6">Rendering Behind Walls</span><br/>
+          <span class="h8 toptxt">Due to the near-orthographric camera setup, there were many situations where world geometry in the foreground would obscure gameplay and vision of the player making it difficult to navigate and fight, especially if the action is hidden behind an obelisk!  To solve this I devised a solution that would allow this to work cleanly whilst still keeping the scene camera rendering deferred.
+          </br></br>
+          One of the simplest solutins would be to add a second pass to shaders that one wants seen behind a wall.  The issue with deferred though is that the z-pass is already established before final shading so there wasn't a way to cleanly render hidden objects without dozens of pixel-sized errors.  Instead a 2nd camera running forward was used that matched the primary camera's perspective setup which ran a replacement shader.  One the replacements would render select (via shader choice in material) geometry only into the depth buffer (ZWrite On, ColorMask 0).  This would prime the second <a class="lnk" href="http://docs.unity3d.com/Manual/SL-ShaderReplacement.html">replacement shader</a> used on characters to use a ZGreater check in order to render.  The replacement camera only cleared depth and rendered after the deferred passes.
+          <br /><br />
+          </span>
+   	  </div>
+
+  
+
+     <div style="clear: both;"></div>
+	    <br />
+      <!--       ROW     -->
+         <div id="cme2">          
+           		 <script>image("ss/cme/cme_s01.jpg", "cme2", "Important objects behind walls cannot be seen")</script>           
+           		 <script>image("ss/cme/cme_s02.jpg", "cme2", "Replacement shader renders only Greater pixels in Z.")</script>
+           		 <script>image("ss/cme/cme_s03.jpg", "cme2", "The render order for the replacement shaders comes after the main scene")</script>
+        </div>   
+      <div style="clear: both;"></div> 
+     
+
+	</div>        	
+	<div style="clear: both;"></div> 
+    
+</div>
+<br/>
+
+
+
+
+
+
+
+
+
+
+<!--       ENTRY/////////////////////////////////////////////////////////     -->
+<div id="entry">
+    
+    <div id="entryLeft">
+		<img src="logo/unity.jpg" /> 
+		<span class="h6">Shaders<br/>2011-2014</span>
+	</div>
+    
+    
+    <div id="entryRight">
+    <span class="h8 toptxt">Exploration of Shaders in Unity</span><br />
+     
+     
+     
+     <span class="h8">
+     
+     
+     
+         <!--       ROW     -->
+         <div id="r1">          
+           		 <script>image("ss/shaders/ibl01.jpg", "r1", "IBL shaders")</script>           
+           		 <script>image("ss/shaders/ibl02.jpg", "r1", "Consistent lighting across different scenes")</script>
+           		 <script>image("ss/shaders/ibl03.jpg", "r1", "Gloss and fresnel controls via maps")</script>
+        </div>   
+         <div style="clear: both;"></div> 
+         
+          <!--       ROW     -->
+         <div id="r2">
+         		 <script>image("ss/shaders/ibl04.jpg", "r2")</script>           
+           		 <script>image("ss/shaders/snow01.jpg", "r2", "Accumulative 'snow' shader blending via pixel world up")</script>
+           		 <script>image("ss/shaders/snow02.jpg", "r2", "Crossfade via 2 heightmaps using vertex alpha control")</script>         
+         </div>
+             	
+         <div style="clear: both;"></div> 
+         
+         
+         <!--       ROW     -->
+         <div id="r3">
+         		 <script>image("ss/shaders/funGrass.jpg", "r3", "Shell based (16x) grass shader with fresnel and local height based AO")</script>           
+           		 <script>image("ss/shaders/waterWavey.jpg", "r3", "Water with fresnel, height based shading and light penetration at shallow wave peaks ")</script>
+           		 <script>image("ss/shaders/shaderkyleshell.jpg", "r3", " Mobile shader with very fast 'matcap' look-up to give consistent spherical lighting")</script>         
+         </div>
+         <div style="clear: both;"></div> 
+         
+        
+         
+     
+     </span>
+	</div>        	
+	<div style="clear: both;"></div> 
+    
+</div>
+<br/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--       ENTRY/////////////////////////////////////////////////////////     -->
+<div id="entry">
+    
+    <div id="entryLeft">
+		<img src="logo/unity.jpg" /> 
+		<span class="h6">Lighting<br/>2012</span>
+	</div>
+    
+    
+    <div id="entryRight">
+
+        <div id="entryProj">
+	        <span class="h8 toptxt">Excercise in lighting a small scene entirely by hand with no pre-baked or dynamic light solutions. All bounces, highlights and fill lights were brought out through the placement of many small point lights. Exaggerations on the rims of arches were achived through spotlights to help make the geometry outline stand out more.</span><br />
+      	</div>
+        <div style="clear: both;"></div>
+	    <br />
+    
+     
+     <span class="h8">
+     
+	     <div id="r4">
+         		 <script>image("ss/light/hl_01.jpg", "r4")</script>           
+           		 <script>image("ss/light/hl_07.jpg", "r4")</script>
+           		 <script>image("ss/light/hl_03.jpg", "r4")</script>         
+         </div>
+          <div style="clear: both;"></div> 
+         <div id="r5">
+         		 <script>image("ss/light/hl_04.jpg", "r5")</script>           
+           		 <script>image("ss/light/hl_05.jpg", "r5")</script>
+           		 <script>image("ss/light/hl_06.jpg", "r5")</script>         
+         </div>
+          <div style="clear: both;"></div>       
+     
+     </span>
+	</div>        	
+	<div style="clear: both;"></div> 
+    
+</div>
+<br/>
+
+
+
+
+
+
+
+
+
+
+<!--       ENTRY/////////////////////////////////////////////////////////     -->
+<div id="entry">
+    
+    <div id="entryLeft">
+		<img src="logo/unity.jpg" /> 
+		<span class="h6">Tools</span>
+	</div>
+    
+    
+    <div id="entryRight">
+
+
+
+		<div id="entryProj">
+                            <span class="h6">Attack System for Animated Characters</span><br/>
+                    <span class="h8 toptxt">This system was written from the gound up to support fast setup and configuration of attacks for an action game.  I wanted the attacks to have careful setup and deliver results similar to what you would see in a Dark Souls game.  The attack can control when 'damage sphers' are activated to fine tune this to the animation frames, as well as agent freezing and parrying windows.  I wrote an editor to allow scrubbing of the animation to fine tune elements of the attack."
+         </span><br />
+      	</div>
+        <div style="clear: both;"></div>
+	    <br />   
+     
+       	 <div id="atkT">
+         		<script>image("ss/atkTool_01.jpg", "atkT")</script>           
+           		<script>image("ss/atkTool_02.jpg", "atkT")</script>
+				<script>image("ss/atkTool_03.jpg", "atkT")</script>
+         </div>
+    	<div style="clear: both;"></div> 
+
+
+
+
+        <div id="entryProj">
+                            <span class="h6">'Eventor' - Event scheduling tool for Unity</span><br/>
+                    <span class="h8 toptxt">Eventor is a custom made tool allowing designers to schedule numerous events such as spawnign an object, playing an animation by visualizing the sequence in a cut-scene style editor.  The system works by running Jobs which derive from an abstract class.  This allows very easy extentions where someone only need implement a co-routine of how they would like a custom job to operate.
+         </span><br />
+      	</div>
+        <div style="clear: both;"></div>
+	    <br />   
+     
+       	 <div id="ev">
+         		 <script>image("ss/eventor02.jpg", "ev")</script>           
+           		 <script>image("ss/eventor01.jpg", "ev")</script>
+         </div>
+    	<div style="clear: both;"></div> 
+         
+         
+        
+        <div id="entryProj">
+        	        <span class="h6">Per-Vertex Radiosity Script</span><br/>
+	        <span class="h8 toptxt">Below are some screen captures of a per-vertex radiosity baking script I wrote as an Editor Script inside of Unity. By capturing images from the point of view of each vertex and summing the colours it gave a very natural result to the lighting. This was also an excercise to explore the flexibility of the Unity Editor.
+ </span><br />
+      	</div>
+        <div style="clear: both;"></div>
+	    <br />
+    
+     
+     <span class="h8">
+     
+    	 <div id="r6">
+         		 <script>image("ss/unityVertRad01.jpg", "r6", "Natural colour bleeding and indirect bounces")</script>           
+           		 <script>image("ss/unityVertRad02.jpg", "r6", "Bright objects contribute to the baked results")</script>
+           		 <script>image("ss/unityVertRad03.jpg", "r6", "Skydomes provide soft outdoor ambient light")</script>         
+         </div>
+         <div style="clear: both;"></div>
+     
+     </span>
+	</div>     
+    
+    
+       	
+	<div style="clear: both;"></div> 
+    
+</div>
+<br/>
+
+
+
+
+
+
+
+
+
+
+
+<!--       ENTRY/////////////////////////////////////////////////////////     -->
+<div id="entry">
+    
+    <div id="entryLeft"> 
+		<img src="logo/camera.jpg" /> 
+        <span class="h6">Photography<br />
+		</span>
+	</div>
+    
+    
+    <div id="entryRight">
+
+        <div id="entryProj">
+          <span class="h8 toptxt">I'll often have a camera with me when out on holidays or adventures and enjoy the artistic and technical sides to digital photography. It is a hobby I have actively persued for a few years enjoy it thouroughly. </span><br />
+      	</div>
+        <div style="clear: both;"></div>
+	    <br />
+    
+     
+     <span class="h8">
+  
+		 <div id="r65">
+         		 <script>image("ss/photo/DSC_2801.jpg", "r65", null, "", "picwide")</script>  
+         </div>
+         <div style="clear: both;"></div>
+		 <div id="r66">
+         		 <script>image("ss/photo/DSC_3616.jpg", "r66", null, "", "pictall")</script>  
+                 <script>image("ss/photo/P1090071.jpg", "r66", null, "", "pictall")</script>  
+         </div>
+         <div style="clear: both;"></div>         
+          <div id="r67">
+         		 <script>image("ss/photo/P9112999.jpg", "r67", null, "", "picwide")</script>  
+         </div>
+         <div style="clear: both;"></div>
+		 <div id="r68">
+         		 <script>image("ss/photo/P1260100.jpg", "r68", null, "", "pictall")</script>  
+                 <script>image("ss/photo/P1310005.jpg", "r68", null, "", "pictall")</script>  
+         </div>
+         <div style="clear: both;"></div> 
+         
+     
+     
+     </span>
+	</div>        	
+	<div style="clear: both;"></div> 
+    
+</div>
+<br/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--       ENTRY/////////////////////////////////////////////////////////     -->
+<div id="entry">
+    
+    <div id="entryLeft">
+		<img src="logo/re.png" /> 
+		<span class="h6">Reality Engine<br/>2007-2009</span>
+	</div>
+    
+    
+    
+    <div id="entryRight">
+
+        <div id="entryProj">
+        
+        <span class="h8 toptxt">Reality Engine was a middleware solution for quick prototyping. During my time at U235 Studios we licensed the engine but found many shortcomings in it's rendering and tools. After U235 I kept exploring the source code and made many tool, rendering and shading modifications (C++, C#, HLSL, .NET).  </span><br /><br />
+        
+        	        <span class="h6">Ubisoft Speed Test (2009) </span><br/>
+	        <span class="h8 toptxt">Small forest scene as part of a test process for Ubisoft in 2009. The scene was very small & stuck to stringent material/texture/polycount budgets.  In addition to the art (meshes, materials, fx, lighting) I also wrote all shaders required (such as scrolling 'god rays') and even implemeted lightmap support into the mesh serializer (Reality Engine) so that I could bake in a lot of the subtle ambient light. 
+ </span><br />
+      	</div>
+        <div style="clear: both;"></div>
+	    <br />   
+     
+       	 <div id="r7">
+         		 <script>image("ss/re/UbiTest01.jpg", "r7")</script>           
+           		 <script>image("ss/re/UbiTest02.jpg", "r7")</script>
+           		 <script>image("ss/re/UbiTest03.jpg", "r7")</script>         
+         </div>
+    	<div style="clear: both;"></div> 
+        
+        
+        
+        <br/>
+         <div id="entryProj">
+        <span class="h6">Dynamic Shadow Mapping </span><br/>
+        <span class="h8 toptxt">The enigne initially had basic shadow mapping that wasn't very satisfying. I took it upon myself to explore and improve this.   I implemented a 3 stage LOD for the shadows - resolution would drop and at farther distances the depth buffer wouldn't update. Shaders would use less sampling (8x, 4x, unfiltered) which for the time (2007-2009) really helped performance.   Visually the shadows were improved by using them as masks for lights (more natural) instead of Reality Engine's approach of multiply blend into the scene. Alpha tested materials were respected in the shadow rendering stage and normalmaps and parallax maps would bias the sampling which greatly improved the final look. </span><br />
+      	</div>
+        <div style="clear: both;"></div>
+	    <br />   
+     
+     <span class="h8 toptxt">    
+     
+	     <div id="r8">
+         		 <script>image("ss/re/newshadows01.jpg", "r8")</script>           
+           		 <script>image("ss/re/newshadows02.jpg", "r8")</script>
+           		 <script>image("ss/re/newshadows03.jpg", "r8")</script>         
+         </div>
+    	<div style="clear: both;"></div>        
+        <div id="r9">	
+         		 <script>image("ss/re/newshadows04.jpg", "r9", "Alpha-test shadows")</script>           
+           		 <script>image("ss/re/newshadows05.jpg", "r9", "Dynamic AABB based on cone direction & angle")</script>
+           		 <script>image("ss/re/newshadows06.jpg", "r9", "Shadowmap offset by surface normalmaps")</script>         
+         </div>
+    	<div style="clear: both;"></div>  
+     
+        
+	    
+        
+         </span>          
+        
+        
+        
+        
+         <br/>
+         <div id="entryProj">
+        <span class="h6">Per-Instance Ambient Occlusion</span><br/>
+        <span class="h8 toptxt">A baking tool written for Reality Engine. The engine previously had no baking options so I implemented a standard AO baking routine for static scene meshes. Though, as this information was stored at the vertex level, this could be written to instances (folige, grass). As a work-a-round, I modified the engine batch renderer (c++) and the instancing shader to allow an instance to have a single float AO term passed along with other instnacing data. Therefore the bake tool could bake information for instances by assuming each instance as a point. Whilst not entirely accurate, it was very fast to bake, added little shader over-head (1 more float) and gave convincing results. </span><br />
+      	</div>
+        <div style="clear: both;"></div>
+	    <br />   
+     
+    
+     
+	     <div id="r9a">	
+         		 <script>image("ss/re/instanceAO_01.jpg", "r9a", "Instance AO")</script>           
+           		 <script>image("ss/re/instanceAO_02.jpg", "r9a", "Only static world AO")</script>        
+         </div>
+          <div style="clear: both;"></div> 
+	     <div id="r9b">	
+         		 <script>image("ss/re/instanceAO_04.jpg", "r9b")</script>           
+           		 <script>image("ss/re/instanceAO_05.jpg", "r9b")</script>
+         </div>      
+        
+     <div style="clear: both;"></div> 
+    
+	</div>        	
+<div style="clear: both;"></div> 
+    
+</div>
+<br/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--       ENTRY/////////////////////////////////////////////////////////     -->
+<div id="entry">
+    
+    <div id="entryLeft"> 
+    <img src="logo/udk.jpg" /> 
+		<span class="h6">Mahabharata<br />2007-2009	
+		</span>
+	</div>
+    
+    
+    <div id="entryRight">
+
+        <div id="entryProj">
+          <span class="h8 toptxt">Themed around ancient Indian mythology, Mahabharata planned to retell these stories through a 3rd person action game. I was responsible for creating the majority of the art, shaders and helped with technical issues the small team had. This was done in spare time as a hobby and all images are still WIP. I helped create content inside Reality Engine and Unreal Engine 3.</span><br />
+      	</div>
+        <div style="clear: both;"></div>
+	    <br />
+    
+     
+     <span class="h8">
+  
+		 <div id="r10">	
+         		 <script>image("ss/maha/fortress16.jpg", "r10")</script>           
+           		 <script>image("ss/maha/fortress17.jpg", "r10")</script>        
+           		 <script>image("ss/maha/fortress18.jpg", "r10")</script>                         
+         </div>
+          <div style="clear: both;"></div> 
+  		 <div id="r11">	
+         		 <script>image("ss/maha/fortress19.jpg", "r11")</script>           
+           		 <script>image("ss/maha/maha_01.jpg", "r11")</script>        
+           		 <script>image("ss/maha/maha_02.jpg", "r11")</script>                         
+         </div>
+          <div style="clear: both;"></div>         
+      
+     </span>
+	</div>        	
+	<div style="clear: both;"></div> 
+    
+</div>
+<br/>
+
+
+
+
+
+
+
+
+
+
+<!--       ENTRY/////////////////////////////////////////////////////////     -->
+<div id="entry">
+    
+    <div id="entryLeft"> 
+    <img src="logo/idtech4.jpg" /> 
+		<span class="h6">Student Project<br />2004
+		</span>
+	</div>
+    
+    
+    <div id="entryRight">
+
+        <div id="entryProj">
+          <span class="h8 toptxt">A small level I created out of interest of the iD technology which tied in with my studies at the time.  All the assets were available through Doom III, though this was one of the last BSP blocking engines I used.</span><br />
+      	</div>
+        <div style="clear: both;"></div>
+	    <br />
+    
+     
+     <span class="h8">
+		
+        <div id="r12">	
+         		 <script>image("ss/d3_09.jpg", "r12")</script>           
+           		 <script>image("ss/d3_10.jpg", "r12")</script>        
+           		 <script>image("ss/d3_14.jpg", "r12")</script>                         
+         </div>
+          <div style="clear: both;"></div>   
+        
+     
+      
+     </span>
+	</div>        	
+	<div style="clear: both;"></div> 
+    
+</div>
+<br/>
+
+
+
+
+
+
+
+
+
+
+<!--       ENTRY/////////////////////////////////////////////////////////     -->
+<div id="entry">
+    
+    <div id="entryLeft"> 
+    
+		<span class="h6">AMP 2 Game Engine<br />Edge of Valour<br />2003	
+		</span>
+	</div>
+    
+    
+    <div id="entryRight">
+
+        <div id="entryProj">
+          <span class="h8 toptxt">Edge of Valour was to be a multi-player hack 'n slash similar to Rune.  I created all environments with it's BSP blocking tools as well as materials, textures and lighting.</span><br />
+      	</div>
+        <div style="clear: both;"></div>
+	    <br />
+    
+     
+     <span class="h8">
+  
+        <div id="r13">	
+         		 <script>image("ss/dm01_32.jpg", "r13")</script>           
+           		 <script>image("ss/dm01_33.jpg", "r13")</script>        
+           		 <script>image("ss/dm01_34.jpg", "r13")</script>                         
+         </div>
+          <div style="clear: both;"></div>     
+      
+     </span>
+	</div>        	
+	<div style="clear: both;"></div>    
+</div>
+<br/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

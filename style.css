@@ -1,0 +1,180 @@
+
+
+
+body {
+    /* background: black; */
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background: url(bg.jpg) no-repeat center center fixed;
+    object-fit: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;    
+  }
+
+
+  /* -------------------------------------- */
+/* FONT AND STYLES */
+
+h1,h2,h3,h4,h5,h6,p
+{
+    color:white;
+    margin: 0;
+    padding: 0;
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    font-weight: normal;
+}
+
+h1{  font-size: 38pt;    text-shadow: 4px 4px 3px #00000094;}
+h2{  font-size: 24pt;    text-shadow: 4px 4px 3px #00000094;}
+h3{  font-size: 18pt;}
+h4{  font-size: 12pt;}
+h5{  font-size: 10pt;}
+p{font-size: 9pt;    color: #cde0e5;}
+
+
+.light
+{
+  color: #caf0f6fa;
+    text-shadow: 1px 1px 3px #00000082;
+}
+
+.left {
+    text-align: left;
+  }
+  
+  .right {
+    text-align: right;
+  }
+  
+  .center {
+    text-align: center ;
+  }
+/* -------------------------------------- */
+
+.header
+{
+    background: linear-gradient(0deg, transparent, black);
+    padding-top: 15px;
+    margin-bottom: 20px;
+}
+
+.link:link,
+.link:visited,
+.link:active
+{
+    color: #ececec;
+    background: #0035969e;
+    min-width: 120px;
+    text-decoration: none;
+    line-height: 28px;
+    display: inline-block;
+    min-height: 30px;
+    border: 1px solid;
+    border-radius: 5px;
+    transition:0.3s;    
+}
+
+.link:hover
+{
+    color: #7bd3ff;
+    background: #004077;
+    transform: translate(0px, 1px);
+    transition:0.1s;    
+}
+
+a:link,
+a.lnk:visited,
+a.lnk:active
+{
+    color:rgb(177, 198, 255);
+}
+
+.entry
+{
+    width: 75%;
+    max-width: 1100px;
+    margin: auto;
+    margin-bottom: 78px;
+    box-shadow: 7px 10px 6px 0px #00000080;
+    border-bottom: 1px solid #ffffff75;
+    border-top: 1px solid #ffffff75;
+}
+
+.top
+{
+    /* display: flex;
+    justify-content: space-between; */
+    display: grid;
+    grid-template-columns: 2fr 6fr 4fr;
+    background: #0c1252;
+    padding: 1%;
+}
+
+
+.content
+{
+    background: #242424d6;
+    padding-top: 0%;
+}
+
+.content > div
+{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+#sscell
+{
+    height: 200px;
+    width: 30%;
+    max-width: 320px;
+    margin: 1%;
+    background: black;
+    box-shadow: 5px 8px 7px 0px #00000069;
+    border: 1px solid #656e74;
+    transition:0.6s;    
+}
+
+#sscell:hover {
+    transform: translate(0px, 3px);
+    border: 1px solid #7bd3ff;
+    transition:0.2s;    
+}
+
+#ss
+{
+    width: 100%; 
+    height: 160px;
+}
+
+
+.sscontainer
+{	
+    height: 190px;
+	overflow:hidden;
+}
+
+#picwide {	
+    width: 900px;
+}
+
+#pictall {	
+    width: 450px;
+}
+
+.abtFlex
+{
+  display:flex;
+  justify-content: space-between;
+  align-content: flex-end;
+}
+
+.abtFlex > div
+{  
+    flex:1 1 auto;
+    margin:5px;  /* and that, will result in a 10px gap */
+  }

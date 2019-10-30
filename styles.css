@@ -1,8 +1,6 @@
 @charset "utf-8";
 /* CSS Document */
 
-<style type="text/css">
-
 
 
 .h5 {
@@ -116,32 +114,31 @@ body
 
 
 
-#entry
+.entry
 {
-	text-align: left;
-	width: 1120px;
-	background: url(icon/grad.png);
-	background-size:100% 100%;
-	background-repeat:no-repeat;
-	background-color:#000;
-	margin:0 auto;
-	padding: 10;	
+    text-align: left;
+    width: 90%;    
+    padding: 10;
+    margin: auto;
+    margin-bottom: 2%;
+    box-shadow: 4px 4px 12px 5px black;
 }
 
-#entryLeft
+.entryLeft
 {
 	float: left;
-	padding: 5px;
-	padding-bottom:100%;
-	margin-bottom:-100%;
-	width: 150px;
-	text-align: center;
-	border-right-style: solid;
-	border-right-width: 2px;
-	border-right-color: #373737;
+    padding: 1%;
+    padding-bottom: 100%;
+    margin-bottom: -100%;
+    width: 150px;
+    text-align: center;
+    background: linear-gradient(45deg, #245e8d73, #000000);
+    /* border-right-style: solid; */
+    /* border-right-width: 2px; */
+    /* border-right-color: #373737; */
 }
 
-#entryRight
+.entryRight
 {
 	float: left;
 	padding: 5px;
@@ -180,11 +177,11 @@ body
     width: 300px;
 }
 
-#picwide {	
+.picwide {	
     width: 900px;
 }
 
-#pictall {	
+.pictall {	
     width: 450px;
 }
 
