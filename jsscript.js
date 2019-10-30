@@ -1,6 +1,7 @@
 
 
-function image(url, divid, subtext, contid, imgid) {
+function image(url, divid, subtext, contid, imgid)
+{
 	//if (contid == undefined)
 	contid = "sscontainer";
 	//if (imgid == undefined)
@@ -21,9 +22,10 @@ function image(url, divid, subtext, contid, imgid) {
 
 	//	document.getElementById(id).style.property = new style
 
-	// the image in the webpage
+
+	// The image in the webpage
 	var a = document.createElement('a');
-	a.href = '#' + url;
+	//a.href = '#' + url;
 	//a.innerHTML = "<img class='" + imgid + "' src='" + url + "'/><br/>";
 	var imgDiv = document.createElement("div");
 	imgDiv.style["background"] = "url(" + url + ")";
@@ -33,16 +35,34 @@ function image(url, divid, subtext, contid, imgid) {
 	a.appendChild(imgDiv);
 
 
-	// the hidden lightbox div
-	var b = document.createElement('a');
-	b.href = '#_';
-	b.innerHTML = "<img src='" + url + "'/>";
-	b.className = 'lightbox';
+
+	// The modal image popup
+	var b = document.createElement("div");
+	//b.href = '#_';
+	b.innerHTML = "<img class='modal-content' src='" + url + "'/>";
+	b.className = 'modal';
 	b.id = url;
 
 	// add the two image links to teh ss div
 	ssdiv.appendChild(a);
 	ssdiv.appendChild(b);
+
+
+	// the clicks to open/close
+	imgDiv.onclick = function ()
+	{
+		//b.style.display = "block";
+	}
+
+	// When the user clicks on <span> (x), close the modal
+	b.onclick = function ()
+	{
+		//b.style.display = "none";
+	}
+
+
+
+
 
 	// add the ss div to the new div
 	newdiv.appendChild(ssdiv);
@@ -50,7 +70,8 @@ function image(url, divid, subtext, contid, imgid) {
 
 
 	// Add the text if available	
-	if (subtext != undefined) {
+	if (subtext != undefined)
+	{
 		var txtd = document.createElement("div");
 		txtd.innerHTML += "<p>" + subtext + "</p>";
 		newdiv.appendChild(txtd);
@@ -59,7 +80,7 @@ function image(url, divid, subtext, contid, imgid) {
 	document.getElementById(divid).appendChild(newdiv);
 }
 
-function screenShot(url) {
-	window.open("imageframe.htm?" + url, "_self",
-		"resizable=no,status=no,HEIGHT=200,WIDTH=200");
-}
+// function screenShot(url) {
+// 	window.open("imageframe.htm?" + url, "_self",
+// 		"resizable=no,status=no,HEIGHT=200,WIDTH=200");
+// }
