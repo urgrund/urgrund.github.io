@@ -5,6 +5,7 @@ body {
     /* background: black; */
     color: white;
     font-family: 'Poppins', sans-serif;
+    font-weight: 200;
     margin: 0;
     background: url(bg.jpg) no-repeat center center fixed;
     object-fit: cover;
@@ -33,7 +34,7 @@ h2{  font-size: 24pt;    text-shadow: 4px 4px 3px #00000094;}
 h3{  font-size: 18pt;}
 h4{  font-size: 12pt;}
 h5{  font-size: 10pt;}
-p{font-size: 9pt;    color: #cde0e5;}
+p{font-size: 9pt;    color: #cde0e5;font-weight: 300;}
 
 
 .light
@@ -67,43 +68,41 @@ p{font-size: 9pt;    color: #cde0e5;}
 .link:active
 {
  color: #ececec;
-    background: linear-gradient(0deg, #004161, transparent);
+    background: linear-gradient(0deg, #006161, transparent);
     min-width: 120px;
     text-decoration: none;
     line-height: 28px;
     display: inline-block;
     min-height: 30px;
-    border-bottom: 1px solid;
-    /* border-radius: 5px; */
+    border-bottom: 1px solid;    
     transition: 0.3s;
 }
 
 .link:hover
-{
-       /* color: #7bd3ff; */
-    /* background: #004077; */
+{    
     transform: translate(0px, 1px);
     transition: 0.1s;
-    border-color: #4ccdff;     
-    /* box-shadow: 0px 0px 11px -2px #04ffff; */
+    border-color: #4cf3ff;      
 }
 
 a:link,
-a.lnk:visited,
-a.lnk:active
+a:visited,
+a:active
 {
-    color:rgb(177, 198, 255);
+    color:white;
 }
-
+a:hover
+{
+    color:#00ffdc;
+}
 .entry
 {
     width: 75%;
     max-width: 1100px;
     margin: auto;
     margin-bottom: 78px;
-    box-shadow: 7px 10px 6px 0px #00000080;
-    border-bottom: 1px solid #ffffff75;
-    border-top: 1px solid #ffffff75;
+    box-shadow: 7px 15px 12px 0px  rgba(0, 0, 0, 0.5);
+    border: 1px solid #0e624f;    
 }
 
 .top
@@ -112,21 +111,32 @@ a.lnk:active
     justify-content: space-between; */
     display: grid;
     grid-template-columns: 2fr 6fr 4fr;
-    background: #0c1252;
+    background: linear-gradient(-170deg, #005f52, #00061d);
     padding: 1%;
+    padding: 1%;
+}
+
+.top > div:nth-child(2) > h3
+{
+   font-weight: 300;
+}
+
+.top > div:nth-child(3) > img
+{
+    box-shadow: 4px 6px 6px 0px rgba(0, 0, 0, 0.4);
 }
 
 
 .content
 {
-    background: #242424d6;
-    padding-top: 0%;
+    background: rgba(0, 0, 0, 0.65);
+    padding: 10px;
 }
 
 .content > div
 {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 
@@ -137,7 +147,7 @@ a.lnk:active
     max-width: 320px;
     margin: 1%;
     background: black;
-    box-shadow: 5px 8px 7px 0px #00000069;
+    box-shadow: 5px 8px 7px 0px rgba(0, 0, 0, 0.5);
     border: 1px solid #656e74;
     transition:0.6s;    
 }
@@ -151,7 +161,7 @@ a.lnk:active
 #ss
 {
     width: 100%; 
-    height: 160px;
+    height: 200px;
 }
 
 
@@ -180,4 +190,31 @@ a.lnk:active
 {  
     flex:1 1 auto;
     margin:5px;  /* and that, will result in a 10px gap */
+  }
+
+
+
+
+  
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 150px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+  }
+  
+  
+  /* Modal Content (image) */
+  .modal-content {
+    margin: auto;
+    display: block;
+    width: 60%;  
+    max-height: 60%;
   }

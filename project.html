@@ -27,7 +27,7 @@
   <link href="style.css" rel="stylesheet" type="text/css" />
   <link href="mobile.css" rel="stylesheet" type="text/css" />
   <link href="lightbox.css" rel="stylesheet" type="text/css" />
-
+  <link href="https://fonts.googleapis.com/css?family=Poppins:200,400&display=swap" rel="stylesheet">
 
 <body>
 
@@ -71,7 +71,7 @@
           I acted as instructor and technical director/artist (particles, lighting, animiation, shaders, performance).
           Result of 4 months creating a fun and fast paced hack 'n slash title. As the instructor of the course I
           assissted in the production aspects of the project and practiced common industry methods for development
-          making the classroom environment an indy studio simulation. <a class="lnk"
+          making the classroom environment an indy studio simulation. <a
             href="http://store.steampowered.com/app/352160/">Was released on Steam!</a>
         </p>
       </div>
@@ -92,8 +92,8 @@
         to cleanly render hidden objects without dozens of pixel-sized errors. Instead a 2nd camera running forward was
         used that matched the primary camera's perspective setup which ran a replacement shader. One the replacements
         would render select (via shader choice in material) geometry only into the depth buffer (ZWrite On, ColorMask
-        0). This would prime the second <a class="lnk"
-          href="http://docs.unity3d.com/Manual/SL-ShaderReplacement.html">replacement shader</a> used on characters to
+        0). This would prime the second <a href="http://docs.unity3d.com/Manual/SL-ShaderReplacement.html">replacement
+          shader</a> used on characters to
         use a ZGreater check in order to render. The replacement camera only cleared depth and rendered after the
         deferred passes.
       </p>
@@ -266,6 +266,97 @@
 
 
 
+
+
+
+
+
+  <!-- ------------------------------------------------------------------------------------------------------------------ -->
+  <div class="entry">
+    <div class="top left">
+      <div class="center">
+        <img src="logo/re.png" />
+        <h3>2005-2009</h3>
+      </div>
+
+      <div>
+        <h3>Reality Engine</h3>
+        <p>Reality Engine was a middleware solution for quick prototyping. During my time at U235 Studios we licensed
+          the engine but found many shortcomings in it's rendering and tools. After U235 I kept exploring the source
+          code and made many tool, rendering and shading modifications (C++, C#, HLSL, .NET).
+        </p>
+      </div>
+      <div>
+      </div>
+    </div>
+
+    <div class="content center">
+
+
+      <h3 class="left">Ubisoft test 2009</h3>
+      <p class="left">Small forest scene as part of a test process for Ubisoft in 2009. The scene was very small & stuck
+        to stringent material/texture/polycount budgets. In addition to the art (meshes, materials, fx, lighting) I also
+        wrote all shaders required (such as scrolling 'god rays') and even implemeted lightmap support into the mesh
+        serializer (Reality Engine) so that I could bake in a lot of the subtle ambient light.
+      </p>
+      <div id="r7">
+        <script>image("ss/re/UbiTest01.jpg", "r7")</script>
+        <script>image("ss/re/UbiTest02.jpg", "r7")</script>
+        <script>image("ss/re/UbiTest03.jpg", "r7")</script>
+      </div>
+
+
+
+      <h3 class="left">Dynamic Shadow Mapping</h3>
+      <p class="left">The enigne initially had basic shadow mapping that wasn't very satisfying. I took it upon myself
+        to explore and improve this. I implemented a 3 stage LOD for the shadows - resolution would drop and at farther
+        distances the depth buffer wouldn't update. Shaders would use less sampling (8x, 4x, unfiltered) which for the
+        time (2007-2009) really helped performance. Visually the shadows were improved by using them as masks for lights
+        (more natural) instead of Reality Engine's approach of multiply blend into the scene. Alpha tested materials
+        were respected in the shadow rendering stage and normalmaps and parallax maps would bias the sampling which
+        greatly improved the final look.
+      </p>
+      <div id="r8">
+        <script>image("ss/re/newshadows01.jpg", "r8")</script>
+        <script>image("ss/re/newshadows02.jpg", "r8")</script>
+        <script>image("ss/re/newshadows03.jpg", "r8")</script>
+      </div>
+      <div id="r9">
+        <script>image("ss/re/newshadows04.jpg", "r9", "Alpha-test shadows")</script>
+        <script>image("ss/re/newshadows05.jpg", "r9", "Dynamic AABB based on cone direction & angle")</script>
+        <script>image("ss/re/newshadows06.jpg", "r9", "Shadowmap offset by surface normalmaps")</script>
+      </div>
+
+
+      <h3 class="left">Per-Instance Ambient Occlusion</h3>
+      <p class="left">A baking tool written for Reality Engine. The engine previously had no baking options so I
+        implemented a standard AO baking routine for static scene meshes. Though, as this information was stored at the
+        vertex level, this could be written to instances (folige, grass). As a work-a-round, I modified the engine batch
+        renderer (c++) and the instancing shader to allow an instance to have a single float AO term passed along with
+        other instnacing data. Therefore the bake tool could bake information for instances by assuming each instance as
+        a point. Whilst not entirely accurate, it was very fast to bake, added little shader over-head (1 more float)
+        and gave convincing results.
+      </p>
+      <div id="r9a">
+        <script>image("ss/re/instanceAO_01.jpg", "r9a", "Instance AO")</script>
+        <script>image("ss/re/instanceAO_02.jpg", "r9a", "Only static world AO")</script>
+      </div>
+      <div id="r9b">
+        <script>image("ss/re/instanceAO_04.jpg", "r9b")</script>
+        <script>image("ss/re/instanceAO_05.jpg", "r9b")</script>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
   <!-- ------------------------------------------------------------------------------------------------------------------ -->
   <div class="entry">
     <div class="top left">
@@ -286,23 +377,23 @@
 
     <div class="content center">
       <!-- 
-      <div id="r65">
-        <script>image("ss/photo/DSC_2801.jpg", "r65", null, "", "picwide")</script>
-      </div>
-
-      <div id="r66">
-        <script>image("ss/photo/DSC_3616.jpg", "r66", null, "", "pictall")</script>
-        <script>image("ss/photo/P1090071.jpg", "r66", null, "", "pictall")</script>
-      </div>
-
-      <div id="r67">
-        <script>image("ss/photo/P9112999.jpg", "r67", null, "", "picwide")</script>
-      </div>
-
-      <div id="r68">
-        <script>image("ss/photo/P1260100.jpg", "r68", null, "", "pictall")</script>
-        <script>image("ss/photo/P1310005.jpg", "r68", null, "", "pictall")</script>
-      </div> -->
+        <div id="r65">
+          <script>image("ss/photo/DSC_2801.jpg", "r65", null, "", "picwide")</script>
+        </div>
+  
+        <div id="r66">
+          <script>image("ss/photo/DSC_3616.jpg", "r66", null, "", "pictall")</script>
+          <script>image("ss/photo/P1090071.jpg", "r66", null, "", "pictall")</script>
+        </div>
+  
+        <div id="r67">
+          <script>image("ss/photo/P9112999.jpg", "r67", null, "", "picwide")</script>
+        </div>
+  
+        <div id="r68">
+          <script>image("ss/photo/P1260100.jpg", "r68", null, "", "pictall")</script>
+          <script>image("ss/photo/P1310005.jpg", "r68", null, "", "pictall")</script>
+        </div> -->
 
 
       <div id="r65">
@@ -321,12 +412,111 @@
 
 
 
+
+
+
+
+
+
+  <!-- ------------------------------------------------------------------------------------------------------------------ -->
+  <div class="entry">
+    <div class="top left">
+      <div class="center">
+        <img src="logo/udk.jpg" />
+        <h3>2007-2009</h3>
+      </div>
+
+      <div>
+        <h3>UDK (UE3)</h3>
+        <p>Built for a client as a freelancer, I created all materials, textures, meshes and lighting inside UDK. It was
+          interesting exploring the Indian/Persian arcitecture!
+        </p>
+      </div>
+      <div>
+      </div>
+    </div>
+
+    <div class="content center">
+      <div id="r10">
+        <script>image("ss/maha/fortress16.jpg", "r10")</script>
+        <script>image("ss/maha/fortress17.jpg", "r10")</script>
+        <script>image("ss/maha/fortress18.jpg", "r10")</script>
+      </div>
+      <div id="r11">
+        <script>image("ss/maha/fortress19.jpg", "r11")</script>
+        <script>image("ss/maha/maha_01.jpg", "r11")</script>
+        <script>image("ss/maha/maha_02.jpg", "r11")</script>
+      </div>
+    </div>
   </div>
 
 
 
 
 
+
+
+
+
+
+  <!-- ------------------------------------------------------------------------------------------------------------------ -->
+  <div class="entry">
+    <div class="top left">
+      <div class="center">
+        <img src="logo/idtech4.jpg" />
+        <h3>2004</h3>
+      </div>
+
+      <div>
+        <h3>Id Tech 4 (Doom 3)</h3>
+        <p>A small level I created out of interest of the iD technology which tied in with my studies at the time. All
+          the assets were available through Doom III, though this was one of the last BSP blocking engines I
+          used.
+        </p>
+      </div>
+      <div>
+      </div>
+    </div>
+
+    <div class="content center">
+      <div id="r12">
+        <script>image("ss/d3_09.jpg", "r12")</script>
+        <script>image("ss/d3_10.jpg", "r12")</script>
+        <script>image("ss/d3_14.jpg", "r12")</script>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <!-- ------------------------------------------------------------------------------------------------------------------ -->
+  <div class="entry">
+    <div class="top left">
+      <div class="center">
+
+        <h3>2003</h3>
+      </div>
+
+      <div>
+        <h3>AMP2 Engine (in-house)</h3>
+        <p>Edge of Valour was to be a multi-player hack 'n slash similar to Rune. I created all environments with it's
+          BSP blocking tools as well as materials, textures and lighting.
+        </p>
+      </div>
+      <div>
+      </div>
+    </div>
+
+    <div class="content center">
+      <div id="r13">
+        <script>image("ss/dm01_32.jpg", "r13")</script>
+        <script>image("ss/dm01_33.jpg", "r13")</script>
+        <script>image("ss/dm01_34.jpg", "r13")</script>
+      </div>
+    </div>
+  </div>
 
 
 

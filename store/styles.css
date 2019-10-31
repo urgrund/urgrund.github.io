@@ -1,8 +1,5 @@
-@charset "utf-8";
+
 /* CSS Document */
-
-<style type="text/css">
-
 
 
 .h5 {
@@ -61,7 +58,7 @@ a.btn:active {
 	color: #000;
 	text-decoration:none;
 }
-
+/* 
 a.btn:hover {
 	color: #0090FF;
 	text-decoration:none;
@@ -70,18 +67,19 @@ a.btn:hover {
 
 
 
-	
-a.lnk:link,
-a.lnk:visited,
-a.lnk:active {
+a{text-decoration: none;}
+a:link,
+a:visited,
+a:active {
 	color: #0090FF;
 	text-decoration:none;
 }
 
-a.lnk:hover {
+
+a:hover {
 	color: #A6D9FF;
 	text-decoration:none;
-}
+} */
 
 
 
@@ -216,5 +214,3 @@ body
 	width:33%;
 	height:100%;
 }
-
-</style>
