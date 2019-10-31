@@ -9,6 +9,9 @@ function image(url, divid, subtext, contid, imgid) {
 	if (imgid == undefined)
 		imgid = "sscell"
 
+	if (subtext == undefined)
+		subtext = "";
+
 
 	// A new div to hold everything
 	var newdiv = document.createElement("div");

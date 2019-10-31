@@ -105,15 +105,17 @@ a:hover
     border: 1px solid #0e624f;    
 }
 
-.top
-{
-    /* display: flex;
-    justify-content: space-between; */
+.top, .top-abt
+{    
     display: grid;
     grid-template-columns: 2fr 6fr 4fr;
     background: linear-gradient(-170deg, #005f52, #00061d);
     padding: 1%;
     padding: 1%;
+}
+.top-abt
+{
+    grid-template-columns: 2fr 6fr 2fr;
 }
 
 .top > div:nth-child(2) > h3
@@ -200,7 +202,7 @@ a:hover
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    padding-top: 150px; /* Location of the box */
+    padding-top: 160px; /* Location of the box */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
