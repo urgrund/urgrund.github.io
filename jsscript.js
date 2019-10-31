@@ -38,35 +38,32 @@ function image(url, divid, subtext, contid, imgid)
 
 	// The modal image popup
 	var b = document.createElement("div");
-	//b.href = '#_';
+
 	b.innerHTML = "<img class='modal-content' src='" + url + "'/>";
 	b.className = 'modal';
 	b.id = url;
 
 	// add the two image links to teh ss div
 	ssdiv.appendChild(a);
-	ssdiv.appendChild(b);
-
+	//ssdiv.appendChild(b);
+	document.getElementById("modalbox").appendChild(b);
 
 	// the clicks to open/close
 	imgDiv.onclick = function ()
 	{
-		//b.style.display = "block";
+		console.log("alksdjlks");
+		b.style.display = "block";
 	}
 
 	// When the user clicks on <span> (x), close the modal
 	b.onclick = function ()
 	{
-		//b.style.display = "none";
+		b.style.display = "none";
 	}
-
-
-
 
 
 	// add the ss div to the new div
 	newdiv.appendChild(ssdiv);
-
 
 
 	// Add the text if available	
@@ -80,7 +77,3 @@ function image(url, divid, subtext, contid, imgid)
 	document.getElementById(divid).appendChild(newdiv);
 }
 
-// function screenShot(url) {
-// 	window.open("imageframe.htm?" + url, "_self",
-// 		"resizable=no,status=no,HEIGHT=200,WIDTH=200");
-// }

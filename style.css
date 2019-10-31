@@ -66,24 +66,26 @@ p{font-size: 9pt;    color: #cde0e5;}
 .link:visited,
 .link:active
 {
-    color: #ececec;
-    background: #0035969e;
+ color: #ececec;
+    background: linear-gradient(0deg, #004161, transparent);
     min-width: 120px;
     text-decoration: none;
     line-height: 28px;
     display: inline-block;
     min-height: 30px;
-    border: 1px solid;
-    border-radius: 5px;
-    transition:0.3s;    
+    border-bottom: 1px solid;
+    /* border-radius: 5px; */
+    transition: 0.3s;
 }
 
 .link:hover
 {
-    color: #7bd3ff;
-    background: #004077;
+       /* color: #7bd3ff; */
+    /* background: #004077; */
     transform: translate(0px, 1px);
-    transition:0.1s;    
+    transition: 0.1s;
+    border-color: #4ccdff;     
+    /* box-shadow: 0px 0px 11px -2px #04ffff; */
 }
 
 a:link,
