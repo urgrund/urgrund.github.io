@@ -1,0 +1,1 @@
+Select * from [dbo].[RP_BoggerTonnes_Total_byTime] ('_startDate','_endDate', '_startShift', '_endShift') order by [Date] asc, [Equipment] asc

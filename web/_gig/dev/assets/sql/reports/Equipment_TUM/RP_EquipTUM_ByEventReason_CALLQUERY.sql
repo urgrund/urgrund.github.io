@@ -1,0 +1,1 @@
+Select * from [dbo].[RP_EquipTUM_ByEventReason] ('_startDate','_endDate', '_startShift', '_endShift') order by [Date] asc, [Equipment] asc, [Event Time] asc

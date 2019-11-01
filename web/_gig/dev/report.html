@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.css">
+    <style>
+        /* Pop up form */
+        body {
+            /* font-family: 'Poppins', sans-serif; */
+            background-color: #353535;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p {
+            color: white;
+            margin: 0;
+            padding: 0;
+            margin-block-start: 0em;
+            margin-block-end: 0em;
+            font-weight: normal;
+        }
+
+        h1 {
+            font-size: 38pt;
+        }
+
+        h2 {
+            font-size: 20pt;
+        }
+
+        h4 {
+            font-size: 10pt;
+        }
+
+        p {
+            font-size: 9pt;
+        }
+
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+
+
+
+        .adj-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 98%;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            min-height: 100%;
+        }
+
+
+        .adj-header {
+            padding: 2px 16px;
+            background-color: #232130;
+            color: rgb(255, 255, 255);
+        }
+
+        .adj-body {
+            display: grid;
+            grid-template-columns: 13% auto;
+            padding: 2px 16px;
+            min-height: 100%;
+            background-image: linear-gradient(rgb(60, 70, 92), rgb(37, 37, 37));
+            color: rgb(255, 255, 255);
+        }
+
+
+        .adj-card {
+            border: 1px solid #888;
+            margin: 15px 0px;
+            padding: 5px 15px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+        }
+
+        .rpt-report {
+            /* display: flex; */
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid black;
+            border-radius: 10px;
+            background: #2a5786;
+            padding: 3px;
+            margin: 0px 0px 2px 0px;
+            height: 40px;
+        }
+
+        .fleft {
+            display: flex;
+        }
+
+        .fright {
+            display: flex;
+            flex-direction: row-reverse;
+        }
+
+
+
+        .rptbtn {
+            border: none;
+            /* 1px solid rgb(221, 221, 221); */
+
+            border-radius: 50%;
+            background: none;
+            color: rgb(221, 221, 221);
+            width: 25px;
+            height: 25px;
+            font-size: 15pt;
+            display: flex;
+            align-items: center;
+            margin-left: 3px;
+            justify-content: center;
+
+            text-decoration: none;
+        }
+
+        .rptbtn a {
+            color: rgb(221, 221, 221);
+        }
+
+        .rptbtn:hover {
+            border: 1px solid rgb(14, 207, 255);
+            color: rgb(14, 207, 255);
+        }
+
+        .rptbtn:focus {
+            outline: 0;
+        }
+
+        .rptbtn:visited {
+            color: inherit;
+        }
+
+        .rpt-csv {
+            border-top: 1px solid grey;
+            margin-top: 10px;
+            height: 800px;
+            font-size: 10pt;
+            color: black;
+            /* overflow: scroll; */
+        }
+
+        .rpt-table {
+            font-size: 10pt;
+            color: black;
+        }
+
+        .rpt-table tr {
+            border-bottom: 1px solid rgb(161, 161, 161);
+        }
+
+        /* td {
+            border: 1px solid white;
+        } */
+
+        .disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .md-datepicker {
+            color: white;
+        }
+
+        .md-datepicker-input-container {
+            color: white;
+        }
+
+        .md-datepicker-input[placeholder] {
+            color: white;
+        }
+
+        .md-datepicker-calendar-icon,
+        .md-datepicker-expand-triangle,
+        .md-datepicker-triangle-button {
+            color: white;
+        }
+
+        .myGrid {
+            width: 500px;
+            height: 250px;
+        }
+    </style>
+</head>
+
+
+
+<!-- Angular Material requires Angular.js Libraries -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script>
+
+<!-- Angular Material Library -->
+<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.js"></script>
+
+
+<!-- UI-Grid (NG) -->
+<script src="https://cdn.jsdelivr.net/gh/angular-ui/bower-ui-grid/ui-grid.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/4.8.1/i18n/ui-grid.auto-resize.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/4.8.1/i18n/ui-grid.exporter.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/angular-ui/bower-ui-grid/ui-grid.min.css">
+
+<!-- For CSV exporting -->
+<script src="http://ui-grid.info/docs/grunt-scripts/csv.js"></script>
+<script src="http://ui-grid.info/docs/grunt-scripts/pdfmake.js"></script>
+<script src="http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js"></script>
+<script src="http://ui-grid.info/docs/grunt-scripts/lodash.min.js"></script>
+<script src="http://ui-grid.info/docs/grunt-scripts/jszip.min.js"></script>
+<script src="http://ui-grid.info/docs/grunt-scripts/excel-builder.dist.js"></script>
+
+<script src="vendors/PapaParse/papaparse.min.js"></script>
+
+<script src="vendors/moment/moment.min.js"></script>
+
+<body>
+
+    <div ng-app="myApp" ng-cloak ng-controller="reportCtrl" id="targetsForm">
+        <!-- <div ng-app="myApp" ng-controller="myCtrl"> -->
+
+        <div class="adj-content">
+
+            <div class="adj-header">
+                <h3>Reports...</h3>
+            </div>
+
+
+
+
+            <div class="adj-body">
+
+                <div>
+                    <div>
+                        <div>
+                            <h5>Start Date & Shift: </h5>
+                            <md-datepicker ng-model="startDate" md-placeholder="Enter date">
+                            </md-datepicker>
+
+                            <select ng-model="shiftStart" ng-options="x.label for x in shiftOptions"></select>
+
+
+                        </div>
+                        <div>
+                            <h5>End Date & Shift: </h5>
+                            <md-datepicker ng-model="endDate" md-placeholder="Enter date">
+                            </md-datepicker>
+
+                            <select ng-model="shiftEnd" ng-options="x.label for x in shiftOptions"></select>
+                        </div>
+                    </div>
+                    </br>
+                    <div ng-repeat="(key, value) in reports track by $index">
+                        <div>
+                            <h3>{{key}}</h3>
+                        </div>
+
+
+                        <!-- Report Button -->
+                        <div ng-repeat="e in value track by $index" id="{{$parent.$index}}-{{$index}}"
+                            class="rpt-report">
+                            <div>
+                                <h6>{{e}}</h6>
+                            </div>
+                            <div class="fleft">
+
+                                <!-- Divs depending on report status -->
+                                <div class="statusDiv">
+                                    <!-- <select ng-if="generatedReports[key][$index][1]==0"
+                                        ng-model="generatedReports[key][$index][2]"
+                                        ng-options="x.label for x in shiftOptions"></select> -->
+                                    <button ng-if="generatedReports[key][$index][1]==0" class="rptbtn"
+                                        ng-click="generateReportFromIndices($parent.$parent.$index, $parent.$index)"><i
+                                            class="fas fa-cloud-download-alt"></i></button>
+                                </div>
+
+                                <!-- Spin if generating -->
+                                <div ng-if="generatedReports[key][$index][1]==1" class="statusDiv"><i
+                                        class="fa fa-spinner fa-spin"></i>
+                                </div>
+
+                                <!-- Green Tick when done -->
+                                <div ng-if="generatedReports[key][$index][1]==2" class="statusDiv"><i
+                                        class="fas fa-check" style="color:greenyellow"></i></div>
+
+                                <div class="fright" ng-if="generatedReports[key][$index][1]==2">
+                                    <button class="rptbtn" ng-click="setCSVViewData(key, $index)"><i class=" fas
+                                    fa-file-import"></i></button>
+                                    <!-- <button class="rptbtn"><a
+                                            ng-href="{{generatedReports[key][$index][0][4]}}{{generatedReports[key][$index][0][0]}}">
+                                            <i class="fas fa-file-csv"></i></a></button> -->
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- Report Button -->
+                        </br>
+
+                    </div>
+                </div>
+
+
+                <!-- Report View  -->
+                <div>
+                    <div ng-if="currentCSVView!==undefined">
+                        <h3>{{currentKeyView}}</h3>
+                        <h2>{{reports[currentKeyView][currentRepView]}}</h2>
+                        <!-- <h5><a ng-href="{{currentCSVView[4]}}{{currentCSVView[0]}}" style="color:cyan">
+                                {{currentCSVView[0]}} ({{currentCSVView[3]}})</a></h5> -->
+
+                        <div ng-if="!refresh">
+                            <div ui-grid="gridOptions" ui-grid-resize-columns ui-grid-exporter class="rpt-csv"></div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="rpt-csv">
+                        <table class="rpt-table">
+                            <tbody>
+                                <tr ng-repeat="e in currentCSVView[2] track by $index">
+                                    <td ng-repeat="c in e track by $index">
+                                        {{c}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> -->
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+
+
+
+
+<script>
+
+    var app = angular.module("myApp", ['ui.grid', 'ui.grid.resizeColumns', 'ui.grid.exporter', 'ngMaterial', 'ngMessages']);
+
+
+    // Configure the date time to have Australian dd-mm-yyyy format
+    angular.module('myApp').config(function ($mdDateLocaleProvider)
+    {
+        $mdDateLocaleProvider.formatDate = function (date)
+        {
+            return moment(date).format('DD/MM/YYYY');
+        };
+
+        $mdDateLocaleProvider.parseDate = function (dateString)
+        {
+            var m = moment(dateString, 'DD/MM/YYYY', true);
+            return m.isValid() ? m.toDate() : new Date(NaN);
+        };
+    });
+
+    app.controller("reportCtrl", function ($scope, $http, $httpParamSerializerJQLike, $timeout, uiGridExporterService, uiGridExporterConstants)
+    {
+        $scope.shiftOptions = [
+            // { 'id': 0, 'label': 'Both' },
+            { 'id': 0, 'label': 'Day' },
+            { 'id': 1, 'label': 'Night' }
+        ];
+
+        $scope.startDate = new Date('2018-10-05');
+        $scope.endDate = new Date('2018-10-10');
+        $scope.shiftStart = $scope.shiftOptions[0];
+        $scope.shiftEnd = $scope.shiftOptions[1];
+
+        $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+
+
+        // Holds the status and data of the 
+        // generated reports.  
+        // ['report', status]
+        // status: 0=not started,  1= generating, 2=complete
+        $scope.generatedReports = [];
+        $scope.reportKeys = [];
+
+        // THe current CSV data to display in the main panel
+        $scope.currentCSVView;
+        $scope.currentKeyView;
+        $scope.currentRepView;
+        $scope.currentCSVText;
+
+
+        $scope.export = function (format)
+        {
+            var exportData = [];
+            var exportColumnHeaders = $scope.gridOptions.showHeader ? uiGridExporterService.getColumnHeaders($scope.gridApi.grid, uiGridExporterConstants.VISIBLE) : [];
+            angular.forEach($scope.gridApi.grid.rows, function (row)
+            {
+                if (row.visible)
+                {
+                    var values = [];
+                    angular.forEach(exportColumnHeaders, function (column)
+                    {
+                        var value = row.entity[column.name];
+                        values.push({
+                            value: value
+                        });
+                    });
+                    exportData.push(values);
+                }
+            });
+            var content;
+            var fileName = $scope.gridOptions.exporterCsvFilename;
+            if (format == "csv")
+            {
+                content = uiGridExporterService.formatAsCsv(exportColumnHeaders, exportData, ',');
+                uiGridExporterService.downloadFile(fileName + '.csv', content, $scope.gridOptions.exporterOlderExcelCompatibility);
+            } else
+            {
+                content = uiGridExporterService.prepareAsPdf($scope.gridApi.grid, exportColumnHeaders, exportData);
+                pdfMake.createPdf(content).download(fileName + '.pdf');
+            }
+        };
+
+
+        $scope.gridOptions = {};
+        $scope.gridOptions = {
+            enableGridMenu: true,
+            exporterMenuCsv: false,
+            exporterMenuPdf: false,
+            gridMenuCustomItems: [{
+                title: 'Export to CSV',
+                action: function ()
+                {
+                    $scope.export('csv');
+                },
+                order: 210
+            }, {
+                title: 'Export to PDF',
+                action: function ()
+                {
+                    $scope.export('pdf');
+                },
+                order: 250
+            }],
+            enableFiltering: true,
+            paginationPageSizes: [8, 16, 24],
+            paginationPageSize: 8,
+            exporterCsvFilename: 'new_data_file',
+            exporterExcelFilename: 'new_data_file',
+            onRegisterApi: function (gridApi)
+            {
+                $scope.gridApi = gridApi;
+            }
+        };
+
+
+
+        // Get all the available reports 
+        // from the server
+        $scope.getReports = function ()
+        {
+            var request = $http({
+                method: 'POST',
+                url: "php/reports/reports.php", data: { 'func': 0 }
+            })
+            request.then(function (response)
+            {
+                $scope.reports = response.data;
+
+                var jsonString = JSON.stringify(response.data);
+                $scope.generatedReports = JSON.parse(jsonString);
+
+                // With a duplicate array, store #'s to 
+                // determine the state of each report
+                for (const key in $scope.generatedReports)
+                {
+                    if ($scope.reports.hasOwnProperty(key))
+                    {
+                        $scope.reportKeys.push(key);
+                        const element = $scope.generatedReports[key];
+                        for (let i = 0; i < element.length; i++)
+                            element[i] = [
+                                null,                       // The report data once generated
+                                0,                          // 0 = Not Generated,  1 = Generating, 2 = Ready
+                                $scope.shiftOptions[0]      // Shift option for generation
+                            ];
+                    }
+                }
+
+                //console.log($scope.reportKeys);
+                //console.log($scope.generatedReports);
+
+            }, function (error) { });
+        };
+
+        var refresh = function ()
+        {
+            $scope.refresh = true;
+            $timeout(function ()
+            {
+                $scope.refresh = false;
+            }, 0);
+        };
+
+
+
+        // User clicks to view a report
+        $scope.setCSVViewData = function (key, rep)
+        {
+            $scope.currentKeyView = key;
+            $scope.currentRepView = rep;
+            $scope.currentCSVView = $scope.generatedReports[key][rep][0];
+            $scope.currentCSVText = csvJSON($scope.currentCSVView[2]);
+
+            $scope.gridOptions.data = $scope.currentCSVText;
+            //console.log($scope.currentCSVView[0]);
+            $scope.gridOptions.exporterCsvFilename = $scope.currentCSVView[0];
+            $scope.gridOptions.exporterExcelFilename = $scope.currentCSVView[0] + ".xlsx";
+            refresh();
+        };
+
+
+
+
+        function csvJSON(csv)
+        {
+            var lines = csv.split("\n");
+            var result = [];
+            var headers = lines[0].split(",");
+            for (var i = 1; i < lines.length; i++)
+            {
+                var obj = {};
+                var currentline = lines[i].split(",");
+
+                for (var j = 0; j < headers.length; j++)
+                {
+                    obj[headers[j]] = currentline[j];
+                }
+
+                result.push(obj);
+            }
+
+            //return result; //JavaScript object
+            return JSON.stringify(result); //JSON
+        }
+
+
+        $scope.generateReportFromIndices = function (cat, rep)
+        {
+            //console.log($scope.generatedReports[$scope.reportKeys[cat]][rep][2].id);
+            //console.log($scope.reportKeys[cat] + "  " + rep);
+
+            // Turns dates back into yyyymmdd
+            var cleanStartDate = $scope.startDate.toISOString().slice(0, 10).replace(/-/g, "");
+            var cleanEndDate = $scope.endDate.toISOString().slice(0, 10).replace(/-/g, "");
+
+            //console.log(cleanStartDate + "    " + cleanEndDate);
+            //console.log($scope.shiftStart);
+
+            // Set status to generating...
+            $scope.generatedReports[$scope.reportKeys[cat]][rep][1] = 1;
+
+            var request = $http({
+                method: 'POST',
+                url: "php/reports/reports.php", data: {
+                    'func': 1,
+                    'category': cat,
+                    'report': rep,
+                    'dateStart': cleanStartDate,
+                    'dateEnd': cleanEndDate,
+                    'shiftStart': $scope.shiftStart.id,
+                    'shiftEnd': $scope.shiftEnd.id
+                    //'shifts': $scope.generatedReports[$scope.reportKeys[cat]][rep][2].id
+                }
+            })
+            request.then(function (response)
+            {
+                //console.log(response.data);
+                $scope.generatedReports[response.data[1]][rep][0] = response.data;
+                $scope.generatedReports[response.data[1]][rep][1] = 2;
+                $scope.setCSVViewData($scope.reportKeys[cat], rep);
+
+                //console.log("Response:  " + response);
+            }, function (error)
+            {
+                console.log("Error getting CSV data for " + cat + " " + rep);
+                $scope.generatedReports[response.data[1]][rep][1] = 0;
+            });
+        };
+
+
+
+        $scope.$watch('$viewContentLoaded', function ()
+        {
+            $timeout(function ()
+            {
+                // Ready...
+                $scope.getReports();
+            }, 0);
+        });
+    });
+
+</script>
+
+</html>

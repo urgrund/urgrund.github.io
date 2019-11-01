@@ -1,0 +1,65 @@
+<!-- <!doctype html> -->
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Short Interval Control Dashboard</title>
+    <meta name="description" content="Short Interval Control">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="apple-icon.png">
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <!-- <link rel="stylesheet" href="vendors/bootstrap/dist/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+
+    <!-- Giggsworth styles -->
+    <link rel="stylesheet" href="assets/css/sic.css">
+    <link rel="stylesheet" href="assets/css/loader.css">
+    <link rel="stylesheet" href="assets/css/menu.css">
+    <link rel="stylesheet" href="assets/css/header.css">
+    <link rel="stylesheet" href="assets/css/modals.css">
+    <link rel="stylesheet" href="assets/css/dash_mines.css">
+    <link rel="stylesheet" href="assets/css/dash_equip.css">
+
+    <!-- Font - consider having this local -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'> -->
+</head>
+
+
+<div class="sicHeader">
+    <div class="sicHeadLeft">
+        <a href="./"> <img src="assets/img/logo.png" alt="Company Logo" style="height:40px;"> </a>
+        <h3><span ng-bind="companyName"></span></h3>
+        <!-- </div> -->
+        <!-- <div class="sicHeadCenter"> -->
+        <div>
+            <div ng-bind="meta.Day"></div>
+            <div ng-bind="meta.Date"></div>
+        </div>
+
+        <div id="sicShiftTitle">Day Shift</div>
+        <div>
+            <label class="switch">
+                <input type="checkbox" checked ng-click="switchShift()">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <div class="shift-value">LastUpdate: <span ng-bind="meta.LastUpdate.date"></span></div>
+    </div>
+
+    <div class="sicHeadRight">
+        <div ng-repeat="x in extraDates"><button ng-click="switchToExtraDate($index)">{{x[x.length-1].Date}}</button>
+        </div>
+    </div>
+</div>
+<!-- <div class="sicHeadRight">
+    <a href="" class="sicHeadBtn"><i class="fas fa-user"></i></a>
+    <a href="" class="sicHeadBtn"><i class="fas fa-cogs"></i></a>
+</div> -->
