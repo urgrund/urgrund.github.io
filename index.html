@@ -68,16 +68,16 @@
                                 <h3>Art TD</h3>
                                 <p>
                                         - Define art pipelines for key art assets (tracks, vehicles)<br />
-                                        - Write shader set to be used with high performance in mind (mobile)<br />
-                                        - Communicate technical restrictions to teams (Singapore/Malaga)<br />
+                                        - Write shader set to be used with high performance in mind (iOS/Android)<br />
+                                        - Communicate technical art restrictions to teams (Singapore/Spain)<br />
                                         - Lead with examples of best practices and measured results<br />
                                         - Point of contact in both studios for art pipelines <br />
-                                        - Regular profiling of project and reporting of any concerns<br />
+                                        - Regular CPU/GPU profiling of project and reporting of any concerns<br />
                                         - Resulted in bringing low performing (memory/FPS) scenes up to targets<br />
                                 </p>
                         </div>
                         <div>
-
+                                <img src="box/box_VLGR.jpg" />
                         </div>
                 </div>
 
@@ -94,17 +94,39 @@
                                 <script>image("ss/vl/vl06.jpg", "vl2", "")</script>
                         </div> -->
 
-
+                        <h4 class="left">Environments/Tracks</h4>
                         <div id="vl3">
                                 <script>image("ss/vl/vl07.jpg", "vl3", "One prefeb, variations of density and scale through shader")</script>
-                                <script>image("ss/vl/vl08.jpg", "vl3", "Very cheap mobile specular approximation using pow() of lightmap value as mask")</script>
+                                <script>image("ss/vl/vl03.jpg", "vl3", "Environment TA work (post-effects, shaders)")</script>
                                 <script>image("ss/vl/vl09.jpg", "vl3", "Forward rendering in Unity to achieve backface lighting")</script>
                         </div>
 
+                        <h4 class="left">Vehicles</h4>
                         <div id="vl4">
-                                <script>image("ss/vl/vl10.jpg", "vl4", "Road shader for mobile devices, detail map with decals")</script>
-                                <script>image("ss/vl/vl11.jpg", "vl4", "Was able to drastically reduce CPU render time with custom solution with DrawMeshInstanced()")</script>
-                                <script>image("ss/vl/vl13.jpg", "vl4", "VFX work for mobile in-game events")</script>
+
+                                <script>image("ss/vl/vl02.jpg", "vl4", "Selection scene for your vehicle, using mobile inputs to pinch/zoom/orbit your selection")</script>
+                                <script>image("ss/vl/vl13.jpg", "vl4", "VFX work for mobile in-game events including approximate motion-blur")</script>
+                        </div>
+
+
+                        <h4 class="left">Custom Batching in Unity</h4>
+                        <p class="left">
+                                The CPU cost of preparing objects for rendering was proving too high with our scenes
+                                when using regular Unity GameObjects. To get around this I wrote a system that collected
+                                all the static renderers and clustered them (similar to a quad-tree) so that they could
+                                be queried with <a href="https://docs.unity3d.com/Manual/CullingGroupAPI.html">Unity's
+                                        Culling Group API</a>. From this, I was able to quickly get the
+                                objects needed for rendering and make direct calls to <a
+                                        href="https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstanced.html">DrawMeshInstanced()</a>
+                                to render all
+                                instances of a mesh in 1 Draw Call. I found an added bonus was that all instances would
+                                truly be rendered in one call, whereas profiling revealed that Unity often breaks
+                                batching of a single instance type.
+                        </p>
+                        <div id="vl5">
+                                <script>image("ss/vl/vl11.jpg", "vl5", "Experimenting with different approaches to building the batches, different List<> methods provided pros/cons with GC and speed")</script>
+                                <script>image("ss/vl/vl14.jpg", "vl5", "Showing the reduction in CPU ms and drawcalls when using custom batching")</script>
+                                <script>image("ss/vl/vl15.jpg", "vl5", "Inital test scene with varying materials and meshes")</script>
                         </div>
                 </div>
         </div>
@@ -157,15 +179,15 @@
                         <div id="bne3">
                                 <script>image("ss/bnss/bnss10.jpg", "bne3", "Ace Combat Hangar Lighting")</script>
                                 <script>image("ss/bnss/bnss09.jpg", "bne3", "Ace Combat Hangar Lighting")</script>
-                                <script>image("ss/bnss/bnss11.jpg", "bne3", "Ace Combat Hangar Lighting")</script>
+                                <script>image("ss/bnss/bnss12.jpg", "bne3", "PS4 stress test for city rendering")</script>
 
                         </div>
 
-                        <div id="bne4">
+                        <!-- <div id="bne4">
                                 <script>image("ss/bnss/bnss01.jpg", "bne4", "Baked pivots for multi-card billboards")</script>
                                 <script>image("ss/bnss/bnss02.jpg", "bne4", "Auto-group, decimate and bake for low-poly background objects")</script>
                                 <script>image("ss/bnss/bnss12.jpg", "bne4", "PS4 stress test for city rendering")</script>
-                        </div>
+                        </div> -->
                 </div>
         </div>
 
@@ -240,7 +262,7 @@
 
         <!-- ------------------------------------------------------------------------------------------------------------------ -->
         <div class="entry">
-                <div class="top left">
+                <div class="top-abt left">
                         <div class="center">
                                 <img src="logo/tf54.png" />
                                 <h4>twofour54</h4>
@@ -259,15 +281,15 @@
                                         in which I wore many hats depending on the situation.<br /><br />
                                         - Working relationship with Ubisoft Abu Dhabi to collaborate and manage course
                                         involvement<br />
-                                        - Integrated systems and procedures into the learning environment that mimicked
-                                        a small development studio<br />
+                                        - Created a simulated studio environment for a more genuine student
+                                        experience<br />
                                         - Represented Academy at events such as Comic Con<br />
                                         - Designed, maintained and delivered curriculum with a focus on industry best
                                         practices<br />
                                         - Student progress and expectation management through review and consultation
                                         sessions<br />
-                                        - Outreach efforts to local universities to promote the course and games
-                                        development as a career opportunity<br />
+                                        - Outreach efforts to local universities to promote game development as a
+                                        career opportunity<br />
                                 </p>
                         </div>
                         <div></div>
@@ -352,10 +374,8 @@
                                 <p>
                                         - Technical role responsible for performance of AAA content on Xbox360 &
                                         Playstation 3 consoles<br />
-                                        - Daily profiling of performance heavy assets such as environments to assess
-                                        their cost (memory/fillrate)<br />
-                                        - Educate and delegate performance improving tasks to art team to keep assets
-                                        running fast on targets<br />
+                                        - Daily profiling of performance heavy assets such as environments<br />
+                                        - Educate and delegate performance improving tasks to art team<br />
                                         - Introduce new staff to the internal tools, technology and processes<br />
                                         - Surgical scene deconstruction to (PIX) to expose hard to find performance
                                         issues<br />

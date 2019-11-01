@@ -43,7 +43,7 @@ function image(url, divid, subtext, contid, imgid) {
 	var innerHTML = "";
 	innerHTML += "<img class='modal-content' src='" + url + "'/>";
 	innerHTML += "<br/>";
-	innerHTML += "<h3 class='center'>" + subtext + "</h3>";
+	innerHTML += "<h4 class='center'>" + subtext + "</h4>";
 	b.innerHTML = innerHTML;
 	b.className = 'modal';
 	b.id = url;
