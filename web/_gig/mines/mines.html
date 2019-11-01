@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)http://116.87.144.37/dev/login.html -->
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+
+
+  <style>
+    [type="date"]::-webkit-inner-spin-button {
+      display: none;
+    }
+
+    .smallText {
+      font-size: 10pt;
+      color: rgb(206, 206, 206);
+    }
+
+    div.companyfloat {
+      position: absolute;
+      top: -85px;
+      right: 0%;
+      width: 100%;
+      height: 10%;
+      text-align: center;
+      /*      vertical-align: middle;*/
+    }
+
+    div.companylogo {
+      display: inline-block;
+      margin: 0 auto;
+      background-color: rgba(60, 70, 92, 0.9);
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      border: 1px solid #232130;
+      /* text-align: center;
+      margin: auto; */
+    }
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+
+    a:link,
+    a:visited,
+    a:hover,
+    a:active {
+      color: rgb(206, 206, 206);
+    }
+
+    a:link {
+      color: rgb(226, 239, 255);
+    }
+
+    a:hover {
+      color: rgb(255, 255, 255);
+    }
+
+
+    .btn {
+      background-color: DodgerBlue;
+      border: none;
+      color: white;
+      /* padding: 12px 16px; */
+      font-size: 20px;
+      width: 60%;
+      height: 50px;
+      cursor: pointer;
+    }
+
+    /* Darker background on mouse-over */
+
+    .btn:hover {
+      background-color: RoyalBlue;
+    }
+
+    .mines-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: 10px;
+    }
+
+    .mines-card {
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(0, 0, 0, 0.8);
+      font-size: 30px;
+      text-align: center;
+    }
+
+    .mines-tabdiv {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    .mines-chartdiv {
+      background-color: rgba(0, 0, 0, 0.2);
+      width: 100%;
+      height: 100px;
+    }
+
+    .mines-equipgrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(60px, 70px));
+      grid-gap: 2px;
+    }
+
+    .mines-equipgridtitle {
+      text-align: left;
+      font-size: 20px;
+    }
+
+    .mines-equipbtn {
+      background-color: #8d8d8d;
+
+      width: 70px;
+      height: 50px;
+      color: white;
+      /* padding: 16px 32px; */
+      text-align: center;
+      font-size: 12px;
+      /* margin: 4px 2px; */
+      opacity: 1;
+      transition: 0.3s;
+      display: inline-block;
+      text-decoration: none;
+      cursor: pointer;
+
+      border: none;
+      /* border: 1px solid green; */
+      /* border-right: 15px solid red; */
+      /* background-image: linear-gradient(to bottom, rgb(29, 39, 58), rgb(44, 60, 90)); */
+      background-color: #4a475c71;
+
+      /* border-right: 15px 'solid'RoyalBlue; */
+    }
+
+    .mines-equipbtn:hover {
+      opacity: 1;
+      background-color: #4a475c;
+    }
+
+    .mines-bogtphgrid {
+      display: grid;
+      border: 1px solid gray;
+      grid-template-columns: auto 7fr;
+      /*1fr;*/
+      text-align: left;
+      grid-gap: 0px;
+      margin: 2px;
+      margin-bottom: 5px;
+      box-shadow: 0 3px 5px rgba(59, 92, 129, 0.3);
+    }
+
+    h6 {
+      margin: 2%;
+    }
+  </style>
+</head>
+
+
+
+
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+
+<script src="alldata.js"></script>
+<script src="Charts.js"></script>
+<script src="ChartsMines.js"></script>
+
+<body>
+
+  <div ng-app="myApp" ng-controller="myCtrl">
+    <div class="mines-container">
+      <div ng-repeat="x in allData  | limitTo:3" ng-init="siteIndex = $index" class="mines-card">
+
+        <h3 ng-bind="x.name"> </h3>
+
+        <!-- N A V I G A T I O N -->
+        <div class="mines-tabdiv">
+          <div><button ng-click="tabClick(siteIndex, x.name, 0)">Overview</button></div>
+          <div><button ng-click="tabClick(siteIndex, x.name, 1)">Boggers</button></div>
+          <div><button ng-click="tabClick(siteIndex, x.name, 2)">Trucks</button></div>
+          <div><button ng-click="tabClick(siteIndex, x.name, 3)">Drills</button></div>
+        </div>
+
+
+
+
+
+
+
+
+        <!-- Overview --------------------------------->
+        <div id="0" class="{{x.name}}Tab">
+          <h6>Overview</h6>
+          <div class="mines-chartdiv">Chart?</div>
+          <div class="mines-chartdiv">Chart?</div>
+          <div class="mines-chartdiv">Chart?</div>
+
+          <h6>Equipment at Site</h6>
+          <div class="mines-equipgridtitle">Boggers</div>
+          <div class="mines-equipgrid">
+            <div ng-repeat="y in x.equipmentByFunction[2]" ng-init="e = getEquipObject(siteIndex, y.Index)"
+              ng-hide="$first">
+              <button class="mines-equipbtn" ng-click="" ng-style='getEquipButtonSylte({{e}})'>{{ e.id }}</button>
+            </div>
+          </div>
+
+
+          <div class="mines-equipgridtitle">Trucks</div>
+          <div class="mines-equipgrid">
+            <div ng-repeat="y in x.equipmentByFunction[3]" ng-init="e = getEquipObject(siteIndex, y.Index)"
+              ng-hide="$first">
+              <button class="mines-equipbtn" ng-click="" ng-style='getEquipButtonSylte({{e}})'>{{ e.id }}</button>
+            </div>
+          </div>
+
+
+          <div class="mines-equipgridtitle">Drills</div>
+          <div class="mines-equipgrid">
+            <div ng-repeat="y in x.equipmentByFunction[0]" ng-init="e = getEquipObject(siteIndex, y.Index)"
+              ng-hide="$first">
+              <button class="mines-equipbtn" ng-click="" ng-style='getEquipButtonSylte({{e}})'>{{ e.id }}</button>
+            </div>
+            <div ng-repeat="y in x.equipmentByFunction[1]" ng-init="e = getEquipObject(siteIndex, y.Index)"
+              ng-hide="$first">
+              <button class="mines-equipbtn" ng-click="" ng-style='getEquipButtonSylte({{e}})'>{{ e.id }}</button>
+            </div>
+          </div>
+        </div>
+        <!-------------------------------------------->
+
+
+
+
+
+
+
+        <!-- Boggers --------------------------------->
+        <div id="1" class="{{x.name}}Tab" style="display:none">
+          <h6>Availability</h6>
+          <div ng-repeat="y in x.equipmentByFunction[2]" ng-if="!$first"
+            ng-init="e = getEquipObject(siteIndex, y.Index)">
+            <div class="mines-bogtphgrid">
+              <div>
+                <button class="mines-equipbtn" ng-click="" ng-style='getEquipButtonSylte({{e}})'>{{ e.id }}</button>
+              </div>
+              <div id="{{siteIndex}}-{{y.Index}}" class="boggerChart">
+                {{e.shiftData[0].events[e.shiftData[0].events.length-1].majorGroup}}
+              </div>
+            </div>
+          </div>
+
+          <h6>Summary</h6>
+          <div id="{{siteIndex}}-BoggerTPH" class="boggerTPH" style="height: 200px; "></div>
+          <div id="{{siteIndex}}-BoggerPIE" class="boggerPIE" style="height: 200px; "></div>
+        </div>
+        <!-------------------------------------------->
+
+
+
+
+
+        <!-- Trucks --------------------------------->
+        <div id="2" class="{{x.name}}Tab" style="display:none">
+          <!-- <div ng-repeat="y in x.equipmentByFunction[3]" ng-hide="$first" ng-init="e = getEquipObject(2, y.Index)">
+            <p>{{ y.id }}</p>
+          </div> -->
+        </div>
+        <!-------------------------------------------->
+
+
+
+        <!-- Drills --------------------------------->
+        <div id="3" class="{{x.name}}Tab" style="display:none">
+          <!-- <div ng-repeat="y in x.equipmentByFunction[0]" ng-hide="$first">
+            <p>{{ y.id }}</p>
+          </div>
+          <div ng-repeat="y in x.equipmentByFunction[1]" ng-hide="$first">
+            <p>{{ y.id }}</p>
+          </div> -->
+        </div>
+        <!-------------------------------------------->
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+
+
+</body>
+
+
+<script>
+
+
+
+
+  // Fake NG Data
+  var app = angular.module("myApp", []);
+
+
+  app.controller("myCtrl", function ($scope) {
+
+    $scope.allData = allData;
+    console.log($scope.allData);
+
+    // Based on a site index and equipment index
+    // return the real data object for the equipment
+    $scope.getEquipObject = function (site, index) {
+      if (index != null || index != undefined) {
+        //console.log($scope.allData[site].equipment[index]);
+        return $scope.allData[site].equipment[index];
+      }
+    };
+
+
+    $scope.createBoggerChart = function (id, equip) {
+      console.log(id + "  " + equip);
+    };
+
+    // Style an equipment button based on 
+    // its last recorded major group status
+    var equipBtnBorderWidth = '5px';
+    $scope.getEquipButtonSylte = function (e) {
+      if (e != null || e != undefined) {
+        if (e.shiftData[0].events[e.shiftData[0].events.length - 1].majorGroup == "OPERATING") { return { 'border-left': equipBtnBorderWidth + ' solid green' } }
+        if (e.shiftData[0].events[e.shiftData[0].events.length - 1].majorGroup == "IDLE") { return { 'border-left': equipBtnBorderWidth + ' solid orange' } }
+        if (e.shiftData[0].events[e.shiftData[0].events.length - 1].majorGroup == "DOWN") { return { 'border-left': equipBtnBorderWidth + ' solid red' } }
+      }
+    };
+
+
+    // Manages click input on the numerous tabs
+    // taking into account the tab ground and index
+    $scope.tabClick = function (siteIndex, site, tabIndex) {
+      x = document.getElementsByClassName(site + "Tab");
+      for (i = 0; i < x.length; i++) {
+
+        // Turn all off
+        x[i].style.display = "none";
+
+
+        // If valid tab, turn on and generate charts for them
+        if (tabIndex == x[i].id) {
+
+          x[i].style.display = "block";
+          equipChartsDivs = x[i].getElementsByClassName("boggerChart");
+
+          var boggerTotalTPH = Array.apply(null, Array(12)).map(function () { return 0; });
+          var boggerTotalAvail = Array.apply(null, Array(3)).map(function () { return 0; });
+
+          // Create the usage bar for each equipment
+          for (j = 0; j < equipChartsDivs.length; j++) {
+
+            // Get the equip and create a chart
+            var id = equipChartsDivs[j].id.substring(2);
+            var equip = $scope.allData[siteIndex].equipment[id];
+            ChartsMines.CreateUsageBar(equipChartsDivs[j].id, equip);
+
+            // Build site totals for metric TPH and usage
+            for (k = 0; k < equip.shiftData[0].tph[0].length; k++) {
+              boggerTotalTPH[k] += equip.shiftData[0].tph[equip.shiftData[0].tph.length - 1][k];
+            }
+
+            boggerTotalAvail[0] += equip.shiftData[0].timeAvailable;
+            boggerTotalAvail[1] += equip.shiftData[0].timeDown;
+            boggerTotalAvail[2] += equip.shiftData[0].timeUtilised;
+
+            console.log(equip.id + " A:" + equip.shiftData[0].timeAvailable + "  D:" + equip.shiftData[0].timeDown + "  U:" + equip.shiftData[0].timeUtilised);
+          }
+
+          // for (j = 0; j < equipChartsDivs.length; j++) {
+          //   console.log(equipChartsDivs[j].id);
+          // }
+
+          //var totalTPHDiv = x[i].getElementsByClassName("boggerTPH")[0];
+          //console.log("DIV : " + tphDiv.id);
+          var tphDiv = document.getElementById(siteIndex + "-" + "BoggerTPH");
+          ChartsMines.CreateTPH(tphDiv.id, boggerTotalTPH);
+
+          var pieDiv = document.getElementById(siteIndex + "-" + "BoggerPIE");
+          ChartsMines.CreatePie(pieDiv.id, boggerTotalAvail);
+
+          console.log(siteIndex + ": " + boggerTotalAvail);
+          //var totalPIEDiv = x[i].getElementsByClassName("boggerPIE")[0];
+          //console.log("DIV : " + totalPIEDiv.id);
+          //ChartsMines.CreatePie(totalPIEDiv.id, boggerTotalAvail);
+
+          //console.log(boggerTotalTPH);
+          //console.log(boggerTotalAvail);
+        }
+
+      }
+    };
+
+
+
+    // $scope.getStyle = function (divsize) {
+
+    //   //return { 'width': (size - 1) + '%' }
+    //   return {
+    //     'grid-template-columns': (divsize[0]) + '% ' + (divsize[1]) + '% ' + (divsize[2]) + '%'
+    //   };
+    // };
+
+    // $scope.getEquipDivSizes = function (site, index) {
+    //   if (index != null || index != undefined) {
+    //     var equip = $scope.allData[site].equipment[index];
+    //     var tt = equip.shiftData[0].timeTotal;
+    //     var sizes = [];
+    //     sizes[0] = equip.shiftData[0].timeAvailable / tt;
+    //     sizes[1] = equip.shiftData[0].timeUtilised / tt;
+    //     sizes[2] = equip.shiftData[0].timeDown / tt;
+    //     return sizes;
+    //   }
+    // };
+
+
+    // Create lists based on types
+    // var tabData = [];
+    // for (var i = 0; i < allData.length - 2; i++) {
+    //   tabData[i] = [];
+    // }
+
+    //    for (var i = 0; i < $scope.allData.length - 2; i++) {
+    //console.log($scope.allData[i]);
+    //    for (var j = 0; j < $scope.allData[i].equipmentByFunction.length; j++) {
+    //console.log($scope.allData[i].equipmentByFunction[0][0]);
+    //    if ($scope.allData[i].equipmentByFunction[j][0] == "LOADING")
+    //    tabData[i][0] = $scope.allData[i].equipmentByFunction;
+    //if ($scope.allData[i].equipmentByFunction[j][0] == "HAULING")
+    //tabData[i][0] = $scope.allData[i].equipmentByFunction;
+    //}
+    //$scope.allData[i].equipmentByFunction.P;
+    //tabData[i][0] = $scope.allData[i].equipmentByFunction.P;
+    //console.log($scope.allData[i].equipmentByFunction[
+    //}
+
+
+    //$scope.loading = $scope.allData[0].equipmentByFunction[0];
+    //console.log($scope.loading);
+    //console.log(tabData);
+
+
+
+
+
+
+
+  });
+
+
+
+
+
+</script>
+
+
+</html>

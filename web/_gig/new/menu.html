@@ -1,0 +1,195 @@
+<div id="site_menu">
+
+    <div class="navbar">
+        <div class="navleft">
+            <div>COMPANY LOGO</div>
+            <!-- <a href="#news">News</a> -->
+
+
+            <div class="dropdown">
+                <div class="dropbtn">Short Interval Control</div>
+                <!-- <i class="fa fa-caret-down"></i> -->
+                <div class="dropdown-content">
+                    <div class="siteCard" ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
+                        <img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg">
+                        <h2>{{x.name}}</h2>
+
+                        <h4>Analysis</h4>
+                        <div><a ng-href="">Bogger Movements</a></div>
+                        <div><a ng-href="">Hauling Movements</a></div>
+                        <div><a ng-href="">Drill Meters</a></div>
+                        </br>
+
+                        <h4>Materials</h4>
+                        <div><a ng-href="">Production Tonnes</a></div>
+                        <div><a ng-href="">Development Tonnes</a></div>
+                        </br>
+
+                        <div class="siteCardGrid">
+                            <div>
+                                <h3>Boggers</h3>
+                                <div ng-repeat="y in x.equipmentByFunction.LOADING">
+                                    <a ng-href="#!equip/{{siteIndex}}/{{y.Index}}">{{ y.ID }}</a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3>Trucks</h3>
+                                <div ng-repeat="y in x.equipmentByFunction.HAULING">
+                                    <a ng-href="#!equip/{{siteIndex}}/{{y.Index}}">{{ y.ID }}</a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3>Drills</h3>
+                                <div ng-repeat="y in x.equipmentByFunction.P">
+                                    <a ng-href="#!equip/{{siteIndex}}/{{y.Index}}">{{ y.ID }}</a>
+                                </div>
+                                <div ng-repeat="y in x.equipmentByFunction.D">
+                                    <a ng-href="#!equip/{{siteIndex}}/{{y.Index}}">{{ y.ID }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <div class="dropbtn">Monthly Compliance</div>
+                <div class="dropdown-content">
+                    <div class="droplist">
+                        <h3>Forms</h3>
+                        <a href="#">Adjust Target Inputs</a>
+
+                        <h3>Mines</h3>
+                        <a href="#">Plan vs Compliance</a>
+                        <a href="#">Material Movements</a>
+
+                        <h3>Equipment</h3>
+                        <a href="#">Link 1</a>
+                        <a href="#">Link 2</a>
+                        <a href="#">Link 3</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <div class="dropbtn">Reports & Analysis</div>
+                <div class="dropdown-content">
+                    <div class="droplist">
+
+                        <h3>Call Ups</h3>
+                        <h5>Day Shift</h5>
+                        <a href="#">First Call-up</a>
+                        <a href="#">Last Call-up</a>
+
+                        <h5>Night Shift</h5>
+                        <a href="#">First Call-up</a>
+                        <a href="#">Last Call-up</a>
+
+                        <h3>Equipment</h3>
+                        <a href="#">Downtime Report</a>
+                        <a href="#">Material Movements</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navright">
+            <div class="util">
+                <div class="utilbtn userbtn"><i class="far fa-user"></i></div>
+                <div class="dropdown-content">
+                    <h3><i class="far fa-user"></i> User</h3>
+                    <div><a href="#">Log-out</a></div>
+                    <div><a href="#">Report Issue</a></div>
+                    <div><a href="#">User Manual</a></div>
+                    <br>
+                    <h3><i class="fas fa-info-circle"></i> i-Mine</h3>
+                    <div><a href="#">About</a></div>
+                    <div><a href="#">Legal</a></div>
+                    <div><a href="#">Web</a></div>
+                </div>
+            </div>
+            <div class="util">
+                <div class="utilbtn"><i class="far fa-bell"></i><span class="alert-badge" ng-bind="alerts.length"
+                        ng-hide="alerts.length < 1"></span></div>
+                <div class="dropdown-content">
+
+                    <!-- Alert System -->
+                    <h3><i class="far fa-bell"></i> Alerts</h3>
+                    <div ng-repeat="alert in alerts">
+                        <alert-box alert="alert"></alert-box>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="util">
+                <div class="utilbtn"><i class="fas fa-database"></i></div>
+                <div class="dropdown-content">
+
+                    <h3> <i class="fas fa-database"></i> DB Connection</h3>
+                    <div class="utilgrid">
+
+                        <div>IP</div>
+                        <div>192.168.0.1</div>
+
+
+                        <div>Connection Status</div>
+                        <div>OK!</div>
+
+                        <div>Last Data Pull</div>
+                        <div>2018-10-10</div>
+
+                        <div>Next Data Pull</div>
+                        <div>9min</div>
+
+                        <div>Local Data Size</div>
+                        <div>1.5mb</div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="util">
+                <div class="utilbtn"><i class="fas fa-cogs"></i></div>
+                <div class="dropdown-content">
+
+                    <h3><i class="fas fa-cogs"></i> Preferences</h3>
+                    <div class="utilgrid">
+                        <div>Data Date</div>
+                        <div><input type="date"></div>
+
+                        <div>Current Shift</div>
+                        <div>
+                            <label class="switch"><input ng-init="state=true" ng-model="state"
+                                    ng-change="shiftSwitchChanged(state)" type="checkbox" id="togBtn" checked>
+                                <div class="slider round" switch-on="Day" switch-off="Night"></div>
+                            </label>
+                        </div>
+
+                        <div>Equipment Alerts</div>
+                        <div>
+                            <label class="switch"><input type="checkbox" id="togBtn" checked>
+                                <div class="slider round" switch-on="Active" switch-off="Off"></div>
+                            </label>
+                        </div>
+                    </div>
+                    <h3><i class="fas fa-search"></i> Equipment Search</h3>
+                    <input type="text" ng-model="search.id" ng-init="search.id ='Search by ID...'">
+                    <div ng-repeat="x in allEquipIDs | filter:search"><a ng-href="{{x.link}}">{{ x.id }}</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- <div>10/10/2018</i></div> -->
+    </div>
+</div>

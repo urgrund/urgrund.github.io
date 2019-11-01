@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+
+    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="tooltip.css">
+    <link rel="stylesheet" href="switch.css">
+    <link rel="stylesheet" href="charts.css">
+    <link rel="stylesheet" href="alerts.css">
+    <link rel="stylesheet" href="datepicker.css">
+    <link rel="stylesheet" href="landing.css">
+    <link rel="stylesheet" href="mines.css">
+    <link rel="stylesheet" href="callup.css">
+
+</head>
+
+<body style="height: 100%; margin: 0">
+
+
+
+
+    <div ng-app="myApp" ng-controller="myCtrl">
+        <!-- <i class="fas fa-camera"></i> -->
+        <div id="site_menu">
+
+            <div class="navbar">
+                <div class="navleft">
+                    <div>COMPANY LOGO</div>
+                    <!-- <a href="#news">News</a> -->
+
+
+                    <div class="dropdown">
+                        <div class="dropbtn">Short Interval Control</div>
+                        <!-- <i class="fa fa-caret-down"></i> -->
+                        <div class="dropdown-content">
+                            <div class="siteCard" ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
+                                <img ng-src="assets/img/site_{{siteIndex}}.jpg">
+                                <h2>{{x.name}}</h2>
+
+                                <h4>Analysis</h4>
+                                <div><a ng-href="">Bogger Movements</a></div>
+                                <div><a ng-href="">Hauling Movements</a></div>
+                                <div><a ng-href="">Drill Meters</a></div>
+                                </br>
+
+                                <h4>Materials</h4>
+                                <div><a ng-href="">Production Tonnes</a></div>
+                                <div><a ng-href="">Development Tonnes</a></div>
+                                </br>
+
+                                <div class="siteCardGrid">
+                                    <div>
+                                        <h3>Boggers</h3>
+                                        <div ng-repeat="y in x.equipmentByFunction.LOADING" ng-hide="$first">
+                                            <a ng-href="">{{ y.ID }}</a>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h3>Trucks</h3>
+                                        <div ng-repeat="y in x.equipmentByFunction.HAULING" ng-hide="$first">
+                                            <a ng-href="">{{ y.ID }}</a>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h3>Drills</h3>
+                                        <div ng-repeat="y in x.equipmentByFunction.P" ng-hide="$first">
+                                            <a ng-href="">{{ y.ID }}</a>
+                                        </div>
+                                        <div ng-repeat="y in x.equipmentByFunction.D" ng-hide="$first">
+                                            <a ng-href="">{{ y.ID }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="dropdown">
+                        <div class="dropbtn">Monthly Compliance</div>
+                        <div class="dropdown-content">
+                            <div class="droplist">
+                                <h3>Forms</h3>
+                                <a href="#">Adjust Target Inputs</a>
+
+                                <h3>Mines</h3>
+                                <a href="#">Plan vs Compliance</a>
+                                <a href="#">Material Movements</a>
+
+                                <h3>Equipment</h3>
+                                <a href="#">Link 1</a>
+                                <a href="#">Link 2</a>
+                                <a href="#">Link 3</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dropdown">
+                        <div class="dropbtn">Reports & Analysis</div>
+                        <div class="dropdown-content">
+                            <div class="droplist">
+
+                                <h3>Call Ups</h3>
+                                <h5>Day Shift</h5>
+                                <a href="#">First Call-up</a>
+                                <a href="#">Last Call-up</a>
+
+                                <h5>Night Shift</h5>
+                                <a href="#">First Call-up</a>
+                                <a href="#">Last Call-up</a>
+
+                                <h3>Equipment</h3>
+                                <a href="#">Downtime Report</a>
+                                <a href="#">Material Movements</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navright">
+                    <div class="util">
+                        <div class="utilbtn userbtn"><i class="far fa-user"></i></div>
+                        <div class="dropdown-content">
+                            <h3><i class="far fa-user"></i> User</h3>
+                            <div><a href="#">Log-out</a></div>
+                            <div><a href="#">Report Issue</a></div>
+                            <div><a href="#">User Manual</a></div>
+                            <div><a href="#">About</a></div>
+                        </div>
+                    </div>
+                    <div class="util">
+                        <div class="utilbtn"><i class="far fa-bell"></i><span class="alert-badge"
+                                ng-bind="alerts.length" ng-hide="alerts.length < 1"></span></div>
+                        <div class="dropdown-content">
+
+                            <h3><i class="far fa-bell"></i> Alerts</h3>
+
+                            <div ng-repeat="alert in alerts">
+                                <div ng-class="alert.level == 0? 'alertgrid a0' : 'alertgrid a1'">
+                                    <div>
+                                        <h2><i
+                                                ng-class="alert.level == 0 ? 'fas fa-exclamation-circle' : 'fas fa-exclamation-triangle'"></i>
+                                        </h2>
+                                    </div>
+                                    <div>
+                                        {{alert.time}}
+                                        </br>
+                                        {{alert.id}}
+                                        <!-- <a ng-href="" ng-class="alert.level == 0? 'a0' : 'a1'">{{alert.id}}</a> -->
+                                    </div>
+
+                                    <div>
+                                        <h5>{{alert.message}}</h5>
+                                    </div>
+                                    <div><span class="alertclose"
+                                            onclick="this.parentElement.parentElement.style.display='none';">&times;</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="util">
+                        <div class="utilbtn"><i class="fas fa-database"></i></div>
+                        <div class="dropdown-content">
+
+                            <h3> <i class="fas fa-database"></i> DB Connection</h3>
+                            <div class="utilgrid">
+
+                                <div>IP</div>
+                                <div>192.168.0.1</div>
+
+
+                                <div>Connection Status</div>
+                                <div>OK!</div>
+
+                                <div>Last Data Pull</div>
+                                <div>2018-10-10</div>
+
+                                <div>Next Data Pull</div>
+                                <div>9min</div>
+
+                                <div>Local Data Size</div>
+                                <div>1.5mb</div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="util">
+                        <div class="utilbtn"><i class="fas fa-cogs"></i></div>
+                        <div class="dropdown-content">
+
+                            <h3><i class="fas fa-cogs"></i> Preferences</h3>
+                            <div class="utilgrid">
+                                <div>Data Date</div>
+                                <div><input type="date"></div>
+
+                                <div>Current Shift</div>
+                                <div>
+                                    <label class="switch"><input type="checkbox" id="togBtn" checked>
+                                        <div class="slider round" switch-on="Day" switch-off="Night"></div>
+                                    </label>
+                                </div>
+
+                                <div>Equipment Alerts</div>
+                                <div>
+                                    <label class="switch"><input type="checkbox" id="togBtn" checked>
+                                        <div class="slider round" switch-on="Active" switch-off="Off"></div>
+                                    </label>
+                                </div>
+                            </div>
+                            <h3><i class="fas fa-search"></i> Equipment Search</h3>
+                            <input type="text" ng-model="search.id" ng-init="search.id ='Search by ID...'">
+                            <div ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
+                                <div ng-repeat="y in x.equipment | filter:search" ng-hide="$first"><a
+                                        ng-href="">{{ y.id }}</a></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- <div>10/10/2018</i></div> -->
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div id="site_body">
+            <div class="cup mines-center">
+
+                <div id="sankeyA" class="h33pc width: 5%">asdasd</div>
+                <div id="sankeyB" class="h33pc">asdasd</div>
+                <div id="sankeyC" class="h33pc">asdasd</div>
+                <!-- <div class="">
+                    <div id="monthlyChart" class="h60pc">asdasd</div>
+                </div> -->
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+    <script type="text/javascript" src="echarts.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+
+    <script src="alldata.js"></script>
+
+    <script type="text/javascript" src="ChartStyles.js"></script>
+    <script type="text/javascript" src="Charts.js"></script>
+    <script type="text/javascript" src="ChartsMines.js"></script>
+    <script type="text/javascript" src="ChartsMonthly.js"></script>
+
+
+
+    <script type="text/javascript">
+
+
+
+
+
+        // Fake NG Data
+        var app = angular.module("myApp", []);
+        var shiftIsDay = 0;
+
+
+
+        app.controller("myCtrl", function ($scope, $timeout) {
+
+            var remap = { Left: 0, Middle: 1, Middle2: 2, Right: 3 };
+
+            allData.pop();
+            allData.pop();
+
+            for (var x = 0; x < 3; x++) {
+                var data = allData[x].materialMovement;
+                for (var i = 0; i < data.length; i++) {
+                    data[i][9] = remap[data[i][9]];
+                    data[i][10] = remap[data[i][10]];
+                }
+            }
+
+
+            // console.log(allData[0].materialMovement);
+
+            //console.log(ChartStyles.test());
+            ChartsMines.CreateSankey("sankeyA", allData, 0);
+            ChartsMines.CreateSankey("sankeyB", allData, 1);
+            ChartsMines.CreateSankey("sankeyC", allData, 2);
+        });
+
+
+
+    </script>
+</body>
+
+</html>

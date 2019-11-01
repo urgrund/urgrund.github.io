@@ -1,0 +1,33 @@
+<div class="landing">
+    <!-- Top date and time -->
+    <div class="underline">
+        <div>
+            <h2>Welcome...</h2>
+        </div>
+        <div class="landtime">
+            <div>
+                <h1 style="font-size: 70px" ng-bind="clock | date:'HH:mm'"></h1>
+            </div>
+            <div>
+                <h3>Day Shift</h3>
+            </div>
+            <div>
+                <h3 ng-bind="dateString"></h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Site info -->
+    <div>
+        <div class="landcard" ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
+            <img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg">
+            <h2 ng-bind="x.name"></h2>
+            <h4>Target: 13232t </br> Actual: 3322t </br>Compliance: &#9650;58%</i></h4>
+            </br>
+            <h3 class="underline"><i class="far fa-bell"></i> Alerts</h3>
+            <div ng-repeat="alert in alerts">
+                <alert-box alert="alert"></alert-box>
+            </div>
+        </div>
+    </div>
+</div>

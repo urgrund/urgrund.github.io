@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+
+    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="tooltip.css">
+    <link rel="stylesheet" href="switch.css">
+    <link rel="stylesheet" href="charts.css">
+    <link rel="stylesheet" href="alerts.css">
+    <link rel="stylesheet" href="_mines.css">
+</head>
+
+<body style="height: 100%; margin: 0">
+
+
+
+
+    <div ng-app="myApp" ng-controller="myCtrl">
+
+        <div id="site_menu">
+
+            <div class="navbar">
+                <div class="navleft">
+                    <div>COMPANY LOGO</div>
+                    <!-- <a href="#news">News</a> -->
+
+
+                    <div class="dropdown">
+                        <div class="dropbtn">Short Interval Control</div>
+                        <!-- <i class="fa fa-caret-down"></i> -->
+                        <div class="dropdown-content">
+                            <div class="siteCard" ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
+                                <img ng-src="assets/img/site_{{siteIndex}}.jpg">
+                                <h2>{{x.name}}</h2>
+
+                                <h4>Analysis</h4>
+                                <div><a ng-href="">Bogger Movements</a></div>
+                                <div><a ng-href="">Hauling Movements</a></div>
+                                <div><a ng-href="">Drill Meters</a></div>
+                                </br>
+
+                                <h4>Materials</h4>
+                                <div><a ng-href="">Production Tonnes</a></div>
+                                <div><a ng-href="">Development Tonnes</a></div>
+                                </br>
+
+                                <div class="siteCardGrid">
+                                    <div>
+                                        <h3>Boggers</h3>
+                                        <div ng-repeat="y in x.equipmentByFunction.LOADING" ng-hide="$first">
+                                            <a ng-href="">{{ y.ID }}</a>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h3>Trucks</h3>
+                                        <div ng-repeat="y in x.equipmentByFunction.HAULING" ng-hide="$first">
+                                            <a ng-href="">{{ y.ID }}</a>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h3>Drills</h3>
+                                        <div ng-repeat="y in x.equipmentByFunction.P" ng-hide="$first">
+                                            <a ng-href="">{{ y.ID }}</a>
+                                        </div>
+                                        <div ng-repeat="y in x.equipmentByFunction.D" ng-hide="$first">
+                                            <a ng-href="">{{ y.ID }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="dropdown">
+                        <div class="dropbtn">Monthly Compliance</div>
+                        <div class="dropdown-content">
+                            <div class="droplist">
+                                <h3>Forms</h3>
+                                <a href="#">Adjust Target Inputs</a>
+
+                                <h3>Mines</h3>
+                                <a href="#">Plan vs Compliance</a>
+                                <a href="#">Material Movements</a>
+
+                                <h3>Equipment</h3>
+                                <a href="#">Link 1</a>
+                                <a href="#">Link 2</a>
+                                <a href="#">Link 3</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dropdown">
+                        <div class="dropbtn">Reports & Analysis</div>
+                        <div class="dropdown-content">
+                            <div class="droplist">
+
+                                <h3>Call Ups</h3>
+                                <h5>Day Shift</h5>
+                                <a href="#">First Call-up</a>
+                                <a href="#">Last Call-up</a>
+
+                                <h5>Night Shift</h5>
+                                <a href="#">First Call-up</a>
+                                <a href="#">Last Call-up</a>
+
+                                <h3>Equipment</h3>
+                                <a href="#">Downtime Report</a>
+                                <a href="#">Material Movements</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navright">
+                    <div class="util">
+                        <div class="utilbtn userbtn"><i class="far fa-user"></i></div>
+                        <div class="dropdown-content">
+                            <h3><i class="far fa-user"></i> User</h3>
+                            <div><a href="#">Log-out</a></div>
+                            <div><a href="#">Report Issue</a></div>
+                            <div><a href="#">Help</a></div>
+                            <div><a href="#">About</a></div>
+                        </div>
+                    </div>
+                    <div class="util">
+                        <div class="utilbtn"><i class="far fa-bell"></i></div>
+                        <div class="dropdown-content">
+
+                            <h3><i class="far fa-bell"></i> Alerts</h3>
+                            <div><a href="#">Connection Status</a></div>
+                            <div><a href="#">Last Data Pull</a></div>
+                            <div><a href="#">Next Data Pull</a></div>
+                            <div><a href="#">Size</a></div>
+
+
+                        </div>
+                    </div>
+
+                    <div class="util">
+                        <div class="utilbtn"><i class="fas fa-database"></i></div>
+                        <div class="dropdown-content">
+
+                            <h3> <i class="fas fa-database"></i> DB Connection</h3>
+                            <div class="utilgrid">
+                                <div>Connection Status</div>
+                                <div>OK!</div>
+
+                                <div>Last Data Pull</div>
+                                <div>2018-10-10</div>
+
+                                <div>Next Data Pull</div>
+                                <div>9min</div>
+
+                                <div>Local Data Size</div>
+                                <div>1.5mb</div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="util">
+                        <div class="utilbtn"><i class="fas fa-cogs"></i></div>
+                        <div class="dropdown-content">
+
+                            <h3><i class="fas fa-cogs"></i> Preferences</h3>
+                            <div class="utilgrid">
+                                <div>Data Date</div>
+                                <div><a href="#">Data Date</a></div>
+
+                                <div>Current Shift</div>
+                                <div>
+                                    <label class="switch"><input type="checkbox" id="togBtn" checked>
+                                        <div class="slider round" switch-on="Day" switch-off="Night"></div>
+                                    </label>
+                                </div>
+
+                                <div>Equipment Alerts</div>
+                                <div>
+                                    <label class="switch"><input type="checkbox" id="togBtn" checked>
+                                        <div class="slider round" switch-on="Active" switch-off="Off"></div>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- <div>10/10/2018</i></div> -->
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <div class="chartCard">
+                    <div class="charthead">
+                        <div class="chartheadtxt left"> Tonnes Per Hour </div>
+                        <div class="chartheadtxt right">                            
+                            <div class="tooltip">
+                                <i class="fas fa-info-circle tooltip"></i>
+                                <span class="tooltiptext">Shows the movements in the specified metric against targets
+                                    from monthly schedule. If this equipment has operated at different sites, this will
+                                    be reflected <a href="">Read More</a></span>
+                            </div>
+                            <i class="fas fa-download"></i>
+                        </div>
+                    </div>
+                    <div id="sankeyT" class="chartdivcontent"></div>
+                </div> -->
+
+        <div id="site_body">
+            <div class="minelayout">
+                <div ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
+
+                    <!-- Header -->
+                    <div class="minecardheader">
+                        <img ng-src="assets/img/site_{{siteIndex}}.jpg">
+                        <h2 ng-bind="x.name"> </h2>
+                        <!-- <div>
+                            <h6>Avg TPH</h6>
+                            <h6>Equip % Up</h6>
+                            <h6>On Target</h6>
+                        </div> -->
+                    </div>
+
+                    <div class="minechartsgrid">
+
+                        <!-- The two charts -->
+                        <div class="chartCard">
+                            <div class="charthead">
+                                <div class="chartheadtxt left">Production Tonnes</div>
+                            </div>
+                            <div id="{{siteIndex}}TPH" class="chartdivcontent">
+                            </div>
+                        </div>
+                        <div class="chartCard">
+                            <div class="charthead">
+                                <div class="chartheadtxt left">Material Movements</div>
+                            </div>
+                            <div id="{{siteIndex}}TPH" class="chartdivcontent">
+                            </div>
+                        </div>
+
+                        <!-- The equipment  -->
+                        <div>
+                            <h6>Equipment at Site</h6>
+                            <div class="equiplayout">
+                                <div>
+                                    Boggers
+                                    <div ng-repeat="y in x.equipmentByFunction.LOADING"
+                                        ng-init="e = getEquipObject(siteIndex, y.Index)" ng-hide="$first">
+                                        <a class="mines-equipbtn" ng-href="#!equip/{{siteIndex}}/{{y.Index}}"
+                                            ng-style='getEquipButtonSylte({{e}})'>{{ e.id }}</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    Trucks
+                                    <div ng-repeat="y in x.equipmentByFunction.HAULING"
+                                        ng-init="e = getEquipObject(siteIndex, y.Index)" ng-hide="$first">
+                                        <a class="mines-equipbtn" ng-href="#!equip/{{siteIndex}}/{{y.Index}}"
+                                            ng-style='getEquipButtonSylte({{e}})'>{{ e.id }}</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    Drills
+                                    <div ng-repeat="y in x.equipmentByFunction.P"
+                                        ng-init="e = getEquipObject(siteIndex, y.Index)" ng-hide="$first">
+                                        <a class="mines-equipbtn" ng-href="#!equip/{{siteIndex}}/{{y.Index}}"
+                                            ng-style='getEquipButtonSylte({{e}})'>{{ e.id }}</a>
+                                    </div>
+                                    <div ng-repeat="y in x.equipmentByFunction.D"
+                                        ng-init="e = getEquipObject(siteIndex, y.Index)" ng-hide="$first">
+                                        <a class="mines-equipbtn" ng-href="#!equip/{{siteIndex}}/{{y.Index}}"
+                                            ng-style='getEquipButtonSylte({{e}})'>{{ e.id }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+    <script src="alldata.js"></script>
+    <script src="html2canvas.js"></script>
+    <script type="text/javascript" src="ChartStyles.js"></script>
+    <script type="text/javascript" src="Charts.js"></script>
+    <script type="text/javascript" src="ChartsMines.js"></script>
+
+
+
+    <script type="text/javascript">
+
+        const ChartStyles = new ChartStyleContainer();
+
+        // enum for major groups
+        const MajorGroup = {
+            IDLE: 'Idle',
+            OPERATING: 'Operating',
+            DOWN: 'Down'
+        }
+
+        var shiftIsDay = 0;
+
+        var dataComplete = true;
+        // Fake NG Data
+        var app = angular.module("myApp", []);
+
+
+        app.controller("myCtrl", function ($scope, $timeout) {
+
+            $scope.siteData = allData;
+            console.log($scope.siteData);
+
+
+            // Title/heading variables
+            $scope.titleAvailable = "Availability";
+            $scope.titleSummary = "Summary";
+
+
+
+
+
+            //$scope.allData = allData;
+            //console.log($scope.allData);
+
+            // Based on a site index and equipment index
+            // return the real data object for the equipment
+            $scope.getEquipObject = function (site, index) {
+                if (index != null || index != undefined) { return $scope.siteData[site].equipment[index]; }
+            };
+
+
+            // THis should be top level, or a service 
+            // and accesible in any scope at all times 
+            $scope.getShift = function () {
+                return shiftIsDay;
+            };
+
+
+
+            // Style an equipment button based on 
+            // its last recorded major group status
+            var equipBtnBorderWidth = '2px';
+            $scope.getEquipButtonSylte = function (e) {
+                if (e != null || e != undefined) {
+                    if (e.shiftData[shiftIsDay].events[e.shiftData[shiftIsDay].events.length - 1].majorGroup == "OPERATING") { return { 'border-left': equipBtnBorderWidth + ' solid green' } }
+                    if (e.shiftData[shiftIsDay].events[e.shiftData[shiftIsDay].events.length - 1].majorGroup == "IDLE") { return { 'border-left': equipBtnBorderWidth + ' solid orange' } }
+                    if (e.shiftData[shiftIsDay].events[e.shiftData[shiftIsDay].events.length - 1].majorGroup == "DOWN") { return { 'border-left': equipBtnBorderWidth + ' solid red' } }
+                }
+            };
+
+
+
+
+            $scope.lastTabOfSite = [];
+            $scope.lastTabOfSite[0] = 0;
+            $scope.lastTabOfSite[1] = 0;
+            $scope.lastTabOfSite[2] = 0;
+
+
+
+            $scope.createCharts = function ($timeout) {
+                if (!dataComplete)
+                    return;
+                //return;
+
+                ClearAllCharts();
+
+                for (i = 0; i < $scope.siteData.length - 2; i++) {
+                    console.log("Create for site : " + $scope.siteData[i].name);
+                    // The element ID's are set in NG in the HTML
+                    ChartsMines.CreateTPH(i + "TPH", $scope.siteData[i].shiftData[shiftIsDay].tph, $scope.siteData[i].shiftData[shiftIsDay].cumulative);
+                    continue;
+
+                    //ChartsMines.CreateTPH(i + "CUMUL", $scope.siteData[i].shiftData[shiftIsDay].cumulative);
+                    ChartsMines.CreateSankey(i + "MM", $scope.siteData[i].materialMovement);
+
+                    var x = document.getElementsByClassName($scope.siteData[i].name + "Tab");
+                    for (z = 0; z < x.length; z++) {
+                        // Get chart divs
+                        var equipChartsDivs = x[z].getElementsByClassName("equipAvailBar");
+                        var boggerTotalTPH = Array.apply(null, Array(12)).map(function () { return 0; });
+                        var boggerTotalAvail = Array.apply(null, Array(3)).map(function () { return 0; });
+
+
+                        // -----------------------------------------------------
+                        // TODO -  this should all come from PHP?
+                        // Yes,  yes it should...   
+                        // -----------------------------------------------------
+
+                        // Create the usage bar for each equipment
+                        for (j = 0; j < equipChartsDivs.length; j++) {
+                            // Get the equip and create a chart
+                            var id = equipChartsDivs[j].id.substring(2);
+                            var equip = $scope.siteData[i].equipment[id];
+
+
+                            ChartsMines.CreateUsageBar(equipChartsDivs[j].id, equip);
+
+                            // Build site totals for metric TPH and usage
+                            for (k = 0; k < equip.shiftData[shiftIsDay].tph[0].length; k++) {
+                                boggerTotalTPH[k] += equip.shiftData[shiftIsDay].tph[equip.shiftData[shiftIsDay].tph.length - 1][k];
+                            }
+
+                            boggerTotalAvail[0] += equip.shiftData[shiftIsDay].timeExOperating;
+                            boggerTotalAvail[1] += equip.shiftData[shiftIsDay].timeExIdle;
+                            boggerTotalAvail[2] += equip.shiftData[shiftIsDay].timeExDown;
+
+                            //console.log(equip.id + " A:" + equip.shiftData[0].timeAvailable + "  D:" + equip.shiftData[0].timeDown + "  U:" + equip.shiftData[0].timeUtilised);
+                        }
+
+                        var tphDiv = document.getElementById(i + "-" + "EquipTypeTPH");
+                        ChartsMines.CreateTPH(tphDiv.id, boggerTotalTPH);
+
+                        var pieDiv = document.getElementById(i + "-" + "EquipTypePIE");
+                        ChartsMines.CreatePie(pieDiv.id, boggerTotalAvail);
+                    }
+                }
+
+                ResizeAllCharts();
+            };
+
+
+            // Manages click input on the numerous tabs
+            // taking into account the tab ground and index
+            $scope.tabClick = function ($event, siteIndex, site, tabIndex) {
+                $scope.lastTabOfSite[siteIndex] = tabIndex;
+
+                // Get all the tab buttons 
+                var btnClassName = siteIndex + "Btn";
+                var buttons = document.getElementsByClassName(btnClassName);
+                //console.log(buttons);
+
+                // What to display in the tab
+                x = document.getElementsByClassName(site + "Tab");
+                for (i = 0; i < x.length; i++) {
+                    // Hide all tab content to start with
+                    // and set button display to 'off' 
+                    x[i].style.display = "none";
+                    buttons[i].className.replace("active", "");
+                    buttons[i].classList.remove("active");
+
+
+                    // If valid tab, turn on and generate charts for them
+                    if (tabIndex == x[i].id) {
+                        // Set display of the tab and the button
+                        x[i].style.display = "block";
+                        buttons[i].className += " active";
+                    }
+                }
+
+                ResizeAllCharts();
+            };
+
+
+            $scope.$watch('$viewContentLoaded', function () {
+                $timeout(function () {
+                    console.log("do now....");
+                    $scope.createCharts();
+                }, 5);
+            });
+
+        });
+
+
+
+    </script>
+</body>
+
+</html>

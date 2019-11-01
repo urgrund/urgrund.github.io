@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+
+    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="tooltip.css">
+    <link rel="stylesheet" href="switch.css">
+    <link rel="stylesheet" href="charts.css">
+    <link rel="stylesheet" href="alerts.css">
+    <link rel="stylesheet" href="datepicker.css">
+    <link rel="stylesheet" href="landing.css">
+    <link rel="stylesheet" href="mines.css">
+
+</head>
+
+<body style="height: 100%; margin: 0">
+
+
+
+
+    <div ng-app="myApp" ng-controller="myCtrl">
+        <!-- <i class="fas fa-camera"></i> -->
+        <div id="site_menu">
+
+            <div class="navbar">
+                <div class="navleft">
+                    <div>COMPANY LOGO</div>
+                    <!-- <a href="#news">News</a> -->
+
+
+                    <div class="dropdown">
+                        <div class="dropbtn">Short Interval Control</div>
+                        <!-- <i class="fa fa-caret-down"></i> -->
+                        <div class="dropdown-content">
+                            <div class="siteCard" ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
+                                <img ng-src="assets/img/site_{{siteIndex}}.jpg">
+                                <h2>{{x.name}}</h2>
+
+                                <h4>Analysis</h4>
+                                <div><a ng-href="">Bogger Movements</a></div>
+                                <div><a ng-href="">Hauling Movements</a></div>
+                                <div><a ng-href="">Drill Meters</a></div>
+                                </br>
+
+                                <h4>Materials</h4>
+                                <div><a ng-href="">Production Tonnes</a></div>
+                                <div><a ng-href="">Development Tonnes</a></div>
+                                </br>
+
+                                <div class="siteCardGrid">
+                                    <div>
+                                        <h3>Boggers</h3>
+                                        <div ng-repeat="y in x.equipmentByFunction.LOADING">
+                                            <a ng-href="">{{ y.ID }}</a>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h3>Trucks</h3>
+                                        <div ng-repeat="y in x.equipmentByFunction.HAULING">
+                                            <a ng-href="">{{ y.ID }}</a>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h3>Drills</h3>
+                                        <div ng-repeat="y in x.equipmentByFunction.P">
+                                            <a ng-href="">{{ y.ID }}</a>
+                                        </div>
+                                        <div ng-repeat="y in x.equipmentByFunction.D">
+                                            <a ng-href="">{{ y.ID }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="dropdown">
+                        <div class="dropbtn">Monthly Compliance</div>
+                        <div class="dropdown-content">
+                            <div class="droplist">
+                                <h3>Forms</h3>
+                                <a href="#">Adjust Target Inputs</a>
+
+                                <h3>Mines</h3>
+                                <a href="#">Plan vs Compliance</a>
+                                <a href="#">Material Movements</a>
+
+                                <h3>Equipment</h3>
+                                <a href="#">Link 1</a>
+                                <a href="#">Link 2</a>
+                                <a href="#">Link 3</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dropdown">
+                        <div class="dropbtn">Reports & Analysis</div>
+                        <div class="dropdown-content">
+                            <div class="droplist">
+
+                                <h3>Call Ups</h3>
+                                <h5>Day Shift</h5>
+                                <a href="#">First Call-up</a>
+                                <a href="#">Last Call-up</a>
+
+                                <h5>Night Shift</h5>
+                                <a href="#">First Call-up</a>
+                                <a href="#">Last Call-up</a>
+
+                                <h3>Equipment</h3>
+                                <a href="#">Downtime Report</a>
+                                <a href="#">Material Movements</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navright">
+                    <div class="util">
+                        <div class="utilbtn userbtn"><i class="far fa-user"></i></div>
+                        <div class="dropdown-content">
+                            <h3><i class="far fa-user"></i> User</h3>
+                            <div><a href="#">Log-out</a></div>
+                            <div><a href="#">Report Issue</a></div>
+                            <div><a href="#">User Manual</a></div>
+                            <br>
+                            <h3><i class="fas fa-info-circle"></i> i-Mine</h3>
+                            <div><a href="#">About</a></div>
+                            <div><a href="#">Legal</a></div>
+                            <div><a href="#">Web</a></div>
+                        </div>
+                    </div>
+                    <div class="util">
+                        <div class="utilbtn"><i class="far fa-bell"></i><span class="alert-badge"
+                                ng-bind="alerts.length" ng-hide="alerts.length < 1"></span></div>
+                        <div class="dropdown-content">
+
+                            <h3><i class="far fa-bell"></i> Alerts</h3>
+
+                            <div ng-repeat="alert in alerts">
+                                <div ng-class="alert.level == 0? 'alertgrid a0' : 'alertgrid a1'">
+                                    <div>
+                                        <h2><i
+                                                ng-class="alert.level == 0 ? 'fas fa-exclamation-circle' : 'fas fa-exclamation-triangle'"></i>
+                                        </h2>
+                                    </div>
+                                    <div>
+                                        {{alert.time}}
+                                        </br>
+                                        {{alert.id}}
+                                        <!-- <a ng-href="" ng-class="alert.level == 0? 'a0' : 'a1'">{{alert.id}}</a> -->
+                                    </div>
+
+                                    <div>
+                                        <h5>{{alert.message}}</h5>
+                                    </div>
+                                    <div><span class="alertclose"
+                                            onclick="this.parentElement.parentElement.style.display='none';">&times;</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="util">
+                        <div class="utilbtn"><i class="fas fa-database"></i></div>
+                        <div class="dropdown-content">
+
+                            <h3> <i class="fas fa-database"></i> DB Connection</h3>
+                            <div class="utilgrid">
+
+                                <div>IP</div>
+                                <div>192.168.0.1</div>
+
+
+                                <div>Connection Status</div>
+                                <div>OK!</div>
+
+                                <div>Last Data Pull</div>
+                                <div>2018-10-10</div>
+
+                                <div>Next Data Pull</div>
+                                <div>9min</div>
+
+                                <div>Local Data Size</div>
+                                <div>1.5mb</div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="util">
+                        <div class="utilbtn"><i class="fas fa-cogs"></i></div>
+                        <div class="dropdown-content">
+
+                            <h3><i class="fas fa-cogs"></i> Preferences</h3>
+                            <div class="utilgrid">
+                                <div>Data Date</div>
+                                <div><input type="date"></div>
+
+                                <div>Current Shift</div>
+                                <div>
+                                    <label class="switch"><input type="checkbox" id="togBtn" checked>
+                                        <div class="slider round" switch-on="Day" switch-off="Night"></div>
+                                    </label>
+                                </div>
+
+                                <div>Equipment Alerts</div>
+                                <div>
+                                    <label class="switch"><input type="checkbox" id="togBtn" checked>
+                                        <div class="slider round" switch-on="Active" switch-off="Off"></div>
+                                    </label>
+                                </div>
+                            </div>
+                            <h3><i class="fas fa-search"></i> Equipment Search</h3>
+                            <input type="text" ng-model="search.id" ng-init="search.id ='Search by ID...'">
+                            <div ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
+                                <div ng-repeat="y in x.equipment | filter:search" ng-hide="$first"><a
+                                        ng-href="">{{ y.id }}</a></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- <div>10/10/2018</i></div> -->
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div id="site_body">
+            <div class="mines" ng-init="x = pageSite">
+                <div>
+                    <div class="landcard">
+                        <img ng-src="assets/img/site_{{siteIndex}}.jpg">
+                        <h2 class="underline">{{x.name}}</h2>
+
+                        <div class="minesEquipTotals">
+                            <div class="chart" id="totalsBoggers">Bog</div>
+                            <div class="chart" id="totalsTrucks">Trucks</div>
+                            <div class="chart" id="totalsDrills">Drills</div>
+                        </div>
+
+
+
+                        <h3 class="underline"><i class="far fa-bell"></i> Alerts</h3>
+                        <div ng-repeat="alert in alerts">
+                            <div ng-class="alert.level == 0? 'alertgrid a0' : 'alertgrid a1'">
+                                <div>
+                                    <h2><i
+                                            ng-class="alert.level == 0 ? 'fas fa-exclamation-circle' : 'fas fa-exclamation-triangle'"></i>
+                                    </h2>
+                                </div>
+                                <div>
+                                    {{alert.time}}
+                                    </br>
+                                    {{alert.id}}
+                                    <!-- <a ng-href="" ng-class="alert.level == 0? 'a0' : 'a1'">{{alert.id}}</a> -->
+                                </div>
+
+                                <div>
+                                    <h5>{{alert.message}}</h5>
+                                </div>
+                                <div><span class="alertclose"
+                                        onclick="this.parentElement.parentElement.style.display='none';">&times;</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mines-center">
+                    <h2 class="underline"><i class="far fa-calendar-alt"></i> Current Overview</h2>
+                    <div class="mines-outlook-container">
+                        <div class="item-t" id="siteTPH"></div>
+                        <div class="item-c" id="siteCumul"></div>
+
+                        <div class="item-b">
+                            <h3>Bogger Availability</h3>
+                            <div ng-repeat="y in x.equipmentByFunction.LOADING" ng-init="e = getEquipObject(y.Index)"
+                                class="mines-bogger">
+                                <div>
+                                    <a class="mines-equipbtn" ng-href="#!equip/{{siteIndex}}/{{y.Index}}"
+                                        ng-style='getEquipButtonStyle({{e.id}})'>{{ e.id }}</a>
+                                </div>
+                                <div class="mines-bogger-chart" id="{{y.Index}}">ASDDS</div>
+                                <div>
+                                    <h6>
+                                        <div><i class="fas fa-weight-hanging" alt="sometexthere"></i> :
+                                            {{e.shiftData[shiftIsDay].tphAvg}}/h
+                                        </div>
+                                        <div><i class="fas fa-chart-line"></i> :
+                                            {{e.shiftData[shiftIsDay].tphTotal}}
+                                        </div>
+                                    </h6>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="item-s">
+                            <h3>Material Movement</h3>
+                            <div id="siteSankey" style="width: 100%; height: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="mines-center">
+                    <h2 class="underline"><i class="far fa-calendar-alt"></i> Monthly Outlook</h2>
+                    <h3>Target: <i class="fas fa-weight-hanging"></i>13500</br>
+                        Actual: <i class="fas fa-weight-hanging"></i> 9850</br>
+                        Compliance: &#9650;58%</i></h3>
+                    </br></br></br></br></br></br></br></br>
+                    <div id="siteMonth" style="height: 100%"></div>
+
+                </div> -->
+            </div>
+        </div>
+
+
+
+
+
+        <script type="text/javascript" src="echarts.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+        <script src="alldata.js"></script>
+        <script src="html2canvas.js"></script>
+        <script type="text/javascript" src="ChartStyles.js"></script>
+        <script type="text/javascript" src="Charts.js"></script>
+        <script type="text/javascript" src="ChartsMines.js"></script>
+
+
+
+        <script type="text/javascript">
+
+
+            // enum for major groups
+            const MajorGroup = {
+                IDLE: 'Idle',
+                OPERATING: 'Operating',
+                DOWN: 'Down'
+            }
+
+            var shiftIsDay = 1;
+
+
+            // Fake NG Data
+            var app = angular.module("myApp", []);
+
+
+            app.controller("myCtrl", function ($scope, $timeout) {
+
+                $scope.siteData = allData;
+                $scope.shiftIsDay = 0;
+                $scope.siteIndex = 0;
+                $scope.pageSite = allData[$scope.siteIndex];
+
+                console.log($scope.pageSite);
+
+
+                // Based on a site index and equipment index
+                // return the real data object for the equipment
+                $scope.getEquipObject = function (index) {
+                    //console.log(index);
+                    //console.log($scope.pageSite.equipment[index]);
+                    return $scope.pageSite.equipment[index];
+                    //if (index != null || index != undefined) { return $scope.pageSite.equipment[index]; }
+                };
+
+
+                // Fake alerts
+                var alerts = [];
+                for (var i = 0; i < Math.round(Math.random() * 10); i++) {
+                    if (Math.random() > 0.5) {
+                        alerts[i] = {
+                            level: 0,
+                            time: "09:24",
+                            id: 'LH020',
+                            message: "Bogger has been in-active for over 15minutes",
+                            action: "Get someone on the bogger"
+                        };
+                    } else {
+                        alerts[i] = {
+                            level: 1,
+                            time: "14:12",
+                            id: 'LH020',
+                            message: "TPH has been below target for over 1hr",
+                            action: "Get someone on the bogger"
+                        };
+                    }
+                }
+
+
+
+                $scope.$watch('$viewContentLoaded', function () {
+                    $timeout(function () {
+
+                        // Bar charts
+                        var c1 = ChartsMines.CreateBar("siteTPH", $scope.pageSite.shiftData[$scope.shiftIsDay].tph, "Tonnes Per Hour", 'bar');
+                        var c2 = ChartsMines.CreateBar("siteCumul", $scope.pageSite.shiftData[$scope.shiftIsDay].cumulative, "Cumulative", 'line');
+
+                        // set group id of each instance respectively.
+                        c1.group = 'group1';
+                        c2.group = 'group1';
+                        echarts.connect('group1');
+                        // or incoming instance array that need to be linked.
+                        //echarts.connect([chart1, chart2]);
+
+                        ChartsMines.CreateSankey("siteSankey", $scope.pageSite.materialMovement);
+
+                        // The line charts for boggers
+                        var x = document.getElementsByClassName("mines-bogger-chart");
+                        //console.log($scope.pageSite.equipment[0]);
+                        for (var i = 0; i < x.length; i++) {
+                            //console.log(x[i].id);
+                            //console.log($scope.pageSite.equipment[x[i].id]);
+                            ChartsMines.CreateUsageBar(x[i].id, $scope.pageSite.equipment[x[i].id]);
+                        }
+
+                        // Monthly
+                        ChartsMines.CreateBar("siteMonth", $scope.pageSite.shiftData[$scope.shiftIsDay].cumulative, "Cumulative", 'bar');
+
+                        $scope.totalsBoggers = Array.apply(null, Array(3)).map(function () { return 0; });
+                        $scope.totalsTrucks = Array.apply(null, Array(3)).map(function () { return 0; });
+                        $scope.totalsDrills = Array.apply(null, Array(3)).map(function () { return 0; });
+
+
+
+
+                        // Total Boggers
+                        for (var i = 1; i < $scope.pageSite.equipmentByFunction.LOADING.length; i++) {
+                            var equip = $scope.pageSite.equipment[$scope.pageSite.equipmentByFunction.LOADING[i].Index];
+                            $scope.totalsBoggers[0] += equip.shiftData[$scope.shiftIsDay].timeExOperating;
+                            $scope.totalsBoggers[1] += equip.shiftData[$scope.shiftIsDay].timeExIdle;
+                            $scope.totalsBoggers[2] += equip.shiftData[$scope.shiftIsDay].timeExDown;
+                        }
+
+                        // Total Trucks 
+                        for (var i = 1; i < $scope.pageSite.equipmentByFunction.HAULING.length; i++) {
+                            var equip = $scope.pageSite.equipment[$scope.pageSite.equipmentByFunction.HAULING[i].Index];
+                            $scope.totalsTrucks[0] += equip.shiftData[$scope.shiftIsDay].timeExOperating;
+                            $scope.totalsTrucks[1] += equip.shiftData[$scope.shiftIsDay].timeExIdle;
+                            $scope.totalsTrucks[2] += equip.shiftData[$scope.shiftIsDay].timeExDown;
+                        }
+
+                        // Total Drills 
+                        for (var i = 1; i < $scope.pageSite.equipmentByFunction.P.length; i++) {
+                            var equip = $scope.pageSite.equipment[$scope.pageSite.equipmentByFunction.P[i].Index];
+                            $scope.totalsDrills[0] += equip.shiftData[$scope.shiftIsDay].timeExOperating;
+                            $scope.totalsDrills[1] += equip.shiftData[$scope.shiftIsDay].timeExIdle;
+                            $scope.totalsDrills[2] += equip.shiftData[$scope.shiftIsDay].timeExDown;
+                        }
+
+                        // Total Drills 
+                        for (var i = 1; i < $scope.pageSite.equipmentByFunction.D.length; i++) {
+                            var equip = $scope.pageSite.equipment[$scope.pageSite.equipmentByFunction.D[i].Index];
+                            $scope.totalsDrills[0] += equip.shiftData[$scope.shiftIsDay].timeExOperating;
+                            $scope.totalsDrills[1] += equip.shiftData[$scope.shiftIsDay].timeExIdle;
+                            $scope.totalsDrills[2] += equip.shiftData[$scope.shiftIsDay].timeExDown;
+                        }
+
+                        //console.log($scope.totalsTrucks);
+                        //ChartsMines.CreatePie('totalsBoggers', totalsBoggers);
+                        //ChartsMines.CreateBar("totalsBoggers", $scope.pageSite.shiftData[$scope.shiftIsDay].tph, "Tonnes Per Hour");
+
+                        ChartsMines.CreateTinyPie("totalsBoggers", $scope.totalsBoggers, "Boggers");
+                        ChartsMines.CreateTinyPie("totalsTrucks", $scope.totalsTrucks, "Trucks");
+                        ChartsMines.CreateTinyPie("totalsDrills", $scope.totalsDrills, "Drills");
+
+                    }, 0);
+                });
+
+
+                $scope.alerts = alerts;
+                //console.log($scope.alerts);
+            });
+
+
+
+        </script>
+</body>
+
+</html>

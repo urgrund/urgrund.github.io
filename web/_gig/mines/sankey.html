@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+
+    <style>
+        .mines-chartdiv {
+            background-color: rgba(0, 0, 0, 0.2);
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+
+<body style="height: 100%; margin: 0">
+
+
+    <!-- <div id="sankeyT" class="mines-chartdiv"></div> -->
+
+    <div id="sankeyA" class="mines-chartdiv"></div>
+    <!-- <div id="sankeyB" class="mines-chartdiv"></div>
+    <div id="sankeyC" class="mines-chartdiv"></div> -->
+
+
+    <script type="text/javascript" src="echarts.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+    <script src="alldata.js"></script>
+    <script src="html2canvas.js"></script>
+    <script type="text/javascript" src="ChartStyles.js"></script>
+    <script type="text/javascript" src="Charts.js"></script>
+    <script type="text/javascript" src="ChartsMines.js"></script>
+
+
+
+    <script type="text/javascript">
+
+        var remap = { Left: 0, Middle: 1, Middle2: 2, Right: 3 };
+
+
+
+        allData.pop();
+        allData.pop();
+
+        for (var x = 0; x < 3; x++) {
+            var data = allData[x].materialMovement;
+            for (var i = 0; i < data.length; i++) {
+                //if (data[i]
+                //console.log(data[i][9] + " : " + remap[data[i][9]]);
+                data[i][9] = remap[data[i][9]];
+                data[i][10] = remap[data[i][10]];
+            }
+        }
+
+        //console.log(allData);
+        //console.log(data);
+        console.log(allData[1].materialMovement);
+
+        //console.log(ChartStyles.test());
+        ChartsMines.CreateSankey2("sankeyA", allData, 2);
+
+
+    </script>
+</body>
+
+</html>

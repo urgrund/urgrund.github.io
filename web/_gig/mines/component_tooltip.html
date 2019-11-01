@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+
+
+    <script type="text/javascript" src="echarts.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+
+
+</head>
+
+<body ng-app="myApp">
+    <!-- components match only elements -->
+    <hellocool-world name="Bob"> </hellocool-world>
+
+
+    <script type="text/javascript">
+        // (function (angular) {
+        //     'use strict';
+        //     angular.module('heroApp', []).controller('MainCtrl', function MainCtrl() {
+        //         this.hero = {
+        //             name: 'Spawn'
+        //         };
+        //     });
+        // })(window.angular);
+
+
+        var app = angular.module("myApp", []);
+
+
+        app.controller("myCtrl", function ($scope) {
+            // $scope.siteData = allData;
+            //$scope.hero = "Poo";
+            this.hero = { name: "POO" };
+        });
+
+
+        angular.module("myApp", [])
+            .component("hellocoolWorld", {
+                templateUrl: 'component_test.html',
+                bindings: { name: '@' }
+            });
+
+        // (function (angular) {
+        //     'use strict';
+        //     angular.module('myApp').component('heroDetail', {
+        //         templateUrl: 'component_test.html',
+        //         bindings: {
+        //             hero: '='
+        //         }
+        //     });
+        // })(window.angular);
+
+    </script>
+</body>
+
+</html>
+
+<!-- 
+Copyright 2019 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+-->

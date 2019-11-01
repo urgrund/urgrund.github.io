@@ -1,0 +1,35 @@
+
+JSON File (can fill this by hand)
+alerts =
+{
+	{ name: "Bogger Down",  severity:'1',  msg:"THe bogger is down and should immediately be looked at"}
+	{ name: "Bogger Down",  severity:'1',  msg:"THe bogger is down and should immediately be looked at"}
+};
+
+
+
+PHP  (can fire off periodicially or on demand)
+AlertWatcher()
+{
+	for all equip
+		for all alerts
+			if meets Condition* for alert
+				add to alerts list (siteID, equipID, alertID)
+}
+
+
+
+PHP sends client JavaScript an Object
+{
+	[0, 1, 4],
+	[0, 2, 1],
+	[1, 7, 2]
+}
+
+
+
+Condition*
+AlertCondition(var alertID, var equipID)
+{
+	// run logic
+}
