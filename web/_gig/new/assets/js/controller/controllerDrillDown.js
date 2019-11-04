@@ -1,22 +1,28 @@
 
 
-app.controller('DrillDownRoute', function ($scope, $routeParams, $timeout) {
+app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout, $route) {
 
     //console.log($routeParams.siteIndex + "  " + $routeParams.equipIndex);
+    console.log($rootScope.shift);
+    //$route.reload();
+    //$scope.shift = $rootScope.shift;
 
-    $scope.equip = $scope.siteData[$routeParams.siteIndex].equipment[$routeParams.equipIndex];
-    console.log($scope.equip);
+    $scope.createEquipmentData = function () {
+        $scope.equip = $scope.siteData[$routeParams.siteIndex].equipment[$routeParams.equipIndex];
+        //console.log($scope.equip);
 
-    var len = $scope.equip.shiftData[$scope.shift].events.length;
-    $scope.lastEvent = $scope.equip.shiftData[$scope.shift].events[len - 1];
+        var len = $scope.equip.shiftData[$rootScope.shift].events.length;
+        $scope.lastEvent = $scope.equip.shiftData[$rootScope.shift].events[len - 1];
 
-    $scope.equipMetric = "";
-    for (var key in $scope.equip.shiftData[$scope.shift].metric) {
-        //console.log($scope.equip.shiftData[shiftIsDay].metric[key]);
-        $scope.equipMetric = $scope.equip.shiftData[$scope.shift].metric[key].name + " Per Hour";
-    }
+        $scope.equipMetric = "";
+        for (var key in $scope.equip.shiftData[$rootScope.shift].metric) {
+            //console.log($scope.equip.shiftData[shiftIsDay].metric[key]);
+            $scope.equipMetric = $scope.equip.shiftData[$rootScope.shift].metric[key].name + " Per Hour";
+        }
+    };
 
-    $scope.$watch('$viewContentLoaded', function () {
+
+    $scope.createEquipmentCharts = function () {
         // Fancy timing to load charts
         var t = 50
         var d = 70;
@@ -41,5 +47,19 @@ app.controller('DrillDownRoute', function ($scope, $routeParams, $timeout) {
             //timeline.group = 'group1';
             echarts.connect('group1');
         }, d);
+    }
+
+
+    $scope.createEquipmentData();
+    $scope.$watch('$viewContentLoaded', function () {
+
+        $scope.createEquipmentCharts();
     });
+
+
+
+    $scope.$on('updateShift', function (event, data) {
+        $route.reload();
+    });
+
 });

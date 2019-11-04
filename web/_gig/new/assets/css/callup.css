@@ -18,6 +18,7 @@
 .row
 {
   font-size: 10pt;  
+  font-weight: 300;
 }
 
 /* .row > div:nth-child(2) {
@@ -28,7 +29,7 @@
 
 .cup-grid {
   display: grid;  
-  grid-template-columns: 2fr 4fr 5fr 5fr 5fr 5fr 2fr;
+  grid-template-columns: 2fr 2fr 6fr 4fr 4fr 4fr 2fr;
   grid-column-gap: 3px;  
   background: none;
   

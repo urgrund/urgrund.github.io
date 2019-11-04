@@ -89,6 +89,12 @@ p{font-size: 9pt;}
   align-content: flex-start;
 }
 
+.flexleft
+{
+  display:flex;
+  justify-content: left;
+}
+
 .flex-right
 {
   flex:1;

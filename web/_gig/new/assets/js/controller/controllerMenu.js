@@ -1,5 +1,5 @@
 
 
 app.controller('Menu', function ($route, $scope, $timeout) {
-    console.log("MEEEENU");
+    console.log("MENU CONTROLLER");
 });

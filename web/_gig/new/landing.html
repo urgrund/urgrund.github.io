@@ -9,7 +9,8 @@
                 <h1 style="font-size: 70px" ng-bind="clock | date:'HH:mm'"></h1>
             </div>
             <div>
-                <h3>Day Shift</h3>
+                <h3 ng-if="shift==0"><i style='color: yellow' class='fas fa-sun'></i> {{shiftTitle}}</h3>
+                <h3 ng-if="shift==1"><i style='color: rgb(53, 147, 255)' class='fas fa-moon'></i> {{shiftTitle}}</h3>
             </div>
             <div>
                 <h3 ng-bind="dateString"></h3>

@@ -1,21 +1,21 @@
-<div id="site_body">
-
-    <div class="equipGrid">
-        <div class="equipHeader first">
+<div class="equipGrid">
+    <div class="equipHeader first">
+        <div>
             <h1 class="shadow">{{equip.id}}</h1>
-            <drill-down-header shift="{{shift}}" equip="equip"> </drill-down-header>
+            <h4 ng-if="shift==0"><i style='color: yellow' class='fas fa-sun'></i> {{shiftTitle}}</h4>
+            <h4 ng-if="shift==1"><i style='color: rgb(53, 147, 255)' class='fas fa-moon'></i> {{shiftTitle}}</h4>
         </div>
-
-        <drill-down-chart title="Metrics Per Hour" chart="mph"></drill-down-chart>
-        <drill-down-chart title="Time Usage Split" chart="tus"></drill-down-chart>
-
-        <drill-down-chart title="Availability & Utilisation" chart="uofa"></drill-down-chart>
-
-        <drill-down-chart title="Operating Events" chart="p1"></drill-down-chart>
-        <drill-down-chart title="Idle Events" chart="p2"></drill-down-chart>
-        <drill-down-chart title="Down Events" chart="p3"></drill-down-chart>
-
-        <drill-down-chart title="Event Timeline" chart="timeline" class="last"></drill-down-chart>
-
+        <drill-down-header shift="{{shift}}" equip="equip"> </drill-down-header>
     </div>
+
+    <drill-down-chart title="Metrics Per Hour" chart="mph"></drill-down-chart>
+    <drill-down-chart title="Time Usage Split" chart="tus"></drill-down-chart>
+
+    <drill-down-chart title="Availability & Utilisation" chart="uofa"></drill-down-chart>
+
+    <drill-down-chart title="Operating Events" chart="p1"></drill-down-chart>
+    <drill-down-chart title="Idle Events" chart="p2"></drill-down-chart>
+    <drill-down-chart title="Down Events" chart="p3"></drill-down-chart>
+
+    <drill-down-chart title="Event Timeline" chart="timeline" class="last"></drill-down-chart>
 </div>

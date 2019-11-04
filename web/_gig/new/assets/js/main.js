@@ -3,6 +3,8 @@
 
 // Variables used outside of particular NG scopes  (ie. charts)
 var shift = 0;
+var shiftTitle = ['Day Shift', 'Night Shift'];
+var shiftCSS = ["<i style='color: yellow' class='fas fa - sun'></i>", "<i class='fas fa-moon'></i>"];
 
 var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -42,21 +44,72 @@ getEquipStyle = function (majorGroup) {
 
 var app = angular.module("myApp", ["ngRoute"]);
 
+app.run(function ($rootScope) {
+    $rootScope.shift = shift;
+    $rootScope.shiftTitle = shiftTitle[shift];
+    $rootScope.siteData = allData;
+
+    // Fake alerts
+    var alerts = [];
+    for (var i = 0; i < Math.round(Math.random() * 10); i++) {
+
+        var randSite = Math.floor(Math.random() * ($rootScope.siteData.length - 1));
+        var randEquip = Math.floor(Math.random() * $rootScope.siteData[randSite].equipment.length);
+        if (Math.random() > 0.5) {
+            alerts[i] = {
+                level: 0,
+                time: "09:24",
+                siteIndex: randSite,
+                equipIndex: randEquip,
+                message: "Bogger has been in-active for over 15minutes",
+                action: "Get someone on the bogger"
+            };
+        } else {
+            alerts[i] = {
+                level: 1,
+                time: "14:12",
+                siteIndex: randSite,
+                equipIndex: randEquip,
+                message: "TPH has been below target for over 1hr",
+                action: "Get someone on the bogger"
+            };
+        }
+    }
+
+    $rootScope.alerts = alerts;
+
+    $rootScope.getEquipStyle = function (majorGroup) {
+        if (majorGroup == "OPERATING") { return { 'color': ChartStyles.statusColorsFlat[0] } }
+        if (majorGroup == "IDLE") { return { 'color': ChartStyles.statusColorsFlat[1] } }
+        if (majorGroup == "DOWN") { return { 'color': ChartStyles.statusColorsFlat[2] } }
+    };
+    console.log($rootScope.alerts);
+});
+
+
+
 // Main Application Entry Point
-app.controller("myCtrl", function ($scope, $timeout, $element, $document) {
+app.controller("myCtrl", function ($scope, $rootScope, $timeout) {
+
     console.log("Main App Entry");
-    $scope.siteData = allData;
-    $scope.shift = shift;
-    console.log($scope.siteData);
+    console.log($rootScope.siteData);
 
     $scope.myValue = true;
+
+
     $scope.shiftSwitchChanged = function (_state) {
         if (_state == true)
-            $scope.shift = 0;
+            $rootScope.shift = 0;
         else
-            $scope.shift = 1;
+            $rootScope.shift = 1;
 
-        console.log(_state + "  " + $scope.shift);
+        $rootScope.shiftTitle = shiftTitle[$rootScope.shift];
+        shift = $rootScope.shift;
+        $scope.$broadcast('updateShift');
+    };
+
+
+    $scope.getReports = function () {
     };
 
 });
@@ -79,12 +132,16 @@ app.config(
         $routeProvider
             .when("/", {
                 templateUrl: "landing.html",
-                controller: 'LandingRoute'
+                controller: 'Landing'
             })
             .when("/equip/:siteIndex/:equipIndex", {
                 templateUrl: 'drilldown.html',
-                controller: 'DrillDownRoute'
-            });
+                controller: 'DrillDown'
+            })
+            .when("/callup/:cupPeriod", {
+                templateUrl: 'callup.html',
+                controller: 'CallUp'
+            });;
         // .when("/Mines", {
         //     templateUrl: "dash_mines.html",
         //     controller: 'MineRoute'
@@ -101,6 +158,9 @@ app.config(
 
 
 // =====================================================================================
+
+
+
 
 
 
@@ -177,6 +237,7 @@ app.component("drillDownHeader", {
             this.lastEventTime = this.lastEvent.eventTime.date.split(" ")[1].substring(0, 8);
             // ---------------------------------------------
 
+            console.log("SDKADLS");
         };
     }
 });
@@ -191,6 +252,12 @@ app.component("alertBox", {
     templateUrl: 'components/alertBox.html',
     bindings: {
         alert: '<'
+    },
+    controller: function ($rootScope) {
+        this.$onInit = function () {
+            this.equipment = $rootScope.siteData[this.alert.siteIndex].equipment[this.alert.equipIndex];
+            //console.log(this.equipment);
+        };
     }
 });
 
