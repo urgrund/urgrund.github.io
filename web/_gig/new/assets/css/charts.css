@@ -301,12 +301,12 @@ border: 1px solid #58739f;
 
 .img_LOADING, .img_HAULING, .img_D, .img_P
 {  
-  background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(assets/img/equip_LOADING.jpg);
+  background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_LOADING.jpg);
   background-size: cover;
   position: absolute;
   top: 0px;
   left: 0px; 
 }
-.img_HAULING{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(assets/img/equip_HAULING.jpg);}
-.img_D{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(assets/img/equip_D.jpg);}
-.img_P{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(assets/img/equip_P.jpg);}
+.img_HAULING{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_HAULING.jpg);}
+.img_D{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_D.jpg);}
+.img_P{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_P.jpg);}

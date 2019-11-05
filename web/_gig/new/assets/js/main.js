@@ -47,7 +47,9 @@ var app = angular.module("myApp", ["ngRoute"]);
 app.run(function ($rootScope) {
     $rootScope.shift = shift;
     $rootScope.shiftTitle = shiftTitle[shift];
+
     $rootScope.siteData = allData;
+    $rootScope.meta = $rootScope.siteData.pop();
 
     // Fake alerts
     var alerts = [];
@@ -83,7 +85,7 @@ app.run(function ($rootScope) {
         if (majorGroup == "IDLE") { return { 'color': ChartStyles.statusColorsFlat[1] } }
         if (majorGroup == "DOWN") { return { 'color': ChartStyles.statusColorsFlat[2] } }
     };
-    console.log($rootScope.alerts);
+    //console.log($rootScope.alerts);
 });
 
 
@@ -141,7 +143,15 @@ app.config(
             .when("/callup/:cupPeriod", {
                 templateUrl: 'callup.html',
                 controller: 'CallUp'
-            });;
+            })
+            .when("/timeline/", {
+                templateUrl: 'timeline.html',
+                controller: 'TimeLine'
+            })
+            .when("/productivity/:filter", {
+                templateUrl: 'productivity.html',
+                controller: 'Productivity'
+            });
         // .when("/Mines", {
         //     templateUrl: "dash_mines.html",
         //     controller: 'MineRoute'
@@ -237,7 +247,6 @@ app.component("drillDownHeader", {
             this.lastEventTime = this.lastEvent.eventTime.date.split(" ")[1].substring(0, 8);
             // ---------------------------------------------
 
-            console.log("SDKADLS");
         };
     }
 });
@@ -260,5 +269,28 @@ app.component("alertBox", {
         };
     }
 });
+
+
+
+
+/// ----------------------------------------
+/// 
+/// ----------------------------------------
+// app.component("shiftText", {
+//     templateUrl: 'components/shiftText.html',
+//     bindings: {
+//         size: '@',
+//     },
+//     controller: function ($rootScope, $scope) {
+
+//         this.$onInit = function () {
+//             console.log(this.size);
+//             this.shift = $rootScope.shift;
+//             this.shiftTitle = $rootScope.shiftTitle;
+//         };
+//     }
+// });
+
+
 
 // =====================================================================================

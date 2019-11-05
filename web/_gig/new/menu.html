@@ -16,7 +16,7 @@
                         <img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg">
                         <h2>{{x.name}}</h2>
 
-                        <h4>Analysis</h4>
+                        <!-- <h4>Analysis</h4>
                         <div><a ng-href="">Bogger Movements</a></div>
                         <div><a ng-href="">Hauling Movements</a></div>
                         <div><a ng-href="">Drill Meters</a></div>
@@ -24,8 +24,10 @@
 
                         <h4>Materials</h4>
                         <div><a ng-href="">Production Tonnes</a></div>
-                        <div><a ng-href="">Development Tonnes</a></div>
+                        <div><a ng-href="">Development Tonnes</a></div> -->
                         </br>
+                        </br>
+
 
                         <div class="siteCardGrid">
                             <div>
@@ -62,18 +64,21 @@
             <div class="dropdown">
                 <div class="dropbtn">Monthly Compliance</div>
                 <div class="dropdown-content">
+
                     <div class="droplist">
-                        <h3>Forms</h3>
-                        <a href="#">Adjust Target Inputs</a>
+                        <div ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
+                            <h3>{{x.name}}</h3>
+                            <a href="#">Adjust Target Inputs</a>
+                            <br />
+                            <a href="#">Plan vs Compliance</a>
+                            <br />
+                            <a href="#">Material Movements</a>
 
-                        <h3>Mines</h3>
-                        <a href="#">Plan vs Compliance</a>
-                        <a href="#">Material Movements</a>
-
-                        <h3>Equipment</h3>
+                            <!-- <h3>Equipment</h3>
                         <a href="#">Link 1</a>
                         <a href="#">Link 2</a>
-                        <a href="#">Link 3</a>
+                        <a href="#">Link 3</a> -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -93,9 +98,11 @@
                         <a ng-href="#!callup/1/1">Last Call-up</a> -->
 
                         <h3>Equipment</h3>
-                        <a href="#">Downtime Report</a>
-                        <a href="#">Material Movements</a>
-
+                        <a ng-href="#!timeline">Equipment Timeline</a>
+                        <a ng-href="#!productivity/D">Jumbo Productivity</a>
+                        <a ng-href="#!productivity/HAULING">Truck Productivity</a>
+                        <a ng-href="#!productivity/LOADING">Bogger Productivity</a>
+                        <a ng-href="#!productivity/D">All Equipment Productivity</a>
                     </div>
                 </div>
             </div>

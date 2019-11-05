@@ -1,0 +1,63 @@
+<div class="cup">
+
+    <div class="mines-center">
+
+        <div class="underline flex">
+            <div class="left">
+                <h2 class="left"><i class="far fa-clock"></i> Equipment Timeline</h2>
+                <h4 ng-if="shift==0"><i style='color: yellow' class='fas fa-sun'></i> {{shiftTitle}}</h4>
+                <h4 ng-if="shift==1"><i style='color: rgb(53, 147, 255)' class='fas fa-moon'></i> {{shiftTitle}}</h4>
+            </div>
+            <div class="right">
+                <h3>10th November 2018</h3>
+            </div>
+        </div>
+
+
+        <div class="equipFlatUsage h60px">
+            <div></div>
+            <div id="equip-timeline-time">Timeline</div>
+        </div>
+
+
+        <div ng-repeat="x in siteData | limitTo:3" ng-init="siteIndex = $index">
+            <div ng-repeat="y in x.equipmentByFunction.HAULING" ng-init="e = getCallUpEvent(siteIndex, y.Index)"
+                ng-hide="$first">
+                <div class="equipFlatUsage">
+
+                    <div><a href="#!equip/{{siteIndex}}/{{y.Index}}" ng-bind="y.ID"></a></div>
+                    <div class="equip-flat-usage" id="{{siteIndex}}-{{y.Index}}">
+                        <p>Loading, please wait...</p>
+                    </div>
+                </div>
+            </div>
+            <div ng-repeat="y in x.equipmentByFunction.LOADING" ng-init="e = getCallUpEvent(siteIndex, y.Index)"
+                ng-hide="$first">
+                <div class="equipFlatUsage">
+                    <div><a href="#!equip/{{siteIndex}}/{{y.Index}}" ng-bind="y.ID"></a></div>
+                    <div class="equip-flat-usage" id="{{siteIndex}}-{{y.Index}}">
+                        <p>Loading, please wait...</p>
+                    </div>
+                </div>
+            </div>
+            <div ng-repeat="y in x.equipmentByFunction.P" ng-init="e = getCallUpEvent(siteIndex, y.Index)"
+                ng-hide="$first">
+                <div class="equipFlatUsage">
+                    <div><a href="#!equip/{{siteIndex}}/{{y.Index}}" ng-bind="y.ID"></a></div>
+                    <div class="equip-flat-usage" id="{{siteIndex}}-{{y.Index}}">
+                        <p>Loading, please wait...</p>
+                    </div>
+                </div>
+            </div>
+            <div ng-repeat="y in x.equipmentByFunction.D" ng-init="e = getCallUpEvent(siteIndex, y.Index)"
+                ng-hide="$first">
+                <div class="equipFlatUsage">
+                    <div><a href="#!equip/{{siteIndex}}/{{y.Index}}" ng-bind="y.ID"></a></div>
+                    <div class="equip-flat-usage" id="{{siteIndex}}-{{y.Index}}">
+                        <p>Loading, please wait...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
