@@ -2,10 +2,10 @@
     <div class="equipHeader first">
         <div>
             <h1 class="shadow">{{equip.id}}</h1>
-            <h4 ng-if="shift==0"><i style='color: yellow' class='fas fa-sun'></i> {{shiftTitle}}</h4>
-            <h4 ng-if="shift==1"><i style='color: rgb(53, 147, 255)' class='fas fa-moon'></i> {{shiftTitle}}</h4>
+            <h4 ng-if="shift==0"><i class='shiftIconDay fas fa-sun'></i> {{shiftTitle}}</h4>
+            <h4 ng-if="shift==1"><i class='shiftIconNight fas fa-moon'></i> {{shiftTitle}}</h4>
         </div>
-        <drill-down-header shift="{{shift}}" equip="equip"> </drill-down-header>
+        <drill-down-header shift="{{shift}}" equip="equip" lines=0> </drill-down-header>
     </div>
 
     <drill-down-chart title="Metrics Per Hour" chart="mph"></drill-down-chart>

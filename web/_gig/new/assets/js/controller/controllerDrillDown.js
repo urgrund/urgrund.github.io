@@ -3,7 +3,7 @@
 app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout, $route) {
 
     //console.log($routeParams.siteIndex + "  " + $routeParams.equipIndex);
-    console.log($rootScope.shift);
+    //console.log($rootScope.shift);
     //$route.reload();
     //$scope.shift = $rootScope.shift;
 

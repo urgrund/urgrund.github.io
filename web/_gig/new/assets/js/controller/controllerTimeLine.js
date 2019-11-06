@@ -16,18 +16,26 @@ app.controller("TimeLine", function ($route, $scope, $rootScope, $routeParams, $
 
 
             Charts.CreateTimeLineFlatTime("equip-timeline-time");
-            console.log(x[0]);
+            //console.log(x[0]);
 
             // Start at i=1 because 0 is the timeline bar
-            for (var i = 1; i < x.length; i++) {
-                var s = x[i].id.split('-');
-                if (s[1] != "") {
-                    var equip = $scope.siteData[s[0]].equipment[s[1]];
-                    //console.log(equip);
-                    if (equip != 'undefined') {
-                        Charts.CreateTimeLineFlat(x[i].id, equip);
-                    }
+            for (var i = 0; i < x.length; i++) {
+                //console.log(x[i].id);
+                var equip = $rootScope.equipment[x[i].id];
+
+                if (equip != 'undefined') {
+                    Charts.CreateTimeLineFlat(x[i].id, equip);
                 }
+
+
+                // var s = x[i].id.split('-');
+                // if (s[1] != "") {
+                //     var equip = $scope.siteData[s[0]].equipment[s[1]];
+                //     //console.log(equip);
+                //     if (equip != 'undefined') {
+                //         Charts.CreateTimeLineFlat(x[i].id, equip);
+                //     }
+                // }
             }
         }, 0);
     });

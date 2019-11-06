@@ -70,7 +70,7 @@
                             <h3>{{x.name}}</h3>
                             <a href="#">Adjust Target Inputs</a>
                             <br />
-                            <a href="#">Plan vs Compliance</a>
+                            <a ng-href="#!monthly/{{siteIndex}}">Plan vs Compliance</a>
                             <br />
                             <a href="#">Material Movements</a>
 
@@ -99,10 +99,11 @@
 
                         <h3>Equipment</h3>
                         <a ng-href="#!timeline">Equipment Timeline</a>
+                        <h3>Productivity</h3>
                         <a ng-href="#!productivity/D">Jumbo Productivity</a>
                         <a ng-href="#!productivity/HAULING">Truck Productivity</a>
                         <a ng-href="#!productivity/LOADING">Bogger Productivity</a>
-                        <a ng-href="#!productivity/D">All Equipment Productivity</a>
+                        <a ng-href="#!productivity/ALL">All Equipment Productivity</a>
                     </div>
                 </div>
             </div>
@@ -130,6 +131,10 @@
 
                     <!-- Alert System -->
                     <h3><i class="far fa-bell"></i> Alerts</h3>
+                    <!-- <div class="flex">
+                        <h3><i class="far fa-bell"></i> Alerts</h3>
+                        <h3><i class="fas fa-sync-alt"></i></h3>
+                    </div> -->
                     <div ng-repeat="alert in alerts">
                         <alert-box alert="alert"></alert-box>
                     </div>
@@ -140,27 +145,23 @@
             <div class="util">
                 <div class="utilbtn"><i class="fas fa-database"></i></div>
                 <div class="dropdown-content">
-
                     <h3> <i class="fas fa-database"></i> DB Connection</h3>
                     <div class="utilgrid">
-
                         <div>IP</div>
-                        <div>192.168.0.1</div>
-
+                        <div>{{meta.IP}}</div>
 
                         <div>Connection Status</div>
                         <div>OK!</div>
 
                         <div>Last Data Pull</div>
-                        <div>2018-10-10</div>
+                        <div>{{meta.LastUpdate['date']}}</div>
 
                         <div>Next Data Pull</div>
-                        <div>9min</div>
+                        <div>...todo</div>
 
                         <div>Local Data Size</div>
-                        <div>1.5mb</div>
+                        <div>...todo</div>
                     </div>
-
                 </div>
             </div>
 
@@ -182,16 +183,22 @@
                             </label>
                         </div>
 
+
+
                         <div>Equipment Alerts</div>
                         <div>
                             <label class="switch"><input type="checkbox" id="togBtn" checked>
                                 <div class="slider round" switch-on="Active" switch-off="Off"></div>
                             </label>
                         </div>
+
+
                     </div>
                     <h3><i class="fas fa-search"></i> Equipment Search</h3>
                     <input type="text" ng-model="search.id" ng-init="search.id ='Search by ID...'">
-                    <div ng-repeat="x in allEquipIDs | filter:search"><a ng-href="{{x.link}}">{{ x.id }}</a>
+                    <!-- <div ng-repeat="x in equipment | filter:search"><a ng-href="{{x.link}}">{{ x.id }}</a>
+                    </div> -->
+                    <div ng-repeat="x in equipment "><a ng-href="{{x.link}}">{{ x.id }}</a>
                     </div>
                 </div>
 

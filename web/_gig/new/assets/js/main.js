@@ -37,6 +37,20 @@ getEquipStyle = function (majorGroup) {
 
 
 
+const capitalize = (s) => {
+    if (typeof s !== 'string') return ''
+    return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
+
+
+
+
+
+
+
+
+
 
 // =====================================================================================
 //  MAIN APPLICATION 
@@ -48,8 +62,26 @@ app.run(function ($rootScope) {
     $rootScope.shift = shift;
     $rootScope.shiftTitle = shiftTitle[shift];
 
+    // All sites
     $rootScope.siteData = allData;
+
+    // Meta data is last
     $rootScope.meta = $rootScope.siteData.pop();
+
+    // All equip next
+    $rootScope.equipment = $rootScope.siteData.pop();
+
+
+    console.log("Sites");
+    console.log($rootScope.siteData);
+
+    console.log("Equipment");
+    console.log($rootScope.equipment);
+
+    console.log("META");
+    console.log($rootScope.meta);
+
+
 
     // Fake alerts
     var alerts = [];
@@ -94,7 +126,6 @@ app.run(function ($rootScope) {
 app.controller("myCtrl", function ($scope, $rootScope, $timeout) {
 
     console.log("Main App Entry");
-    console.log($rootScope.siteData);
 
     $scope.myValue = true;
 
@@ -131,6 +162,7 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout) {
 
 app.config(
     function ($routeProvider) {
+
         $routeProvider
             .when("/", {
                 templateUrl: "landing.html",
@@ -138,19 +170,28 @@ app.config(
             })
             .when("/equip/:siteIndex/:equipIndex", {
                 templateUrl: 'drilldown.html',
-                controller: 'DrillDown'
+                controller: 'DrillDown',
+                resolve: { init: function () { ClearAllCharts(); } }
             })
             .when("/callup/:cupPeriod", {
                 templateUrl: 'callup.html',
-                controller: 'CallUp'
+                controller: 'CallUp',
+                resolve: { init: function () { ClearAllCharts(); } }
             })
             .when("/timeline/", {
                 templateUrl: 'timeline.html',
-                controller: 'TimeLine'
+                controller: 'TimeLine',
+                resolve: { init: function () { ClearAllCharts(); } }
             })
             .when("/productivity/:filter", {
                 templateUrl: 'productivity.html',
-                controller: 'Productivity'
+                controller: 'Productivity',
+                resolve: { init: function () { ClearAllCharts(); } }
+            })
+            .when("/monthly/:site", {
+                templateUrl: 'monthly.html',
+                controller: 'Monthly',
+                resolve: { init: function () { ClearAllCharts(); } }
             });
         // .when("/Mines", {
         //     templateUrl: "dash_mines.html",
@@ -203,6 +244,7 @@ app.component("drillDownHeader", {
     templateUrl: 'components/drillDownHeader.html',
     bindings: {
         shift: '@',
+        lines: '@',
         equip: '<'
     },
     controller: function () {
@@ -246,6 +288,15 @@ app.component("drillDownHeader", {
 
             this.lastEventTime = this.lastEvent.eventTime.date.split(" ")[1].substring(0, 8);
             // ---------------------------------------------
+
+
+            this.overline = "overline";
+            this.underline = "underline";
+
+            if (this.lines == 0) {
+                this.overline = "";
+                this.underline = "";
+            }
 
         };
     }

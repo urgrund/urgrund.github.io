@@ -55,6 +55,7 @@ function ResizeAllCharts() {
 // Dispose of the chart through eCharts
 // then null and create new array obj
 function ClearAllCharts() {
+    console.log("Clearing all charts");
     for (var i = 0; i < allCharts.length; i++) {
         if (allCharts[i] != null) {
             allCharts[i].dispose();

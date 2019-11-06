@@ -20,7 +20,17 @@
         </div>
 
 
-        <div ng-repeat="x in siteData | limitTo:3" ng-init="siteIndex = $index">
+        <div ng-repeat="(key, e) in equipment">
+            <div class="equipFlatUsage">
+                <div><a href="#!equip/{{siteIndex}}/{{y.Index}}" ng-bind="key"></a></div>
+                <div class="equip-flat-usage" id="{{key}}">
+                    <p>Loading, please wait...</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <div ng-repeat="x in siteData | limitTo:3" ng-init="siteIndex = $index">
             <div ng-repeat="y in x.equipmentByFunction.HAULING" ng-init="e = getCallUpEvent(siteIndex, y.Index)"
                 ng-hide="$first">
                 <div class="equipFlatUsage">
@@ -58,6 +68,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
