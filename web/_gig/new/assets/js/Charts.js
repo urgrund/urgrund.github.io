@@ -233,11 +233,16 @@ class Charts {
                 data: timeLabelsShift[shift],
                 axisLabel: ChartStyles.timeLineAxisLabel()
             },
-            yAxis: {
+            yAxis: [{
                 type: 'value',
                 splitLine: { show: false },
                 axisLine: ChartStyles.axisLineGrey
             },
+            {
+                type: 'value',
+                splitLine: { show: false },
+                axisLine: ChartStyles.axisLineGrey
+            }],
             series: seriesArray
         };
 

@@ -4,7 +4,7 @@
     <div ng-repeat="y in equipToShow" class="jumbogriditem">
 
         <div class="">
-            <a ng-href="#!equip/{{siteIndex}}/{{y.Index}}" class="img_{{function}}">
+            <a ng-href="#!equip/{{y.id}}" class="img_{{y.function}}">
                 <h1 class="center shadow">{{y.id}}</h1>
             </a>
             <drill-down-header shift="{{shift}}" equip="y" lines=0 class="first">

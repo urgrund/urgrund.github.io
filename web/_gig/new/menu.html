@@ -33,24 +33,24 @@
                             <div>
                                 <h3>Boggers</h3>
                                 <div ng-repeat="y in x.equipmentByFunction.LOADING">
-                                    <a ng-href="#!equip/{{siteIndex}}/{{y.Index}}">{{ y.ID }}</a>
+                                    <a ng-href="#!equip/{{y.ID}}">{{ y.ID }}</a>
                                 </div>
                             </div>
 
                             <div>
                                 <h3>Trucks</h3>
                                 <div ng-repeat="y in x.equipmentByFunction.HAULING">
-                                    <a ng-href="#!equip/{{siteIndex}}/{{y.Index}}">{{ y.ID }}</a>
+                                    <a ng-href="#!equip/{{y.ID}}">{{ y.ID }}</a>
                                 </div>
                             </div>
 
                             <div>
                                 <h3>Drills</h3>
                                 <div ng-repeat="y in x.equipmentByFunction.P">
-                                    <a ng-href="#!equip/{{siteIndex}}/{{y.Index}}">{{ y.ID }}</a>
+                                    <a ng-href="#!equip/{{y.ID}}">{{ y.ID }}</a>
                                 </div>
                                 <div ng-repeat="y in x.equipmentByFunction.D">
-                                    <a ng-href="#!equip/{{siteIndex}}/{{y.Index}}">{{ y.ID }}</a>
+                                    <a ng-href="#!equip/{{y.ID}}">{{ y.ID }}</a>
                                 </div>
                             </div>
                         </div>
@@ -68,11 +68,9 @@
                     <div class="droplist">
                         <div ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
                             <h3>{{x.name}}</h3>
-                            <a href="#">Adjust Target Inputs</a>
-                            <br />
+                            <a ng-href="#">Adjust Target Inputs</a>
                             <a ng-href="#!monthly/{{siteIndex}}">Plan vs Compliance</a>
-                            <br />
-                            <a href="#">Material Movements</a>
+                            <a ng-href="#">Material Movements</a>
 
                             <!-- <h3>Equipment</h3>
                         <a href="#">Link 1</a>

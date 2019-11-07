@@ -122,6 +122,7 @@ app.run(function ($rootScope) {
 
 
 
+
 // Main Application Entry Point
 app.controller("myCtrl", function ($scope, $rootScope, $timeout) {
 
@@ -168,7 +169,8 @@ app.config(
                 templateUrl: "landing.html",
                 controller: 'Landing'
             })
-            .when("/equip/:siteIndex/:equipIndex", {
+            //.when("/equip/:siteIndex/:equipIndex", {
+            .when("/equip/:id", {
                 templateUrl: 'drilldown.html',
                 controller: 'DrillDown',
                 resolve: { init: function () { ClearAllCharts(); } }
@@ -290,12 +292,12 @@ app.component("drillDownHeader", {
             // ---------------------------------------------
 
 
-            this.overline = "overline";
-            this.underline = "underline";
+            this.flexColumn = "";
+            this.flex = "flex";
 
             if (this.lines == 0) {
-                this.overline = "";
-                this.underline = "";
+                this.flexColumn = "";
+                this.flex = "";
             }
 
         };

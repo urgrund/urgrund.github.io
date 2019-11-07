@@ -86,7 +86,7 @@ p{font-size: 9pt; font-weight: 300;}
 {
   display:flex;
   justify-content: space-between;
-  align-content: flex-end;
+  /* align-content: flex-end; */
 }
 
 .flex-start
@@ -94,11 +94,23 @@ p{font-size: 9pt; font-weight: 300;}
   align-content: flex-start;
 }
 
+.flex-end
+{
+  justify-content: flex-end;
+}
+
+
 .flex-right
 {
   flex:1;
   flex-direction: row-reverse;
 }
+
+.flex-column
+{
+  flex-direction: column;
+}
+
 
 .vertical
 {
@@ -160,6 +172,7 @@ p{font-size: 9pt; font-weight: 300;}
 }
 
 
+
 .jumbogrid {  
     /* display: grid;    
     grid-template-columns: repeat(auto-fill,minmax( 410px, 410px));
@@ -177,13 +190,13 @@ p{font-size: 9pt; font-weight: 300;}
   margin-bottom: 50px;
   padding: 5px;
 
-  /* min-height: 500px; */
-  /* height: 550px; */
+  min-height: 650px;
+  /* height: 600px; */
   width: 410px;  
 
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 3fr 3fr 5fr;
+  grid-template-rows: 3fr 3fr 4fr;
 }
 
 
@@ -235,6 +248,7 @@ p{font-size: 9pt; font-weight: 300;}
   display: grid;
   grid-template-columns: 1fr 3fr;
 }
+
 
 .equipTitleGrid {
   align-self: flex-end;
@@ -299,17 +313,26 @@ p{font-size: 9pt; font-weight: 300;}
 
 
 .sitePicSmall, .sitePicBig{
-max-width: 70px;
-max-height: 70px;
-border-radius: 10%;
-box-shadow: 4px 5px 11px 0px #00000091;
-border: 1px solid #58739f;
+  max-width: 70px;
+  max-height: 70px;
+  border-radius: 10%;
+  box-shadow: 4px 5px 11px 0px #00000091;
+  border: 1px solid #8aadcf;;
+  transition: 0.2s;
 }
 
 .sitePicBig
 {
   max-width: 110px;
   max-height: 110px;
+}
+
+a > .sitePicBig:hover
+{
+  border-color: #43c3ff;
+  transition: 0.2s;
+  box-shadow: 0px 0px 11px 0px #00bbff5c;
+  transform: translate(0px, 2px);
 }
 
 
@@ -324,3 +347,15 @@ border: 1px solid #58739f;
 .img_HAULING{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_HAULING.jpg);}
 .img_D{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_D.jpg);}
 .img_P{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_P.jpg);}
+
+.imgLink {   
+  display: contents;
+}
+
+.imgLink:hover {  
+  display: contents;
+}
+
+.imgLink:active {
+  display: contents;
+}
