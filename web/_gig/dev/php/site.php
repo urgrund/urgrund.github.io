@@ -199,33 +199,6 @@ class Site
 
 
 
-    /**
-     * Creates the TPH data needed for
-     * the site included per-shift 
-     **/
-    // function CreateTPHData()
-    // {
-    //     // 24 TPH
-    //     $temp = 0;
-    //     for ($i = 0; $i < 24; $i++) {
-    //         $temp += $this->tph24->tph[$i];
-    //         $this->tph24->cumulative[$i] = $temp;
-    //     }
-
-    //     // // Per-shift TPH
-    //     for ($j = 0; $j < 2; $j++) {
-    //         $temp = 0;
-    //         for ($i = 0; $i < 12; $i++) {
-    //             $val  = $this->tph24->tph[$i + (12 * $j)];
-    //             $temp += $val;
-
-    //             $this->shiftData[$j]->cumulative[$i] = $temp;
-    //             $this->shiftData[$j]->tph[$i] = $val;
-    //         }
-    //         $this->shiftData[$j]->avg = round($temp / 12);
-    //     }
-    //     //Debug::Log($this->shiftData);
-    // }
 
 
 
@@ -233,6 +206,9 @@ class Site
     // Adds equipment to the Site and maps it to its function
     function AddEquipment(Equipment $_equipmentObject)
     {
+        global $allEquipment;
+
+        // Add equipment to sites total list
         $this->equipment[$_equipmentObject->id] = $_equipmentObject;
 
         // Assign the equipment its function

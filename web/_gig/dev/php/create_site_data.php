@@ -7,6 +7,9 @@ static $allSites = array();
 static $sites  = ["SLC", "WF", "M%"];
 static $date = '20181010';
 
+// The global list of all equipment
+static $allEquipment = array();
+
 
 // Maps datetime day to full day name
 static $dayNameMap = array(
@@ -58,6 +61,9 @@ class CreateSiteData
         CreateDataForAllSites();
         CreateDataForAllEquip();
 
+        // Make a list of all equipment
+        AddGlobalEquipList();
+
         // Wrap up and submit
         AddMetaData();
     }
@@ -65,7 +71,6 @@ class CreateSiteData
 Debug::EndProfile();
 
 // ------------------------------------------------------------------
-
 
 
 
@@ -97,6 +102,25 @@ function CreateSQLResults()
 }
 // ------------------------------------------------------------------
 
+
+
+
+
+// ------------------------------------------------------------------
+// Add equipment to global total list
+function AddGlobalEquipList()
+{
+    global $allSites;
+    global $allEquipment;
+    for ($i = 0; $i < count($allSites); $i++) {
+        for ($j = 0; $j < count($allSites[$i]->equipment); $j++) {
+            $equip = $allSites[$i]->equipment[$j];
+            $allEquipment[$equip->id] = $equip;
+        }
+    }
+    $allSites[] = $allEquipment;
+}
+// ------------------------------------------------------------------
 
 
 
@@ -159,6 +183,8 @@ function CreateSitesAndEquipment()
     global $allSites;
     global $date;
     global $sqlEquipEventList;
+
+    global $allEquipment;
 
     //$sqlTxt = "Select * from ALLEquipmentEventList(" . $date . ") order by[Equipment] asc, [Event Time] asc";
     $result = $sqlEquipEventList; //SQLUtils::QueryToText($sqlTxt);
