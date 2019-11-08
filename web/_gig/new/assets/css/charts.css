@@ -209,7 +209,7 @@ p{font-size: 9pt; font-weight: 300;}
   grid-row-gap: 1%; 
 
   grid-template-columns: 30% 30% 30%;
-  grid-template-rows: 11% 32% 32% 20%;
+  grid-template-rows: 6% 34% 34% 20%;
   /* grid-template-columns: var(--equipGridCSpace) var(--equipGridCSpace) var(--equipGridCSpace);
   grid-template-rows: var(--equipGridRTitle) var(--equipGridRSpace) var(--equipGridRSpace) var(--equipGridRTimeLine); */
   

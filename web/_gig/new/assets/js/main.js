@@ -194,6 +194,11 @@ app.config(
                 templateUrl: 'monthly.html',
                 controller: 'Monthly',
                 resolve: { init: function () { ClearAllCharts(); } }
+            })
+            .when("/reports/", {
+                templateUrl: 'reports.html',
+                controller: 'Reports',
+                resolve: { init: function () { ClearAllCharts(); } }
             });
         // .when("/Mines", {
         //     templateUrl: "dash_mines.html",

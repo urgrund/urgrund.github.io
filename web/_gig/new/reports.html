@@ -1,0 +1,15 @@
+<div class="mines-center">
+
+    <h1>Hello</h1>
+    <div ng-repeat="(key, value) in reports track by $index">
+        <div>
+            <h3>{{key}}</h3>
+            <div ng-repeat="e in value track by $index" id="{{$parent.$index}}-{{$index}}" class="">
+                <div class="equipSmallInfo">
+                    <h6>{{e}}</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

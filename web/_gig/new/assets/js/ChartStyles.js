@@ -115,16 +115,25 @@ class ChartStyleContainer {
         }];
 
 
+
+
+        // ----------------------------------------------------------
+        // Cumulative
         this.cumulativeColor = {
             type: 'linear',
             x: 0, y: 0, x2: 0, y2: 1,
-            colorStops: [{ offset: 0, color: 'rgba(0,178,255,1)' },
-            { offset: 1, color: 'rgba(0,12,255,1)' }]
-            // type: 'linear',
-            // x: 0, y: 0, x2: 1, y2: 0,
-            // colorStops: [{ offset: 0, color: '#00ff6a' },
-            // { offset: 1, color: 'rgba(255,140,0,1)' }]
+            colorStops: [{ offset: 0, color: 'rgba(33,252,199,1)' }, { offset: 1, color: 'rgba(35,223,199,1)' }]
         };
+
+        this.cumulativeArea = {
+            type: 'linear',
+            x: 0, y: 0, x2: 0, y2: 1,
+            colorStops: [{ offset: 0, color: 'rgba(133,252,193,0.35)' }, { offset: 1, color: 'rgba(35,223,129,0)' }]
+        };
+
+        // ----------------------------------------------------------
+
+
 
         this.disabledColor = {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{

@@ -131,7 +131,10 @@ class Charts {
             if (m.cph[11] > 0)
                 metrics.push(m);
         }
-        //console.log(metrics);
+        console.log(metrics);
+
+
+        var cumulative = ArrayOfNumbers(0, 12, 0);
 
 
         // Add all the series together
@@ -145,6 +148,7 @@ class Charts {
                 {
                     id: i,
                     name: metrics[i].site,
+                    yAxisIndex: 0,
                     type: 'bar',
                     data: metrics[i].mph,
                     stack: 'mph',
@@ -168,9 +172,31 @@ class Charts {
 
             // Accumulate values into each site
             for (var j = 0; j < 12; j++) {
+                cumulative[j] += metrics[i].cph[j];
                 siteTotals[metrics[i].site][j] = siteTotals[metrics[i].site][j] + metrics[i].mph[j];
             }
         }
+
+
+
+        // Cumulative setup
+        //console.log(cumulative);
+        legend.push("Cumulative");
+        seriesArray.push(
+            {
+                name: "Cumulative",
+                yAxisIndex: 1,
+                // z: 0,
+                type: 'line',
+                data: cumulative,
+                itemStyle: { color: ChartStyles.cumulativeColor },
+                areaStyle: { color: ChartStyles.cumulativeArea },
+                symbol: 'none',
+                lineStyle: ChartStyles.lineShadow()
+            });
+
+
+
 
         // For each site add legend
         var siteCount = 0;
@@ -180,6 +206,7 @@ class Charts {
                 {
                     name: key,
                     type: 'bar',
+                    barMaxWidth: 10,
                     data: siteTotals[key],
                     itemStyle: { color: ChartStyles.siteColors[0] },
                     label: { normal: { show: true, position: 'top' } }
@@ -196,10 +223,17 @@ class Charts {
 
             // Labels for each metric
             for (var i = 0; i < params.length; i++) {
+
+                //console.log(params[i]);
                 var metric = metrics[params[i].seriesId];
                 if (typeof metric !== 'undefined')
-                    string += metric.site + " " + metric.name + " (" + metric.activity + ") : " + params[i].value + "</br>";
+                    string += "<p>" + metric.site + " " + metric.name + " (" + metric.activity + ") : " + params[i].value + "</p>";
             }
+
+            // The last entry is the cumulative 
+            var index = params.length - 1;
+            console.log(params[index]);
+            string += params[index].seriesName + " : " + params[index].value + "<br/>";
             return string;
         }
 

@@ -1,7 +1,7 @@
 
 
 :root {
-    --transitionTime:0s;
+    --transitionTime:0.15s;
     --menubg:  linear-gradient(-1deg, rgba(1, 19, 41, 0.82) 0, rgba(0, 74, 144, 0.61) 100%), url(../img/login_blur.jpg) no-repeat center center fixed;
   
     --menubtnhover: #50e3ffd4; 
