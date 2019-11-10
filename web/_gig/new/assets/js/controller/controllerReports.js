@@ -1,4 +1,5 @@
-app.controller('Reports', function ($route, $scope, $timeout) {
+app.controller('Reports', function ($scope, $http, $httpParamSerializerJQLike, $timeout, uiGridExporterService, uiGridExporterConstants)
+{
 
     var tempReports = { "Bogger Tonnes": ["All Tonnes By Mine By Time ", "Development Total By Mine By Time ", "Production Total By Mine By Time ", "Stockpile Total By Mine By Time ", "Total By Time By Activity ", "Total By Time "], "Equipment TUM": ["By Event Reason ", "By Major Category "] };
 
@@ -20,11 +21,46 @@ app.controller('Reports', function ($route, $scope, $timeout) {
     $scope.shiftStart = $scope.shiftOptions[0];
     $scope.shiftEnd = $scope.shiftOptions[1];
 
+    $scope.accordionActive = false;
 
     //console.log(tempReports);
 
 
-    $scope.getReports = function () {
+    $scope.gridOptions = {};
+    $scope.gridOptions = {
+        enableGridMenu: true,
+        exporterMenuCsv: false,
+        exporterMenuPdf: false,
+        gridMenuCustomItems: [{
+            title: 'Export to CSV',
+            action: function ()
+            {
+                $scope.export('csv');
+            },
+            order: 210
+        }, {
+            title: 'Export to PDF',
+            action: function ()
+            {
+                $scope.export('pdf');
+            },
+            order: 250
+        }],
+        enableFiltering: true,
+        paginationPageSizes: [8, 16, 24],
+        paginationPageSize: 8,
+        exporterCsvFilename: 'new_data_file',
+        exporterExcelFilename: 'new_data_file',
+        onRegisterApi: function (gridApi)
+        {
+            $scope.gridApi = gridApi;
+        }
+    };
+
+
+
+    $scope.getReports = function ()
+    {
         // var request = $http({
         //     method: 'POST',
         //     url: "php/reports/reports.php", data: { 'func': 0 }
@@ -37,8 +73,10 @@ app.controller('Reports', function ($route, $scope, $timeout) {
 
         // With a duplicate array, store #'s to 
         // determine the state of each report
-        for (const key in $scope.generatedReports) {
-            if ($scope.reports.hasOwnProperty(key)) {
+        for (const key in $scope.generatedReports)
+        {
+            if ($scope.reports.hasOwnProperty(key))
+            {
                 $scope.reportKeys.push(key);
                 const element = $scope.generatedReports[key];
                 for (let i = 0; i < element.length; i++)
@@ -50,18 +88,113 @@ app.controller('Reports', function ($route, $scope, $timeout) {
             }
         }
 
-        console.log($scope.reportKeys);
-        console.log($scope.generatedReports);
+        //console.log($scope.reportKeys);
+        //console.log($scope.generatedReports);
 
         //}, function (error) { });
     };
 
 
+    $scope.accordionClick = function ($event)
+    {
+        $event.currentTarget.classList.toggle("active");
+        var panel = $event.currentTarget.nextElementSibling;
+        if (panel.style.maxHeight)
+        {
+            panel.style.maxHeight = null;
+        } else
+        {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+        }
 
-    $scope.$watch('$viewContentLoaded', function () {
-        $timeout(function () {
+        $scope.accordionActive = !$scope.accordionActive;
+    }
+
+
+
+    var refresh = function ()
+    {
+        $scope.refresh = true;
+        $timeout(function ()
+        {
+            $scope.refresh = false;
+        }, 0);
+    };
+
+
+
+    // User clicks to view a report
+    $scope.setCSVViewData = function (key, rep)
+    {
+        // $scope.currentKeyView = key;
+        // $scope.currentRepView = rep;
+        // $scope.currentCSVView = $scope.generatedReports[key][rep][0];
+        // $scope.currentCSVText = csvJSON($scope.currentCSVView[2]);
+
+        $scope.gridOptions.data = csvJSON(tempReport[2]);// $scope.currentCSVText;
+
+        //$scope.gridOptions.exporterCsvFilename = $scope.currentCSVView[0];
+        //$scope.gridOptions.exporterExcelFilename = $scope.currentCSVView[0] + ".xlsx";
+        refresh();
+    };
+
+
+    function csvJSON(csv)
+    {
+        var lines = csv.split("\n");
+        var result = [];
+        var headers = lines[0].split(",");
+        for (var i = 1; i < lines.length; i++)
+        {
+            var obj = {};
+            var currentline = lines[i].split(",");
+
+            for (var j = 0; j < headers.length; j++)
+            {
+                obj[headers[j]] = currentline[j];
+            }
+
+            result.push(obj);
+        }
+
+        //return result; //JavaScript object
+        return JSON.stringify(result); //JSON
+    }
+
+
+
+
+    $scope.$watch('$viewContentLoaded', function ()
+    {
+        $timeout(function ()
+        {
             // Ready...
             $scope.getReports();
+            $scope.setCSVViewData(null, null);
+
+            //console.log(tempReport);
         }, 0);
     });
 });
+
+
+/* <script>
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++)
+    {
+        acc[i].addEventListener("click", function ()
+        {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.maxHeight)
+            {
+                panel.style.maxHeight = null;
+            } else
+            {
+                panel.style.maxHeight = panel.scrollHeight + "px";
+            }
+        });
+}
+</script> */

@@ -103,6 +103,7 @@
   .util
   {
       /* float: right; */
+      margin-left: 3%;
   }
   
   .util .utilbtn, .dropdown .dropbtn {

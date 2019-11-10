@@ -10,6 +10,9 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
 
+    <link rel="stylesheet"
+        href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.css">
+
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
     <link rel="stylesheet" href="assets/css/alerts.css">
@@ -24,6 +27,7 @@
     <link rel="stylesheet" href="assets/css/tooltip.css">
 
     <link rel="stylesheet" href="assets/css/charts.css">
+    <link rel="stylesheet" href="assets/css/reports.css">
 
 </head>
 
@@ -34,7 +38,7 @@
     <div id="site_body" ng-view></div>
 </body>
 
-
+</html>
 
 
 
@@ -43,8 +47,8 @@
 
 
 <!-- jQuery & Bootstrap -->
-
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<!-- 
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
 <!-- <script src="vendors/jquery/dist/jquery.min.js"></script>
 <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script> -->
 
@@ -52,9 +56,37 @@
 <!-- Charting includes  -->
 <script type="text/javascript" src="vendors/echarts/echarts.min.js"></script>
 
+
 <!-- Angular -->
 <script type="text/javascript" src="vendors/ng/angular.min.js"></script>
 <script type="text/javascript" src="vendors/ng/angular-route.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script>
+
+
+<!-- Angular Material Library -->
+<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.js"></script>
+
+
+<!-- UI-Grid (NG) -->
+<script src="https://cdn.jsdelivr.net/gh/angular-ui/bower-ui-grid/ui-grid.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/4.8.1/i18n/ui-grid.auto-resize.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/4.8.1/i18n/ui-grid.exporter.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/angular-ui/bower-ui-grid/ui-grid.min.css">
+
+
+<!-- For CSV exporting -->
+<script src="http://ui-grid.info/docs/grunt-scripts/csv.js"></script>
+<script src="http://ui-grid.info/docs/grunt-scripts/pdfmake.js"></script>
+<script src="http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js"></script>
+<script src="http://ui-grid.info/docs/grunt-scripts/lodash.min.js"></script>
+<script src="http://ui-grid.info/docs/grunt-scripts/jszip.min.js"></script>
+<script src="http://ui-grid.info/docs/grunt-scripts/excel-builder.dist.js"></script>
+
+
+<!-- Time  -->
+<script src="vendors/moment/moment.min.js"></script>
 
 
 
@@ -64,6 +96,9 @@
 
 <!-- Charts -->
 <script src="assets/js/alldata.js"></script>
+<script src="assets/js/tempReport.js"></script>
+
+
 <script src="assets/js/Charts.js"></script>
 <script src="assets/js/ChartsMines.js"></script>
 <script src="assets/js/ChartsMonthly.js"></script>
@@ -95,5 +130,3 @@
     app.controller("myCtrl", function ($scope, $timeout, $element, $document) {
     });
 </script> -->
-
-</html>

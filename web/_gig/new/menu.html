@@ -13,7 +13,7 @@
                 <!-- <i class="fa fa-caret-down"></i> -->
                 <div class="dropdown-content">
                     <div class="siteCard" ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
-                        <img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg">
+                        <img class="sitePicSmall" ng-src="assets/img/site_{{siteIndex}}.jpg">
                         <h2>{{x.name}}</h2>
 
                         <!-- <h4>Analysis</h4>
@@ -100,8 +100,11 @@
 
                         <h3>Equipment</h3>
                         <a ng-href="#!timeline">Equipment Timeline</a>
+
+
                         <h3>Productivity</h3>
                         <a ng-href="#!productivity/D">Jumbo Productivity</a>
+                        <a ng-href="#!productivity/P">Drill Productivity</a>
                         <a ng-href="#!productivity/HAULING">Truck Productivity</a>
                         <a ng-href="#!productivity/LOADING">Bogger Productivity</a>
                         <a ng-href="#!productivity/ALL">All Equipment Productivity</a>
@@ -109,8 +112,10 @@
                 </div>
             </div>
         </div>
-        <h4 class="light"><i class="fas fa-ellipsis-v"></i></h4>
+
         <div class="navright">
+
+
             <div class="util">
                 <div class="utilbtn userbtn"><i class="far fa-user"></i></div>
                 <div class="dropdown-content">
@@ -171,11 +176,16 @@
                 <div class="utilbtn"><i class="fas fa-cogs"></i></div>
                 <div class="dropdown-content">
 
+                    <h3><i class="far fa-calendar-alt"></i> Data Date</h3>
+                    <div class="utilgrid">
+                        <div>Date</div>
+                        <div><input type="date"></div>
+                        <div>Available Dates</div>
+                    </div>
+
+
                     <h3><i class="fas fa-cogs"></i> Preferences</h3>
                     <div class="utilgrid">
-                        <div>Data Date</div>
-                        <div><input type="date"></div>
-
                         <div>Current Shift</div>
                         <div>
                             <label class="switch"><input ng-init="state=true" ng-model="state"
@@ -184,17 +194,15 @@
                             </label>
                         </div>
 
-
-
                         <div>Equipment Alerts</div>
                         <div>
                             <label class="switch"><input type="checkbox" id="togBtn" checked>
                                 <div class="slider round" switch-on="Active" switch-off="Off"></div>
                             </label>
                         </div>
-
-
                     </div>
+
+
                     <h3><i class="fas fa-search"></i> Equipment Search</h3>
                     <input type="text" ng-model="search.id" ng-init="search.id ='Search by ID...'">
                     <!-- <div ng-repeat="x in equipment | filter:search"><a ng-href="{{x.link}}">{{ x.id }}</a>
@@ -202,8 +210,13 @@
                     <div ng-repeat="x in equipment "><a ng-href="{{x.link}}">{{ x.id }}</a>
                     </div>
                 </div>
-
             </div>
+
+            <div class="util">
+                <h5 ng-if="shift==0"><i class='shiftIconDay fas fa-sun'></i> {{shiftTitle}}</h5>
+                <h5 ng-if="shift==1"><i class='shiftIconNight fas fa-moon'></i> {{shiftTitle}}</h5>
+            </div>
+
         </div>
 
 

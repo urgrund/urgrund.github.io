@@ -29,7 +29,8 @@ const MajorGroup = {
     DOWN: 'Down'
 }
 
-getEquipStyle = function (majorGroup) {
+getEquipStyle = function (majorGroup)
+{
     if (majorGroup == "OPERATING") { return { 'color': ChartStyles.statusColorsFlat[0] } }
     if (majorGroup == "IDLE") { return { 'color': ChartStyles.statusColorsFlat[1] } }
     if (majorGroup == "DOWN") { return { 'color': ChartStyles.statusColorsFlat[2] } }
@@ -37,7 +38,8 @@ getEquipStyle = function (majorGroup) {
 
 
 
-const capitalize = (s) => {
+const capitalize = (s) =>
+{
     if (typeof s !== 'string') return ''
     return s.charAt(0).toUpperCase() + s.slice(1)
 }
@@ -56,9 +58,13 @@ const capitalize = (s) => {
 //  MAIN APPLICATION 
 // =====================================================================================
 
-var app = angular.module("myApp", ["ngRoute"]);
+// Init the Angular application
+var app = angular.module("myApp", ['ngRoute', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.exporter', 'ngMaterial', 'ngMessages']);
 
-app.run(function ($rootScope) {
+
+// First run and rootscope
+app.run(function ($rootScope)
+{
     $rootScope.shift = shift;
     $rootScope.shiftTitle = shiftTitle[shift];
 
@@ -85,11 +91,13 @@ app.run(function ($rootScope) {
 
     // Fake alerts
     var alerts = [];
-    for (var i = 0; i < Math.round(Math.random() * 10); i++) {
+    for (var i = 0; i < Math.round(Math.random() * 10); i++)
+    {
 
         var randSite = Math.floor(Math.random() * ($rootScope.siteData.length - 1));
         var randEquip = Math.floor(Math.random() * $rootScope.siteData[randSite].equipment.length);
-        if (Math.random() > 0.5) {
+        if (Math.random() > 0.5)
+        {
             alerts[i] = {
                 level: 0,
                 time: "09:24",
@@ -98,7 +106,8 @@ app.run(function ($rootScope) {
                 message: "Bogger has been in-active for over 15minutes",
                 action: "Get someone on the bogger"
             };
-        } else {
+        } else
+        {
             alerts[i] = {
                 level: 1,
                 time: "14:12",
@@ -112,7 +121,8 @@ app.run(function ($rootScope) {
 
     $rootScope.alerts = alerts;
 
-    $rootScope.getEquipStyle = function (majorGroup) {
+    $rootScope.getEquipStyle = function (majorGroup)
+    {
         if (majorGroup == "OPERATING") { return { 'color': ChartStyles.statusColorsFlat[0] } }
         if (majorGroup == "IDLE") { return { 'color': ChartStyles.statusColorsFlat[1] } }
         if (majorGroup == "DOWN") { return { 'color': ChartStyles.statusColorsFlat[2] } }
@@ -121,17 +131,17 @@ app.run(function ($rootScope) {
 });
 
 
-
-
-// Main Application Entry Point
-app.controller("myCtrl", function ($scope, $rootScope, $timeout) {
+// Main controller
+app.controller("myCtrl", function ($scope, $rootScope, $timeout)
+{
 
     console.log("Main App Entry");
 
     $scope.myValue = true;
 
 
-    $scope.shiftSwitchChanged = function (_state) {
+    $scope.shiftSwitchChanged = function (_state)
+    {
         if (_state == true)
             $rootScope.shift = 0;
         else
@@ -143,7 +153,8 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout) {
     };
 
 
-    $scope.getReports = function () {
+    $scope.getReports = function ()
+    {
     };
 
 });
@@ -162,7 +173,8 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout) {
 // Router
 
 app.config(
-    function ($routeProvider) {
+    function ($routeProvider)
+    {
 
         $routeProvider
             .when("/", {
@@ -236,10 +248,13 @@ console.log("Setting up Components...");
 app.component("drillDownChart", {
     templateUrl: 'components/drillDownChart.html',
     bindings: {
-        title: '@',
+        name: '@',
         chart: '@'
     }
 });
+/// ----------------------------------------
+
+
 
 
 
@@ -254,15 +269,18 @@ app.component("drillDownHeader", {
         lines: '@',
         equip: '<'
     },
-    controller: function () {
+    controller: function ()
+    {
 
-        this.getEquipStyle = function (majorGroup) {
+        this.getEquipStyle = function (majorGroup)
+        {
             if (majorGroup == "OPERATING") { return { 'color': ChartStyles.statusColorsFlat[0] } }
             if (majorGroup == "IDLE") { return { 'color': ChartStyles.statusColorsFlat[1] } }
             if (majorGroup == "DOWN") { return { 'color': ChartStyles.statusColorsFlat[2] } }
         };
 
-        this.$onInit = function () {
+        this.$onInit = function ()
+        {
 
             if (this.equip == undefined)
                 return;
@@ -286,7 +304,8 @@ app.component("drillDownHeader", {
             // Can this variable be updated with 
             // interval check so that its realtime?
             this.late = 0;
-            if (hh > 4) {
+            if (hh > 4)
+            {
                 this.timeSinceLastCall = ">" + 4 + "hrs!";
                 this.late = 1;
             }
@@ -300,7 +319,8 @@ app.component("drillDownHeader", {
             this.flexColumn = "";
             this.flex = "flex";
 
-            if (this.lines == 0) {
+            if (this.lines == 0)
+            {
                 this.flexColumn = "";
                 this.flex = "";
             }
@@ -308,6 +328,8 @@ app.component("drillDownHeader", {
         };
     }
 });
+/// ----------------------------------------
+
 
 
 
@@ -320,34 +342,42 @@ app.component("alertBox", {
     bindings: {
         alert: '<'
     },
-    controller: function ($rootScope) {
-        this.$onInit = function () {
+    controller: function ($rootScope)
+    {
+        this.$onInit = function ()
+        {
             this.equipment = $rootScope.siteData[this.alert.siteIndex].equipment[this.alert.equipIndex];
             //console.log(this.equipment);
         };
     }
 });
+/// ----------------------------------------
+
 
 
 
 
 /// ----------------------------------------
-/// 
+/// Report Item
 /// ----------------------------------------
-// app.component("shiftText", {
-//     templateUrl: 'components/shiftText.html',
-//     bindings: {
-//         size: '@',
-//     },
-//     controller: function ($rootScope, $scope) {
+app.component("reportItem", {
+    templateUrl: 'components/reportItem.html',
+    bindings: {
+        key: '@',
+        value: '@',
+        id: '@'
+    },
+    controller: function ($rootScope)
+    {
+        this.$onInit = function ()
+        {
+            //console.log(this.id);
+        };
+    }
+});
+/// ----------------------------------------
 
-//         this.$onInit = function () {
-//             console.log(this.size);
-//             this.shift = $rootScope.shift;
-//             this.shiftTitle = $rootScope.shiftTitle;
-//         };
-//     }
-// });
+
 
 
 
