@@ -155,7 +155,7 @@ class Charts
 
 
         var cumulative = ArrayOfNumbers(0, 12, 0);
-
+        var mergedData = ArrayOfNumbers(0, 12, 0);
 
         // Add all the series together
         // along with legend info 
@@ -183,14 +183,14 @@ class Charts
 
             // Site total
             // See if a site (WF, SLC..etc) exists
-            // and start creating totals for it
+            // and create clean empty arrays for it
             if (!(metrics[i].site in siteTotals))
             {
-                siteTotals[metrics[i].site] = [];
-                for (var j = 0; j < 12; j++)
-                {
-                    siteTotals[metrics[i].site][j] = 0;
-                }
+                siteTotals[metrics[i].site] = ArrayOfNumbers(0, 12, 0);
+                // for (var j = 0; j < 12; j++)
+                // {
+                //     siteTotals[metrics[i].site][j] = 0;
+                // }
             }
 
             // Accumulate values into each site
@@ -198,10 +198,13 @@ class Charts
             {
                 cumulative[j] += metrics[i].cph[j];
                 siteTotals[metrics[i].site][j] = siteTotals[metrics[i].site][j] + metrics[i].mph[j];
+                mergedData[j] += siteTotals[metrics[i].site][j];
             }
         }
 
 
+        //console.log(siteTotals);
+        //console.log(mergedData);
 
         // Cumulative setup
         //console.log(cumulative);
@@ -222,18 +225,16 @@ class Charts
 
 
 
-        // For each site add legend
-        var siteCount = 0;
+        // Add each site data to series
         for (var key in siteTotals)
         {
-            siteCount++;
             seriesArray.unshift(
                 {
                     name: key,
                     type: 'bar',
-                    barMaxWidth: 10,
+                    barMaxWidth: '5',
                     data: siteTotals[key],
-                    itemStyle: { color: ChartStyles.siteColors[0] },
+                    //itemStyle: { color: ChartStyles.siteColors[0] },
                     label: { normal: { show: true, position: 'top' } }
                 });
         }
@@ -250,14 +251,11 @@ class Charts
             // Labels for each metric
             for (var i = 0; i < params.length; i++)
             {
-
-                //console.log(params[i]);
                 var metric = metrics[params[i].seriesId];
                 if (typeof metric !== 'undefined')
                 {
                     if (params[i].value > 0)
                     {
-                        //string += "<p>" + metric.site + " " + metric.name + " (" + metric.activity + ") : " + params[i].value + "</p>";
                         string += "<p>(" + metric.site + ") " + metric.name + " : " + params[i].value + "</p>";
                     }
                 }
@@ -265,7 +263,6 @@ class Charts
 
             // The last entry is the cumulative 
             var index = params.length - 1;
-            //console.log(params[index]);
             string += params[index].seriesName + " : " + params[index].value + "<br/>";
             return string;
         }
