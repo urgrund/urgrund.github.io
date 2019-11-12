@@ -9,12 +9,31 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout) 
     $scope.data = response[0];
     $scope.compliance = response[1];
 
-    // Pretending that it is this month
+
+    console.log($routeParams.func);
+
+    console.log($scope.data);
+    console.log($scope.compliance);
+
+    // Chart view of Monthyl Compliance
+    if ($routeParams.func == 0) {
+        ChartsMonthly.CreateMonthlyCompliance("monthlyChart", $scope.data);
+    }
 
 
-    //console.log($scope.data);
-    //console.log($scope.compliance);
-    //console.log($rootScope.siteData[$routeParams.site]);
-    ChartsMonthly.CreateMonthlyCompliance("monthlyChart", $scope.data);
+    // Targets Adjustment 
+    if ($routeParams.func == 1) {
+        $scope.entry = [];
+        for (var key in $scope.data) {
+            $scope.entry.push($scope.data[key][2]);
+            //console.log($scope.data[key][2]);
+        }
+
+
+        $scope.gridOptions = {};
+        $scope.gridOptions.data = JSON.stringify($scope.entry);
+
+        console.log($scope.entry);
+    }
 
 });

@@ -68,9 +68,8 @@
                     <div class="droplist">
                         <div ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
                             <h3>{{x.name}}</h3>
-                            <a ng-href="#">Adjust Target Inputs</a>
-                            <a ng-href="#!monthly/{{siteIndex}}">Plan vs Compliance</a>
-                            <a ng-href="#">Material Movements</a>
+                            <p><a ng-href="#!monthly/{{siteIndex}}/0">Plan vs Compliance</a></p>
+                            <p><a ng-href="#!monthly/{{siteIndex}}/1">Adjust Target Inputs</a> </p>
 
                             <!-- <h3>Equipment</h3>
                         <a href="#">Link 1</a>

@@ -1,58 +1,56 @@
-<div class="">
-    <div class="mines-center">
+<div class="reportGrid">
 
 
-        <button class="accordion equipSmallInfo" ng-click="accordionClick($event)">
-            <div class="reportTitle left light">
-                <p>Bogger Tonnes</p>
-                <h3>All Tonnes By Mine By Time</h3>
-            </div>
-            <h4 ng-if="accordionActive">Close Report Options <i class="fas fa-chevron-circle-up"></i></h4>
-            <h4 ng-if="!accordionActive">Open Report Options <i class="fas fa-chevron-circle-down"></i></h4>
-        </button>
+    <button class="accordion equipSmallInfo" ng-click="accordionClick($event)">
+        <div class="reportTitle left light">
+            <p>Bogger Tonnes</p>
+            <h3>All Tonnes By Mine By Time</h3>
+        </div>
+        <h4 ng-if="accordionActive">Close Report Options <i class="fas fa-chevron-circle-up"></i></h4>
+        <h4 ng-if="!accordionActive">Open Report Options <i class="fas fa-chevron-circle-down"></i></h4>
+    </button>
 
-        <div class="panel">
-            <h4 class="underline center">Preferences</h4>
+    <div class="panel">
+        <h4 class="underline center">Preferences</h4>
+        <div class="reportFlex">
+            <h5>Start Date & Shift: </h5>
+            <md-datepicker ng-model="startDate" md-placeholder="Enter date">
+            </md-datepicker>
+            <select ng-model="shiftStart" ng-options="x.label for x in shiftOptions"></select>
+
+            <h5>End Date & Shift: </h5>
+            <md-datepicker ng-model="endDate" md-placeholder="Enter date">
+            </md-datepicker>
+
+            <select ng-model="shiftEnd" ng-options="x.label for x in shiftOptions"></select>
+        </div>
+        <br />
+
+
+        <div ng-repeat="(key, value) in reports track by $index">
+
+            <!-- <h3>{{key}}</h3> -->
+            <!-- <h3>{{value}}</h3> -->
+            <h3 class="underline center">{{key}}</h3>
             <div class="reportFlex">
-                <h5>Start Date & Shift: </h5>
-                <md-datepicker ng-model="startDate" md-placeholder="Enter date">
-                </md-datepicker>
-                <select ng-model="shiftStart" ng-options="x.label for x in shiftOptions"></select>
 
-                <h5>End Date & Shift: </h5>
-                <md-datepicker ng-model="endDate" md-placeholder="Enter date">
-                </md-datepicker>
-
-                <select ng-model="shiftEnd" ng-options="x.label for x in shiftOptions"></select>
-            </div>
-            <br />
-
-
-            <div ng-repeat="(key, value) in reports track by $index">
-
-                <!-- <h3>{{key}}</h3> -->
-                <!-- <h3>{{value}}</h3> -->
-                <h3 class="underline center">{{key}}</h3>
-                <div class="reportFlex">
-
-                    <div ng-repeat="e in value track by $index">
-                        <!-- <h6>{{e}}</h6> -->
-                        <report-item key="{{key}}" value="{{e}}" id="{{$parent.$index}}-{{$index}}">
-                        </report-item>
-                    </div>
+                <div ng-repeat="e in value track by $index">
+                    <!-- <h6>{{e}}</h6> -->
+                    <report-item key="{{key}}" value="{{e}}" id="{{$parent.$index}}-{{$index}}">
+                    </report-item>
                 </div>
             </div>
-
         </div>
-
-        <!-- Report View -->
-        <!-- <div ng-if="currentCSVView!==undefined"> -->
-        <div>
-            <div ng-if="!refresh">
-                <div ui-grid="gridOptions" ui-grid-resize-columns ui-grid-exporter class="reportCSV"></div>
-            </div>
-        </div>
-
 
     </div>
+
+    <!-- Report View -->
+    <!-- <div ng-if="currentCSVView!==undefined"> -->
+    <div>
+        <div ng-if="!refresh">
+            <div ui-grid="gridOptions" ui-grid-resize-columns ui-grid-exporter class="reportCSV"></div>
+        </div>
+    </div>
+
+
 </div>

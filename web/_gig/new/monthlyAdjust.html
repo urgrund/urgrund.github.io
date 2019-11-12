@@ -1,0 +1,38 @@
+<div class="cup">
+
+    <div class="mines-center">
+
+        <div class="left">
+            <div class="flex flex-start">
+                <img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg">
+                <div>
+                    <h2 class="left"> {{site.name}}</h2>
+                    <h4>10th November 2018</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="lockcontainer">
+            <span class="lock"></span>
+        </div>
+
+
+        <div ng-repeat="x in entry" class="flex w60pc">
+            <div class="flex">
+                <h3>{{x[3]}}</h3>
+                <h3>-</h3>
+                <h3>{{x[4]}}</h3>
+                <h3>-</h3>
+                <h3>{{x[5]}}</h3>
+            </div>
+            <div class="flex right">
+                <h3><input></h3>
+                <label class="switch"><input type="checkbox" id="togBtn" checked>
+                    <div class="slider round" switch-on="Active" switch-off="Inactive"></div>
+                </label>
+
+            </div>
+        </div>
+        <!-- <div ui-grid="gridOptions"></div> -->
+    </div>
+</div>
