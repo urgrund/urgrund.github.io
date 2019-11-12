@@ -1,4 +1,5 @@
-:root {
+/* :root { */
+  *{
   --chartDivRoundness: 8px;
   --bgMain: url(../img/login_dark.jpg) no-repeat center center fixed;
   --bgBlur: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url(../img/login_blur.jpg) no-repeat center center fixed;

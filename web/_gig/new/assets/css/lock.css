@@ -1,4 +1,22 @@
-* {  
+
+
+.locked, .unlocked
+{
+  color: white;
+    text-shadow: 3px 3px 3px #000000;
+}
+
+.locked:focus, .unlocked:focus{
+  outline: none;
+}
+
+
+.unlocked
+{
+  color:red;
+}
+
+/* * {  
     --locked-color: #5fadbf;
     --unlocked-color: #ff5153;
   }
@@ -10,8 +28,6 @@
     justify-content: center;
     min-height: 400px;
   }
-  /* :::::::::::::: Required CSS */
-  /* Locked */
   .lock {
     width: 24px;
     height: 21px;
@@ -51,11 +67,11 @@
     -webkit-transition: all 0.1s ease-in-out;
     transition: all 0.1s ease-in-out;
   }
-  /* Locked Hover */
+ 
   .lock:hover:before {
     height: 12px;
   }
-  /* Unlocked */
+ 
   .unlocked {
     transform: rotate(10deg);
   }
@@ -72,7 +88,7 @@
   .unlocked:after {
     background: var(--unlocked-color);
   }
-  /* Unlocked Hover */
+  
   .unlocked:hover {
     transform: rotate(3deg);
   }
@@ -81,4 +97,4 @@
     left: 40%;
     bottom: 124%;
     transform: rotate(-30deg);
-  }
+  } */

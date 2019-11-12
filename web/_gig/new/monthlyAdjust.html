@@ -12,9 +12,12 @@
             </div>
         </div>
 
-        <div class="lockcontainer">
-            <span class="lock"></span>
-        </div>
+
+
+        <!-- <div class="lockcontainer">
+             <span class="lock" ng-click="toggleLock($event)"></span> 
+
+        </div> -->
 
 
         <div ng-repeat="x in entry" class="flex w60pc">
@@ -27,9 +30,12 @@
             </div>
             <div class="flex right">
                 <h3><input></h3>
-                <label class="switch"><input type="checkbox" id="togBtn" checked>
-                    <div class="slider round" switch-on="Active" switch-off="Inactive"></div>
-                </label>
+                <h4><i class="fas fa-lock locked" ng-click="toggleLock($event)"></i></h4>
+                <div class="left">
+                    <label class="switch"><input type="checkbox" id="togBtn" checked>
+                        <div class="slider round" switch-on="Active" switch-off="Inactive"></div>
+                    </label>
+                </div>
 
             </div>
         </div>

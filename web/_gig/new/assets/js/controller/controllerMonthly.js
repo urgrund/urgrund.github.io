@@ -1,5 +1,6 @@
 
-app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout) {
+app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout)
+{
 
     $scope.siteIndex = $routeParams.site;
     $scope.site = $rootScope.siteData[$routeParams.site];
@@ -10,21 +11,31 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout) 
     $scope.compliance = response[1];
 
 
-    console.log($routeParams.func);
-
-    console.log($scope.data);
-    console.log($scope.compliance);
+    //console.log($routeParams.func);
+    //console.log($scope.data);
+    //console.log($scope.compliance);
 
     // Chart view of Monthyl Compliance
-    if ($routeParams.func == 0) {
+    if ($routeParams.func == 0)
+    {
         ChartsMonthly.CreateMonthlyCompliance("monthlyChart", $scope.data);
     }
 
+    $scope.toggleLock = function ($event)
+    {
+        //console.log("aslkdjsl");
+
+        $event.currentTarget.classList.toggle("fa-lock-open");
+        $event.currentTarget.classList.toggle("unlocked");
+        //$event.currentTarget.classList.toggle("unlocked");
+    }
 
     // Targets Adjustment 
-    if ($routeParams.func == 1) {
+    if ($routeParams.func == 1)
+    {
         $scope.entry = [];
-        for (var key in $scope.data) {
+        for (var key in $scope.data)
+        {
             $scope.entry.push($scope.data[key][2]);
             //console.log($scope.data[key][2]);
         }
@@ -33,7 +44,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout) 
         $scope.gridOptions = {};
         $scope.gridOptions.data = JSON.stringify($scope.entry);
 
-        console.log($scope.entry);
+        //console.log($scope.entry);
     }
 
 });
