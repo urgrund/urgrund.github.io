@@ -6,12 +6,12 @@
             <div class="flex flex-start">
                 <img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg">
                 <div>
-                    <h2 class="left"> {{site.name}}</h2>
-                    <h4>10th November 2018</h4>
+                    <h3 class="left"> {{site.name}}</h3>
+                    <h2>Adjust Monthly Targets...</h2>
                 </div>
             </div>
         </div>
-
+        <br />
 
 
         <!-- <div class="lockcontainer">
@@ -19,26 +19,58 @@
 
         </div> -->
 
+        <div class="center underline">
 
-        <div ng-repeat="x in entry" class="flex w60pc">
-            <div class="flex">
-                <h3>{{x[3]}}</h3>
-                <h3>-</h3>
-                <h3>{{x[4]}}</h3>
-                <h3>-</h3>
-                <h3>{{x[5]}}</h3>
-            </div>
-            <div class="flex right">
-                <h3><input></h3>
-                <h4><i class="fas fa-lock locked" ng-click="toggleLock($event)"></i></h4>
-                <div class="left">
-                    <label class="switch"><input type="checkbox" id="togBtn" checked>
+            <h4 class="underline">
+                <div class="monthlyTargetGrid">
+                    <div class="left">Location</div>
+                    <div class="center">Monthly Target</div>
+                    <div class="center">Active</div>
+                    <div class="center flex">Lock <h4><i class="fas fa-lock locked fa-lock-open" ng-init="biglock=0"
+                                ng-click="biglock= biglock == 0? 1:0; toggleLock($event, -1)" ng-model="biglock"></i>
+                        </h4>
+                    </div>
+                </div>
+            </h4>
+
+
+            <div ng-repeat="x in entry" class="monthlyTargetGrid">
+                <div class="flex">
+                    <h3>{{x.data[3]}}</h3>
+                    <h3> - </h3>
+                    <h3>{{x.data[4]}}</h3>
+                    <h3> - </h3>
+                    <h3>{{x.data[5]}}</h3>
+                </div>
+                <div class="flex flex-end">
+                    <p class="light">Target: </p>
+                    <h3><input ng-disabled="x.lock == 1"></h3>
+                </div>
+
+                <div class="center">
+                    <label class="switch"><input type="checkbox" id="togBtn" checked ng-disabled="x.lock == 1">
                         <div class="slider round" switch-on="Active" switch-off="Inactive"></div>
                     </label>
+                </div>
+                <div class="center">
+                    <h4><i class="fas fa-lock locked fa-lock-open" ng-class="getLockClass($index)"
+                            ng-click="toggleLock($event, $index)"></i></h4>
                 </div>
 
             </div>
         </div>
-        <!-- <div ui-grid="gridOptions"></div> -->
+
+        <div class="center">
+            <h4>Upload targets to server...</h4>
+            <h1>
+                <button ng-click="uploadToServer()" class="equipSmallInfo">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </button>
+            </h1>
+        </div>
     </div>
+
+
+    <!-- <div ui-grid="gridOptions"></div> -->
+</div>
 </div>

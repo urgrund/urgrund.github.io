@@ -11,7 +11,7 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
 
         //$scope.equip = $scope.siteData[$routeParams.siteIndex].equipment[$routeParams.equipIndex];
         $scope.equip = $rootScope.equipment[$routeParams.id];
-        //console.log($scope.equip);
+        console.log($scope.equip);
 
         var len = $scope.equip.shiftData[$rootScope.shift].events.length;
         $scope.lastEvent = $scope.equip.shiftData[$rootScope.shift].events[len - 1];

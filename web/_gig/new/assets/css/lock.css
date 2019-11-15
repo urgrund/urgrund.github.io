@@ -2,7 +2,7 @@
 
 .locked, .unlocked
 {
-  color: white;
+  color: rgb(255, 0, 0);
     text-shadow: 3px 3px 3px #000000;
 }
 
@@ -13,7 +13,7 @@
 
 .unlocked
 {
-  color:red;
+  color:rgb(255, 255, 255);
 }
 
 /* * {  

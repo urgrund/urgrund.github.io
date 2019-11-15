@@ -120,7 +120,7 @@ class ChartsMonthly {
                     type: 'bar',
                     stack: 'stack',
                     name: 'Tonnes',
-                    itemStyle: { color: ChartStyles.cumulativeColor, barBorderRadius: borderRadius },
+                    itemStyle: { color: ChartStyles.siteColors[0], barBorderRadius: borderRadius },
                     // barGap: '-100%',
                     // barWidth: 10,
                     animationEasing: 'linear',

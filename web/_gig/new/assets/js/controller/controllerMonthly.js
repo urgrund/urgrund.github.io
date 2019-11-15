@@ -1,6 +1,5 @@
 
-app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout)
-{
+app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout) {
 
     $scope.siteIndex = $routeParams.site;
     $scope.site = $rootScope.siteData[$routeParams.site];
@@ -16,28 +15,48 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout)
     //console.log($scope.compliance);
 
     // Chart view of Monthyl Compliance
-    if ($routeParams.func == 0)
-    {
+    if ($routeParams.func == 0) {
         ChartsMonthly.CreateMonthlyCompliance("monthlyChart", $scope.data);
     }
 
-    $scope.toggleLock = function ($event)
-    {
-        //console.log("aslkdjsl");
 
-        $event.currentTarget.classList.toggle("fa-lock-open");
-        $event.currentTarget.classList.toggle("unlocked");
+    $scope.getLockClass = function ($index) {
+        //$event.currentTarget.classList.toggle("fa-lock-open");
         //$event.currentTarget.classList.toggle("unlocked");
+        if ($scope.entry[$index] != undefined) {
+            if ($scope.entry[$index].lock == true) {
+                return "fas fa-lock locked"
+            } else {
+                return "fas fa-lock-open unlocked";
+            }
+        }
+        return "";
     }
 
+
+    $scope.toggleLock = function ($event, $index) {
+        //console.log($index);
+        //console.log($scope.biglock);
+        //
+        //$scope.biglock == '0'
+        if ($index == -1) {
+            for (var i = 0; i < $scope.entry.length; i++) {
+                $scope.entry[i].lock = $scope.biglock == 0 ? true : false;
+            }
+        }
+        else {
+            if ($scope.biglock == 1)
+                if ($scope.entry[$index] != undefined)
+                    $scope.entry[$index].lock = !$scope.entry[$index].lock;
+        }
+    }
+
+
     // Targets Adjustment 
-    if ($routeParams.func == 1)
-    {
+    if ($routeParams.func == 1) {
         $scope.entry = [];
-        for (var key in $scope.data)
-        {
-            $scope.entry.push($scope.data[key][2]);
-            //console.log($scope.data[key][2]);
+        for (var key in $scope.data) {
+            $scope.entry.push({ lock: false, data: $scope.data[key][2] });
         }
 
 

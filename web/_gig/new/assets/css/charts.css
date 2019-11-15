@@ -389,14 +389,14 @@ a > .sitePicBig:hover
 .img_LOADING, .img_HAULING, .img_D, .img_P
 {  
   background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_LOADING.jpg);
-  background-size: cover;
-  position: absolute;
+  background-size: cover;  
+  /* position: absolute;
   top: 0px;
-  left: 0px; 
+  left: 0px;  */
 }
-.img_HAULING{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_HAULING.jpg);}
-.img_D{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_D.jpg);}
-.img_P{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_P.jpg);}
+.img_HAULING{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_HAULING.jpg); background-size: cover;  }
+.img_D{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_D.jpg);background-size: cover;  }
+.img_P{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_P.jpg);background-size: cover;  }
 
 .imgLink {   
   display: contents;
