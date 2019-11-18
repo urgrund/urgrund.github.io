@@ -151,11 +151,11 @@ class Charts
             if (m.cph[11] > 0)
                 metrics.push(m);
         }
-        console.log(metrics);
+        //console.log(metrics);
 
 
         var cumulative = ArrayOfNumbers(0, 12, 0);
-        var mergedData = ArrayOfNumbers(0, 12, 0);
+        //var mergedData = ArrayOfNumbers(0, 12, 0);
 
         // Add all the series together
         // along with legend info 
@@ -177,9 +177,11 @@ class Charts
                     itemStyle: { color: 'rgba(0,0,0,0)' }
                 });
 
+
             // Legend
             if (!legend.includes(metrics[i].site))
                 legend.push(metrics[i].site);
+
 
             // Site total
             // See if a site (WF, SLC..etc) exists
@@ -198,7 +200,7 @@ class Charts
             {
                 cumulative[j] += metrics[i].cph[j];
                 siteTotals[metrics[i].site][j] = siteTotals[metrics[i].site][j] + metrics[i].mph[j];
-                mergedData[j] += siteTotals[metrics[i].site][j];
+                //mergedData[j] += siteTotals[metrics[i].site][j];
             }
         }
 
@@ -232,9 +234,10 @@ class Charts
                 {
                     name: key,
                     type: 'bar',
-                    barMaxWidth: '5',
+                    stack: 'aaa',
+                    barMaxWidth: '15',
                     data: siteTotals[key],
-                    //itemStyle: { color: ChartStyles.siteColors[0] },
+                    itemStyle: { color: ChartStyles.siteColors[0] },
                     label: { normal: { show: true, position: 'top' } }
                 });
         }
