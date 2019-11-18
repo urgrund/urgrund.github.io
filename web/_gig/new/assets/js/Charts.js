@@ -122,6 +122,26 @@ const ChartTPHDisplay = {
     CUMULATIVE: '1',
     BOTH: '2'
 }
+
+function CalculateMA(dayCount, data)
+{
+    var result = [];
+    for (var i = 0, len = data.length; i < len; i++)
+    {
+        if (i < dayCount)
+        {
+            result.push('-');
+            continue;
+        }
+        var sum = 0;
+        for (var j = 0; j < dayCount; j++)
+        {
+            sum += data[i - j];//[1];
+        }
+        result.push((sum / dayCount).toFixed(2));
+    }
+    return result;
+}
 // -----------------------------------------------------------------------
 
 

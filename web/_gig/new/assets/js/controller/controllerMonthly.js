@@ -21,7 +21,37 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout)
     // Chart view of Monthyl Compliance
     if ($routeParams.func == 0)
     {
-        ChartsMonthly.CreateMonthlyCompliance("monthlyChart", $scope.data);
+        //ChartsMonthly.CreateMonthlyCompliance("monthlyChart", $scope.data);
+
+
+
+        // Test Long Term
+        //console.log(longTermData);
+        var data = [];
+        data.push([]);
+        data.push([]);
+        for (var i = 1; i < longTermData.length; i++)
+        {
+            data[0].push(longTermData[i][0]);
+            data[1].push(longTermData[i][9]);
+        }
+        var c1 = ChartsMonthly.CreateLongTerm("poo", data, "Availability", ChartStyles.statusItemStyle(0));
+
+
+        data = [];
+        data.push([]);
+        data.push([]);
+        for (var i = 1; i < longTermData.length; i++)
+        {
+            data[0].push(longTermData[i][0]);
+            data[1].push(longTermData[i][10]);
+        }
+        var c2 = ChartsMonthly.CreateLongTerm("poo2", data, "Utilisation of Availability", { color: ChartStyles.uofaColor });
+
+        c1.group = 'group1';
+        c2.group = 'group1';
+        //timeline.group = 'group1';
+        echarts.connect('group1');
     }
 
 

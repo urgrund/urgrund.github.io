@@ -1,7 +1,99 @@
 
-class ChartsMonthly {
+class ChartsMonthly
+{
 
-    static CreateMonthlyCompliance(_elementID, _data) {
+
+    static CreateLongTerm(_elementID, _data, _name, _style)
+    {
+        var myChart = echarts.init(document.getElementById(_elementID), 'chartTone');
+
+        var ma30 = CalculateMA(30, _data[1]);
+        var ma60 = CalculateMA(60, _data[1]);
+
+        var option = {
+
+            backgroundColor: ChartStyles.backGroundColor,
+            textStyle: ChartStyles.textStyle,
+
+            // toolbox: {
+            //     feature: {
+            //         dataZoom: {
+            //             show: false,
+            //             yAxisIndex: false
+            //         }
+            //     },
+            //     textStyle: ChartStyles.toolTipTextStyle(),
+            // },
+            grid: {
+                top: '3%',
+                bottom: '15%',
+                left: '3%',
+                right: '3%',
+                containLabel: true
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                },
+                textStyle: ChartStyles.toolTipTextStyle(),
+                axisPointer: ChartStyles.toolTipShadow()
+            },
+            dataZoom: [{
+                type: 'inside'
+            }, {
+                type: 'slider'
+            }],
+            xAxis: {
+                type: 'category',
+                data: _data[0]
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: function (value, index) { return (value * 100 + "%"); }
+                },
+                splitLine: { show: false },
+                axisLine: ChartStyles.axisLineGrey
+            },
+            series: [{
+                name: _name,
+                data: _data[1],
+                type: 'line',
+                symbol: 'none',
+                itemStyle: _style,//ChartStyles.statusItemStyle(_colorIndex),
+                lineStyle: { width: 1.5 },
+                large: true
+            },
+            {
+                name: 'MA30',
+                data: ma30,
+                type: 'line',
+                symbol: 'none',
+                lineStyle: { width: 1 },
+                large: true
+            },
+            {
+                name: 'MA60',
+                data: ma60,
+                type: 'line',
+                symbol: 'none',
+                lineStyle: { width: 1 },
+                large: true
+            }]
+        };
+
+        SetOptionOnChart(option, myChart);
+        return myChart;
+    }
+
+
+
+
+
+
+    static CreateMonthlyCompliance(_elementID, _data)
+    {
 
         //console.log(_data);
 
@@ -10,7 +102,8 @@ class ChartsMonthly {
         var newData = [[], [], [], [], []];
 
         var index = 0;
-        for (var key in _data) {
+        for (var key in _data)
+        {
 
             var len = _data[key][1].length - 1;
             var target = parseInt(_data[key][2][0]);
@@ -43,7 +136,8 @@ class ChartsMonthly {
 
             tooltip: {
                 trigger: 'axis',
-                formatter: function (params, index) {
+                formatter: function (params, index)
+                {
 
                     var label = "";
 
