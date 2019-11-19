@@ -1,6 +1,5 @@
 
-app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout)
-{
+app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout) {
 
     $scope.siteIndex = $routeParams.site;
     $scope.site = $rootScope.siteData[$routeParams.site];
@@ -19,53 +18,18 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout)
     */
 
     // Chart view of Monthyl Compliance
-    if ($routeParams.func == 0)
-    {
-        //ChartsMonthly.CreateMonthlyCompliance("monthlyChart", $scope.data);
-
-
-
-        // Test Long Term
-        //console.log(longTermData);
-        var data = [];
-        data.push([]);
-        data.push([]);
-        for (var i = 1; i < longTermData.length; i++)
-        {
-            data[0].push(longTermData[i][0]);
-            data[1].push(longTermData[i][9]);
-        }
-        var c1 = ChartsMonthly.CreateLongTerm("poo", data, "Availability", ChartStyles.statusItemStyle(0));
-
-
-        data = [];
-        data.push([]);
-        data.push([]);
-        for (var i = 1; i < longTermData.length; i++)
-        {
-            data[0].push(longTermData[i][0]);
-            data[1].push(longTermData[i][10]);
-        }
-        var c2 = ChartsMonthly.CreateLongTerm("poo2", data, "Utilisation of Availability", { color: ChartStyles.uofaColor });
-
-        c1.group = 'group1';
-        c2.group = 'group1';
-        //timeline.group = 'group1';
-        echarts.connect('group1');
+    if ($routeParams.func == 0) {
+        ChartsMonthly.CreateMonthlyCompliance("monthlyChart", $scope.data);
     }
 
 
-    $scope.getLockClass = function ($index)
-    {
+    $scope.getLockClass = function ($index) {
         //$event.currentTarget.classList.toggle("fa-lock-open");
         //$event.currentTarget.classList.toggle("unlocked");
-        if ($scope.entry[$index] != undefined)
-        {
-            if ($scope.entry[$index].lock == true)
-            {
+        if ($scope.entry[$index] != undefined) {
+            if ($scope.entry[$index].lock == true) {
                 return "fas fa-lock locked"
-            } else
-            {
+            } else {
                 return "fas fa-lock-open unlocked";
             }
         }
@@ -73,21 +37,17 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout)
     }
 
 
-    $scope.toggleLock = function ($event, $index)
-    {
+    $scope.toggleLock = function ($event, $index) {
         //console.log($index);
         //console.log($scope.biglock);
         //
         //$scope.biglock == '0'
-        if ($index == -1)
-        {
-            for (var i = 0; i < $scope.entry.length; i++)
-            {
+        if ($index == -1) {
+            for (var i = 0; i < $scope.entry.length; i++) {
                 $scope.entry[i].lock = $scope.biglock == 0 ? true : false;
             }
         }
-        else
-        {
+        else {
             if ($scope.biglock == 1)
                 if ($scope.entry[$index] != undefined)
                     $scope.entry[$index].lock = !$scope.entry[$index].lock;
@@ -96,11 +56,9 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout)
 
 
     // Targets Adjustment 
-    if ($routeParams.func == 1)
-    {
+    if ($routeParams.func == 1) {
         $scope.entry = [];
-        for (var key in $scope.data)
-        {
+        for (var key in $scope.data) {
             $scope.entry.push({ lock: false, data: $scope.data[key][2] });
         }
 

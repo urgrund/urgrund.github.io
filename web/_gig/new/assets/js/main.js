@@ -203,6 +203,11 @@ app.config(
                 templateUrl: 'reports.html',
                 controller: 'Reports',
                 resolve: { init: function () { ClearAllCharts(); } }
+            })
+            .when("/longterm/", {
+                templateUrl: 'longterm.html',
+                controller: 'LongTerm',
+                resolve: { init: function () { ClearAllCharts(); } }
             });
         // .when("/Mines", {
         //     templateUrl: "dash_mines.html",
@@ -305,7 +310,7 @@ app.component("drillDownHeader", {
 
 
             this.flexColumn = "";
-            this.flex = "flex";
+            this.flex = "flex flex-start";
 
             if (this.lines == 0) {
                 this.flexColumn = "";
