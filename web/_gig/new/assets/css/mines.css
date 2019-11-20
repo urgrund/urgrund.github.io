@@ -43,6 +43,9 @@
     /* background: linear-gradient(25deg, #141f33, #4d6f8b);
     box-shadow: 5px 5px 12px 1px #000000bf; */
 
+    padding:1%;
+    height: 90%;
+
     background: var(--bgBlur);
     object-fit: cover;
     background-position: center;
@@ -50,11 +53,11 @@
     background-size: cover;
 
     -webkit-box-shadow: var(--divShadow);
-  -moz-box-shadow: var(--divShadow);
-  box-shadow: var(--divShadow);
+    -moz-box-shadow: var(--divShadow);
+    box-shadow: var(--divShadow);
 
-  border-radius: var(--chartDivRoundness);
-  border: 1px solid var(--chartDivBorder);
+    border-radius: var(--chartDivRoundness);
+    border: 1px solid var(--chartDivBorder);
 }
 
 

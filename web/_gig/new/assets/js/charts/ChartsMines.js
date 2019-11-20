@@ -4,7 +4,7 @@ class ChartsMines {
     static CreateUsageBar(_elementID, _data) {
         // -------------------------------------------------------------
         //if (myPie == null)
-        var myChart = echarts.init(document.getElementById(_elementID), 'chartTone');
+        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
 
         var _d = _data.shiftData[shift];
 

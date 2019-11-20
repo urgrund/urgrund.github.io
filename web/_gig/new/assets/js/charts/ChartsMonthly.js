@@ -1,10 +1,8 @@
 
-class ChartsMonthly
-{
+class ChartsMonthly {
 
 
-    static CreateLongTerm(_elementID, _data, _name, _style)
-    {
+    static CreateLongTerm(_elementID, _data, _name, _style) {
         var myChart = echarts.init(document.getElementById(_elementID), 'chartTone');
 
         var ma30 = CalculateMA(30, _data[1]);
@@ -23,10 +21,10 @@ class ChartsMonthly
                 }
             },
             grid: {
-                top: '3%',
-                bottom: '15%',
-                left: '3%',
-                right: '3%',
+                top: '4%',
+                bottom: '20%',
+                left: '1%',
+                right: '1%',
                 containLabel: true
             },
             tooltip: {
@@ -91,8 +89,7 @@ class ChartsMonthly
 
 
 
-    static CreateMonthlyCompliance(_elementID, _data)
-    {
+    static CreateMonthlyCompliance(_elementID, _data) {
 
         //console.log(_data);
 
@@ -101,8 +98,7 @@ class ChartsMonthly
         var newData = [[], [], [], [], []];
 
         var index = 0;
-        for (var key in _data)
-        {
+        for (var key in _data) {
 
             var len = _data[key][1].length - 1;
             var target = parseInt(_data[key][2][0]);
@@ -135,8 +131,7 @@ class ChartsMonthly
 
             tooltip: {
                 trigger: 'axis',
-                formatter: function (params, index)
-                {
+                formatter: function (params, index) {
 
                     var label = "";
 

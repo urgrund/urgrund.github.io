@@ -17,13 +17,11 @@ timeLabelsShiftExtra[0] = GenerateTimeLabels(13, 6);
 timeLabelsShiftExtra[1] = GenerateTimeLabels(13, 18);
 //time12 = GenerateTimeLabels(12, 6);
 //time24 = GenerateTimeLabels(24, 6);
-function GenerateTimeLabels(_count, _offset)
-{
+function GenerateTimeLabels(_count, _offset) {
     var _array = [];
     var num;
     var suf;
-    for (var i = _offset; i < _count + _offset; i++)
-    {
+    for (var i = _offset; i < _count + _offset; i++) {
         var hr = i % 24;
         if (hr == 0) hr = 12;
         num = hr > 12 ? hr - 12 : hr;
@@ -46,15 +44,13 @@ function GenerateTimeLabels(_count, _offset)
 //     ResizeAllCharts();
 // });
 
-window.addEventListener('resize', function (event)
-{
+window.addEventListener('resize', function (event) {
     ResizeAllCharts();
 });
 
 
 // Call resize on all existing eCharts
-function ResizeAllCharts()
-{
+function ResizeAllCharts() {
     for (var i = 0; i < allCharts.length; i++)
         if (allCharts[i] != null)
             allCharts[i].resize();
@@ -62,13 +58,10 @@ function ResizeAllCharts()
 
 // Dispose of the chart through eCharts
 // then null and create new array obj
-function ClearAllCharts()
-{
+function ClearAllCharts() {
     console.log("Clearing all charts");
-    for (var i = 0; i < allCharts.length; i++)
-    {
-        if (allCharts[i] != null)
-        {
+    for (var i = 0; i < allCharts.length; i++) {
+        if (allCharts[i] != null) {
             allCharts[i].dispose();
             allCharts[i] = null;
         }
@@ -77,10 +70,8 @@ function ClearAllCharts()
 }
 
 
-function SetOptionOnChart(_option, _chart)
-{
-    if (_option && typeof _option === "object")
-    {
+function SetOptionOnChart(_option, _chart) {
+    if (_option && typeof _option === "object") {
         //console.log("settting");
         _chart.setOption(_option, true);
         allCharts.push(_chart);
@@ -91,13 +82,11 @@ function SetOptionOnChart(_option, _chart)
 
 // -----------------------------------------------------------------------
 // Time and other functions
-function SecondsToMinutes(_seconds)
-{
+function SecondsToMinutes(_seconds) {
     return _seconds / 60;
 }
 
-function ArrayOfNumbers(_number, _count, _startIndex)
-{
+function ArrayOfNumbers(_number, _count, _startIndex) {
     var arr = [];
     for (var i = 0; i < _count; i++)
         arr[i] = i >= _startIndex ? _number : 0;
@@ -105,13 +94,11 @@ function ArrayOfNumbers(_number, _count, _startIndex)
 }
 
 // Converts a value into a useable % string
-function RatioToPercent(_value)
-{
+function RatioToPercent(_value) {
     return Math.round(_value * 100) + "%";
 }
 
-function SecondsToHoursAndMinutes(num)
-{
+function SecondsToHoursAndMinutes(num) {
     var hours = Math.floor(num / 60);
     var minutes = Math.trunc(Math.round((num % 60) * 100) / 100);
     return (hours > 0 ? hours + "h " : "") + minutes + "m";
@@ -123,19 +110,19 @@ const ChartTPHDisplay = {
     BOTH: '2'
 }
 
-function CalculateMA(dayCount, data)
-{
+
+
+// Calculates a Moving Average and
+// returns an array of values 
+function CalculateMA(dayCount, data) {
     var result = [];
-    for (var i = 0, len = data.length; i < len; i++)
-    {
-        if (i < dayCount)
-        {
+    for (var i = 0, len = data.length; i < len; i++) {
+        if (i < dayCount) {
             result.push('-');
             continue;
         }
         var sum = 0;
-        for (var j = 0; j < dayCount; j++)
-        {
+        for (var j = 0; j < dayCount; j++) {
             sum += data[i - j];//[1];
         }
         result.push((sum / dayCount).toFixed(2));
@@ -149,24 +136,21 @@ function CalculateMA(dayCount, data)
 
 // Variables used in the charts
 // need to manage these better
-var dailyTargetPercent = 85;
-var chartTone = 'dark';
+//var dailyTargetPercent = 85;
+//var chartTone = 'dark';
 
 
 
 
-class Charts
-{
+class Charts {
 
-    static CreateMPH(_elementID, _data, _display)
-    {
+    static CreateMPH(_elementID, _data, _display) {
         var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
 
         // Only interested if there was 
         // any metrics recorded this shift
         var metrics = [];
-        for (var i = 0; i < _data.shiftData[shift].metricData.length; i++)
-        {
+        for (var i = 0; i < _data.shiftData[shift].metricData.length; i++) {
             var m = _data.shiftData[shift].metricData[i];
             if (m.cph[11] > 0)
                 metrics.push(m);
@@ -182,8 +166,7 @@ class Charts
         var seriesArray = [];
         var legend = [];
         var siteTotals = [];
-        for (var i = 0; i < metrics.length; i++)
-        {
+        for (var i = 0; i < metrics.length; i++) {
             // Invisible Series
             seriesArray.push(
                 {
@@ -206,8 +189,7 @@ class Charts
             // Site total
             // See if a site (WF, SLC..etc) exists
             // and create clean empty arrays for it
-            if (!(metrics[i].site in siteTotals))
-            {
+            if (!(metrics[i].site in siteTotals)) {
                 siteTotals[metrics[i].site] = ArrayOfNumbers(0, 12, 0);
                 // for (var j = 0; j < 12; j++)
                 // {
@@ -216,8 +198,7 @@ class Charts
             }
 
             // Accumulate values into each site
-            for (var j = 0; j < 12; j++)
-            {
+            for (var j = 0; j < 12; j++) {
                 cumulative[j] += metrics[i].cph[j];
                 siteTotals[metrics[i].site][j] = siteTotals[metrics[i].site][j] + metrics[i].mph[j];
                 //mergedData[j] += siteTotals[metrics[i].site][j];
@@ -248,8 +229,7 @@ class Charts
 
 
         // Add each site data to series
-        for (var key in siteTotals)
-        {
+        for (var key in siteTotals) {
             seriesArray.unshift(
                 {
                     name: key,
@@ -264,21 +244,17 @@ class Charts
 
 
         // Construct the hover over message
-        function Label(params)
-        {
+        function Label(params) {
             var string = "";
 
             // The time 
             string += "<h4 class='underline'>" + params[0].name + "</h4>";
 
             // Labels for each metric
-            for (var i = 0; i < params.length; i++)
-            {
+            for (var i = 0; i < params.length; i++) {
                 var metric = metrics[params[i].seriesId];
-                if (typeof metric !== 'undefined')
-                {
-                    if (params[i].value > 0)
-                    {
+                if (typeof metric !== 'undefined') {
+                    if (params[i].value > 0) {
                         string += "<p>(" + metric.site + ") " + metric.name + " : " + params[i].value + "</p>";
                     }
                 }
@@ -311,8 +287,7 @@ class Charts
                 textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),
                 backgroundColor: 'rgba(50,50,50,0.9)',
-                formatter: function (params, index)
-                {
+                formatter: function (params, index) {
                     return Label(params);
                 }
             },
@@ -342,8 +317,7 @@ class Charts
 
 
 
-    static CreateTPH(_elementID, _data, _display)
-    {
+    static CreateTPH(_elementID, _data, _display) {
         var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
 
         // Adjust for shift        
@@ -373,8 +347,7 @@ class Charts
             dailyTarget = 180;
 
         // Hourly tonne and % targets
-        for (var i = 0; i < dataLength; i++)
-        {
+        for (var i = 0; i < dataLength; i++) {
             var perHourDailyTarget = (parseFloat(dailyTarget / 12) * (i + 1));
             dailyTargetData.push({ value: perHourDailyTarget, symbolSize: (i == dataLength - 1) ? '10' : '0' });// (i = dataLength - 1) ? 'false' : 'true' });
             eightyFiveTargetData.push(parseFloat(perHourDailyTarget * parseFloat(dailyTargetPercent / 100)));
@@ -382,10 +355,8 @@ class Charts
 
         // Color based on reaching % target            
         var cumulativeVal = 0;
-        for (var i = 0; i < dataLength; i++)
-        {
-            for (var j = 0; j < tonnesPerHour.length; j++)
-            {
+        for (var i = 0; i < dataLength; i++) {
+            for (var j = 0; j < tonnesPerHour.length; j++) {
                 cumulativeVal += Math.round(tonnesPerHour[j][i]);
                 var val = Math.round(tonnesPerHour[j][i]);
                 tonnesPerHour[j][i] = {
@@ -443,8 +414,7 @@ class Charts
         );
 
 
-        switch (_display.toString())
-        {
+        switch (_display.toString()) {
             case ChartTPHDisplay.TPH.toString():
                 seriesArray.push({
                     name: 'Hourly',//_data["metric"],
@@ -466,8 +436,7 @@ class Charts
                     });
                 break;
             case ChartTPHDisplay.BOTH.toString():
-                for (var i = 0; i < tonnesPerHour.length; i++)
-                {
+                for (var i = 0; i < tonnesPerHour.length; i++) {
                     seriesArray.push(
                         {
                             name: _data.sites[i], //'Hourly',//_data["metric"],
@@ -548,10 +517,9 @@ class Charts
 
 
 
-    static CreateTimeLine(_elementID, _data)
-    {
+    static CreateTimeLine(_elementID, _data) {
         var dom = document.getElementById(_elementID);
-        var myChart = echarts.init(dom, chartTone);
+        var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
         var _d = _data.shiftData[shift];
 
@@ -564,8 +532,7 @@ class Charts
         //var colors = ['red', 'orange', 'green'];
 
         var data = [];
-        for (var i = 0; i < _d.events.length; i++)
-        {
+        for (var i = 0; i < _d.events.length; i++) {
             var majorGroup = _d.events[i].majorGroup;// 
 
             var groupIndex;
@@ -617,8 +584,7 @@ class Charts
         var customTypes = ["Bar", "Box", "Line"];
         //var customTypeOffsets = [2, 15, 2];//[-0, -25, -50];
 
-        function renderItem(params, api, customType)
-        {
+        function renderItem(params, api, customType) {
             var categoryIndex = api.value(0);
             var start = api.coord([api.value(1), categoryIndex]);
             var end = api.coord([api.value(2), categoryIndex]);
@@ -630,8 +596,7 @@ class Charts
             // Offset of each bar
             var hOffset = height / 4;// customTypeOffsets[categoryIndex];
 
-            if (customType == customTypes[2])
-            {
+            if (customType == customTypes[2]) {
 
                 var newY = start[1];
                 var newH = api.size([0, 1])[1];//height / 2;//hOffset;
@@ -646,8 +611,7 @@ class Charts
                     ,
                     clipRect
                 );
-            } else
-            {
+            } else {
                 var rectShape = echarts.graphic.clipRectByRect(
                     {
                         x: start[0],
@@ -677,8 +641,7 @@ class Charts
             tooltip: {
                 // Display info about the events 
                 confine: true,
-                formatter: function (params)
-                {
+                formatter: function (params) {
                     return "<h4 class='underline'>" + params.value[4] + "</h4>" + params.name + " for " + SecondsToHoursAndMinutes(params.value[3] / 60);
                 },
                 textStyle: ChartStyles.toolTipTextStyle(),
@@ -783,9 +746,8 @@ class Charts
 
 
 
-    static CreateUofA(_elementID, _data)
-    {
-        var myChart = echarts.init(document.getElementById(_elementID), chartTone);
+    static CreateUofA(_elementID, _data) {
+        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
 
         var _d = _data.shiftData[shift].uofa;
 
@@ -795,8 +757,7 @@ class Charts
 
         // Bit hacky to scale the values
         // so that they don't overlap 
-        for (var i = 0; i < _d.length; i++)
-        {
+        for (var i = 0; i < _d.length; i++) {
             availability[i] = _d[i].availability / _d[i].totalTime;
             utilisation[i] = (_d[i].utilisation / _d[i].totalTime) * 0.99;
             uofa[i] = _d[i].uofa * 0.98;
@@ -827,8 +788,7 @@ class Charts
                 textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),
                 backgroundColor: 'rgba(50,50,50,0.9)',
-                formatter: function (params)
-                {
+                formatter: function (params) {
                     var title = "<h4 class='underline'>" + params[0].name + "</h4>";
                     var a = params[0].seriesName + ": " + RatioToPercent(params[0].value); //Math.round(params[0].value * 100) + "%";
                     var b = params[1].seriesName + ": " + RatioToPercent(params[1].value);//Math.round(params[1].value * 100) + "%";
@@ -847,8 +807,7 @@ class Charts
                 type: 'value',
                 axisLabel:
                 {
-                    formatter: function (value, index)
-                    {
+                    formatter: function (value, index) {
                         return (value * 100 + "%");
                     }
                 },
@@ -926,8 +885,7 @@ class Charts
 
 
 
-    static CreateUofAPie(_elementID, _data)
-    {
+    static CreateUofAPie(_elementID, _data) {
         // -------------------------------------------------------------
         //if (myPie == null)
         var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
@@ -943,8 +901,7 @@ class Charts
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "TimeUsageSplit"),
             tooltip: {
                 trigger: 'item',
-                formatter: function (params, index)
-                {
+                formatter: function (params, index) {
                     return (Math.round(params.percent * 10) / 10) + "%" + "  (" + SecondsToHoursAndMinutes(params.value) + ")";
                 },
                 textStyle: ChartStyles.toolTipTextStyle(),
@@ -1008,28 +965,24 @@ class Charts
 
 
 
-    static CreatePareto(_elementID, _majorGroup, _data)
-    {
+    static CreatePareto(_elementID, _majorGroup, _data) {
         //console.log("Creating Pareto for " + _majorGroup);
         var dom = document.getElementById(_elementID);
-        var myChart = echarts.init(dom, chartTone);
+        var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
         var _d = _data.shiftData[shift];
 
         var eventData = [];
         var statusColor;
-        if (_majorGroup == MajorGroup.IDLE)
-        {
+        if (_majorGroup == MajorGroup.IDLE) {
             eventData = _d.eventBreakDown.IDLE;
             statusColor = 1;//ChartStyles.statusColors[1];
         }
-        if (_majorGroup == MajorGroup.OPERATING)
-        {
+        if (_majorGroup == MajorGroup.OPERATING) {
             eventData = _d.eventBreakDown.OPERATING;
             statusColor = 0;//ChartStyles.statusColors[0];
         }
-        if (_majorGroup == MajorGroup.DOWN)
-        {
+        if (_majorGroup == MajorGroup.DOWN) {
             eventData = _d.eventBreakDown.DOWN;
             statusColor = 2;//ChartStyles.statusColors[2];
         }
@@ -1037,15 +990,13 @@ class Charts
 
         // Get data sorted 
         var minorGroup = new Array();
-        if (eventData == 'undefined' || eventData == null)
-        {
+        if (eventData == 'undefined' || eventData == null) {
             eventData = {};
             eventData.eventCount = 1;
             eventData.duration = 0;
             minorGroup.push({ "event": "No Events", "duration": 0 });
         }
-        else
-        {
+        else {
             //var index = 0;
             for (var key in eventData.categories)
                 minorGroup.push({ "event": key, "duration": eventData.categories[key] });
@@ -1058,16 +1009,14 @@ class Charts
         var eventBars = [];
         var cumulative = [];
         var tempSum = 0;
-        for (let i = 0; i < minorGroup.length; i++)
-        {
+        for (let i = 0; i < minorGroup.length; i++) {
             tempSum += (minorGroup[i].duration) / eventData.duration;
             cumulative.push(tempSum);
             eventNames[i] = minorGroup[i].event.replace("-", "").replace(/ /g, "\n");
         }
 
         // Get cumulative to %
-        for (let i = 0; i < minorGroup.length; i++)
-        {
+        for (let i = 0; i < minorGroup.length; i++) {
             cumulative[i] = cumulative[i] / cumulative[cumulative.length - 1];
             eventBars[i] = getItemStyle(minorGroup[i], cumulative[i]);
         }
@@ -1081,8 +1030,7 @@ class Charts
 
         // move this to a charts utilities class
         // and deal with different themes
-        function getItemStyle(_minorGroup, cumulativeVal)
-        {
+        function getItemStyle(_minorGroup, cumulativeVal) {
             //var red = (cumulativeVal < 0.8);// || (category.count / eventData.eventCount > 0.8);
             return {
                 value: _minorGroup.duration / 3600,
@@ -1110,8 +1058,7 @@ class Charts
                 trigger: 'axis',
                 axisPointer: ChartStyles.toolTipShadow(),
                 textStyle: ChartStyles.toolTipTextStyle(),
-                formatter: function (params, index)
-                {
+                formatter: function (params, index) {
                     return "<h4 class='underline'>" + params[0].name + "</h4>" + SecondsToHoursAndMinutes(params[0].value * 60);
                 },
                 barMaxWidth: barWidth
@@ -1187,10 +1134,9 @@ class Charts
 
 
 
-    static CreateTimeLineFlat(_elementID, _data)
-    {
+    static CreateTimeLineFlat(_elementID, _data) {
         var dom = document.getElementById(_elementID);
-        var myChart = echarts.init(dom, chartTone);
+        var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
         var _d = _data.shiftData[shift];
 
@@ -1200,8 +1146,7 @@ class Charts
         //var colors = ['red', 'orange', 'green'];
 
         var data = [];
-        for (var i = 0; i < _d.events.length; i++)
-        {
+        for (var i = 0; i < _d.events.length; i++) {
             var majorGroup = _d.events[i].majorGroup;// 
 
             var groupIndex;
@@ -1253,8 +1198,7 @@ class Charts
         // Custom render for timeline
         var customTypes = ["Bar", "Box", "Line"];
 
-        function renderItem(params, api, customType)
-        {
+        function renderItem(params, api, customType) {
             var categoryIndex = api.value(0);
             var start = api.coord([api.value(1), categoryIndex]);
             var end = api.coord([api.value(2), categoryIndex]);
@@ -1269,8 +1213,7 @@ class Charts
             };
 
             // These are the 2 custom rects to draw
-            if (customType == customTypes[2])
-            {
+            if (customType == customTypes[2]) {
                 var rectShape = echarts.graphic.clipRectByRect(
                     {
                         x: start[0],
@@ -1281,8 +1224,7 @@ class Charts
                     ,
                     clipRect
                 );
-            } else
-            {
+            } else {
                 var rectShape = echarts.graphic.clipRectByRect(
                     {
                         x: start[0],
@@ -1309,8 +1251,7 @@ class Charts
             textStyle: ChartStyles.textStyle,
             tooltip: {
                 // Display info about the events 
-                formatter: function (params)
-                {
+                formatter: function (params) {
                     var duration = Math.round(params.value[3] / 60);
                     return params.marker + params.value[4] + "<br/ >" + params.name + "<br/ >" + " for " + duration + " min";
                 },
@@ -1398,10 +1339,9 @@ class Charts
 
 
 
-    static CreateTimeLineFlatTime(_elementID)
-    {
+    static CreateTimeLineFlatTime(_elementID) {
         var dom = document.getElementById(_elementID);
-        var myChart = echarts.init(dom, chartTone);
+        var myChart = echarts.init(dom, ChartStyles.baseStyle);
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
