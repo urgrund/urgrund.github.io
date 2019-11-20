@@ -88,7 +88,7 @@ p{font-size: 9pt; font-weight: 300;}
 {
   display:flex;
   flex: 0;
-  /* justify-content: space-between; */
+   justify-content: space-between; 
   /* align-content: flex-end; */
 }
 
