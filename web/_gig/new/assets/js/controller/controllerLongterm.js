@@ -43,13 +43,24 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
         var chartTotal = ChartsMonthly.CreateLongTerm("lt_total", $scope.dataTotal, "Total Asset Utilisation", ChartStyles.statusItemStyle(2));
 
         // Efficiency 
-        $scope.dataEff = $scope.fillDataFromColumn(12);
-        var chartEff = ChartsMonthly.CreateLongTerm("lt_eff", $scope.dataEff, "Efficiency", ChartStyles.statusItemStyle(1));
+        //$scope.dataEff = $scope.fillDataFromColumn(12);
+        //var chartEff = ChartsMonthly.CreateLongTerm("lt_eff", $scope.dataEff, "Efficiency", ChartStyles.statusItemStyle(1));
+
+
+        $scope.dataTime = {};
+        $scope.dataTime.Down = $scope.fillDataFromColumn(4);
+        $scope.dataTime.Idle = $scope.fillDataFromColumn(5);
+        $scope.dataTime.PrimaryOperating = $scope.fillDataFromColumn(6);
+        $scope.dataTime.Operating = $scope.fillDataFromColumn(7);
+
+        var chartTime = ChartsMonthly.CreateLongTerm("lt_time", $scope.dataTime, "Time", null, true);
+        console.log($scope.dataTime);
+
 
         chartAvail.group = 'group1';
         chartUofA.group = 'group1';
         chartTotal.group = 'group1';
-        chartEff.group = 'group1';
+        //chartEff.group = 'group1';
 
 
         echarts.connect('group1');

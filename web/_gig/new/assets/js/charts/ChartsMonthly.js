@@ -2,16 +2,75 @@
 class ChartsMonthly {
 
 
-    static CreateLongTerm(_elementID, _data, _name, _style) {
+    static CreateLongTerm(_elementID, _data, _name, _style, _lines) {
         var myChart = echarts.init(document.getElementById(_elementID), 'chartTone');
 
-        var ma30 = CalculateMA(30, _data[1]);
-        var ma60 = CalculateMA(60, _data[1]);
+        if (_lines == true) {
+            console.log("DJLDJS");
+            var _series = [
+                {
+                    name: _name,
+                    data: _data.Down[1],
+                    type: 'line',
+                    symbol: 'none',
+                    stack: 'stack',
+                    itemStyle: ChartStyles.statusItemStyle(2),
+                    lineStyle: { width: 1.5 },
+                    large: true
+                },
+                {
+                    name: _name,
+                    data: _data.Idle[1],
+                    type: 'line',
+                    symbol: 'none',
+                    stack: 'stack',
+                    itemStyle: ChartStyles.statusItemStyle(1),
+                    lineStyle: { width: 1.5 },
+                    large: true
+                },
+                {
+                    name: _name,
+                    data: _data.Operating[1],
+                    type: 'line',
+                    symbol: 'none',
+                    stack: 'stack',
+                    itemStyle: ChartStyles.statusItemStyle(0),
+                    lineStyle: { width: 1.5 },
+                    large: true
+                }
+            ];
+        }
+        else {
+            var ma30 = CalculateMA(30, _data[1]);
+            var ma60 = CalculateMA(60, _data[1]);
+
+            var _series = [{
+                name: _name,
+                data: _data[1],
+                type: 'line',
+                symbol: 'none',
+                itemStyle: _style,//ChartStyles.statusItemStyle(_colorIndex),
+                lineStyle: { width: 1.5 },
+                large: true
+            },
+            {
+                name: 'MA60',
+                data: ma60,
+                type: 'line',
+                symbol: 'none',
+                itemStyle: { color: 'white' },
+                lineStyle: { width: 1 },
+                large: true
+            }];
+        }
+
+
 
         var option = {
 
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
+
 
             toolbox: {
                 left: 'center',
@@ -42,7 +101,7 @@ class ChartsMonthly {
             }],
             xAxis: {
                 type: 'category',
-                data: _data[0]
+                data: _lines == true ? _data.Idle[0] : _data[0]
             },
             yAxis: {
                 type: 'value',
@@ -52,15 +111,7 @@ class ChartsMonthly {
                 splitLine: { show: false },
                 axisLine: ChartStyles.axisLineGrey
             },
-            series: [{
-                name: _name,
-                data: _data[1],
-                type: 'line',
-                symbol: 'none',
-                itemStyle: _style,//ChartStyles.statusItemStyle(_colorIndex),
-                lineStyle: { width: 1.5 },
-                large: true
-            },
+            series: _series
             // {
             //     name: 'MA30',
             //     data: ma30,
@@ -69,15 +120,15 @@ class ChartsMonthly {
             //     lineStyle: { width: 1 },
             //     large: true
             // },
-            {
-                name: 'MA60',
-                data: ma60,
-                type: 'line',
-                symbol: 'none',
-                itemStyle: { color: 'white' },
-                lineStyle: { width: 1 },
-                large: true
-            }]
+            // {
+            //     name: 'MA60',
+            //     data: ma60,
+            //     type: 'line',
+            //     symbol: 'none',
+            //     itemStyle: { color: 'white' },
+            //     lineStyle: { width: 1 },
+            //     large: true
+            // }]
         };
 
         SetOptionOnChart(option, myChart);

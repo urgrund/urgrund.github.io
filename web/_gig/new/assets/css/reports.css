@@ -3,7 +3,14 @@
 {
   display: grid;
   grid-template-rows: 100px auto;
+
+  background: var(--bgBlur);
+  object-fit: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
+
 .reportFlex
 {
   display: flex;
