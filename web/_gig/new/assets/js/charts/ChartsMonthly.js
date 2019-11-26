@@ -15,8 +15,10 @@ class ChartsMonthly {
                     symbol: 'none',
                     stack: 'stack',
                     itemStyle: ChartStyles.statusItemStyle(2),
-                    lineStyle: { width: 1.5 },
-                    large: true
+                    areaStyle: { color: 'rgba(255,0,0,0.4)' },
+                    lineStyle: { width: 1 },
+                    large: true,
+                    smooth: 0.5
                 },
                 {
                     name: _name,
@@ -25,8 +27,10 @@ class ChartsMonthly {
                     symbol: 'none',
                     stack: 'stack',
                     itemStyle: ChartStyles.statusItemStyle(1),
-                    lineStyle: { width: 1.5 },
-                    large: true
+                    areaStyle: { color: 'rgba(255,255,0,0.4)' },
+                    lineStyle: { width: 1 },
+                    large: true,
+                    smooth: 0.5
                 },
                 {
                     name: _name,
@@ -35,8 +39,10 @@ class ChartsMonthly {
                     symbol: 'none',
                     stack: 'stack',
                     itemStyle: ChartStyles.statusItemStyle(0),
-                    lineStyle: { width: 1.5 },
-                    large: true
+                    areaStyle: { color: 'rgba(0,255,0,0.4' },
+                    lineStyle: { width: 1 },
+                    large: true,
+                    smooth: 0.5
                 }
             ];
         }
@@ -60,7 +66,8 @@ class ChartsMonthly {
                 symbol: 'none',
                 itemStyle: { color: 'white' },
                 lineStyle: { width: 1 },
-                large: true
+                large: true,
+                smooth: true
             }];
         }
 
