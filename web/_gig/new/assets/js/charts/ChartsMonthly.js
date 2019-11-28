@@ -6,7 +6,7 @@ class ChartsMonthly {
         var myChart = echarts.init(document.getElementById(_elementID), 'chartTone');
 
         if (_lines == true) {
-            console.log("DJLDJS");
+
             var _series = [
                 {
                     name: _name,
