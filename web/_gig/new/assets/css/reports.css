@@ -18,6 +18,19 @@
   flex-flow: wrap;  
 }
 
+.reportFlex > input
+{     
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.reportPrefText
+{
+  width: 165px;
+  text-align: right;
+}
+
+
 .reportTitle
 {    position: absolute;
 }
