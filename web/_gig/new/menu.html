@@ -199,10 +199,15 @@
 
 
                     <h3><i class="fas fa-search"></i> Equipment Search</h3>
-                    <input type="text" ng-model="search.id" ng-init="search.id ='Search by ID...'">
+                    <!-- <input type="text" ng-model="search" ng-init="search ='Search by ID...'"> -->
                     <!-- <div ng-repeat="x in equipment | filter:search"><a ng-href="{{x.link}}">{{ x.id }}</a>
                     </div> -->
-                    <div ng-repeat="x in equipment "><a ng-href="{{x.link}}">{{ x.id }}</a>
+
+                    <input type="text" ng-model="searchText" placeholder="Search by ID...">
+                    <div ng-init="equipList = createMenuEquipList()">
+                        <div ng-repeat="x in equipList | filter:searchText">
+                            <a ng-href="#!equip/{{x}}">{{ x }}</a>
+                        </div>
                     </div>
                 </div>
             </div>

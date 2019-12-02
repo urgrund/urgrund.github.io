@@ -75,17 +75,18 @@ app.run(function ($rootScope) {
     $rootScope.equipment = $rootScope.siteData.pop();
 
 
-    console.log("Sites");
+    console.log("Sites :");
     console.log($rootScope.siteData);
 
-    console.log("Equipment");
+    console.log("Equipment :");
     console.log($rootScope.equipment);
 
-    console.log("META");
+    console.log("META :");
     console.log($rootScope.meta);
 
 
 
+    // ------------------------------------------------------
     // Fake alerts
     var alerts = [];
     for (var i = 0; i < Math.round(Math.random() * 10); i++) {
@@ -114,12 +115,18 @@ app.run(function ($rootScope) {
     }
 
     $rootScope.alerts = alerts;
+    // ------------------------------------------------------
+
+
 
     $rootScope.getEquipStyle = function (majorGroup) {
         if (majorGroup == "OPERATING") { return { 'color': ChartStyles.statusColorsFlat[0] } }
         if (majorGroup == "IDLE") { return { 'color': ChartStyles.statusColorsFlat[1] } }
         if (majorGroup == "DOWN") { return { 'color': ChartStyles.statusColorsFlat[2] } }
     };
+
+
+
     //console.log($rootScope.alerts);
 });
 
@@ -129,7 +136,8 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout) {
 
     console.log("Main App Entry");
 
-    $scope.myValue = true;
+
+
 
 
     $scope.shiftSwitchChanged = function (_state) {
@@ -146,6 +154,21 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout) {
 
     $scope.getReports = function () {
     };
+
+
+    $scope.createMenuEquipList = function () {
+        var list = [];
+        for (var key in $rootScope.equipment) {
+            list.push($rootScope.equipment[key].id);
+        }
+        //console.log(list);
+        return list;
+    };
+
+
+    $scope.$watch('$viewContentLoaded', function () {
+        $scope.createMenuEquipList();
+    });
 
 });
 
