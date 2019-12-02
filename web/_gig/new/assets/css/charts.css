@@ -1,8 +1,11 @@
-/* :root { */
-  *{
+:root {
+  /* *{ */
   --chartDivRoundness: 8px;
-  --bgMain: url(../img/login_dark.jpg) no-repeat center center fixed;
+  
+  /* --bgMain: url(../img/login_dark.jpg) no-repeat center center fixed; */
+  
   --bgBlur: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url(../img/login_blur.jpg) no-repeat center center fixed;
+
   --divShadow: 9px 14px 10px -5px rgba(0, 0, 0, 0.37);
   --chartDivHeaderBg: linear-gradient(90deg, rgb(51, 70, 103) 0, rgba(91, 111, 139, 0.6) 100%);
   --chartDivBorder: #007ac7;
@@ -13,6 +16,8 @@
   --equipGridRSpace: 34%;
   --equipGridRTimeLine: 24%;
 }
+
+
 
 /* * {
   box-sizing: border-box;
@@ -25,14 +30,22 @@ body {
   /* background: black; */
   color: white;
   font-family: 'Poppins', sans-serif;
-  margin: 0;
-  background: var(--bgMain);
+  height: 100%;
+   margin: 0;
+  /* background: var(--bgMain); */
   /* background: url(../img/login_dark.jpg) no-repeat center center fixed; */
-  object-fit: cover;
+  
+  /* background-image:url(../img/login_dark.jpg); */
+   /* background-image:var(--bgMainImg);  */
+    /* background-image:url(../img/login_dark.jpg);  */
+  /* background:no-repeat center center fixed; */
+
+
+  /* object-fit: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
-  background-color: rgb(0, 0, 0, 1); 
+  background-size: cover; */
+  /* background-color: rgb(0, 0, 0, 1);  */
 }
 
 
@@ -189,7 +202,7 @@ p{font-size: 9pt; font-weight: 300;}
 
 .jumbogriditem {
   box-shadow: 4px 6px 8px 0px #000000ba;
-  background-color: #00436dc7;  
+  background-color: rgba(0, 67, 109, 0.78);  
   margin: 0.5%;
   margin-bottom: 50px;
   padding: 5px;
