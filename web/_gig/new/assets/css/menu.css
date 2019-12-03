@@ -65,11 +65,10 @@
     color: rgb(204, 204, 204);
     font-size: 10pt;    
     
-    /* background: var(--bgBlur);
     object-fit: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover; */
+    background-size: cover; 
     
     /* background: var(--menubg); */
     object-fit: cover;

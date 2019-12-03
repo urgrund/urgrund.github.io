@@ -4,7 +4,8 @@
   display: grid;
   grid-template-rows: 100px auto;
 
-  background: var(--bgBlur);
+  /* background: var(--bgBlur); */
+  background: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url(../img/login_blur.jpg) no-repeat center center fixed;
   object-fit: cover;
   background-position: center;
   background-repeat: no-repeat;
