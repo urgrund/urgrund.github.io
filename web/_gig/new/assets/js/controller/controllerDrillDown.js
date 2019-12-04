@@ -1,30 +1,34 @@
 
 
-app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout, $route) {
+app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout, $route)
+{
 
     //console.log($routeParams.siteIndex + "  " + $routeParams.equipIndex);
     //console.log($rootScope.shift);
     //$route.reload();
     //$scope.shift = $rootScope.shift;
 
-    $scope.createEquipmentData = function () {
+    $scope.createEquipmentData = function ()
+    {
 
         //$scope.equip = $scope.siteData[$routeParams.siteIndex].equipment[$routeParams.equipIndex];
         $scope.equip = $rootScope.equipment[$routeParams.id];
-        console.log($scope.equip);
+        //console.log($scope.equip);
 
         var len = $scope.equip.shiftData[$rootScope.shift].events.length;
         $scope.lastEvent = $scope.equip.shiftData[$rootScope.shift].events[len - 1];
 
         $scope.equipMetric = "";
-        for (var key in $scope.equip.shiftData[$rootScope.shift].metric) {
+        for (var key in $scope.equip.shiftData[$rootScope.shift].metric)
+        {
             //console.log($scope.equip.shiftData[shiftIsDay].metric[key]);
             $scope.equipMetric = $scope.equip.shiftData[$rootScope.shift].metric[key].name + " Per Hour";
         }
     };
 
 
-    $scope.createEquipmentCharts = function () {
+    $scope.createEquipmentCharts = function ()
+    {
         // Fancy timing to load charts
         var t = 50
         var d = 70;
@@ -42,7 +46,8 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
 
         $timeout(function () { timeline = Charts.CreateTimeLine("timeline", $scope.equip); }, d); d += t;
 
-        $timeout(function () {
+        $timeout(function ()
+        {
             // set group id of each instance respectively.
             mph.group = 'group1';
             uofa.group = 'group1';
@@ -53,14 +58,16 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
 
 
     $scope.createEquipmentData();
-    $scope.$watch('$viewContentLoaded', function () {
+    $scope.$watch('$viewContentLoaded', function ()
+    {
 
         $scope.createEquipmentCharts();
     });
 
 
 
-    $scope.$on('updateShift', function (event, data) {
+    $scope.$on('updateShift', function (event, data)
+    {
         $route.reload();
     });
 

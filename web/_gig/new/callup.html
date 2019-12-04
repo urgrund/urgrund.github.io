@@ -4,8 +4,6 @@
         <div class="underline flex">
             <div class="left">
                 <h2 class="left"><i class="fas fa-phone-volume"></i> {{calUpTitleFirst}}</h2>
-                <!-- <h4 ng-if="shift==0"><i class='shiftIconDay fas fa-sun'></i> {{shiftTitle}}</h4>
-                <h4 ng-if="shift==1"><i class='shiftIconNight fas fa-moon'></i> {{shiftTitle}}</h4> -->
             </div>
             <div class="right">
                 <h3>10th November 2018</h3>
@@ -13,19 +11,59 @@
         </div>
 
 
+        <div ng-repeat="z in equipByFunc">
+            <h4>{{z.name}}</h4>
 
-        <h3>Trucks</h3>
-        <div class="cup-grid underline head">
-            <div>#</div>
-            <div><i class="far fa-clock"></i></div>
-            <div><i class="fas fa-info-circle"></i></div>
-            <div><i class="far fa-user"></i></div>
-            <div><i class="far fa-map"></i></div>
-            <div><i class="fas fa-map-marker-alt"></i></div>
-            <div>+/- 2hrs</div>
+            <!-- Headings  -->
+            <div class="cup-grid underline head">
+                <!-- <div>
+                    <h5 class="light">Asset ID</h5>
+                </div>
+                <div class="flex flex-start">
+                    <h5 class="light"><i class="far fa-clock"> </i>
+                        Event Time</h5>
+                </div>
+                <div class="flex flex-start">
+                    <h5 class="light"><i class="fas fa-info-circle"></i>
+                        Status</h5>
+                </div>
+                <div class="flex flex-start">
+                    <h5 class="light"><i class="far fa-user"></i>
+                        Operator</h5>
+                </div>
+                <div class="flex flex-start">
+                    <h5 class="light"><i class="far fa-map"></i>
+                        Site</h5>
+                </div>
+                <div class="flex flex-start">
+                    <h5 class="light"><i class="fas fa-map-marker-alt"></i>
+                        Location</h5>
+                </div>
+                <div class="flex flex-start">
+                    <h5 class="light">+/- 2hrs</h5>
+                </div> -->
+            </div>
+
+            <!-- Call up information -->
+            <div ng-repeat="x in z.equipment" ng-init="siteIndex = $index">
+                <div class="cup-grid row" ng-init="e = getCallUpEvent(0,0, x)">
+                    <div><a ng-href="#!equip/{{x.id}}" ng-bind="x.id"></a></div>
+                    <div ng-bind="e.eventTime.date"></div>
+                    <div><span ng-style='getEquipStyle(e.majorGroup)'><i class="fas fa-circle"></i></span>
+                        {{e.status}}
+                    </div>
+                    <div ng-init="opName = e.operator == '.' ? ' No Operator' : e.operator"
+                        ng-class="{'cup-redwarn': (e.operator == '.')}">
+                        <i ng-if="e.operator == '.'" class="fas fa-exclamation-triangle"></i>{{opName}}
+                    </div>
+                    <div ng-bind="e.mineArea"></div>
+                    <div ng-bind="e.location"></div>
+                    <div ng-bind="e.timeDiff"></div>
+                </div>
+            </div>
+            </br>
         </div>
-
-        <div ng-repeat="x in siteData | limitTo:3" ng-init="siteIndex = $index"
+        <!-- <div ng-repeat="x in siteData | limitTo:3" ng-init="siteIndex = $index"
             ng-animate="{enter: 'page-transition-enter', leave: 'page-transition-leave'}">
             <div ng-repeat="y in x.equipmentByFunction.HAULING" ng-init="e = getCallUpEvent(siteIndex, y.Index)"
                 ng-hide="$first">
@@ -45,10 +83,10 @@
                     <div ng-bind="e.timeDiff"></div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         </br>
-        <h3>Boggers</h3>
+        <!-- <h3>Boggers</h3>
         <div class="cup-grid underline head">
             <div>#</div>
             <div><i class="far fa-clock"></i></div>
@@ -75,8 +113,8 @@
                     <div ng-bind="e.timeDiff"></div>
                 </div>
             </div>
-        </div>
-
+        </div> -->
+        <!-- 
 
         <h3>Drills</h3>
         <div class="cup-grid underline head">
@@ -121,7 +159,7 @@
                     <div ng-bind="e.timeDiff"></div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!--
                         <div ng-repeat="y in x.equipmentByFunction.D" ng-init="e = getCallUpEvent(siteIndex, y.Index)"
                             ng-hide="$first" class="cup-grid">

@@ -1,11 +1,7 @@
 
 
-app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $timeout) {
-
-    //console.log($routeParams.cupShift);
-    //$scope.siteData = allData;
-
-
+app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $timeout)
+{
     $scope.callUpIsFirst = $routeParams.cupPeriod == 0 ? true : false;
     $scope.callUpIsDay = $rootScope.shift ? true : false;
 
@@ -16,22 +12,52 @@ app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $ti
     //console.log($scope.siteData);
     //console.log($scope.calUpTitle);
 
-    // Based on a site index and equipment index
-    // return the real data object for the equipment
-    $scope.getEquipObject = function (site, index) {
-        if (index != null || index != undefined) { return $rootScope.siteData[site].equipment[index]; }
-    };
+
+    // Create arrays for call-up
+    $scope.equipByFunc = [];
+    $scope.equipByFunc.push({ 'name': "Trucks", 'equipment': [] });
+    $scope.equipByFunc.push({ 'name': "Boggers", 'equipment': [] });
+    $scope.equipByFunc.push({ 'name': "Drills", 'equipment': [] });
+
+    for (var key in $rootScope.equipment)
+    {
+        var e = $rootScope.equipment[key];
+        if (e.function == 'P' || e.function == 'D')
+            $scope.equipByFunc[2].equipment.push(e);
+        else if (e.function == 'LOADING')
+            $scope.equipByFunc[1].equipment.push(e);
+        else if (e.function == 'HAULING')
+            $scope.equipByFunc[0].equipment.push(e);
+    }
+
+    console.log($scope.equipByFunc);
 
 
-    $scope.getCallUpEvent = function (site, index) {
-        if (index != null || index != undefined) {
-            var shiftData = $scope.getEquipShiftData(site, index);
 
+
+
+    // TODO
+    // Remove Site and Index, use only Equip KEY
+    $scope.getCallUpEvent = function (site, index, _equip)
+    {
+        //console.log($rootScope);
+
+
+        //if (index != null || index != undefined)
+        {
+            //var shiftData = $scope.getEquipShiftData(site, index);
+
+            // $scope.getEquipShiftData = function (site, index)
+            // {
+            //     if (index != null || index != undefined) { return $scope.siteData[site].equipment[index].shiftData[$scope.callUpIsDay ? 1 : 0]; }
+            // };
+            var shiftData = _equip.shiftData[$scope.callUpIsDay ? 1 : 0];
 
             // So that we don't overwrite the original 
             var callUpEvent = JSON.stringify(($scope.callUpIsFirst == true) ? shiftData.events[shiftData.eventFirstOp] : shiftData.events[shiftData.events.length - 1]);
 
-            if (callUpEvent == undefined) {
+            if (callUpEvent == undefined)
+            {
                 console.log("Event was null for " + site + "  " + index);
                 return;
             }
@@ -66,20 +92,16 @@ app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $ti
     };
 
 
-    $scope.getEquipShiftData = function (site, index) {
-        if (index != null || index != undefined) { return $scope.siteData[site].equipment[index].shiftData[$scope.callUpIsDay ? 1 : 0]; }
-    };
 
-
-
-
-    $scope.$watch('$viewContentLoaded', function () {
+    $scope.$watch('$viewContentLoaded', function ()
+    {
 
     });
 
 
 
-    $scope.$on('updateShift', function (event, data) {
+    $scope.$on('updateShift', function (event, data)
+    {
         $route.reload();
     });
 });
