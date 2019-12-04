@@ -183,6 +183,17 @@
                             <div class="slider round" switch-on="Active" switch-off="Off"></div>
                         </label>
                     </div>
+
+                    <div>Background</div>
+                    <div>
+                        <label class="switch"><input ng-init="imgState=true" ng-model="imgState"
+                                ng-change="switchBackground(imgState)" type="checkbox" id="togBtn" checked>
+                            <div class="slider round" switch-on="Image" switch-off="Gradient"></div>
+                        </label>
+                        <!-- <div ng-repeat="x in backgroundOptions" class="flex">
+                            <button ng-click="switchBackground(x.value)" class="{{x.value}}">{{x.name}}</button>                            
+                        </div> -->
+                    </div>
                 </div>
 
 

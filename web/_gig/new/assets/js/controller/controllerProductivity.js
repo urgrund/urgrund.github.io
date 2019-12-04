@@ -25,11 +25,6 @@ app.controller('Productivity', function ($routeParams, $rootScope, $route, $scop
         // Using site and equip indices as element ID
         // use this to create a chart
         for (var i = 0; i < elements.length; i++) {
-            //var res = elements[i].id.split("-");
-            //res[0] = parseInt(res[0]);
-            //res[1] = parseInt(res[1]);
-            //var equip = $scope.siteData[res[0]].equipment[res[1]];
-            //Charts.CreateUofA(elements[i].id, equip);
             Charts.CreateUofA(elements[i].id, $rootScope.equipment[elements[i].id]);
         }
     }

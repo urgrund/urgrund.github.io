@@ -1,8 +1,6 @@
-class ChartStyleContainer
-{
+class ChartStyleContainer {
 
-    constructor()
-    {
+    constructor() {
 
         this.baseStyle = "dark";
         this.backGroundColor = 'rgba(0, 0, 0, 0)';
@@ -18,11 +16,6 @@ class ChartStyleContainer
                 fontSize: 11
             };
 
-        this.tooltip =
-            {
-                trigger: 'axis',
-                axisPointer: { type: 'shadow' }
-            };
 
         this.axisLineGrey =
             {
@@ -159,8 +152,7 @@ class ChartStyleContainer
     }
 
 
-    toolTip()
-    {
+    toolTip() {
         return {
             trigger: 'axis',
             axisPointer: {
@@ -177,16 +169,14 @@ class ChartStyleContainer
         };
     }
 
-    toolTipTextStyle()
-    {
+    toolTipTextStyle() {
         return {
             color: '#fff',
             fontSize: 12
         };
     }
 
-    toolTipShadow()
-    {
+    toolTipShadow() {
         return {
             type: 'shadow', z: '-1',
             shadowStyle: {
@@ -195,14 +185,17 @@ class ChartStyleContainer
         };
     }
 
+    toolTipBackgroundColor() {
+        return 'rgb(34, 85, 138)';
+    }
+
     // toolBoxPixelRatio(_height) {
     //     if(_height < 
     //     return {
 
     //     };
     // }
-    toolBox(_height, _name)
-    {
+    toolBox(_height, _name) {
         return {
             y: 'bottom',
             show: true,
@@ -234,8 +227,7 @@ class ChartStyleContainer
         };
     }
 
-    createTitle(_content)
-    {
+    createTitle(_content) {
         return {
             subtext: _content,
             subtextStyle: { color: '#fff' },
@@ -244,8 +236,7 @@ class ChartStyleContainer
         };
     }
 
-    statusItemStyle(_index)
-    {
+    statusItemStyle(_index) {
         return {
             normal: { color: ChartStyles.statusColors[_index] },
             emphasis: { color: ChartStyles.statusColorsEmpahsis[_index] }
@@ -256,8 +247,7 @@ class ChartStyleContainer
         };
     }
 
-    lineShadow()
-    {
+    lineShadow() {
         return {
             shadowColor: 'rgba(1, 1, 1, 0.4)',
             shadowBlur: 7,
@@ -265,8 +255,7 @@ class ChartStyleContainer
             shadowOffsetY: 4
         };
     }
-    timeLineAxisLabel()
-    {
+    timeLineAxisLabel() {
         return {
             show: true,
             interval: 'auto',

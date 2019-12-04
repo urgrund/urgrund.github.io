@@ -27,9 +27,6 @@ function GenerateTimeLabels(_count, _offset) {
         num = hr > 12 ? hr - 12 : hr;
         suf = hr > 11 ? "pm" : "am";
         _array[i - _offset] = num + suf;
-        // _array[i - _offset] = {
-        //     value: num + suf, textStyle: { fontSize: 10 }
-        // };
     }
     return _array;
 }
@@ -39,10 +36,7 @@ function GenerateTimeLabels(_count, _offset) {
 
 
 // -----------------------------------------------------------------------
-// $(window).on('resize', function ()
-// {
-//     ResizeAllCharts();
-// });
+
 
 window.addEventListener('resize', function (event) {
     ResizeAllCharts();
@@ -286,7 +280,7 @@ class Charts {
                 trigger: 'axis',
                 textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),
-                backgroundColor: 'rgba(50,50,50,0.9)',
+                backgroundColor: ChartStyles.toolTipBackgroundColor(),//'rgba(50,50,50,0.9)',
                 formatter: function (params, index) {
                     return Label(params);
                 }
@@ -646,7 +640,7 @@ class Charts {
                 },
                 textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),
-                backgroundColor: 'rgba(50,50,50,0.9)'
+                backgroundColor: ChartStyles.toolTipBackgroundColor()
             },
             grid: {
                 containLabel: true,
@@ -787,7 +781,7 @@ class Charts {
                 axisPointer: { type: 'shadow' },
                 textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),
-                backgroundColor: 'rgba(50,50,50,0.9)',
+                backgroundColor: ChartStyles.toolTipBackgroundColor(),
                 formatter: function (params) {
                     var title = "<h4 class='underline'>" + params[0].name + "</h4>";
                     var a = params[0].seriesName + ": " + RatioToPercent(params[0].value); //Math.round(params[0].value * 100) + "%";
@@ -906,7 +900,7 @@ class Charts {
                 },
                 textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),
-                backgroundColor: 'rgba(50,50,50,0.9)'
+                backgroundColor: ChartStyles.toolTipBackgroundColor()
             },
 
             legend: {
@@ -1056,8 +1050,9 @@ class Charts {
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "EventBreakdown"),
             tooltip: {
                 trigger: 'axis',
-                axisPointer: ChartStyles.toolTipShadow(),
                 textStyle: ChartStyles.toolTipTextStyle(),
+                axisPointer: ChartStyles.toolTipShadow(),
+                backgroundColor: ChartStyles.toolTipBackgroundColor(),
                 formatter: function (params, index) {
                     return "<h4 class='underline'>" + params[0].name + "</h4>" + SecondsToHoursAndMinutes(params[0].value * 60);
                 },

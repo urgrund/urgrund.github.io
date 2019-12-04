@@ -19,15 +19,14 @@
 
 
 
-/* * {
+* {
   box-sizing: border-box;
-} */
+}
 html {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
 body {
-  /* background: black; */
   color: white;
   font-family: 'Poppins', sans-serif;
   height: 100%;
@@ -170,11 +169,9 @@ p{font-size: 9pt; font-weight: 300;}
 
 .chartdivcontent {
   /* background: var(--bgBlur); */
-  background: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url(../img/login_blur.jpg) no-repeat center center fixed;
-  object-fit: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  /* background: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url(../img/login_blur.jpg) no-repeat center center fixed;
+  object-fit: cover;  
+  background-size: cover; */
 
   -webkit-box-shadow: var(--divShadow);
   -moz-box-shadow: var(--divShadow);
@@ -345,7 +342,29 @@ p{font-size: 9pt; font-weight: 300;}
 
 
 /* -------------------------------------------------- */
+/* Backgrounds */
 
+.bg_img
+{
+  background: url(../img/login_dark.jpg) no-repeat center center fixed;
+  object-fit: cover;    
+  background-size: cover;     
+}
+
+.bg_imgBlur
+{
+  background: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url(../img/login_blur.jpg) no-repeat center center fixed;
+  object-fit: cover;  
+  background-size: cover; 
+}
+
+.bg_navy{  background: linear-gradient(28deg, black, rgb(62, 73, 117));}
+
+.bg_navyBlur{      background: linear-gradient(0deg, rgb(0, 21, 51), rgb(35, 45, 84));}
+
+
+
+ 
 
 /* -------------------------------------------------- */
 
@@ -406,9 +425,6 @@ a > .sitePicBig:hover
 {  
   background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_LOADING.jpg);
   background-size: cover;  
-  /* position: absolute;
-  top: 0px;
-  left: 0px;  */
 }
 .img_HAULING{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_HAULING.jpg); background-size: cover;  }
 .img_D{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_D.jpg);background-size: cover;  }

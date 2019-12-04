@@ -75,15 +75,25 @@ app.run(function ($rootScope) {
     $rootScope.equipment = $rootScope.siteData.pop();
 
 
-    console.log("Sites :");
-    console.log($rootScope.siteData);
+    // Debug output
+    // console.log("Sites :");
+    // console.log($rootScope.siteData);
 
-    console.log("Equipment :");
-    console.log($rootScope.equipment);
+    // console.log("Equipment :");
+    // console.log($rootScope.equipment);
 
-    console.log("META :");
-    console.log($rootScope.meta);
+    // console.log("META :");
+    // console.log($rootScope.meta);
 
+
+    // Background options
+    $rootScope.backGroundClass = "bg_img";
+    $rootScope.backGroundClassBlur = "bg_imgBlur";
+
+    $rootScope.backgroundOptions = [
+        { 'name': 'Navy', 'value': 'bg_navy' },
+        { 'name': 'Image', 'value': 'bg_img' }
+    ];
 
 
     // ------------------------------------------------------
@@ -165,6 +175,21 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout) {
         return list;
     };
 
+
+    $scope.switchBackground = function (_class) {
+        if (_class == true) {
+            $rootScope.backGroundClass = "bg_img";
+            $rootScope.backGroundClassBlur = $rootScope.backGroundClass + "Blur";
+        }
+        else {
+            $rootScope.backGroundClass = "bg_navy";
+            $rootScope.backGroundClassBlur = $rootScope.backGroundClass + "Blur";
+        }
+        //console.log(_class);
+        //$rootScope.backGroundClass = _class;
+        //$rootScope.backGroundClassBlur = _class + "Blur";
+        //$scope.shiftSwitchChanged($rootScope.shift == 0 ? true : false);
+    }
 
     $scope.$watch('$viewContentLoaded', function () {
         $scope.createMenuEquipList();
@@ -270,6 +295,10 @@ app.component("drillDownChart", {
     bindings: {
         name: '@',
         chart: '@'
+    },
+    controller: function ($rootScope) {
+        //console.log($rootScope);
+        //this.root = $rootScope;
     }
 });
 /// ----------------------------------------

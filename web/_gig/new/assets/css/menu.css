@@ -48,14 +48,11 @@
     position: absolute;
     top: 35px;
     bottom: 0;
-    width: 100%; 
-    
-    background: url(../img/login_dark.jpg) no-repeat center center fixed;
+    width: 100%;         
     object-fit: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover; 
-    /* background-image:var(--slide1);  */
+    background-size: cover;     
 }
 
 .navbar {
