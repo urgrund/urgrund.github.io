@@ -22,7 +22,7 @@
         </div> -->
 
 
-        <div class="center underline">
+        <div class="center">
 
             <h4 class="underline">
                 <div class="monthlyTargetGrid">
@@ -39,11 +39,11 @@
 
             <div ng-repeat="x in entry" class="monthlyTargetGrid">
                 <div class="flex">
-                    <h3>{{x.data[3]}}</h3>
-                    <h3> - </h3>
-                    <h3>{{x.data[4]}}</h3>
-                    <h3> - </h3>
-                    <h3>{{x.data[5]}}</h3>
+                    <h4>{{x.data[3]}}</h4>
+                    <h4> - </h4>
+                    <h4>{{x.data[4]}}</h4>
+                    <h4> - </h4>
+                    <h4>{{x.data[5]}}</h4>
                 </div>
                 <div class="flex flex-end">
                     <p class="light">Target: </p>
@@ -63,7 +63,8 @@
             </div>
         </div>
 
-        <div class="center underline">
+        </br>
+        <div class="center">
             <h4>Upload targets to server...</h4>
             <h1>
                 <button ng-click="uploadToServer()" class="equipSmallInfo">

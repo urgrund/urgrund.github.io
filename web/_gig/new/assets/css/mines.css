@@ -137,8 +137,9 @@
 {
   display: grid;
   align-items: center;
-  grid-template-columns: 4fr 3fr 2fr 1fr;
+  grid-template-columns: 3fr 3fr 2fr 1fr;
   width: 50%;
+  min-width: 750px;
   margin-left: auto;
   margin-right: auto;
 }

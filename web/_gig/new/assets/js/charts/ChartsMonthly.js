@@ -1,11 +1,16 @@
 
-class ChartsMonthly {
+class ChartsMonthly
+{
 
 
-    static CreateLongTerm(_elementID, _data, _name, _style, _lines) {
+    static CreateLongTerm(_elementID, _data, _name, _style, _lines)
+    {
         var myChart = echarts.init(document.getElementById(_elementID), 'chartTone');
 
-        if (_lines == true) {
+        var smoothVal = 0.15;
+
+        if (_lines == true)
+        {
 
             var _series = [
                 {
@@ -46,7 +51,8 @@ class ChartsMonthly {
                 }
             ];
         }
-        else {
+        else
+        {
             var ma30 = CalculateMA(30, _data[1]);
             var ma60 = CalculateMA(60, _data[1]);
 
@@ -57,11 +63,12 @@ class ChartsMonthly {
                 symbol: 'none',
                 itemStyle: _style,//ChartStyles.statusItemStyle(_colorIndex),
                 lineStyle: { width: 1.5 },
-                large: true
+                large: true,
+                smooth: smoothVal
             },
             {
-                name: 'MA60',
-                data: ma60,
+                name: 'MA30',
+                data: ma30,
                 type: 'line',
                 symbol: 'none',
                 itemStyle: { color: 'white' },
@@ -147,7 +154,8 @@ class ChartsMonthly {
 
 
 
-    static CreateMonthlyCompliance(_elementID, _data) {
+    static CreateMonthlyCompliance(_elementID, _data)
+    {
 
         //console.log(_data);
 
@@ -156,7 +164,8 @@ class ChartsMonthly {
         var newData = [[], [], [], [], []];
 
         var index = 0;
-        for (var key in _data) {
+        for (var key in _data)
+        {
 
             var len = _data[key][1].length - 1;
             var target = parseInt(_data[key][2][0]);
@@ -189,7 +198,8 @@ class ChartsMonthly {
 
             tooltip: {
                 trigger: 'axis',
-                formatter: function (params, index) {
+                formatter: function (params, index)
+                {
 
                     var label = "";
 
