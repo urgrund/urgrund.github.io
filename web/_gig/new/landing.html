@@ -22,7 +22,8 @@
     <div>
         <div class="landcard" ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
             <!-- <a href=#> LDJLAJSD</a> -->
-            <a class="imgLink" href=#><img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg"> </a>
+            <img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg">
+            <!-- <a class="imgLink" href=#><img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg"> </a> -->
             <h2 ng-bind="x.name"></h2>
             <h4>Target: 13232t</br> Actual: 3322t </br>Compliance: &#9650;58%</i></h4>
             </br>

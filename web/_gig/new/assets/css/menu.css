@@ -25,6 +25,12 @@
   border-top:1px solid #8aadcf; 
 }
 
+.rightline
+{
+  border-right:1px solid #8aadcf; 
+}
+
+
 .shadow
 {
   text-shadow: 2px 2px 9px black
