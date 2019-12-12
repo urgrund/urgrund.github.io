@@ -1,6 +1,5 @@
 
-app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
-{
+app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout) {
     // Temp data
     $scope.days = 970;
     $scope.calendarTime = 313.33;
@@ -10,17 +9,14 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
     $scope.totalAssetUtil = 69;
 
 
-    $scope.fillDataFromColumn = function (_column)
-    {
+    $scope.fillDataFromColumn = function (_column) {
         var data = [];
         data.push([]);
         data.push([]);
 
         var tempDates = [];
-        for (var i = 1; i < longTermData.length; i++)
-        {
-            if (!tempDates.includes(longTermData[i][0]))
-            {
+        for (var i = 1; i < longTermData.length; i++) {
+            if (!tempDates.includes(longTermData[i][0])) {
                 data[0].push(longTermData[i][0]);
                 data[1].push(longTermData[i][_column]);
 
@@ -34,8 +30,7 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
 
 
 
-    $scope.createCharts = function ()
-    {
+    $scope.createCharts = function () {
         //console.log(longTermData[0]);
 
         // Availability
@@ -74,15 +69,29 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
 
 
         // Callbacks for zoom
-        chartAvail.on('dataZoom', function (evt)
-        {
+        chartAvail.on('dataZoom', function (evt) {
             $scope.updateValuesFromDataZoom(evt, chartAvail);
         })
+
+
+        // Temp Waterfall
+        var waterFall = {};
+        waterFall.calendarTime = 62000;
+        waterFall.unplannedBreakdown = 6000;
+        waterFall.plannedMaintenance = 5000;
+        waterFall.totalAvailability = 51000;
+        waterFall.unplannedStandby = 500;
+        waterFall.operatingStandby = 9000;
+        waterFall.totalUtilisation = 42000;
+        waterFall.operatingDelay = 3000;
+        waterFall.operatingTime = 39000;
+
+
+
     }
 
 
-    $scope.updateValuesFromDataZoom = function (evt, _chart)
-    {
+    $scope.updateValuesFromDataZoom = function (evt, _chart) {
         var axis = _chart.getModel().option.xAxis[0];
         var startTime = axis.data[axis.rangeStart];
         var endTime = axis.data[axis.rangeEnd];
@@ -96,10 +105,8 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
         var timeDifference = endTime.getTime() - startTime.getTime();
         var daysDifference = timeDifference / (1000 * 3600 * 24);
 
-        if (daysDifference != undefined)
-        {
-            if ($scope.days != daysDifference)
-            {
+        if (daysDifference != undefined) {
+            if ($scope.days != daysDifference) {
                 $scope.days = daysDifference;
                 $scope.$apply();
             }
@@ -108,10 +115,8 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
         //console.log(Difference_In_Days);
     };
 
-    $scope.$watch('$viewContentLoaded', function ()
-    {
-        $timeout(function ()
-        {
+    $scope.$watch('$viewContentLoaded', function () {
+        $timeout(function () {
             $scope.createCharts();
         }, 0);
         //$scope.createEquipmentCharts();

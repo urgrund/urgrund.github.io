@@ -15,8 +15,7 @@ timeLabelsShift[1] = GenerateTimeLabels(12, 18);
 timeLabelsShiftExtra = [];
 timeLabelsShiftExtra[0] = GenerateTimeLabels(13, 6);
 timeLabelsShiftExtra[1] = GenerateTimeLabels(13, 18);
-//time12 = GenerateTimeLabels(12, 6);
-//time24 = GenerateTimeLabels(24, 6);
+
 function GenerateTimeLabels(_count, _offset) {
     var _array = [];
     var num;
@@ -38,6 +37,7 @@ function GenerateTimeLabels(_count, _offset) {
 // -----------------------------------------------------------------------
 
 
+// On a window resize, resize all current charts
 window.addEventListener('resize', function (event) {
     ResizeAllCharts();
 });
@@ -66,7 +66,6 @@ function ClearAllCharts() {
 
 function SetOptionOnChart(_option, _chart) {
     if (_option && typeof _option === "object") {
-        //console.log("settting");
         _chart.setOption(_option, true);
         allCharts.push(_chart);
     }
@@ -128,14 +127,6 @@ function CalculateMA(dayCount, data) {
 
 
 
-// Variables used in the charts
-// need to manage these better
-//var dailyTargetPercent = 85;
-//var chartTone = 'dark';
-
-
-
-
 class Charts {
 
     static CreateMPH(_elementID, _data, _display) {
@@ -185,17 +176,12 @@ class Charts {
             // and create clean empty arrays for it
             if (!(metrics[i].site in siteTotals)) {
                 siteTotals[metrics[i].site] = ArrayOfNumbers(0, 12, 0);
-                // for (var j = 0; j < 12; j++)
-                // {
-                //     siteTotals[metrics[i].site][j] = 0;
-                // }
             }
 
             // Accumulate values into each site
             for (var j = 0; j < 12; j++) {
                 cumulative[j] += metrics[i].cph[j];
                 siteTotals[metrics[i].site][j] = siteTotals[metrics[i].site][j] + metrics[i].mph[j];
-                //mergedData[j] += siteTotals[metrics[i].site][j];
             }
         }
 
@@ -306,201 +292,6 @@ class Charts {
         SetOptionOnChart(option, myChart);
         return myChart;
     }
-
-
-
-
-
-    static CreateTPH(_elementID, _data, _display) {
-        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
-
-        // Adjust for shift        
-        //console.log("Make TPH");
-        var _d = _data.shiftData[shift].tph;  //_data["tph"];// TrimDataForShift(_data["tph"]);// [];
-
-        //var title = _data["metric"];// "Tonnes Per Hour";//data[1][1];
-
-
-
-        var tonnesPerHour = [];
-        for (var i = 0; i < _d.length - 1; i++)
-            tonnesPerHour[i] = _d[i];
-
-        //console.log(tonnesPerHour);
-
-        var dataLength = tonnesPerHour[0].length;
-        var colouredCumulativeData = [];
-        var dailyTargetData = [];
-        var eightyFiveTargetData = [];
-
-
-        // These numbers should come from targets
-        // and from PHP / SQL,  not here in charts
-        var dailyTarget = 1200;
-        if (_data["metric"].indexOf("M") !== -1)
-            dailyTarget = 180;
-
-        // Hourly tonne and % targets
-        for (var i = 0; i < dataLength; i++) {
-            var perHourDailyTarget = (parseFloat(dailyTarget / 12) * (i + 1));
-            dailyTargetData.push({ value: perHourDailyTarget, symbolSize: (i == dataLength - 1) ? '10' : '0' });// (i = dataLength - 1) ? 'false' : 'true' });
-            eightyFiveTargetData.push(parseFloat(perHourDailyTarget * parseFloat(dailyTargetPercent / 100)));
-        }
-
-        // Color based on reaching % target            
-        var cumulativeVal = 0;
-        for (var i = 0; i < dataLength; i++) {
-            for (var j = 0; j < tonnesPerHour.length; j++) {
-                cumulativeVal += Math.round(tonnesPerHour[j][i]);
-                var val = Math.round(tonnesPerHour[j][i]);
-                tonnesPerHour[j][i] = {
-                    value: val == 0 ? "" : val,
-                    itemStyle: { color: ChartStyles.siteColors[i] }
-                };
-            }
-
-            var overUnder = (parseFloat(cumulativeVal) < parseFloat(eightyFiveTargetData[i])) ? 2 : 0;
-            colouredCumulativeData.push(
-                {
-                    value: cumulativeVal == 0 ? "" : cumulativeVal,
-                    itemStyle: { color: ChartStyles.statusColors[overUnder] }
-                });
-        }
-
-        //console.log(_d);
-
-        var seriesArray = [];
-        seriesArray.push(
-            {
-                name: 'Targets',
-                type: 'line',
-                yAxisIndex: 1,
-                lineStyle: { type: 'solid', color: ChartStyles.cumulativeColor, width: '1' },
-                itemStyle: { color: ChartStyles.cumulativeColor },
-                // symbol: 'none',
-                //animation: false,
-                data: dailyTargetData,
-                z: '-1',
-                areaStyle: {
-                    normal: {
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                            offset: 0,
-                            color: ChartStyles.cumulativeColor.colorStops[0].color
-                        },
-                        {
-                            offset: 1,
-                            color: 'rgba(0,0,0,0.0)'
-                        }
-                        ], false),
-                        shadowColor: 'rgba(53,142,215, 0)',
-                        shadowBlur: 20
-                    }
-                }
-            }//,
-            // {
-            //     name: 'Targets',//dailyTargetPercent.toString(),
-            //     type: 'line',
-            //     yAxisIndex: 1,
-            //     lineStyle: { type: 'dotted', color: 'orange' },
-            //     animation: false,
-            //     data: eightyFiveTargetData
-            // }
-        );
-
-
-        switch (_display.toString()) {
-            case ChartTPHDisplay.TPH.toString():
-                seriesArray.push({
-                    name: 'Hourly',//_data["metric"],
-                    type: 'bar',
-                    yAxisIndex: 1,
-                    data: tonnesPerHour,
-                    label: { normal: { show: true, position: 'top' } }
-                });
-                break;
-            case ChartTPHDisplay.CUMULATIVE.toString():
-                seriesArray.push(
-                    {
-                        name: 'Cumulative',
-                        type: 'bar',
-                        yAxisIndex: 1,
-                        data: colouredCumulativeData,
-                        itemStyle: { color: ChartStyles.cumulativeColor },
-                        label: { normal: { show: true, position: 'top' } }
-                    });
-                break;
-            case ChartTPHDisplay.BOTH.toString():
-                for (var i = 0; i < tonnesPerHour.length; i++) {
-                    seriesArray.push(
-                        {
-                            name: _data.sites[i], //'Hourly',//_data["metric"],
-                            type: 'bar',
-                            stack: 'tph',
-                            data: tonnesPerHour[i],
-                            yAxisIndex: 1,
-                            itemStyle: { color: ChartStyles.siteColors[i] },
-                            label: { normal: { show: true, position: 'top' } }
-                        });
-                }
-                seriesArray.push(
-                    {
-                        name: 'Cumulative',
-                        type: 'bar',
-                        data: colouredCumulativeData,
-                        yAxisIndex: 1,
-                        itemStyle: { color: ChartStyles.cumulativeColor },
-                        label: { normal: { show: true, position: 'top' } }
-                    });
-                break;
-        }
-
-
-        // Create legend
-        var legend = [];
-        for (var i = 0; i < tonnesPerHour.length; i++)
-            legend.push({ name: _data.sites[i]/*, textStyle: { color: siteColors[i] }, icon: 'pin'*/ });
-        //legend.push('Cumulative');
-        legend.push('Targets');
-
-
-        var option = {
-            backgroundColor: ChartStyles.backGroundColor,
-            textStyle: ChartStyles.textStyle,
-            tooltip: ChartStyles.toolTip(),
-            legend: { y: 'top', data: legend },
-            grid: {
-                top: '20%',
-                bottom: '5%',
-                left: '3%',
-                right: '3%',
-                containLabel: true
-            },
-            toolbox: ChartStyles.toolBox(myChart.getHeight(), "TPH"),
-            xAxis: {
-                type: 'category',
-                data: timeLabelsShift[shift],
-                axisLabel: ChartStyles.timeLineAxisLabel()
-            },
-            yAxis: [
-                {
-                    //name: 'Tonnes',
-                    //nameLocation: 'middle',
-                    splitLine: { show: false },
-                    axisLine: ChartStyles.axisLineGrey
-                }, {
-                    //name: 'Cumulative',
-                    //nameLocation: 'middle',
-                    splitLine: { show: false },
-                    axisLine: ChartStyles.axisLineGrey
-                }
-            ],
-            series: seriesArray
-        };
-
-        SetOptionOnChart(option, myChart);
-        return myChart;
-    }
-
 
 
     //---------------------------------------------------------------------------------------------
@@ -1376,3 +1167,204 @@ class Charts {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+// static CreateTPH(_elementID, _data, _display) {
+//     var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+
+//     // Adjust for shift        
+//     //console.log("Make TPH");
+//     var _d = _data.shiftData[shift].tph;  //_data["tph"];// TrimDataForShift(_data["tph"]);// [];
+
+//     //var title = _data["metric"];// "Tonnes Per Hour";//data[1][1];
+
+
+
+//     var tonnesPerHour = [];
+//     for (var i = 0; i < _d.length - 1; i++)
+//         tonnesPerHour[i] = _d[i];
+
+//     //console.log(tonnesPerHour);
+
+//     var dataLength = tonnesPerHour[0].length;
+//     var colouredCumulativeData = [];
+//     var dailyTargetData = [];
+//     var eightyFiveTargetData = [];
+
+
+//     // These numbers should come from targets
+//     // and from PHP / SQL,  not here in charts
+//     var dailyTarget = 1200;
+//     if (_data["metric"].indexOf("M") !== -1)
+//         dailyTarget = 180;
+
+//     // Hourly tonne and % targets
+//     for (var i = 0; i < dataLength; i++) {
+//         var perHourDailyTarget = (parseFloat(dailyTarget / 12) * (i + 1));
+//         dailyTargetData.push({ value: perHourDailyTarget, symbolSize: (i == dataLength - 1) ? '10' : '0' });// (i = dataLength - 1) ? 'false' : 'true' });
+//         eightyFiveTargetData.push(parseFloat(perHourDailyTarget * parseFloat(dailyTargetPercent / 100)));
+//     }
+
+//     // Color based on reaching % target            
+//     var cumulativeVal = 0;
+//     for (var i = 0; i < dataLength; i++) {
+//         for (var j = 0; j < tonnesPerHour.length; j++) {
+//             cumulativeVal += Math.round(tonnesPerHour[j][i]);
+//             var val = Math.round(tonnesPerHour[j][i]);
+//             tonnesPerHour[j][i] = {
+//                 value: val == 0 ? "" : val,
+//                 itemStyle: { color: ChartStyles.siteColors[i] }
+//             };
+//         }
+
+//         var overUnder = (parseFloat(cumulativeVal) < parseFloat(eightyFiveTargetData[i])) ? 2 : 0;
+//         colouredCumulativeData.push(
+//             {
+//                 value: cumulativeVal == 0 ? "" : cumulativeVal,
+//                 itemStyle: { color: ChartStyles.statusColors[overUnder] }
+//             });
+//     }
+
+//     //console.log(_d);
+
+//     var seriesArray = [];
+//     seriesArray.push(
+//         {
+//             name: 'Targets',
+//             type: 'line',
+//             yAxisIndex: 1,
+//             lineStyle: { type: 'solid', color: ChartStyles.cumulativeColor, width: '1' },
+//             itemStyle: { color: ChartStyles.cumulativeColor },
+//             // symbol: 'none',
+//             //animation: false,
+//             data: dailyTargetData,
+//             z: '-1',
+//             areaStyle: {
+//                 normal: {
+//                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+//                         offset: 0,
+//                         color: ChartStyles.cumulativeColor.colorStops[0].color
+//                     },
+//                     {
+//                         offset: 1,
+//                         color: 'rgba(0,0,0,0.0)'
+//                     }
+//                     ], false),
+//                     shadowColor: 'rgba(53,142,215, 0)',
+//                     shadowBlur: 20
+//                 }
+//             }
+//         }//,
+//         // {
+//         //     name: 'Targets',//dailyTargetPercent.toString(),
+//         //     type: 'line',
+//         //     yAxisIndex: 1,
+//         //     lineStyle: { type: 'dotted', color: 'orange' },
+//         //     animation: false,
+//         //     data: eightyFiveTargetData
+//         // }
+//     );
+
+
+//     switch (_display.toString()) {
+//         case ChartTPHDisplay.TPH.toString():
+//             seriesArray.push({
+//                 name: 'Hourly',//_data["metric"],
+//                 type: 'bar',
+//                 yAxisIndex: 1,
+//                 data: tonnesPerHour,
+//                 label: { normal: { show: true, position: 'top' } }
+//             });
+//             break;
+//         case ChartTPHDisplay.CUMULATIVE.toString():
+//             seriesArray.push(
+//                 {
+//                     name: 'Cumulative',
+//                     type: 'bar',
+//                     yAxisIndex: 1,
+//                     data: colouredCumulativeData,
+//                     itemStyle: { color: ChartStyles.cumulativeColor },
+//                     label: { normal: { show: true, position: 'top' } }
+//                 });
+//             break;
+//         case ChartTPHDisplay.BOTH.toString():
+//             for (var i = 0; i < tonnesPerHour.length; i++) {
+//                 seriesArray.push(
+//                     {
+//                         name: _data.sites[i], //'Hourly',//_data["metric"],
+//                         type: 'bar',
+//                         stack: 'tph',
+//                         data: tonnesPerHour[i],
+//                         yAxisIndex: 1,
+//                         itemStyle: { color: ChartStyles.siteColors[i] },
+//                         label: { normal: { show: true, position: 'top' } }
+//                     });
+//             }
+//             seriesArray.push(
+//                 {
+//                     name: 'Cumulative',
+//                     type: 'bar',
+//                     data: colouredCumulativeData,
+//                     yAxisIndex: 1,
+//                     itemStyle: { color: ChartStyles.cumulativeColor },
+//                     label: { normal: { show: true, position: 'top' } }
+//                 });
+//             break;
+//     }
+
+
+//     // Create legend
+//     var legend = [];
+//     for (var i = 0; i < tonnesPerHour.length; i++)
+//         legend.push({ name: _data.sites[i]/*, textStyle: { color: siteColors[i] }, icon: 'pin'*/ });
+//     //legend.push('Cumulative');
+//     legend.push('Targets');
+
+
+//     var option = {
+//         backgroundColor: ChartStyles.backGroundColor,
+//         textStyle: ChartStyles.textStyle,
+//         tooltip: ChartStyles.toolTip(),
+//         legend: { y: 'top', data: legend },
+//         grid: {
+//             top: '20%',
+//             bottom: '5%',
+//             left: '3%',
+//             right: '3%',
+//             containLabel: true
+//         },
+//         toolbox: ChartStyles.toolBox(myChart.getHeight(), "TPH"),
+//         xAxis: {
+//             type: 'category',
+//             data: timeLabelsShift[shift],
+//             axisLabel: ChartStyles.timeLineAxisLabel()
+//         },
+//         yAxis: [
+//             {
+//                 //name: 'Tonnes',
+//                 //nameLocation: 'middle',
+//                 splitLine: { show: false },
+//                 axisLine: ChartStyles.axisLineGrey
+//             }, {
+//                 //name: 'Cumulative',
+//                 //nameLocation: 'middle',
+//                 splitLine: { show: false },
+//                 axisLine: ChartStyles.axisLineGrey
+//             }
+//         ],
+//         series: seriesArray
+//     };
+
+//     SetOptionOnChart(option, myChart);
+//     return myChart;
+// }
+
+
