@@ -75,19 +75,30 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
 
 
         // Temp Waterfall
-        var waterFall = {};
-        waterFall.calendarTime = 62000;
-        waterFall.unplannedBreakdown = 6000;
-        waterFall.plannedMaintenance = 5000;
-        waterFall.totalAvailability = 51000;
-        waterFall.unplannedStandby = 500;
-        waterFall.operatingStandby = 9000;
-        waterFall.totalUtilisation = 42000;
-        waterFall.operatingDelay = 3000;
-        waterFall.operatingTime = 39000;
+        // var waterFall = {};
+        // waterFall.calendarTime = 62000;
+        // waterFall.unplannedBreakdown = 6000;
+        // waterFall.plannedMaintenance = 5000;
+        // waterFall.totalAvailability = 51000;
+        // waterFall.unplannedStandby = 500;
+        // waterFall.operatingStandby = 9000;
+        // waterFall.totalUtilisation = 42000;
+        // waterFall.operatingDelay = 3000;
+        // waterFall.operatingTime = 39000;
 
+        var waterFall = [];
+        waterFall.push({ 'name': 'Calendar Time', 'value': 62500 });
+        waterFall.push({ 'name': 'Unplanned Breakdown', 'value': 6000 });
+        waterFall.push({ 'name': 'Planned Maintenance', 'value': 5000 });
+        waterFall.push({ 'name': 'Total Availability', 'value': 51000 });
+        waterFall.push({ 'name': 'Unplanned Standy', 'value': 500 });
+        waterFall.push({ 'name': 'Operating Standy', 'value': 9000 });
+        waterFall.push({ 'name': 'Total Utilisation', 'value': 42000 });
+        waterFall.push({ 'name': 'Operating Delay', 'value': 3000 });
+        waterFall.push({ 'name': 'Operating Time', 'value': 39000 });
 
-
+        var wf = ChartsMonthly.CreateLongTermWaterfall("lt_wf", waterFall);
+        //console.log(waterFall);
     }
 
 

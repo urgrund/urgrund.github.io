@@ -1,16 +1,109 @@
 
-class ChartsMonthly
-{
+class ChartsMonthly {
+
+    static CreateLongTermWaterfall(_elementID, _data) {
+
+        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+
+        // Create the arrays for the data
+        var labels = [];
+        var valueStack = [];
+        var valueSpace = [];
+
+        var timeSpent = 0;
+        for (var i = 0; i < _data.length; i++) {
+            labels[i] = _data[i].name;
+            valueStack[i] = _data[i].value;
+
+            if (i == 0 || i == 3 || i == 6) {
+                valueSpace[i] = 0;
+            } else {
+                timeSpent += _data[i].value;
+                valueSpace[i] = _data[0].value - timeSpent;
+            }
+        }
+
+        // console.log(labels);
+        // console.log(valueStack);
+        // console.log(valueSpace);
 
 
-    static CreateLongTerm(_elementID, _data, _name, _style, _lines)
-    {
+        var option = {
+            backgroundColor: ChartStyles.backGroundColor,
+            textStyle: ChartStyles.textStyle,
+            title: {
+                text: 'Waterfall'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter: function (params) {
+                    var tar = params[1];
+                    return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value;
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                splitLine: { show: false },
+                data: labels
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    type: 'bar',
+                    stack: 'a',
+                    // This is to make it invisible
+                    itemStyle: {
+                        normal: {
+                            barBorderColor: 'rgba(0,0,0,0)',
+                            color: 'rgba(0,0,0,0)'
+                        },
+                        emphasis: {
+                            barBorderColor: 'rgba(0,0,0,0)',
+                            color: 'rgba(0,0,0,0)'
+                        }
+                    },
+                    data: valueSpace
+                },
+                {
+                    type: 'bar',
+                    stack: 'a',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'inside'
+                        }
+                    },
+                    data: valueStack
+                }
+            ]
+        };
+
+        SetOptionOnChart(option, myChart);
+        return myChart;
+    }
+
+
+
+
+
+
+    static CreateLongTerm(_elementID, _data, _name, _style, _lines) {
         var myChart = echarts.init(document.getElementById(_elementID), 'chartTone');
 
         var smoothVal = 0.15;
 
-        if (_lines == true)
-        {
+        if (_lines == true) {
 
             var _series = [
                 {
@@ -51,8 +144,7 @@ class ChartsMonthly
                 }
             ];
         }
-        else
-        {
+        else {
             var ma30 = CalculateMA(30, _data[1]);
             var ma60 = CalculateMA(60, _data[1]);
 
@@ -154,8 +246,7 @@ class ChartsMonthly
 
 
 
-    static CreateMonthlyCompliance(_elementID, _data)
-    {
+    static CreateMonthlyCompliance(_elementID, _data) {
 
         //console.log(_data);
 
@@ -164,8 +255,7 @@ class ChartsMonthly
         var newData = [[], [], [], [], []];
 
         var index = 0;
-        for (var key in _data)
-        {
+        for (var key in _data) {
 
             var len = _data[key][1].length - 1;
             var target = parseInt(_data[key][2][0]);
@@ -198,8 +288,7 @@ class ChartsMonthly
 
             tooltip: {
                 trigger: 'axis',
-                formatter: function (params, index)
-                {
+                formatter: function (params, index) {
 
                     var label = "";
 
