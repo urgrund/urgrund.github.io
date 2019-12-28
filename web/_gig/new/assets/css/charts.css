@@ -380,10 +380,11 @@ p{font-size: 9pt; font-weight: 300;}
 
 
 /* Percentages */
-.h100pc{height: 100%;}
+.h100pc{ height: 100%;}
 .h60pc{ height: 60%;}
 .h33pc{ height: 33%;}
-.h20pc{height: 20%;}
+.h20pc{ height: 20%;}
+.h10pc{ height: 10%;}
 
 .w100pc { width: 100%}
 .w60pc {width:60%}

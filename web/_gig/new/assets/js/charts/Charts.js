@@ -251,7 +251,7 @@ class Charts {
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
-            tooltip: ChartStyles.toolTip(),
+            //tooltip: ChartStyles.toolTip(),
             legend: { y: 'top', data: legend },
             grid: {
                 top: '20%',
@@ -271,20 +271,31 @@ class Charts {
                     return Label(params);
                 }
             },
-            xAxis: {
-                type: 'category',
-                data: timeLabelsShift[shift],
-                axisLabel: ChartStyles.timeLineAxisLabel()
-            },
+            // xAxis: {
+            //     type: 'category',
+            //     data: timeLabelsShift[shift],
+            //     axisLabel: ChartStyles.timeLineAxisLabel(),
+            //     axisTick: {
+            //         show: true,                    
+            //         alignWithLabel: false
+            //     }
+            // },
+            xAxis: ChartStyles.xAxis(timeLabelsShift[shift]),
             yAxis: [{
                 type: 'value',
                 splitLine: { show: false },
-                axisLine: ChartStyles.axisLineGrey
+                axisLine: ChartStyles.axisLineGrey,
+                axisLabel: {                    
+                    fontSize: ChartStyles.fontSizeSmall
+                }
             },
             {
                 type: 'value',
                 splitLine: { show: false },
-                axisLine: ChartStyles.axisLineGrey
+                axisLine: ChartStyles.axisLineGrey,
+                axisLabel: {                    
+                    fontSize: ChartStyles.fontSizeSmall
+                }
             }],
             series: seriesArray
         };
@@ -540,12 +551,11 @@ class Charts {
         var utilisation = [];
         var uofa = [];
 
-        // Bit hacky to scale the values
-        // so that they don't overlap 
+        // Why is this logic here and not controller or PHP?
         for (var i = 0; i < _d.length; i++) {
             availability[i] = _d[i].availability / _d[i].totalTime;
-            utilisation[i] = (_d[i].utilisation / _d[i].totalTime) * 0.99;
-            uofa[i] = _d[i].uofa * 0.98;
+            utilisation[i] = (_d[i].utilisation / _d[i].totalTime);// * 0.99;
+            uofa[i] = _d[i].uofa;// * 0.98;
         }
 
 
@@ -578,26 +588,21 @@ class Charts {
                     var a = params[0].seriesName + ": " + RatioToPercent(params[0].value); //Math.round(params[0].value * 100) + "%";
                     var b = params[1].seriesName + ": " + RatioToPercent(params[1].value);//Math.round(params[1].value * 100) + "%";
                     var c = params[2].seriesName + ": " + RatioToPercent(params[2].value);//Math.round(params[2].value * 100) + "%";
-                    return title + a + "<br/>" + b + "<br/>" + c;
-                    //return params[0].name;
-                },
-                //formatter: '{b0}: {a0}<br />{b1}: {a1} : {b1} : {c1} : {d1}'
+                    return title + a + "<br/>" + b + "<br/>" + c;               
+                }             
             },
-            xAxis: {
-                type: 'category',
-                data: timeLabelsShift[shift],
-                axisLabel: ChartStyles.timeLineAxisLabel()
-            },
+            xAxis:ChartStyles.xAxis(timeLabelsShift[shift]),
             yAxis: {
                 type: 'value',
                 axisLabel:
                 {
+                    fontSize: ChartStyles.fontSizeSmall,    
                     formatter: function (value, index) {
                         return (value * 100 + "%");
                     }
                 },
                 splitLine: { show: false },
-                axisLine: ChartStyles.axisLineGrey
+                axisLine: ChartStyles.axisLineGrey,                 
             },
             series: [
                 {
@@ -853,16 +858,7 @@ class Charts {
             //     feature: { saveAsImage: {} }
             // },
             xAxis: [
-                {
-                    data: eventNames,
-                    axisLabel: {
-                        lineHeight: 8,
-                        show: true,
-                        interval: 0,
-                        // rotate: 90,
-                        fontSize: ChartStyles.fontSizeSmall
-                    }
-                }
+                ChartStyles.xAxis(eventNames, 0)
             ],
             yAxis: [
                 {
@@ -879,7 +875,7 @@ class Charts {
                     max: 1,
                     splitLine: { show: false },
                     axisLabel: {
-                        // fontSize: 10,
+                        fontSize: ChartStyles.fontSizeSmall,
                         formatter: function (value, index) { return value * 100 + "%"; }
                     },
                     axisLine: ChartStyles.axisLineGrey

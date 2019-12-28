@@ -12,9 +12,19 @@ class ChartsMonthly {
 
         var timeSpent = 0;
         for (var i = 0; i < _data.length; i++) {
-            labels[i] = _data[i].name;
-            valueStack[i] = _data[i].value;
 
+            var name = _data[i].name;
+            //labels[i] = name.replace(" ", "</br>");
+            labels[i] = _data[i].name;
+
+            valueStack[i] = {
+                value: _data[i].value,
+                itemStyle: { color: _data[i].id == undefined ? ChartStyles.darkColor : ChartStyles.TUMColors[_data[i].id] }
+                //itemStyle: { color: ChartStyles.getTUMColor(i) }
+            };
+
+            // Because Dave version has full
+            // columns for these indices
             if (i == 0 || i == 3 || i == 6) {
                 valueSpace[i] = 0;
             } else {
@@ -31,14 +41,13 @@ class ChartsMonthly {
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
-            title: {
-                text: 'Waterfall'
-            },
+            title: ChartStyles.createTitle("Time Utilisation Model Breakdown"),
             tooltip: {
+                confine: true,
                 trigger: 'axis',
-                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                },
+                textStyle: ChartStyles.toolTipTextStyle(),
+                axisPointer: ChartStyles.toolTipShadow(),
+                backgroundColor: ChartStyles.toolTipBackgroundColor(),//'rgba(50,50,50,0.9)',               
                 formatter: function (params) {
                     var tar = params[1];
                     return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value;
@@ -47,16 +56,14 @@ class ChartsMonthly {
             grid: {
                 left: '3%',
                 right: '4%',
-                bottom: '3%',
+                bottom: '5%',
                 containLabel: true
             },
-            xAxis: {
-                type: 'category',
-                splitLine: { show: false },
-                data: labels
-            },
+            xAxis: ChartStyles.xAxis(labels, 0),
             yAxis: {
-                type: 'value'
+                type: 'value',
+                splitLine: { show: false },
+                axisLine: ChartStyles.axisLineGrey
             },
             series: [
                 {
@@ -81,7 +88,7 @@ class ChartsMonthly {
                     label: {
                         normal: {
                             show: true,
-                            position: 'inside'
+                            position: 'top'
                         }
                     },
                     data: valueStack
@@ -285,7 +292,7 @@ class ChartsMonthly {
 
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
-
+            toolbox: ChartStyles.toolBox(myChart.getHeight(), "MonthlyCompliance"),
             tooltip: {
                 trigger: 'axis',
                 formatter: function (params, index) {

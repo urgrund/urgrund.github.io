@@ -87,15 +87,15 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
         // waterFall.operatingTime = 39000;
 
         var waterFall = [];
-        waterFall.push({ 'name': 'Calendar Time', 'value': 62500 });
-        waterFall.push({ 'name': 'Unplanned Breakdown', 'value': 6000 });
-        waterFall.push({ 'name': 'Planned Maintenance', 'value': 5000 });
+        waterFall.push({ 'name': 'Calendar Time', 'value': 62000 });
+        waterFall.push({ 'name': 'Unplanned Breakdown', 'value': 6000, 'id':0 });
+        waterFall.push({ 'name': 'Planned Maintenance', 'value': 5000, 'id':1 });
         waterFall.push({ 'name': 'Total Availability', 'value': 51000 });
-        waterFall.push({ 'name': 'Unplanned Standy', 'value': 500 });
-        waterFall.push({ 'name': 'Operating Standy', 'value': 9000 });
-        waterFall.push({ 'name': 'Total Utilisation', 'value': 42000 });
-        waterFall.push({ 'name': 'Operating Delay', 'value': 3000 });
-        waterFall.push({ 'name': 'Operating Time', 'value': 39000 });
+        waterFall.push({ 'name': 'Unplanned Standy', 'value': 4000, 'id':2 });
+        waterFall.push({ 'name': 'Operating Standy', 'value': 7000, 'id':3 });
+        waterFall.push({ 'name': 'Total Utilisation', 'value': 40000 });
+        waterFall.push({ 'name': 'Operating Delay', 'value': 3000, 'id':4 });
+        waterFall.push({ 'name': 'Operating Time', 'value': 37000, 'id':5 });
 
         var wf = ChartsMonthly.CreateLongTermWaterfall("lt_wf", waterFall);
         //console.log(waterFall);

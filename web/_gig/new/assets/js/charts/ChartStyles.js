@@ -10,20 +10,24 @@ class ChartStyleContainer {
         this.fontSizeLarge = 20;
 
         this.textStyle =
-            {
-                color: '#fff',
-                fontFamily: 'Poppins',
-                fontSize: 11
-            };
+        {
+            color: '#fff',
+            fontFamily: 'Poppins',
+            fontSize: 11
+        };
 
 
         this.axisLineGrey =
-            {
-                show: true,
-                lineStyle: {
-                    opacity: 0.5
-                }
-            };
+        {
+            show: true,
+            lineStyle: {
+                opacity: 0.5
+            }
+        };
+
+
+        // -----------------------------------------------------------------------------
+        // Status Colours
 
         // Colors for flat shading status
         this.statusColorsFlat = ['#00ff6a', 'rgb(253,232,0)', 'rgba(255,0,0,1)'];
@@ -31,31 +35,25 @@ class ChartStyleContainer {
 
         // Colors for gradient shading status
         this.statusColors = [
+            // OPERATING
             {
                 type: 'linear',
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
+                x: 0, y: 0, x2: 0, y2: 1,
                 colorStops: [{ offset: 0, color: '#00ff6a' },
                 { offset: 1, color: '#00b297' }]
                 //00b285
             },
+            // IDLE
             {
                 type: 'linear',
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
+                x: 0, y: 0, x2: 0, y2: 1,
                 colorStops: [{ offset: 0, color: 'rgb(255,255,0)' },
                 { offset: 1, color: 'rgb(240,169,0)' }]
             }
+            // DOWN
             , {
                 type: 'linear',
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
+                x: 0, y: 0, x2: 0, y2: 1,
                 colorStops: [{ offset: 0, color: 'rgba(255,140,0,1)' },
                 { offset: 1, color: 'rgba(255,0,0,1)' }]
             }
@@ -66,33 +64,24 @@ class ChartStyleContainer {
         this.statusColorsEmpahsis = [
             {
                 type: 'linear',
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
+                x: 0, y: 0, x2: 0, y2: 1,
                 colorStops: [{ offset: 0, color: '#00ff6a' },
                 { offset: 1, color: '#00b285' }]
             },
             {
                 type: 'linear',
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
+                x: 0, y: 0, x2: 0, y2: 1,
                 colorStops: [{ offset: 0, color: '#ffff00' },
                 { offset: 1, color: '#eab300' }]
             }
             , {
                 type: 'linear',
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
+                x: 0, y: 0, x2: 0, y2: 1,
                 colorStops: [{ offset: 0, color: 'rgba(255,180,50,1)' },
                 { offset: 1, color: 'rgba(255,100,100,1)' }]
             }
         ];
-
+        // -----------------------------------------------------------------------------
 
 
 
@@ -130,6 +119,8 @@ class ChartStyleContainer {
 
 
 
+
+
         this.disabledColor = {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                 offset: 0,
@@ -148,26 +139,61 @@ class ChartStyleContainer {
             { offset: 1, color: '#000cff' }]
         };
 
-        this.pieRadii = ['60%', '75%'];
-    }
-
-
-    toolTip() {
-        return {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'shadow', z: '-1',
-                shadowStyle: {
-                    color: 'rgba(8,14,18,0.2)'
-                }
-            },
-            textStyle: {
-                color: '#fff',
-                fontSize: 10
-            },
-            backgroundColor: 'rgba(50,50,50,0.9)'
+        this.darkColor = {
+            type: 'linear',
+            x: 0, y: 0, x2: 0, y2: 1,
+            colorStops: [{ offset: 0, color: 'rgba(15,15,15,1)' },
+            { offset: 1, color: 'rgba(15,15,15,0.25)' }]
         };
+
+        this.pieRadii = ['60%', '75%'];
+
+
+
+
+        // ----------------------------------------------------------
+        // Current 6 colours for TUM model
+
+        this.TUMColors = [
+            // Unplanned Breakdown
+            this.statusColors[2],
+            // Planned Maintenance
+            this.statusColors[1],
+            //Unplanned Standby
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [{ offset: 0, color: '#00b2ff' },
+                { offset: 1, color: '#000cff' }]
+            },
+            // Operating Standby
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [{ offset: 0, color: '#71d4ff' },
+                { offset: 1, color: '#1a85fe' }]
+            },
+            // Operating Delay
+            this.statusColors[0],
+            // Operating Time
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [{ offset: 0, color: '#00d646' },
+                { offset: 1, color: '#006e53' }]
+            }
+        ]
+        // ----------------------------------------------------------
+
     }
+
+
+
+
+
+
+
+
 
     toolTipTextStyle() {
         return {
@@ -177,10 +203,20 @@ class ChartStyleContainer {
     }
 
     toolTipShadow() {
+        return this.toolTipLine();
+        // return {
+        //     type: 'shadow', z: '-1',
+        //     shadowStyle: {
+        //         color: 'rgba(8,14,18,0.2)'
+        //     }
+        // };
+    }
+
+    toolTipLine() {
         return {
-            type: 'shadow', z: '-1',
-            shadowStyle: {
-                color: 'rgba(8,14,18,0.2)'
+            type: 'line', z: '-1',
+            lineStyle: {
+                color: 'rgba(255,255,255,0.4)'
             }
         };
     }
@@ -195,6 +231,7 @@ class ChartStyleContainer {
 
     //     };
     // }
+
     toolBox(_height, _name) {
         return {
             y: 'bottom',
@@ -207,12 +244,12 @@ class ChartStyleContainer {
                     pixelRatio: 2,
                     name: _name + "_" + (new Date().toISOString()),
                     title: 'Save Image',
-                    backgroundColor: {
-                        type: 'linear',
-                        x: 0, y: 0, x2: 0, y2: 1,
-                        colorStops: [{ offset: 0, color: 'rgba(10,10,10,1)' },
-                        { offset: 1, color: 'rgba(50,50,50,1)' }]
-                    },
+                    // backgroundColor: {
+                    //     type: 'linear',
+                    //     x: 0, y: 0, x2: 0, y2: 1,
+                    //     colorStops: [{ offset: 0, color: 'rgba(40,40,40,1)' },
+                    //     { offset: 1, color: 'rgba(255,70,70,1)' }]
+                    // },
                     emphasis: {
                         iconStyle: {
                             color: 'white',
@@ -227,6 +264,21 @@ class ChartStyleContainer {
         };
     }
 
+
+    xAxis(_data, _rotate) {
+        return {
+            type: 'category',
+            data: _data,
+            axisLabel: ChartStyles.timeLineAxisLabel(_rotate),
+            splitLine: { show: false },
+            axisTick: {
+                show: true,
+                alignWithLabel: true
+            }
+        }
+    }
+
+
     createTitle(_content) {
         return {
             subtext: _content,
@@ -236,16 +288,14 @@ class ChartStyleContainer {
         };
     }
 
+
     statusItemStyle(_index) {
         return {
             normal: { color: ChartStyles.statusColors[_index] },
             emphasis: { color: ChartStyles.statusColorsEmpahsis[_index] }
-            // shadowColor: 'rgba(1, 1, 1, 1)',
-            // shadowBlur: 10,
-            // shadowOffsetX: 20,
-            // shadowOffsetY: 20
         };
     }
+
 
     lineShadow() {
         return {
@@ -255,11 +305,12 @@ class ChartStyleContainer {
             shadowOffsetY: 4
         };
     }
-    timeLineAxisLabel() {
+
+    timeLineAxisLabel(_rotate) {
         return {
             show: true,
-            interval: 'auto',
-            rotate: 45,
+            interval: 0,//'auto',
+            rotate: _rotate == undefined ? 45 : _rotate,
             fontSize: ChartStyles.fontSizeSmall
         }
     }
