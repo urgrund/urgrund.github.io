@@ -200,7 +200,7 @@ class ChartStyleContainer {
 
     toolTipTextStyle() {
         return {
-            color: '#fff',
+            color: '#ff012b',
             fontSize: 12
         };
     }
@@ -227,6 +227,11 @@ class ChartStyleContainer {
     toolTipBackgroundColor() {
         return 'rgb(34, 85, 138)';
     }
+
+    toolTipTextTitle(_string) { return "<h5 class='underline bold'>" + _string + "</h5>"; }
+    toolTipTextEntry(_string, _class = "") { return "<p class='" + _class + "'>" + _string + "</p>"; }
+
+
 
     // toolBoxPixelRatio(_height) {
     //     if(_height < 
@@ -317,6 +322,7 @@ class ChartStyleContainer {
             fontSize: ChartStyles.fontSizeSmall
         }
     }
+
 }
 
 // The instance

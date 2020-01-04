@@ -228,21 +228,23 @@ class Charts {
             var string = "";
 
             // The time 
-            string += "<h4 class='underline'>" + params[0].name + "</h4>";
+            string += ChartStyles.toolTipTextTitle(params[0].name); //"<h4 class='underline'>" + params[0].name + "</h4>";
 
             // Labels for each metric
             for (var i = 0; i < params.length; i++) {
                 var metric = metrics[params[i].seriesId];
                 if (typeof metric !== 'undefined') {
                     if (params[i].value > 0) {
-                        string += "<p>(" + metric.site + ") " + metric.name + " : " + params[i].value + "</p>";
+                        //string += "<p>(" + metric.site + ") " + metric.name + " : " + params[i].value + "</p>";
+                        string += ChartStyles.toolTipTextEntry("(" + metric.site + ") " + metric.name + " : " + params[i].value);
                     }
                 }
             }
 
             // The last entry is the cumulative 
             var index = params.length - 1;
-            string += params[index].seriesName + " : " + params[index].value + "<br/>";
+            //string += params[index].seriesName + " : " + params[index].value + "<br/>";
+            string += ChartStyles.toolTipTextEntry(params[index].seriesName + " : " + params[index].value, "bold");
             return string;
         }
 
@@ -285,7 +287,7 @@ class Charts {
                 type: 'value',
                 splitLine: { show: false },
                 axisLine: ChartStyles.axisLineGrey,
-                axisLabel: {                    
+                axisLabel: {
                     fontSize: ChartStyles.fontSizeSmall
                 }
             },
@@ -293,7 +295,7 @@ class Charts {
                 type: 'value',
                 splitLine: { show: false },
                 axisLine: ChartStyles.axisLineGrey,
-                axisLabel: {                    
+                axisLabel: {
                     fontSize: ChartStyles.fontSizeSmall
                 }
             }],
@@ -438,7 +440,8 @@ class Charts {
                 // Display info about the events 
                 confine: true,
                 formatter: function (params) {
-                    return "<h4 class='underline'>" + params.value[4] + "</h4>" + params.name + " for " + SecondsToHoursAndMinutes(params.value[3] / 60);
+                    return ChartStyles.toolTipTextTitle(params.value[4]) + ChartStyles.toolTipTextEntry(params.name + " for " + SecondsToHoursAndMinutes(params.value[3] / 60));
+                    //return "<h4 class='underline'>" + params.value[4] + "</h4>" + params.name + " for " + SecondsToHoursAndMinutes(params.value[3] / 60);
                 },
                 textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),
@@ -563,7 +566,7 @@ class Charts {
 
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
-            title: ChartStyles.createTitle('Actual Availability, Utilisation & U of A vs Target'),
+            title: ChartStyles.createTitle('Actual Availability, Utilisation & U of A'),// vs Target'),
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "UofA"),
             legend: {
                 top: 25,
@@ -584,25 +587,25 @@ class Charts {
                 axisPointer: ChartStyles.toolTipShadow(),
                 backgroundColor: ChartStyles.toolTipBackgroundColor(),
                 formatter: function (params) {
-                    var title = "<h4 class='underline'>" + params[0].name + "</h4>";
-                    var a = params[0].seriesName + ": " + RatioToPercent(params[0].value); //Math.round(params[0].value * 100) + "%";
-                    var b = params[1].seriesName + ": " + RatioToPercent(params[1].value);//Math.round(params[1].value * 100) + "%";
-                    var c = params[2].seriesName + ": " + RatioToPercent(params[2].value);//Math.round(params[2].value * 100) + "%";
-                    return title + a + "<br/>" + b + "<br/>" + c;               
-                }             
+                    var string = ChartStyles.toolTipTextTitle(params[0].name);
+                    string += ChartStyles.toolTipTextEntry(params[0].seriesName + ": " + RatioToPercent(params[0].value));
+                    string += ChartStyles.toolTipTextEntry(params[1].seriesName + ": " + RatioToPercent(params[1].value));
+                    string += ChartStyles.toolTipTextEntry(params[2].seriesName + ": " + RatioToPercent(params[2].value));
+                    return string;
+                }
             },
-            xAxis:ChartStyles.xAxis(timeLabelsShift[shift]),
+            xAxis: ChartStyles.xAxis(timeLabelsShift[shift]),
             yAxis: {
                 type: 'value',
                 axisLabel:
                 {
-                    fontSize: ChartStyles.fontSizeSmall,    
+                    fontSize: ChartStyles.fontSizeSmall,
                     formatter: function (value, index) {
                         return (value * 100 + "%");
                     }
                 },
                 splitLine: { show: false },
-                axisLine: ChartStyles.axisLineGrey,                 
+                axisLine: ChartStyles.axisLineGrey,
             },
             series: [
                 {
@@ -692,7 +695,10 @@ class Charts {
             tooltip: {
                 trigger: 'item',
                 formatter: function (params, index) {
-                    return (Math.round(params.percent * 10) / 10) + "%" + "  (" + SecondsToHoursAndMinutes(params.value) + ")";
+                    console.log(params.name);
+                    var string = ChartStyles.toolTipTextTitle(params.name);
+                    string += ChartStyles.toolTipTextEntry((Math.round(params.percent * 10) / 10) + "%" + "  (" + SecondsToHoursAndMinutes(params.value) + ")");
+                    return string;
                 },
                 textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),
@@ -755,28 +761,37 @@ class Charts {
 
 
 
-    static CreatePareto(_elementID, _majorGroup, _data) {
+    static CreatePareto(_elementID, _data, _colorIndex) {
         //console.log("Creating Pareto for " + _majorGroup);
-        var dom = document.getElementById(_elementID);
-        var myChart = echarts.init(dom, ChartStyles.baseStyle);
+        //var dom = document.getElementById(_elementID);
+        //var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
-        var _d = _data.shiftData[shift];
+        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
 
-        var eventData = [];
-        var statusColor;
-        if (_majorGroup == MajorGroup.IDLE) {
-            eventData = _d.eventBreakDown.IDLE;
-            statusColor = 1;//ChartStyles.statusColors[1];
-        }
-        if (_majorGroup == MajorGroup.OPERATING) {
-            eventData = _d.eventBreakDown.OPERATING;
-            statusColor = 0;//ChartStyles.statusColors[0];
-        }
-        if (_majorGroup == MajorGroup.DOWN) {
-            eventData = _d.eventBreakDown.DOWN;
-            statusColor = 2;//ChartStyles.statusColors[2];
-        }
+        // var _d = _data.shiftData[shift];
+
+        // var eventData = [];
+        // var statusColor;
+        // if (_majorGroup == MajorGroup.IDLE) {
+        //     eventData = _d.eventBreakDown.IDLE;
+        //     statusColor = 1;//ChartStyles.statusColors[1];
+        // }
+        // if (_majorGroup == MajorGroup.OPERATING) {
+        //     eventData = _d.eventBreakDown.OPERATING;
+        //     statusColor = 0;//ChartStyles.statusColors[0];
+        // }
+        // if (_majorGroup == MajorGroup.DOWN) {
+        //     eventData = _d.eventBreakDown.DOWN;
+        //     statusColor = 2;//ChartStyles.statusColors[2];
+        // }
         //console.log("Creating Pareto");
+
+
+
+        var eventData = _data;
+
+
+
 
         // Get data sorted 
         var minorGroup = new Array();
@@ -808,7 +823,10 @@ class Charts {
         // Get cumulative to %
         for (let i = 0; i < minorGroup.length; i++) {
             cumulative[i] = cumulative[i] / cumulative[cumulative.length - 1];
-            eventBars[i] = getItemStyle(minorGroup[i], cumulative[i]);
+            eventBars[i] = {
+                value: minorGroup[i].duration / 3600,
+                itemStyle: { color: ChartStyles.TUMColors[_colorIndex] }
+            };  //getItemStyle(minorGroup[i], cumulative[i]);
         }
 
         var barWidth = eventBars.length > 1 ? (eventBars.length > 3 ? '50%' : '20%') : '10%';
@@ -820,13 +838,12 @@ class Charts {
 
         // move this to a charts utilities class
         // and deal with different themes
-        function getItemStyle(_minorGroup, cumulativeVal) {
-            //var red = (cumulativeVal < 0.8);// || (category.count / eventData.eventCount > 0.8);
-            return {
-                value: _minorGroup.duration / 3600,
-                itemStyle: ChartStyles.statusItemStyle(statusColor)
-            };
-        }
+        // function getItemStyle(_minorGroup, cumulativeVal) {
+        //     return {
+        //         value: _minorGroup.duration / 3600,
+        //         itemStyle: ChartStyles.statusItemStyle(statusColor)
+        //     };
+        // }
 
 
         // Sub text for each chart
@@ -846,17 +863,14 @@ class Charts {
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "EventBreakdown"),
             tooltip: {
                 trigger: 'axis',
-                textStyle: ChartStyles.toolTipTextStyle(),
+                //textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),
                 backgroundColor: ChartStyles.toolTipBackgroundColor(),
                 formatter: function (params, index) {
-                    return "<h4 class='underline'>" + params[0].name + "</h4>" + SecondsToHoursAndMinutes(params[0].value * 60);
+                    return ChartStyles.toolTipTextTitle(params[0].name) + ChartStyles.toolTipTextEntry(SecondsToHoursAndMinutes(params[0].value * 60));
                 },
                 barMaxWidth: barWidth
             },
-            // toolbox: {
-            //     feature: { saveAsImage: {} }
-            // },
             xAxis: [
                 ChartStyles.xAxis(eventNames, 0)
             ],
@@ -909,6 +923,7 @@ class Charts {
         };
 
         SetOptionOnChart(option, myChart);
+        return myChart;
     }
 
 

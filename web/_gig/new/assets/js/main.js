@@ -29,8 +29,7 @@ const MajorGroup = {
     DOWN: 'Down'
 }
 
-getEquipStyle = function (majorGroup)
-{
+getEquipStyle = function (majorGroup) {
     if (majorGroup == "OPERATING") { return { 'color': ChartStyles.statusColorsFlat[0] } }
     if (majorGroup == "IDLE") { return { 'color': ChartStyles.statusColorsFlat[1] } }
     if (majorGroup == "DOWN") { return { 'color': ChartStyles.statusColorsFlat[2] } }
@@ -38,8 +37,7 @@ getEquipStyle = function (majorGroup)
 
 
 
-const capitalize = (s) =>
-{
+const capitalize = (s) => {
     if (typeof s !== 'string') return ''
     return s.charAt(0).toUpperCase() + s.slice(1)
 }
@@ -63,8 +61,14 @@ var app = angular.module("myApp", ['ngRoute', 'ui.grid', 'ui.grid.resizeColumns'
 
 
 // First run and rootscope
-app.run(function ($rootScope)
-{
+app.run(function ($rootScope) {
+
+    // TODO
+    // Shift should at least start correctly
+    // ie) if it's 6am-6pm,  it's Day Shift
+
+    //if(itsDayShift) shift = 0 else shift = 1;
+
     $rootScope.shift = shift;
     $rootScope.shiftTitle = shiftTitle[shift];
 
@@ -102,12 +106,10 @@ app.run(function ($rootScope)
     // ------------------------------------------------------
     // Fake alerts
     var alerts = [];
-    for (var i = 0; i < Math.round(Math.random() * 10); i++)
-    {
+    for (var i = 0; i < Math.round(Math.random() * 10); i++) {
         var randSite = Math.floor(Math.random() * ($rootScope.siteData.length - 1));
         var randEquip = Math.floor(Math.random() * $rootScope.siteData[randSite].equipment.length);
-        if (Math.random() > 0.5)
-        {
+        if (Math.random() > 0.5) {
             alerts[i] = {
                 level: 0,
                 time: "09:24",
@@ -116,8 +118,7 @@ app.run(function ($rootScope)
                 message: "Bogger has been in-active for over 15minutes",
                 action: "Get someone on the bogger"
             };
-        } else
-        {
+        } else {
             alerts[i] = {
                 level: 1,
                 time: "14:12",
@@ -134,15 +135,13 @@ app.run(function ($rootScope)
 
 
 
-    $rootScope.setNewSiteData = function (_data)
-    {
+    $rootScope.setNewSiteData = function (_data) {
     };
 
 
 
 
-    $rootScope.getEquipStyle = function (majorGroup)
-    {
+    $rootScope.getEquipStyle = function (majorGroup) {
         if (majorGroup == "OPERATING") { return { 'color': ChartStyles.statusColorsFlat[0] } }
         if (majorGroup == "IDLE") { return { 'color': ChartStyles.statusColorsFlat[1] } }
         if (majorGroup == "DOWN") { return { 'color': ChartStyles.statusColorsFlat[2] } }
@@ -155,8 +154,7 @@ app.run(function ($rootScope)
 
 
 // Main controller
-app.controller("myCtrl", function ($scope, $rootScope, $timeout)
-{
+app.controller("myCtrl", function ($scope, $rootScope, $timeout) {
 
     console.log("Main App Entry");
 
@@ -164,8 +162,7 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout)
 
 
 
-    $scope.shiftSwitchChanged = function (_state)
-    {
+    $scope.shiftSwitchChanged = function (_state) {
         if (_state == true)
             $rootScope.shift = 0;
         else
@@ -177,16 +174,13 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout)
     };
 
 
-    $scope.getReports = function ()
-    {
+    $scope.getReports = function () {
     };
 
 
-    $scope.createMenuEquipList = function ()
-    {
+    $scope.createMenuEquipList = function () {
         var list = [];
-        for (var key in $rootScope.equipment)
-        {
+        for (var key in $rootScope.equipment) {
             list.push($rootScope.equipment[key].id);
         }
         //console.log(list);
@@ -194,15 +188,12 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout)
     };
 
 
-    $scope.switchBackground = function (_class)
-    {
-        if (_class == true)
-        {
+    $scope.switchBackground = function (_class) {
+        if (_class == true) {
             $rootScope.backGroundClass = "bg_img";
             $rootScope.backGroundClassBlur = $rootScope.backGroundClass + "Blur";
         }
-        else
-        {
+        else {
             $rootScope.backGroundClass = "bg_navy";
             $rootScope.backGroundClassBlur = $rootScope.backGroundClass + "Blur";
         }
@@ -212,8 +203,7 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout)
         //$scope.shiftSwitchChanged($rootScope.shift == 0 ? true : false);
     }
 
-    $scope.$watch('$viewContentLoaded', function ()
-    {
+    $scope.$watch('$viewContentLoaded', function () {
         $scope.createMenuEquipList();
     });
 
@@ -233,8 +223,7 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout)
 // Router
 
 app.config(
-    function ($routeProvider)
-    {
+    function ($routeProvider) {
 
         $routeProvider
             .when("/", {
@@ -263,8 +252,7 @@ app.config(
                 resolve: { init: function () { ClearAllCharts(); } }
             })
             .when("/monthly/:site/:func", {
-                templateUrl: function (params)
-                {
+                templateUrl: function (params) {
                     return params.func == 0 ? 'monthly.html' : 'monthlyAdjust.html';
                     console.log(func);
                 },
@@ -320,8 +308,7 @@ app.component("drillDownChart", {
         name: '@',
         chart: '@'
     },
-    controller: function ($rootScope)
-    {
+    controller: function ($rootScope) {
         //console.log($rootScope);
         //this.root = $rootScope;
     }
@@ -343,18 +330,15 @@ app.component("drillDownHeader", {
         lines: '@',
         equip: '<'
     },
-    controller: function ()
-    {
+    controller: function () {
 
-        this.getEquipStyle = function (majorGroup)
-        {
+        this.getEquipStyle = function (majorGroup) {
             if (majorGroup == "OPERATING") { return { 'color': ChartStyles.statusColorsFlat[0] } }
             if (majorGroup == "IDLE") { return { 'color': ChartStyles.statusColorsFlat[1] } }
             if (majorGroup == "DOWN") { return { 'color': ChartStyles.statusColorsFlat[2] } }
         };
 
-        this.$onInit = function ()
-        {
+        this.$onInit = function () {
 
             if (this.equip == undefined)
                 return;
@@ -378,8 +362,7 @@ app.component("drillDownHeader", {
             // Can this variable be updated with 
             // interval check so that its realtime?
             this.late = 0;
-            if (hh > 4)
-            {
+            if (hh > 4) {
                 this.timeSinceLastCall = ">" + 4 + "hrs!";
                 this.late = 1;
             }
@@ -393,8 +376,7 @@ app.component("drillDownHeader", {
             this.flexColumn = "";
             this.flex = "flex flex-start";
 
-            if (this.lines == 0)
-            {
+            if (this.lines == 0) {
                 this.flexColumn = "";
                 this.flex = "";
             }
@@ -416,10 +398,8 @@ app.component("alertBox", {
     bindings: {
         alert: '<'
     },
-    controller: function ($rootScope)
-    {
-        this.$onInit = function ()
-        {
+    controller: function ($rootScope) {
+        this.$onInit = function () {
             this.equipment = $rootScope.siteData[this.alert.siteIndex].equipment[this.alert.equipIndex];
             //console.log(this.equipment);
         };
@@ -441,10 +421,8 @@ app.component("reportItem", {
         value: '@',
         id: '@'
     },
-    controller: function ($rootScope)
-    {
-        this.$onInit = function ()
-        {
+    controller: function ($rootScope) {
+        this.$onInit = function () {
             //console.log(this.id);
         };
     }

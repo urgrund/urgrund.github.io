@@ -108,7 +108,7 @@ class ChartsMonthly {
     static CreateLongTerm(_elementID, _data, _name, _style, _lines) {
         var myChart = echarts.init(document.getElementById(_elementID), 'chartTone');
 
-        var smoothVal = 0.15;
+        var smoothVal = 0;
 
         if (_lines == true) {
 
