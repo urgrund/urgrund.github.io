@@ -157,8 +157,10 @@ class ChartStyleContainer {
         this.TUMColors = [
             // Unplanned Breakdown
             this.statusColors[2],
+
             // Planned Maintenance
             this.statusColors[1],
+
             //Unplanned Standby
             {
                 type: 'linear',
@@ -175,6 +177,7 @@ class ChartStyleContainer {
             },
             // Operating Delay
             this.statusColors[0],
+
             // Operating Time
             {
                 type: 'linear',
