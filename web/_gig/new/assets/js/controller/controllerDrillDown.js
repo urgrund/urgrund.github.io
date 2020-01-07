@@ -7,6 +7,10 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
     //$route.reload();
     //$scope.shift = $rootScope.shift;
 
+
+    //console.log($rootScope.backGroundState);
+    //console.log($rootScope.equipment[$routeParams.id]);
+
     $scope.createEquipmentData = function () {
 
         //$scope.equip = $scope.siteData[$routeParams.siteIndex].equipment[$routeParams.equipIndex];
@@ -26,7 +30,7 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
 
     $scope.createEquipmentCharts = function () {
         // Fancy timing to load charts
-        var t = 50
+        var t = 70;
         var d = 70;
 
         var mph;

@@ -4,7 +4,7 @@
 // Variables used outside of particular NG scopes  (ie. charts)
 var shift = 0;
 var shiftTitle = ['Day Shift', 'Night Shift'];
-var shiftCSS = ["<i style='color: yellow' class='fas fa - sun'></i>", "<i class='fas fa-moon'></i>"];
+//var shiftCSS = ["<i style='color: yellow' class='fas fa - sun'></i>", "<i class='fas fa-moon'></i>"];
 
 var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -29,11 +29,6 @@ const MajorGroup = {
     DOWN: 'Down'
 }
 
-getEquipStyle = function (majorGroup) {
-    if (majorGroup == "OPERATING") { return { 'color': ChartStyles.statusColorsFlat[0] } }
-    if (majorGroup == "IDLE") { return { 'color': ChartStyles.statusColorsFlat[1] } }
-    if (majorGroup == "DOWN") { return { 'color': ChartStyles.statusColorsFlat[2] } }
-};
 
 
 
@@ -93,14 +88,6 @@ app.run(function ($rootScope) {
     console.log($rootScope.meta);
 
 
-    // Background options
-    $rootScope.backGroundClass = "bg_img";
-    $rootScope.backGroundClassBlur = "bg_imgBlur";
-
-    $rootScope.backgroundOptions = [
-        { 'name': 'Navy', 'value': 'bg_navy' },
-        { 'name': 'Image', 'value': 'bg_img' }
-    ];
 
 
     // ------------------------------------------------------
@@ -141,24 +128,116 @@ app.run(function ($rootScope) {
 
 
 
-    $rootScope.getEquipStyle = function (majorGroup) {
-        if (majorGroup == "OPERATING") { return { 'color': ChartStyles.statusColorsFlat[0] } }
-        if (majorGroup == "IDLE") { return { 'color': ChartStyles.statusColorsFlat[1] } }
-        if (majorGroup == "DOWN") { return { 'color': ChartStyles.statusColorsFlat[2] } }
+
+    // $rootScope.getEquipStyle = function (majorGroup) {
+    //     if (majorGroup == "OPERATING") { return { 'color': ChartStyles.statusColorsFlat[0] } }
+    //     if (majorGroup == "IDLE") { return { 'color': ChartStyles.statusColorsFlat[1] } }
+    //     if (majorGroup == "DOWN") { return { 'color': ChartStyles.statusColorsFlat[2] } }
+    // };
+
+
+    $rootScope.equipStyleIcon = {
+        OPERATING: 'far fa-arrow-alt-circle-up',
+        IDLE: 'fas fa-exclamation-circle',
+        DOWN: 'fas fa-times-circle'
+    };
+
+    $rootScope.equipStyleColor = {
+        OPERATING: { 'color': ChartStyles.statusColorsFlat[0] },
+        IDLE: { 'color': ChartStyles.statusColorsFlat[1] },
+        DOWN: { 'color': ChartStyles.statusColorsFlat[2] }
     };
 
 
 
-    //console.log($rootScope.alerts);
+
+    // ------------------------------------------------------
+    // Background Styles
+
+    // MAYBE ALL THIS CAN BE IT'S OWN CLASS
+
+    $rootScope.backGroundState = true;
+
+    // Background style for each equipment
+    $rootScope.backGroundEquip = {
+        HAULING: 'bg_truck',
+        LOADING: 'bg_bog',
+        P: 'bg_drill',
+        D: 'bg_drill'
+    };
+
+    $rootScope.backGroundDefault = "bg_img";
+
+
+    $rootScope.backGroundClass = $rootScope.backGroundDefault;
+    $rootScope.backGroundClassBlur = $rootScope.backGroundDefault + "Blur";
+
+
+
+    // $rootScope.backgroundOptions = [
+    //     { 'name': 'Navy', 'value': 'bg_navy' },
+    //     { 'name': 'Image', 'value': 'bg_img' }
+    // ];
+    // ------------------------------------------------------
+
+
+
 });
 
 
+
+
+
 // Main controller
-app.controller("myCtrl", function ($scope, $rootScope, $timeout) {
+app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $location) {
 
     console.log("Main App Entry");
 
 
+
+    // On Route Change
+    $scope.$on('$locationChangeStart', function (event, next, current) {
+        // Clear charts for memory/performance
+        ClearAllCharts();
+
+        // Update background 
+        $scope.switchBackground($rootScope.backGroundState);
+
+        // if (current_user.is_logged_in) {
+        //     var route_object = ($route.routes[$location.path()]).route_object; //This is how you get it
+        //     if (!(route_object.route_roles)) {
+        //         event.preventDefault();
+        //     }
+        // }
+    });
+
+
+    $scope.switchBackground = function (_state) {
+
+
+        if (_state == true) {
+
+            if ($location.$$url.includes("equip")) {
+                var equipFunction = $rootScope.equipment[$location.$$url.slice(7)].function;
+
+                console.log(equipFunction);
+                $rootScope.backGroundClass = $rootScope.backGroundEquip[equipFunction];
+                $rootScope.backGroundClassBlur = $rootScope.backGroundClass + "Blur";
+            }
+            else {
+                $rootScope.backGroundClass = $rootScope.backGroundDefault;
+                $rootScope.backGroundClassBlur = $rootScope.backGroundClass + "Blur";
+            }
+
+        }
+        else {
+            $rootScope.backGroundClass = "bg_navy";
+            $rootScope.backGroundClassBlur = $rootScope.backGroundClass + "Blur";
+        }
+
+        $rootScope.backGroundState = _state;
+        //$scope.$broadcast('backGroundChanged');
+    }
 
 
 
@@ -188,20 +267,7 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout) {
     };
 
 
-    $scope.switchBackground = function (_class) {
-        if (_class == true) {
-            $rootScope.backGroundClass = "bg_img";
-            $rootScope.backGroundClassBlur = $rootScope.backGroundClass + "Blur";
-        }
-        else {
-            $rootScope.backGroundClass = "bg_navy";
-            $rootScope.backGroundClassBlur = $rootScope.backGroundClass + "Blur";
-        }
-        //console.log(_class);
-        //$rootScope.backGroundClass = _class;
-        //$rootScope.backGroundClassBlur = _class + "Blur";
-        //$scope.shiftSwitchChanged($rootScope.shift == 0 ? true : false);
-    }
+
 
     $scope.$watch('$viewContentLoaded', function () {
         $scope.createMenuEquipList();
@@ -233,41 +299,41 @@ app.config(
             //.when("/equip/:siteIndex/:equipIndex", {
             .when("/equip/:id", {
                 templateUrl: 'drilldown.html',
-                controller: 'DrillDown',
-                resolve: { init: function () { ClearAllCharts(); } }
+                controller: 'DrillDown'//,
+                //resolve: { init: function () { ClearAllCharts(); } }
             })
             .when("/callup/:cupPeriod", {
                 templateUrl: 'callup.html',
-                controller: 'CallUp',
-                resolve: { init: function () { ClearAllCharts(); } }
+                controller: 'CallUp'//,
+                //resolve: { init: function () { ClearAllCharts(); } }
             })
             .when("/timeline/", {
                 templateUrl: 'timeline.html',
-                controller: 'TimeLine',
-                resolve: { init: function () { ClearAllCharts(); } }
+                controller: 'TimeLine'//,
+                //resolve: { init: function () { ClearAllCharts(); } }
             })
             .when("/productivity/:filter", {
                 templateUrl: 'productivity.html',
-                controller: 'Productivity',
-                resolve: { init: function () { ClearAllCharts(); } }
+                controller: 'Productivity'//,
+                // resolve: { init: function () { ClearAllCharts(); } }
             })
             .when("/monthly/:site/:func", {
                 templateUrl: function (params) {
                     return params.func == 0 ? 'monthly.html' : 'monthlyAdjust.html';
                     console.log(func);
                 },
-                controller: 'Monthly',
-                resolve: { init: function () { ClearAllCharts(); } }
+                controller: 'Monthly'//,
+                // resolve: { init: function () { ClearAllCharts(); } }
             })
             .when("/reports/", {
                 templateUrl: 'reports.html',
-                controller: 'Reports',
-                resolve: { init: function () { ClearAllCharts(); } }
+                controller: 'Reports'//,
+                //resolve: { init: function () { ClearAllCharts(); } }
             })
             .when("/longterm/", {
                 templateUrl: 'longterm.html',
-                controller: 'LongTerm',
-                resolve: { init: function () { ClearAllCharts(); } }
+                controller: 'LongTerm'//,
+                //resolve: { init: function () { ClearAllCharts(); } }
             });
         // .when("/Mines", {
         //     templateUrl: "dash_mines.html",
@@ -330,15 +396,13 @@ app.component("drillDownHeader", {
         lines: '@',
         equip: '<'
     },
-    controller: function () {
+    controller: function ($rootScope) {
 
-        this.getEquipStyle = function (majorGroup) {
-            if (majorGroup == "OPERATING") { return { 'color': ChartStyles.statusColorsFlat[0] } }
-            if (majorGroup == "IDLE") { return { 'color': ChartStyles.statusColorsFlat[1] } }
-            if (majorGroup == "DOWN") { return { 'color': ChartStyles.statusColorsFlat[2] } }
-        };
 
         this.$onInit = function () {
+
+            //console.log("ASKDLAJSDK");
+            //console.log($rootScope.equipment);
 
             if (this.equip == undefined)
                 return;

@@ -695,7 +695,6 @@ class Charts {
             tooltip: {
                 trigger: 'item',
                 formatter: function (params, index) {
-                    console.log(params.name);
                     var string = ChartStyles.toolTipTextTitle(params.name);
                     string += ChartStyles.toolTipTextEntry((Math.round(params.percent * 10) / 10) + "%" + "  (" + SecondsToHoursAndMinutes(params.value) + ")");
                     return string;

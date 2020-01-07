@@ -15,6 +15,8 @@
   --equipGridRTitle: 4%;
   --equipGridRSpace: 34%;
   --equipGridRTimeLine: 24%;
+
+  --backGroundTint: #0000005e;
 }
 
 
@@ -211,7 +213,7 @@ p{font-size: 9pt; font-weight: 300;}
   grid-row-gap: 1%; 
 
   grid-template-columns: 30% 30% 30%;
-  grid-template-rows: 6% 34% 34% 20%;
+  grid-template-rows: 5% 34% 34% 20%;
   /* grid-template-columns: var(--equipGridCSpace) var(--equipGridCSpace) var(--equipGridCSpace);
   grid-template-rows: var(--equipGridRTitle) var(--equipGridRSpace) var(--equipGridRSpace) var(--equipGridRTimeLine); */
   
@@ -284,11 +286,11 @@ p{font-size: 9pt; font-weight: 300;}
 .equipSmallInfo
 {  
   background: #22558a;
-  box-shadow: 2px 2px 4px 0px #00000047;
+  box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.4);
   margin: 2px;
   padding: 7px;
   transition: 400ms;
-  min-width: 180px;
+  min-width: 188px;
 }
 
 .reportSmallInfo:hover,
@@ -331,29 +333,41 @@ p{font-size: 9pt; font-weight: 300;}
 /* -------------------------------------------------- */
 /* Backgrounds */
 
-.bg_img
+.bg_img, .bg_bog, .bg_truck, .bg_drill
 {
   background: url(../img/login_dark.jpg) no-repeat center center fixed;
   object-fit: cover;    
   background-size: cover;     
 }
 
-.bg_imgBlur
+.bg_imgBlur, .bg_bogBlur, .bg_truckBlur, .bg_drillBlur
 {
   background: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url(../img/login_blur.jpg) no-repeat center center fixed;
   object-fit: cover;  
   background-size: cover; 
 }
+/* --backGroundTint */
 
+.bg_bog{    background-image: url(../img/bg/bg_bog.jpg);}
+.bg_bogBlur {  background-image: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url(../img/bg/bg_bog_blur.jpg);}
+
+.bg_truck{    background-image: url(../img/bg/bg_truck.jpg);}
+.bg_truckBlur {  background-image: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%),url(../img/bg/bg_truck_blur.jpg);}
+
+.bg_drill{ background-image: url(../img/bg/bg_drill.jpg);}
+.bg_drillBlur {  background-image: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url(../img/bg/bg_drill_blur.jpg);}
+
+
+
+/* Gradient background */
 .bg_navy{  background: linear-gradient(28deg, black, rgb(62, 73, 117));}
-
 .bg_navyBlur{      background: linear-gradient(0deg, rgb(0, 21, 51), rgb(35, 45, 84));}
-
-
 
  
 
 /* -------------------------------------------------- */
+
+
 
 
 

@@ -17,8 +17,10 @@
             </div>
 
             <div class="equipSmallInfo">
-                <p class="light"><span ng-style='$ctrl.getEquipStyle($ctrl.lastEvent.majorGroup)'><i
-                            class="fas fa-info-circle"></i></span> Status</p>
+                <p class="light"><span>
+                        <i ng-class='$root.equipStyleIcon[$ctrl.lastEvent.majorGroup]'
+                            ng-style='$root.equipStyleColor[$ctrl.lastEvent.majorGroup]'></i></span> Status</p>
+
 
                 <h5 class="bold">{{$ctrl.lastEvent.status}}</h5>
             </div>
@@ -57,7 +59,7 @@
 
 
             <div class="equipSmallInfo">
-                <p class="light"><span ng-style='$ctrl.getEquipStyle($ctrl.lastEvent.majorGroup)'><i
+                <p class="light"><span ng-style='getEquipStyle($ctrl.lastEvent.majorGroup)'><i
                             class="fas fa-info-circle"></i></span> Status</p>
 
                 <h5>{{$ctrl.lastEvent.status}}</h5>

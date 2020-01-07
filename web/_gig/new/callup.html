@@ -49,7 +49,8 @@
                 <div class="cup-grid row" ng-init="e = getCallUpEvent(0,0, x)">
                     <div><a ng-href="#!equip/{{x.id}}" ng-bind="x.id"></a></div>
                     <div ng-bind="e.eventTime.date"></div>
-                    <div><span ng-style='getEquipStyle(e.majorGroup)'><i class="fas fa-circle"></i></span>
+                    <div>
+                        <i ng-class='equipStyleIcon[e.majorGroup]' ng-style='equipStyleColor[e.majorGroup]'></i>
                         {{e.status}}
                     </div>
                     <div ng-init="opName = e.operator == '.' ? ' No Operator' : e.operator"
