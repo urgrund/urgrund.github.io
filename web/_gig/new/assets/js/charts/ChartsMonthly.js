@@ -184,7 +184,7 @@ class ChartsMonthly {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
 
-
+            title: ChartStyles.createTitle(_name),
             toolbox: {
                 left: 'center',
                 feature: {
@@ -287,18 +287,28 @@ class ChartsMonthly {
 
 
         var borderRadius = '0';
+        var barWidth = 18;
 
         var option = {
-
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
+            title: ChartStyles.createTitle(""),
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "MonthlyCompliance"),
+            legend: {
+
+                textStyle: {
+                    color: "#fff"
+                },
+                orient: 'horizontal',
+                x: 'center',
+                y: 'top',
+                selectedMode: false,
+                data: ['Tonnes', 'Over', 'Target']
+            },
             tooltip: {
                 trigger: 'axis',
+                confine: true,
                 formatter: function (params, index) {
-
-                    var label = "";
-
                     var target = params[3].value;
                     var mined = params[0].value + params[1].value;
                     var over = params[1].value;
@@ -306,18 +316,18 @@ class ChartsMonthly {
                     var len = _data[params[0].name][1].length;
                     var average = (_data[params[0].name][1][len - 1] / len).toFixed(2);
 
-                    label += "<h4 class='underline'>" + params[0].name + "</h4>"
-                        + "Target : " + target + "</br>"
-                        + "Mined : " + mined + (target > 0 ? " (" + RatioToPercent(mined / target) + ")</br>" : "</br>")
-                        + "Average : " + average;//+ _data[params[0].name];
-                    if (over > 0)
-                        label += "<p class='cup-redwarn'>Over: " + params[1].value + " (" + RatioToPercent(params[1].value / target) + ")</p>";
+                    var label = "";
+                    label += ChartStyles.toolTipTextTitle(params[0].name)
+                        + ChartStyles.toolTipTextEntry("Target : " + target)
+                        + ChartStyles.toolTipTextEntry("Mined : " + mined + (target > 0 ? " (" + RatioToPercent(mined / target) + ")" : ""))
+                        + ChartStyles.toolTipTextEntry("Average : " + average);
+                    if (over > 0 && target > 0)
+                        label += ChartStyles.toolTipTextEntry("Over: " + params[1].value + " (" + RatioToPercent(params[1].value / target) + ")", 'cup-redwarn');
 
                     return label;
                 },
-                textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),
-                backgroundColor: 'rgba(50,50,50,0.9)'
+                backgroundColor: ChartStyles.toolTipBackgroundColor()
             },
 
             grid: {
@@ -326,14 +336,6 @@ class ChartsMonthly {
                 left: '3%',
                 right: '3%',
                 containLabel: true
-            },
-            legend: {
-                textStyle: ChartStyles.toolTipTextStyle(),
-                orient: 'horizontal',
-                x: 'center',
-                y: 'top',
-                selectedMode: false,
-                data: ['Tonnes', 'Over', 'Target']
             },
             xAxis: [
                 {
@@ -363,6 +365,7 @@ class ChartsMonthly {
                 nameGap: 40,
                 axisLabel: { fontSize: ChartStyles.fontSizeAxis },
                 splitLine: {
+                    show: false,
                     lineStyle: { color: 'rgba(126, 134, 136, 0.33)', width: 1 }
                 }
             },
@@ -386,7 +389,7 @@ class ChartsMonthly {
                     name: 'Over',
                     itemStyle: { color: ChartStyles.statusColors[2], barBorderRadius: borderRadius },
                     // barGap: '50%',
-                    barWidth: 10,
+                    barWidth: barWidth,
 
                     animationEasing: 'linear',
                     animationDuration: 500,
@@ -404,7 +407,7 @@ class ChartsMonthly {
                     xAxisIndex: 1,
                     type: 'bar',
                     //barGap: '-50%',
-                    barWidth: 20,
+                    barWidth: (barWidth * 1.75),
                     itemStyle: {
                         color: 'rgba(0,0,0,0.125)',
                         barBorderColor: '#02b3ff',

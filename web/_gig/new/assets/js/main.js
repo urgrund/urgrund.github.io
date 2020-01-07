@@ -22,7 +22,6 @@ month[9] = "October";
 month[10] = "November";
 month[11] = "December";
 
-
 const MajorGroup = {
     IDLE: 'Idle',
     OPERATING: 'Operating',
@@ -32,10 +31,10 @@ const MajorGroup = {
 
 
 
-const capitalize = (s) => {
-    if (typeof s !== 'string') return ''
-    return s.charAt(0).toUpperCase() + s.slice(1)
-}
+// const capitalize = (s) => {
+//     if (typeof s !== 'string') return ''
+//     return s.charAt(0).toUpperCase() + s.slice(1)
+// }
 
 
 
@@ -67,15 +66,108 @@ app.run(function ($rootScope) {
     $rootScope.shift = shift;
     $rootScope.shiftTitle = shiftTitle[shift];
 
-    // All sites
-    $rootScope.siteData = allData;
 
-    // Meta data is last
-    $rootScope.meta = $rootScope.siteData.pop();
 
-    // All equip next
-    $rootScope.equipment = $rootScope.siteData.pop();
 
+
+
+    /** Set the data object that the core of the SIC
+     * tool will interface with. */
+    $rootScope.setNewSiteData = function (_data) {
+        console.log("SKDJALKSDJ");
+        // All sites
+        $rootScope.siteData = _data;
+
+        // Meta data is last
+        $rootScope.meta = $rootScope.siteData.pop();
+
+        // All equip next
+        $rootScope.equipment = $rootScope.siteData.pop();
+
+        $rootScope.siteDataDate = $rootScope.convertToNiceDateObject($rootScope.meta.Date);
+    };
+
+
+
+
+    $rootScope.equipStyleIcon = {
+        OPERATING: 'far fa-arrow-alt-circle-up',
+        IDLE: 'fas fa-exclamation-circle',
+        DOWN: 'fas fa-times-circle'
+    };
+
+    $rootScope.equipStyleColor = {
+        OPERATING: { 'color': ChartStyles.statusColorsFlat[0] },
+        IDLE: { 'color': ChartStyles.statusColorsFlat[1] },
+        DOWN: { 'color': ChartStyles.statusColorsFlat[2] }
+    };
+
+
+
+
+    /** Create a nicely formatted date from a numerical date
+     */
+    $rootScope.convertToNiceDateObject = function (_date) {
+        var date = new Date(_date);
+        var dateDay = days[date.getDay()];
+        var dateMonth = month[date.getMonth()];// "September";
+
+        var longDate = dateDay + ", " + date.getDate() + " " + dateMonth + " " + date.getFullYear();
+        var shortDate = date.getDate() + "-" + (date.getUTCMonth() + 1) + "-" + date.getFullYear();
+        var newDateObject = {
+            LONG: longDate,
+            SHORT: shortDate
+        };
+
+        return newDateObject;
+    };
+
+
+
+    // ------------------------------------------------------
+    // Background Styles
+
+    // MAYBE ALL THIS CAN BE IT'S OWN CLASS?
+
+    $rootScope.backGroundState = true;
+
+    /** Background style for each equipment */
+    $rootScope.backGroundEquip = {
+        HAULING: 'bg_truck',
+        LOADING: 'bg_bog',
+        P: 'bg_drill',
+        D: 'bg_drill'
+    };
+
+    $rootScope.backGroundDefault = "bg_img";
+
+
+    $rootScope.backGroundClass = $rootScope.backGroundDefault;
+    $rootScope.backGroundClassBlur = $rootScope.backGroundDefault + "Blur";
+
+
+
+    // $rootScope.backgroundOptions = [
+    //     { 'name': 'Navy', 'value': 'bg_navy' },
+    //     { 'name': 'Image', 'value': 'bg_img' }
+    // ];
+    // ------------------------------------------------------
+
+
+
+});
+
+
+
+
+
+// Main controller
+app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $location) {
+
+    console.log("Main App Entry");
+
+
+    $rootScope.setNewSiteData(allData);
 
     // Debug output
     console.log("Sites :");
@@ -86,6 +178,8 @@ app.run(function ($rootScope) {
 
     console.log("META :");
     console.log($rootScope.meta);
+
+
 
 
 
@@ -122,77 +216,6 @@ app.run(function ($rootScope) {
 
 
 
-    $rootScope.setNewSiteData = function (_data) {
-    };
-
-
-
-
-
-    // $rootScope.getEquipStyle = function (majorGroup) {
-    //     if (majorGroup == "OPERATING") { return { 'color': ChartStyles.statusColorsFlat[0] } }
-    //     if (majorGroup == "IDLE") { return { 'color': ChartStyles.statusColorsFlat[1] } }
-    //     if (majorGroup == "DOWN") { return { 'color': ChartStyles.statusColorsFlat[2] } }
-    // };
-
-
-    $rootScope.equipStyleIcon = {
-        OPERATING: 'far fa-arrow-alt-circle-up',
-        IDLE: 'fas fa-exclamation-circle',
-        DOWN: 'fas fa-times-circle'
-    };
-
-    $rootScope.equipStyleColor = {
-        OPERATING: { 'color': ChartStyles.statusColorsFlat[0] },
-        IDLE: { 'color': ChartStyles.statusColorsFlat[1] },
-        DOWN: { 'color': ChartStyles.statusColorsFlat[2] }
-    };
-
-
-
-
-    // ------------------------------------------------------
-    // Background Styles
-
-    // MAYBE ALL THIS CAN BE IT'S OWN CLASS
-
-    $rootScope.backGroundState = true;
-
-    // Background style for each equipment
-    $rootScope.backGroundEquip = {
-        HAULING: 'bg_truck',
-        LOADING: 'bg_bog',
-        P: 'bg_drill',
-        D: 'bg_drill'
-    };
-
-    $rootScope.backGroundDefault = "bg_img";
-
-
-    $rootScope.backGroundClass = $rootScope.backGroundDefault;
-    $rootScope.backGroundClassBlur = $rootScope.backGroundDefault + "Blur";
-
-
-
-    // $rootScope.backgroundOptions = [
-    //     { 'name': 'Navy', 'value': 'bg_navy' },
-    //     { 'name': 'Image', 'value': 'bg_img' }
-    // ];
-    // ------------------------------------------------------
-
-
-
-});
-
-
-
-
-
-// Main controller
-app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $location) {
-
-    console.log("Main App Entry");
-
 
 
     // On Route Change
@@ -202,19 +225,10 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
 
         // Update background 
         $scope.switchBackground($rootScope.backGroundState);
-
-        // if (current_user.is_logged_in) {
-        //     var route_object = ($route.routes[$location.path()]).route_object; //This is how you get it
-        //     if (!(route_object.route_roles)) {
-        //         event.preventDefault();
-        //     }
-        // }
     });
 
 
     $scope.switchBackground = function (_state) {
-
-
         if (_state == true) {
 
             if ($location.$$url.includes("equip")) {

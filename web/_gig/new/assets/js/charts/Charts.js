@@ -441,7 +441,6 @@ class Charts {
                 confine: true,
                 formatter: function (params) {
                     return ChartStyles.toolTipTextTitle(params.value[4]) + ChartStyles.toolTipTextEntry(params.name + " for " + SecondsToHoursAndMinutes(params.value[3] / 60));
-                    //return "<h4 class='underline'>" + params.value[4] + "</h4>" + params.name + " for " + SecondsToHoursAndMinutes(params.value[3] / 60);
                 },
                 textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),

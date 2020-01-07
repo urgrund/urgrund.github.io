@@ -2,10 +2,11 @@
     <div class="equipHeader first">
         <!-- <div class="img_{{equip.function}}"> -->
         <div>
-            <!-- <div class="img_{{equip.function}}"> -->
-            <h1 class="bold shadow">{{equip.id}}</h1>
-            <!-- <p>{{equip.function}}</p> -->
-            <!-- </div> -->
+            <h1 class="bold shadow">
+                <i ng-class='equipStyleIcon[lastEvent.majorGroup]' ng-style='equipStyleColor[lastEvent.majorGroup]'>
+                </i> {{equip.id}}
+                </span>
+            </h1>
         </div>
         <div class="right">
             <drill-down-header shift="{{shift}}" equip="equip" lines=1> </drill-down-header>

@@ -6,18 +6,20 @@
                 <h2 class="left"><i class="fas fa-phone-volume"></i> {{calUpTitleFirst}}</h2>
             </div>
             <div class="right">
-                <h3>10th November 2018</h3>
+                <h3>{{siteDataDate.LONG}}</h3>
             </div>
         </div>
 
 
         <div ng-repeat="z in equipByFunc">
-            <h4>{{z.name}}</h4>
+            <!-- <h4>{{z.name}}</h4> -->
 
             <!-- Headings  -->
-            <div class="cup-grid underline head">
-                <!-- <div>
-                    <h5 class="light">Asset ID</h5>
+            <div class="cup-grid underline">
+                <div>
+                    <!-- <h5 class="light">Asset ID</h5> -->
+                    <h3 class="bold">{{z.name}}</h3>
+
                 </div>
                 <div class="flex flex-start">
                     <h5 class="light"><i class="far fa-clock"> </i>
@@ -41,7 +43,7 @@
                 </div>
                 <div class="flex flex-start">
                     <h5 class="light">+/- 2hrs</h5>
-                </div> -->
+                </div>
             </div>
 
             <!-- Call up information -->
