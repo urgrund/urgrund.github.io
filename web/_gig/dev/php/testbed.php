@@ -9,7 +9,7 @@ include_once('header.php');
 $path = $_SERVER['DOCUMENT_ROOT'];
 
 $path .= "LKSJDLKAJ";
-echo $path;
+//echo $path;
 
 //AllDayData();
 //TestStuff();
@@ -17,6 +17,32 @@ static $date = "20181010";
 //Bla();
 
 //TodaysDate();
+
+//SomeSQL();
+
+// $t = '20181010';
+// $date = new DateTime($t);
+// Debug::Log($date->format('w'));
+
+
+
+//AllDayData();
+function SomeSQL()
+{
+
+    include_once('setDebugOff.php');
+    //$sqlTxt = "Select * from [dbo].[View_OverView] where shift like ' 20181010 P % '";
+
+    // TUM & Longterm stuff
+    $sqlTxt = "Select * from[dbo].[EquipmentNewTUM]('20181001', '20181231') order by[Date] asc";
+
+
+    $final = SQLUtils::QueryToJSON($sqlTxt);
+    echo ($final);
+}
+
+
+
 
 
 function TodaysDate()

@@ -57,6 +57,8 @@ if (is_object($request)) {
     }
     return;
 } else {
+
+    Debug::Disable();
     Reports::$userStartDate = '20181003';
     Reports::GetGeneratedReport(0, 0);
     //include_once('../setDebugOff.php');

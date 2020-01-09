@@ -257,7 +257,7 @@ class Equipment
 
 
 
-    // 'Metric' per hour
+    // Metric per hour
     function GenerateMPH($_allTPHData)
     {
         // Already generated data?

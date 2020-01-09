@@ -16,7 +16,8 @@ class SiteShiftData
     var $metricData = array();
 
     // Only the Production stuff is here
-    var $productionMetric = null;
+    var $productionTonnes = null;
+    var $productionMetres = null;
 }
 
 
@@ -163,20 +164,40 @@ class Site
                 }
 
 
-                // If a Production type metric
+                // If a Production TONNE
                 // then add this to the site data
                 if ($metric->metric == "TONNE") {
 
                     // The activity is production, this is
                     // what we want to record 
                     if (strpos($metric->activity, 'Production') !== false) {
+
                         // Create if haven't already 
-                        if ($this->shiftData[$i]->productionMetric == null)
-                            $this->shiftData[$i]->productionMetric = new MetricData($metric->metric, $metric->site, $metric->activity);
+                        if ($this->shiftData[$i]->productionTonnes == null)
+                            $this->shiftData[$i]->productionTonnes = new MetricData($metric->metric, $metric->site, $metric->activity);
 
                         // Add this equipments metric (which is production)
                         // to this sites production Metric
-                        MetricData::Add($metric, $this->shiftData[$i]->productionMetric);
+                        MetricData::Add($metric, $this->shiftData[$i]->productionTonnes);
+                    }
+                }
+
+
+                // If a Production METRE
+                // then add this to the site data
+                if (strpos($metric->metric, 'PROD') !== false) {
+
+                    // The activity is production, this is
+                    // what we want to record 
+                    if (strpos($metric->activity, 'Production') !== false) {
+
+                        // Create if haven't already 
+                        if ($this->shiftData[$i]->productionMetres == null)
+                            $this->shiftData[$i]->productionMetres = new MetricData($metric->metric, $metric->site, $metric->activity);
+
+                        // Add this equipments metric (which is production)
+                        // to this sites production Metric
+                        MetricData::Add($metric, $this->shiftData[$i]->productionMetres);
                     }
                 }
             }
