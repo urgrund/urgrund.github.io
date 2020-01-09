@@ -1,0 +1,30 @@
+<div class="cup">
+
+    <div class="mines-center {{$parent.backGroundClassBlur}}">
+
+        <div class="underline flex">
+            <div class="left">
+                <h2 class="left"><i class="far fa-clock"></i> Equipment Timeline for {{shiftTitle}}</h2>
+            </div>
+            <div class="right">
+                <h3>{{siteDataDate.LONG}}</h3>
+            </div>
+        </div>
+
+
+        <div class="equipFlatUsage h60px">
+            <div></div>
+            <div id="equip-timeline-time"></div>
+        </div>
+
+
+        <div ng-repeat="(key, e) in equipment">
+            <div class="equipFlatUsage">
+                <div><a href="#!equip/{{key}}" ng-bind="key"></a></div>
+                <div class="equip-flat-usage" id="{{key}}">
+                    <p>Loading, please wait...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+<div ng-class="{{$ctrl.alert.level}} == 0? 'alertgrid a0' : 'alertgrid a1'">
+    <div>
+        <h2><i ng-class="{{$ctrl.alert.level}} == 0 ? 'fas fa-exclamation-circle' : 'fas fa-exclamation-triangle'"></i>
+        </h2>
+    </div>
+    <div>
+        {{$ctrl.alert.time}}
+        </br>
+        <a ng-href="#!equip/{{$ctrl.equipment.id}}">{{$ctrl.equipment.id}}</a>
+    </div>
+
+    <div>
+        <p>{{$ctrl.alert.message}}</p>
+    </div>
+    <div><span class="alertclose" onclick="this.parentElement.parentElement.style.display='none';">&times;</span>
+    </div>
+</div>

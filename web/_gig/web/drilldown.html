@@ -1,0 +1,26 @@
+<div class="equipGrid">
+    <div class="equipHeader first">
+        <!-- <div class="img_{{equip.function}}"> -->
+        <div>
+            <h1 class="bold shadow">
+                <i ng-class='equipStyleIcon[lastEvent.majorGroup]' ng-style='equipStyleColor[lastEvent.majorGroup]'>
+                </i> {{equip.id}}
+                </span>
+            </h1>
+        </div>
+        <div class="right">
+            <drill-down-header shift="{{shift}}" equip="equip" lines=1> </drill-down-header>
+        </div>
+    </div>
+
+    <drill-down-chart name="Metrics Per Hour" chart="mph"></drill-down-chart>
+    <drill-down-chart name="Time Usage Split" chart="tus"></drill-down-chart>
+
+    <drill-down-chart name="Availability & Utilisation" chart="uofa"></drill-down-chart>
+
+    <drill-down-chart name="Operating Events" chart="p1"></drill-down-chart>
+    <drill-down-chart name="Idle Events" chart="p2"></drill-down-chart>
+    <drill-down-chart name="Down Events" chart="p3"></drill-down-chart>
+
+    <drill-down-chart name="Event Timeline" chart="timeline" class="last"></drill-down-chart>
+</div>
