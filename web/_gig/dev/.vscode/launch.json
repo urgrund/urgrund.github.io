@@ -16,7 +16,8 @@
             "request": "launch",
             "program": "${file}",
             "cwd": "${fileDirname}",
-            "port": 9000
+            "port": 9000,
+            "runtimeExecutable": "D:\\wamp64\\bin\\php\\php7.3.12\\php.exe"
         }
     ]
 }

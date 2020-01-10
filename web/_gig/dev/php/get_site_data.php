@@ -4,7 +4,14 @@ include_once('setDebugOff.php');
 include_once('create_site_data.php');
 
 
-new GetSiteData();
+// Date should be sent from the client
+if (isset($_POST['date'])) {
+    $date = $_POST['date'];
+    new GetSiteData();
+}
+
+
+
 class GetSiteData
 {
     private static $_fileDir = "../sitedata/";
@@ -17,11 +24,6 @@ class GetSiteData
 
         $forceRegenation = true; //false;
 
-
-        // Date should be sent from the client
-        if (isset($_POST['date'])) {
-            $date = $_POST['date'];
-        }
 
 
         $preGenerated = GetSiteData::CheckGeneratedDataExists($date);
@@ -45,9 +47,11 @@ class GetSiteData
 
     public static function CheckGeneratedDataExists($_date)
     {
+        // TODO - sanitise the date input?
+
         $json = @file_get_contents(self::$_fileDir . $_date . self::$_fileExt);
         if ($json === false) {
-            //echo "File not found";
+            Debug::Log("File not found");
         } else {
             return $json;
         }
@@ -61,7 +65,8 @@ class GetSiteData
     {
         //echo ("ASLKDJLASKJDLAKSJD");
         $myFile = $_date;
-        if (file_put_contents(self::$_fileDir . $myFile . self::$_fileExt, $_data)) { }
+        if (file_put_contents(self::$_fileDir . $myFile . self::$_fileExt, $_data)) {
+        }
 
 
         // THIS MAY NEED TO GO INTO DATABASE IN REAL SCENARIO

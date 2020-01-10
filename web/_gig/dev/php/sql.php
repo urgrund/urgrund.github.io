@@ -23,7 +23,7 @@ class SQLUtils
 
         $serverName = "tcp:giggsworthtest.database.windows.net,1433";
         $uid = 'test@giggsworthtest';
-        $pwd = "Giggsworth666";
+        $pwd = "GigWorth666";
         $dbase = "ug_trial";
 
         /* Establish a Connection to the SQL Server  */

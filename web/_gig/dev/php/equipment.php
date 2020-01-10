@@ -71,13 +71,13 @@ class Equipment
         // For each shift... 
         for ($q = 0; $q < 2; $q++) {
 
-            // Prepare 12 UofA objects
+            // Prepare 12 UofA hours for the shift
             $hourDateObjs = [];
             for ($i = 0; $i < 12; $i++) {
                 $hourDateObjs[$i] = new EquipmentUofAHour($i, $q);
             }
 
-            // Shorter ref for the shift events
+            // Easier ref
             $events = $this->shiftData[$q]->events;
 
             // Go through all events for this shift
@@ -145,6 +145,7 @@ class Equipment
                     $hourDateObj->totalTime += $secondsSpentInHour;
 
                     // Time for use in UofA
+                    // TODO - I don't think this is used anymore?!
                     if ($events[$i]->majorGroup != "DOWN") {
                         $hourDateObj->availability += $secondsSpentInHour;
                         if ($events[$i]->majorGroup != "IDLE")
@@ -191,10 +192,11 @@ class Equipment
 
 
 
-    // From an array of events this function will
-    // split out the categories, minor events and 
-    // the total time spent in each of these to see
-    // how many of each type of event may have occurred
+    /** From an array of events this function will
+     * split out the categories, minor events and 
+     * the total time spent in each of these to see
+     * how many of each type of event may have occurred
+     **/
     private function GetBreakDownOfEventsArray($_eventsArray)
     {
         $breakDown = [];
@@ -237,8 +239,8 @@ class Equipment
     }
 
 
-    // For each shift, get the indices for
-    // first call ups and last call up events
+    /** For each shift, get the indices for
+     * first call ups and last call up events */
     function GenerateShiftCallUps()
     {
         for ($i = 0; $i < count($this->shiftData); $i++) {

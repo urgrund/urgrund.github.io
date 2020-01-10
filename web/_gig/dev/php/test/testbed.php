@@ -1,7 +1,7 @@
 
 <?php
 
-include_once('header.php');
+include_once('..\header.php');
 
 
 
@@ -11,34 +11,71 @@ $path = $_SERVER['DOCUMENT_ROOT'];
 $path .= "LKSJDLKAJ";
 //echo $path;
 
-//AllDayData();
-//TestStuff();
-static $date = "20181010";
-//Bla();
 
-//TodaysDate();
+static $date = "20181010";
+
+
+echo 'poo';
+
+
+
+
+
+// Debug::StartProfile("Open Server Connection");
+// //echo "Connecting...";
+// global $isConnected;
+// global $conn;
+
+// //Debug::Log($isConnected);
+
+// if ($isConnected == true)
+//     return;
+
+// $serverName = "tcp:giggsworthtest.database.windows.net,1433";
+// $uid = 'test@giggsworthtest';
+// $pwd = "GigWorth666";
+// $dbase = "ug_trial";
+
+// /* Establish a Connection to the SQL Server  */
+// $connectionInfo = array("Database" => $dbase, "UID" => $uid, "PWD" => $pwd, "CharacterSet" => "UTF-8", "ConnectionPooling" => "1", "MultipleActiveResultSets" => '0');
+// $conn = sqlsrv_connect($serverName, $connectionInfo);
+// echo ($conn);
+// Debug::EndProfile();
+
+
+
+// [PHP_PDO_SQLSRV]
+// extension=pdo_sqlsrv_73_ts_x86
+// extension=pdo_sqlsrv_73_ts_x64
+
+// [PHP_SQLSRV]
+// extension=sqlsrv_73_ts_x86
+// extension=sqlsrv_73_ts_x64
+
+
+
+
+//Debug::Log($period);
+
+
+
 
 //SomeSQL();
-
-// $t = '20181010';
-// $date = new DateTime($t);
-// Debug::Log($date->format('w'));
-
-
-
-//AllDayData();
 function SomeSQL()
 {
+    Debug::StartProfile("Some SQL");
 
     include_once('setDebugOff.php');
     //$sqlTxt = "Select * from [dbo].[View_OverView] where shift like ' 20181010 P % '";
 
     // TUM & Longterm stuff
     $sqlTxt = "Select * from[dbo].[EquipmentNewTUM]('20181001', '20181231') order by[Date] asc";
-
+    $sqlTxt = "Select * from ALLMetricPerHour('20181010')";
 
     $final = SQLUtils::QueryToJSON($sqlTxt);
     echo ($final);
+
+    Debug::EndProfile();
 }
 
 
@@ -111,7 +148,7 @@ function TestStuff()
 function AllDayData()
 {
     //$sqlTxt = "Select * from [dbo].[View_OverView] where shift like ' 20181010 P % '";
-    $sqlTxt = "Select * From FullDataSet (' 20181010 ')";
+    $sqlTxt = "Select * From FullDataSet ('20181010', '20181010')";
     $final = SQLUtils::QueryToJSON($sqlTxt);
     echo ($final);
 }
@@ -133,7 +170,6 @@ function PreparedStatement()
 
     SQLUtils::OpenConnection();
     global $conn;
-
 
     $id = "LH020";
     $stmt = sqlsrv_prepare($conn, $sqlTxt, array(&$id));

@@ -144,16 +144,21 @@ class Debug
 
 
     private static $profileEventList = array();
+
+    /**
+     * Start a Profiling entry with an event object, remember to end it with EndProfile
+     **/
     public static function StartProfile($event)
     {
         if (self::$_debugOff || self::$_debugOffMaster)
             return;
-
-        //strlen 
-        //Debug::Log(strlen((string)$event));
         array_push(self::$profileEventList, array('Event' => $event, 'StartTime' => microtime(true)));
     }
 
+
+    /**
+     * End a Profiling entry and log its timing
+     **/
     public static function EndProfile()
     {
         if (self::$_debugOff || self::$_debugOffMaster)

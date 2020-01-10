@@ -7,7 +7,6 @@ include_once('sql.php');
 // Equipment
 include_once('equipment.php');
 include_once('equipment_objects.php');
-//include_once('metricData.php');
 
 // Site
 include_once('site.php');

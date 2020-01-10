@@ -1,14 +1,19 @@
 <?php
 include_once('header.php');
 
-
+/** Final object with all generated data
+ * for the last time the day was created **/
 static $allSites = array();
+
+
+// The global list of all equipment
+static $allEquipment = array();
+
+
 
 static $sites  = ["SLC", "WF", "M%"];
 static $date = '20181010';
 
-// The global list of all equipment
-static $allEquipment = array();
 
 
 // Maps datetime day to full day name
@@ -49,8 +54,22 @@ if (Debug::enabled() == true) {
 
 class CreateSiteData
 {
+    public static function SetDateForCreation($_date)
+    {
+        global $date;
+        $date = $_date;
+    }
+
     public static function Run()
     {
+        // Clean for each run 
+        global $allSites;
+        global $allEquipment;
+
+        $allSites = array();
+        $allEquipment = array();
+
+
         // Get the SQL data we need first
         CreateSQLResults();
 

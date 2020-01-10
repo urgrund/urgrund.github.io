@@ -24,7 +24,7 @@ class EquipmentEvent
     var $status;            // minor group
     var $majorGroup;        // Such as Idle, Operating, Down
     var $shift;
-    var $tumCategory;       // A more granular category within a Major Group
+    var $tumCategory;       // Time Usage Model category
 }
 
 
@@ -79,8 +79,9 @@ class EquipmentShiftData
 }
 
 
-// Each measurement has a metric
-// and this class helps work with it
+
+/** Holds data related to a specific Metric  
+ */
 class MetricData
 {
     public $metric;
