@@ -21,26 +21,26 @@ echo 'poo';
 
 
 
-// Debug::StartProfile("Open Server Connection");
-// //echo "Connecting...";
-// global $isConnected;
-// global $conn;
+Debug::StartProfile("Open Server Connection");
+//echo "Connecting...";
+global $isConnected;
+global $conn;
 
-// //Debug::Log($isConnected);
+//Debug::Log($isConnected);
 
-// if ($isConnected == true)
-//     return;
+if ($isConnected == true)
+    return;
 
-// $serverName = "tcp:giggsworthtest.database.windows.net,1433";
-// $uid = 'test@giggsworthtest';
-// $pwd = "GigWorth666";
-// $dbase = "ug_trial";
+$serverName = "tcp:giggsworthtest.database.windows.net,1433";
+$uid = 'test@giggsworthtest';
+$pwd = "GigWorth666";
+$dbase = "ug_trial";
 
-// /* Establish a Connection to the SQL Server  */
-// $connectionInfo = array("Database" => $dbase, "UID" => $uid, "PWD" => $pwd, "CharacterSet" => "UTF-8", "ConnectionPooling" => "1", "MultipleActiveResultSets" => '0');
-// $conn = sqlsrv_connect($serverName, $connectionInfo);
-// echo ($conn);
-// Debug::EndProfile();
+/* Establish a Connection to the SQL Server  */
+$connectionInfo = array("Database" => $dbase, "UID" => $uid, "PWD" => $pwd, "CharacterSet" => "UTF-8", "ConnectionPooling" => "1", "MultipleActiveResultSets" => '0');
+$conn = sqlsrv_connect($serverName, $connectionInfo);
+echo ($conn);
+Debug::EndProfile();
 
 
 

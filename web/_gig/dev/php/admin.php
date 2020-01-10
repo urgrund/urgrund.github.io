@@ -35,8 +35,6 @@
         $data = GetSiteData::CheckGeneratedDataExists($date);
 
 
-
-
         if ($data != null) {
             echo ($date);
             echo " complete. (already generated) </br>";
