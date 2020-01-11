@@ -1,7 +1,6 @@
 
 
-app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $timeout)
-{
+app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $timeout) {
     $scope.callUpIsFirst = $routeParams.cupPeriod == 0 ? true : false;
     $scope.callUpIsDay = $rootScope.shift ? true : false;
 
@@ -19,8 +18,7 @@ app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $ti
     $scope.equipByFunc.push({ 'name': "Boggers", 'equipment': [] });
     $scope.equipByFunc.push({ 'name': "Drills", 'equipment': [] });
 
-    for (var key in $rootScope.equipment)
-    {
+    for (var key in $rootScope.equipment) {
         var e = $rootScope.equipment[key];
         if (e.function == 'P' || e.function == 'D')
             $scope.equipByFunc[2].equipment.push(e);
@@ -38,8 +36,7 @@ app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $ti
 
     // TODO
     // Remove Site and Index, use only Equip KEY
-    $scope.getCallUpEvent = function (site, index, _equip)
-    {
+    $scope.getCallUpEvent = function (site, index, _equip) {
         //console.log($rootScope);
 
 
@@ -56,8 +53,7 @@ app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $ti
             // So that we don't overwrite the original 
             var callUpEvent = JSON.stringify(($scope.callUpIsFirst == true) ? shiftData.events[shiftData.eventFirstOp] : shiftData.events[shiftData.events.length - 1]);
 
-            if (callUpEvent == undefined)
-            {
+            if (callUpEvent == undefined) {
                 console.log("Event was null for " + site + "  " + index);
                 return;
             }
@@ -93,15 +89,13 @@ app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $ti
 
 
 
-    $scope.$watch('$viewContentLoaded', function ()
-    {
+    $scope.$watch('$viewContentLoaded', function () {
 
     });
 
 
 
-    $scope.$on('updateShift', function (event, data)
-    {
+    $scope.$on('updateShift', function (event, data) {
         $route.reload();
     });
 });

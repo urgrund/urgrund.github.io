@@ -1,19 +1,16 @@
 <div class="navbar">
     <div class="navleft">
-        <div><a href="#!">
-                COMPANY LOGO
-            </a></div>
-        <!-- <a href="#news">News</a> -->
+        <div class="navItem">
+            <div><a href="#!">COMPANY LOGO</a></div>
+        </div>
 
 
         <div class="dropdown">
             <div class="dropbtn">Short Interval Control</div>
-            <!-- <i class="fa fa-caret-down"></i> -->
             <div class="dropdown-content">
                 <div class="siteCard" ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
                     <img class="sitePicSmall" ng-src="assets/img/site_{{siteIndex}}.jpg">
-                    <h2>{{x.name}}</h2>
-
+                    <h3>{{x.name}}</h3>
                     <!-- <h4>Analysis</h4>
                         <div><a ng-href="">Bogger Movements</a></div>
                         <div><a ng-href="">Hauling Movements</a></div>
@@ -23,27 +20,28 @@
                         <h4>Materials</h4>
                         <div><a ng-href="">Production Tonnes</a></div>
                         <div><a ng-href="">Development Tonnes</a></div> -->
+
                     </br>
                     </br>
 
 
                     <div class="siteCardGrid">
                         <div>
-                            <h3>Boggers</h3>
+                            <h4>Boggers</h4>
                             <div ng-repeat="y in x.equipmentByFunction.LOADING">
                                 <a ng-href="#!equip/{{y.ID}}">{{ y.ID }}</a>
                             </div>
                         </div>
 
                         <div>
-                            <h3>Trucks</h3>
+                            <h4>Trucks</h4>
                             <div ng-repeat="y in x.equipmentByFunction.HAULING">
                                 <a ng-href="#!equip/{{y.ID}}">{{ y.ID }}</a>
                             </div>
                         </div>
 
                         <div>
-                            <h3>Drills</h3>
+                            <h4>Drills</h4>
                             <div ng-repeat="y in x.equipmentByFunction.P">
                                 <a ng-href="#!equip/{{y.ID}}">{{ y.ID }}</a>
                             </div>
@@ -53,21 +51,19 @@
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
 
         <div class="dropdown">
             <div class="dropbtn">Monthly Compliance</div>
             <div class="dropdown-content">
-
-                <div class="droplist">
-                    <div ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
-                        <h3>{{x.name}}</h3>
-                        <p><a ng-href="#!monthly/{{siteIndex}}/0">Plan vs Compliance</a></p>
-                        <p><a ng-href="#!monthly/{{siteIndex}}/1">Adjust Target Inputs</a> </p>
+                <div>
+                    <div ng-repeat="x in siteData | limitTo:3" ng-init="siteIndex = $index">
+                        <div class="droplist">
+                            <h3>{{x.name}}</h3>
+                            <a ng-href="#!monthly/{{siteIndex}}/0">Plan vs Compliance</a>
+                            <a ng-href="#!monthly/{{siteIndex}}/1">Adjust Target Inputs</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -107,9 +103,22 @@
 
 
         <div class="util">
-            <div class="utilbtn userbtn"><i class="far fa-user"></i></div>
+            <div class="utilbtn">
+                <h2><i class="far fa-user"></i></h2>
+            </div>
             <div class="dropdown-content">
-                <h3><i class="far fa-user"></i> User</h3>
+                <div class="droplist">
+                    <h3><i class="far fa-user"></i> User</h3>
+                    <a ng-href="#">Log-out</a>
+                    <a ng-href="#">Report Issue</a>
+                    <a ng-href="#">User Manual</a>
+                    <br>
+                    <h3><i class="fas fa-info-circle"></i> i-Mine</h3>
+                    <a ng-href="#">About</a>
+                    <a ng-href="#">Legal</a>
+                    <a ng-href="#">Web</a>
+                </div>
+                <!-- <h3><i class="far fa-user"></i> User</h3>
                 <div><a href="#">Log-out</a></div>
                 <div><a href="#">Report Issue</a></div>
                 <div><a href="#">User Manual</a></div>
@@ -117,12 +126,13 @@
                 <h3><i class="fas fa-info-circle"></i> i-Mine</h3>
                 <div><a href="#">About</a></div>
                 <div><a href="#">Legal</a></div>
-                <div><a href="#">Web</a></div>
+                <div><a href="#">Web</a></div> -->
             </div>
         </div>
         <div class="util">
             <div class="utilbtn"><i class="far fa-bell"></i><span class="alert-badge" ng-bind="alerts.length"
-                    ng-hide="alerts.length < 1"></span></div>
+                    ng-hide="alerts.length < 1"></span>
+            </div>
             <div class="dropdown-content">
 
                 <!-- Alert System -->
@@ -197,9 +207,9 @@
                 </div>
 
 
-                <h3><i class="far fa-calendar-alt"></i> Data Date</h3>
+                <h3><i class="far fa-calendar-alt"></i> Data</h3>
                 <div class="utilgrid">
-                    <div>Current</div>
+                    <div>Active Date</div>
                     <div>{{siteDataDate.SHORT}}</div>
                     <div>Date</div>
                     <div><input type="date"></div>
@@ -209,23 +219,24 @@
 
 
 
-                <h3><i class="fas fa-search"></i> Equipment Search</h3>
-                <!-- <input type="text" ng-model="search" ng-init="search ='Search by ID...'"> -->
-                <!-- <div ng-repeat="x in equipment | filter:search"><a ng-href="{{x.link}}">{{ x.id }}</a>
-                    </div> -->
+                <h3><i class="fas fa-search"></i> Search</h3>
 
-                <input type="text" ng-model="searchText" placeholder="Search by ID...">
+                <input type="text" ng-model="searchText" ng-init="searchText='Enter equipment ID...'"
+                    placeholder="Search by ID...">
                 <div ng-init="equipList = createMenuEquipList()">
-                    <div ng-repeat="x in equipList | filter:searchText">
+                    <div class="droplist" ng-repeat="x in equipList | filter:searchText">
+                        <!-- TODO - have the status icons next to the ID -->
                         <a ng-href="#!equip/{{x}}">{{ x }}</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="util">
-            <h5 ng-if="shift==0"><i class='shiftIconDay fas fa-sun'></i> {{shiftTitle}}</h5>
-            <h5 ng-if="shift==1"><i class='shiftIconNight fas fa-moon'></i> {{shiftTitle}}</h5>
+        <div class="navItem">
+            <div>
+                <h5 ng-if="shift==0"><i class='shiftIconDay fas fa-sun'></i> {{shiftTitle}}</h5>
+                <h5 ng-if="shift==1"><i class='shiftIconNight fas fa-moon'></i> {{shiftTitle}}</h5>
+            </div>
         </div>
 
     </div>
