@@ -976,11 +976,6 @@ class Charts {
                     trueTime
                 ],
                 itemStyle: ChartStyles.statusItemStyle(colorIndex[groupIndex])
-                // {
-                //     normal: {
-                //         color: ChartStyles.statusColors[colorIndex[groupIndex]] //colors[groupIndex] //typeItem.color
-                //     }
-                // }
             });
         }
 

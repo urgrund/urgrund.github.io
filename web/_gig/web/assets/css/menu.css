@@ -5,7 +5,7 @@
     /* --menubg:  linear-gradient(-1deg, rgba(1, 19, 41, 0.82) 0, rgba(0, 74, 144, 0.61) 100%), url(../img/login_blur.jpg) no-repeat center center fixed; */
     /* --menubg: url(../img/login_blur.jpg) no-repeat center center fixed; */
   
-    --menubtnhover: rgba(0, 0, 0, 0.3); 
+    --menubtnhover: rgba(0, 0, 0, 0.2); 
     --menubtncolor: #6d85a4;
 
     --menumargin: 6px;
@@ -362,26 +362,6 @@
 }
 
 
-  /* .siteCard div
-  {
-    display: flex; 
-    justify-content: space-between;
-  }
-  
-  .siteCard div div {
-    display: flex;
-    flex-direction: column;
-  } */
-  
-  /* .column a:hover {
-    background-color: #ddd;    
-  }  
-  
-  .row:after {
-    content: "";
-    display: table;
-    clear: both; 
-  } */
   
   /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
   @media screen and (max-width: 600px) {

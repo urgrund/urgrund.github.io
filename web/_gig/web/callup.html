@@ -48,9 +48,11 @@
 
             <!-- Call up information -->
             <div ng-repeat="x in z.equipment" ng-init="siteIndex = $index">
-                <div class="cup-grid row" ng-init="e = getCallUpEvent(0,0, x)">
+                <div class="cup-grid" ng-init="e = getCallUpEvent(0,0, x)">
                     <div><a ng-href="#!equip/{{x.id}}" ng-bind="x.id"></a></div>
-                    <div ng-bind="e.eventTime.date"></div>
+                    <div>
+                        <p ng-bind="e.eventTime.date"></p>
+                    </div>
                     <div>
                         <i ng-class='equipStyleIcon[e.majorGroup]' ng-style='equipStyleColor[e.majorGroup]'></i>
                         {{e.status}}

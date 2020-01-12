@@ -1,6 +1,8 @@
-app.controller('Reports', function ($scope, $http, $httpParamSerializerJQLike, $timeout, uiGridExporterService, uiGridExporterConstants)
-{
+app.controller('Reports', function ($scope, $http, $httpParamSerializerJQLike, $timeout, uiGridExporterService, uiGridExporterConstants) {
 
+
+    // The list of available reports
+    // this will need to come from server 
     var tempReports = { "Bogger Tonnes": ["All Tonnes By Mine By Time ", "Development Total By Mine By Time ", "Production Total By Mine By Time ", "Stockpile Total By Mine By Time ", "Total By Time By Activity ", "Total By Time "], "Equipment TUM": ["By Event Reason ", "By Major Category "] };
 
 
@@ -26,22 +28,26 @@ app.controller('Reports', function ($scope, $http, $httpParamSerializerJQLike, $
     //console.log(tempReports);
 
 
+    $scope.reportCategory = "Bogger Tonnes"
+    $scope.reportTitle = "All Tonnes By Mine By Time";
+
     $scope.gridOptions = {};
+
+
+
     $scope.gridOptions = {
         enableGridMenu: true,
         exporterMenuCsv: false,
         exporterMenuPdf: false,
         gridMenuCustomItems: [{
             title: 'Export to CSV',
-            action: function ()
-            {
+            action: function () {
                 $scope.export('csv');
             },
             order: 210
         }, {
             title: 'Export to PDF',
-            action: function ()
-            {
+            action: function () {
                 $scope.export('pdf');
             },
             order: 250
@@ -51,16 +57,14 @@ app.controller('Reports', function ($scope, $http, $httpParamSerializerJQLike, $
         paginationPageSize: 8,
         exporterCsvFilename: 'new_data_file',
         exporterExcelFilename: 'new_data_file',
-        onRegisterApi: function (gridApi)
-        {
+        onRegisterApi: function (gridApi) {
             $scope.gridApi = gridApi;
         }
     };
 
 
 
-    $scope.getReports = function ()
-    {
+    $scope.getReports = function () {
         // var request = $http({
         //     method: 'POST',
         //     url: "php/reports/reports.php", data: { 'func': 0 }
@@ -73,10 +77,8 @@ app.controller('Reports', function ($scope, $http, $httpParamSerializerJQLike, $
 
         // With a duplicate array, store #'s to 
         // determine the state of each report
-        for (const key in $scope.generatedReports)
-        {
-            if ($scope.reports.hasOwnProperty(key))
-            {
+        for (const key in $scope.generatedReports) {
+            if ($scope.reports.hasOwnProperty(key)) {
                 $scope.reportKeys.push(key);
                 const element = $scope.generatedReports[key];
                 for (let i = 0; i < element.length; i++)
@@ -95,15 +97,12 @@ app.controller('Reports', function ($scope, $http, $httpParamSerializerJQLike, $
     };
 
 
-    $scope.accordionClick = function ($event)
-    {
+    $scope.accordionClick = function ($event) {
         $event.currentTarget.classList.toggle("active");
         var panel = $event.currentTarget.nextElementSibling;
-        if (panel.style.maxHeight)
-        {
+        if (panel.style.maxHeight) {
             panel.style.maxHeight = null;
-        } else
-        {
+        } else {
             panel.style.maxHeight = panel.scrollHeight + "px";
         }
 
@@ -112,11 +111,9 @@ app.controller('Reports', function ($scope, $http, $httpParamSerializerJQLike, $
 
 
 
-    var refresh = function ()
-    {
+    var refresh = function () {
         $scope.refresh = true;
-        $timeout(function ()
-        {
+        $timeout(function () {
             $scope.refresh = false;
         }, 0);
     };
@@ -124,8 +121,7 @@ app.controller('Reports', function ($scope, $http, $httpParamSerializerJQLike, $
 
 
     // User clicks to view a report
-    $scope.setCSVViewData = function (key, rep)
-    {
+    $scope.setCSVViewData = function (key, rep) {
         // $scope.currentKeyView = key;
         // $scope.currentRepView = rep;
         // $scope.currentCSVView = $scope.generatedReports[key][rep][0];
@@ -139,18 +135,15 @@ app.controller('Reports', function ($scope, $http, $httpParamSerializerJQLike, $
     };
 
 
-    function csvJSON(csv)
-    {
+    function csvJSON(csv) {
         var lines = csv.split("\n");
         var result = [];
         var headers = lines[0].split(",");
-        for (var i = 1; i < lines.length; i++)
-        {
+        for (var i = 1; i < lines.length; i++) {
             var obj = {};
             var currentline = lines[i].split(",");
 
-            for (var j = 0; j < headers.length; j++)
-            {
+            for (var j = 0; j < headers.length; j++) {
                 obj[headers[j]] = currentline[j];
             }
 
@@ -164,15 +157,13 @@ app.controller('Reports', function ($scope, $http, $httpParamSerializerJQLike, $
 
 
 
-    $scope.$watch('$viewContentLoaded', function ()
-    {
-        $timeout(function ()
-        {
+    $scope.$watch('$viewContentLoaded', function () {
+        $timeout(function () {
             // Ready...
             $scope.getReports();
             $scope.setCSVViewData(null, null);
 
-            //console.log(tempReport);
+            console.log(tempReport);
         }, 0);
     });
 });

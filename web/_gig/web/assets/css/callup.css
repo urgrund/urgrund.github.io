@@ -12,11 +12,11 @@
 }
 
 
-.row
+/* .row
 {
-  font-size: 10pt;  
-  font-weight: 300;
-}
+   font-size: 10pt;  
+  font-weight: 300; 
+} */
 
 /* .row > div:nth-child(2) {
   background: red;
@@ -34,7 +34,7 @@
 
 .cup-grid:hover
 {
-  background: rgba(0, 0, 0, 0.3);  
+  background: var(--menubtnhover);
 }
 
 .cup-redwarn
