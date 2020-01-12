@@ -12,7 +12,7 @@
     --menuDropContentBG :  linear-gradient(20deg, rgb(9, 65, 131) 0, rgb(13, 51, 88) 100%);
 
     /* --site_menu_height: 30px; */
-    --site_body_top: 40px;
+    --site_body_top: 25px;
 }
 
 
@@ -163,11 +163,13 @@
     min-width: 40px;
   }
 
-  .userbtn
-  {
-    min-width: 70px;
-    background-color: red;
+  .userbtn  {
+    min-width: 50px;
+    background-color:rgba(0, 75, 189, 1);
+    margin-left: 15px;
   }
+
+  
   /* .util .userbtn
   {
       font-size: 100%;    

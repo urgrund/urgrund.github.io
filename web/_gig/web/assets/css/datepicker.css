@@ -6,9 +6,9 @@
     font-size: 8pt;
     text-align: right;
     color: white;
-    border: 1px solid #6f6f6f00;
-    background-color: #4f677387;
-    box-shadow: inset 1px 3px 6px #00000099;
+    border: 1px solid rgba(111, 111, 111, 0);
+    background-color: rgba(79, 103, 115, 0.529);
+    box-shadow: inset 1px 3px 6px rgba(0, 0, 0, 0.6);
     transition: 0.8s;
 }
 input[type="text"]
@@ -25,7 +25,7 @@ input:hover
 
 textarea:focus, input:focus{
     outline: none;
-    background-color: #61b4dd87;
+    background-color: rgba(97, 180, 221, 0.529);
 }
 
 /* create a new arrow, because we are going to mess up the native one

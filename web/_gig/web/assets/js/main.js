@@ -74,7 +74,7 @@ app.run(function ($rootScope) {
     /** Set the data object that the core of the SIC
      * tool will interface with. */
     $rootScope.setNewSiteData = function (_data) {
-        console.log("SKDJALKSDJ");
+
         // All sites
         $rootScope.siteData = _data;
 
@@ -105,7 +105,8 @@ app.run(function ($rootScope) {
 
 
 
-    /** Create a nicely formatted date from a numerical date
+    /**
+     * Create a nicely formatted date from a numerical date
      */
     $rootScope.convertToNiceDateObject = function (_date) {
         var date = new Date(_date);
@@ -120,6 +121,15 @@ app.run(function ($rootScope) {
         };
 
         return newDateObject;
+    };
+
+
+    /**
+     * Get the last event registered with equipment based on the current shift     
+     */
+    $rootScope.getEquipmentLastEvent = function (_equip) {
+        var len = _equip.shiftData[$rootScope.shift].events.length;
+        return _equip.shiftData[$rootScope.shift].events[len - 1];
     };
 
 
@@ -421,8 +431,9 @@ app.component("drillDownHeader", {
             if (this.equip == undefined)
                 return;
 
-            var len = this.equip.shiftData[this.shift].events.length;
-            this.lastEvent = this.equip.shiftData[this.shift].events[len - 1];
+            //var len = this.equip.shiftData[this.shift].events.length;
+            //this.lastEvent = this.equip.shiftData[this.shift].events[len - 1];
+            this.lastEvent = $rootScope.getEquipmentLastEvent(this.equip);
 
             // ---------------------------------------------
             // Get time difference from 8am or 8pm

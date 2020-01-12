@@ -1040,12 +1040,19 @@ class Charts {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
             tooltip: {
+                textStyle: ChartStyles.toolTipTextStyle(),
+                axisPointer: ChartStyles.toolTipShadow(),
+                backgroundColor: ChartStyles.toolTipBackgroundColor(),//'rgba(50,50,50,0.9)',
+
                 // Display info about the events 
                 formatter: function (params) {
+                    ChartStyles.toolTipTextEntry
+                    var text = ChartStyles.toolTipTextTitle(params.value[4]);
                     var duration = Math.round(params.value[3] / 60);
-                    return params.marker + params.value[4] + "<br/ >" + params.name + "<br/ >" + " for " + duration + " min";
+                    text += ChartStyles.toolTipTextEntry(params.name + " for " + duration + " min");
+                    return text;
+                    //return params.marker + params.value[4] + "<br/ >" + params.name + "<br/ >" + " for " + duration + " min";
                 },
-                textStyle: ChartStyles.toolTipTextStyle(),
 
                 // Fast show/hide as there's a LOT of them 
                 hideDelay: 0,

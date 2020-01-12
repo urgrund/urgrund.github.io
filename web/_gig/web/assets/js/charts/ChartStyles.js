@@ -219,7 +219,8 @@ class ChartStyleContainer {
         return {
             type: 'line', z: '-1',
             lineStyle: {
-                color: 'rgba(255,255,255,0.4)'
+                color: 'rgba(255,255,255,0.2)'
+                //color: 'rgba(0,0,0,0.8)'
             }
         };
     }

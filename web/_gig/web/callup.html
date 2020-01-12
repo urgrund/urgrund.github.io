@@ -1,15 +1,16 @@
 <div class="cup">
-    <div class="mines-center {{$parent.backGroundClassBlur}}">
 
-        <div class="underline flex">
-            <div class="left">
-                <h2 class="left"><i class="fas fa-phone-volume"></i> {{calUpTitleFirst}}</h2>
-            </div>
-            <div class="right">
-                <h3>{{siteDataDate.LONG}}</h3>
-            </div>
+    <div class="flex">
+        <div class="left">
+            <h2 class="left"><i class="fas fa-phone-volume"></i> {{calUpTitleFirst}}</h2>
         </div>
+        <div class="right">
+            <h3>{{siteDataDate.LONG}}</h3>
+        </div>
+    </div>
 
+
+    <div class="mines-center {{$parent.backGroundClassBlur}}">
 
         <div ng-repeat="z in equipByFunc">
             <!-- <h4>{{z.name}}</h4> -->

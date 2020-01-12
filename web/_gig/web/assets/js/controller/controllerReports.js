@@ -163,7 +163,7 @@ app.controller('Reports', function ($scope, $http, $httpParamSerializerJQLike, $
             $scope.getReports();
             $scope.setCSVViewData(null, null);
 
-            console.log(tempReport);
+            //console.log(tempReport);
         }, 0);
     });
 });
