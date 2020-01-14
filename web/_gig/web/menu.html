@@ -4,7 +4,6 @@
             <div><a href="#!">COMPANY LOGO</a></div>
         </div>
 
-
         <div class="dropdown">
             <div class="dropbtn">Short Interval Control</div>
             <div class="dropdown-content">
@@ -101,7 +100,7 @@
 
     <div class="navright">
 
-
+        <!-- User Menu -->
         <div class="util userbtn">
             <div class="utilbtn">
                 <h2><i class="far fa-user"></i></h2>
@@ -129,6 +128,8 @@
                 <div><a href="#">Web</a></div> -->
             </div>
         </div>
+
+        <!-- Alerts -->
         <div class="util">
             <div class="utilbtn"><i class="far fa-bell"></i><span class="alert-badge" ng-bind="alerts.length"
                     ng-hide="alerts.length < 1"></span>
@@ -148,6 +149,7 @@
             </div>
         </div>
 
+        <!-- Connect to DB -->
         <div class="util">
             <div class="utilbtn"><i class="fas fa-database"></i></div>
             <div class="dropdown-content">
@@ -171,7 +173,7 @@
             </div>
         </div>
 
-
+        <!-- Preferences -->
         <div class="util">
             <div class="utilbtn"><i class="fas fa-cogs"></i></div>
             <div class="dropdown-content">
@@ -206,18 +208,22 @@
                     </div>
                 </div>
 
-
                 <h3><i class="far fa-calendar-alt"></i> Data</h3>
                 <div class="utilgrid">
                     <div>Active Date</div>
-                    <div>{{siteDataDate.SHORT}}</div>
-                    <div>Date</div>
+                    <div>
+                        <h4>{{siteDataDate.SHORT}}</h4>
+                    </div>
+                    <div>Trailing Week</div>
+                    <div>
+                        <div class="flex" ng-repeat="x in cachedData">
+                            <button ng-click="setNewSiteData(x)"> {{ convertToNiceDateObject(x[4].Date).LONG }}
+                            </button>
+                        </div>
+                    </div>
+                    <div>Specific Date</div>
                     <div><input type="date"></div>
-                    <div>Available Dates</div>
                 </div>
-
-
-
 
                 <h3><i class="fas fa-search"></i> Search</h3>
 
@@ -229,6 +235,18 @@
                         <a ng-href="#!equip/{{x}}">{{ x }}</a>
                     </div>
                 </div>
+            </div>
+        </div>
+
+
+
+        <div class="navItem">
+            <div>|</div>
+        </div>
+
+        <div class="navItem">
+            <div>
+                <h5><i class="far fa-calendar-alt"></i> {{siteDataDate.SHORT}}</h5>
             </div>
         </div>
 

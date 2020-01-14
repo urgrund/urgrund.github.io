@@ -2,18 +2,8 @@
 
 app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout, $route) {
 
-    //console.log($routeParams.siteIndex + "  " + $routeParams.equipIndex);
-    //console.log($rootScope.shift);
-    //$route.reload();
-    //$scope.shift = $rootScope.shift;
-
-
-    //console.log($rootScope.backGroundState);
-    //console.log($rootScope.equipment[$routeParams.id]);
-
     $scope.createEquipmentData = function () {
 
-        //$scope.equip = $scope.siteData[$routeParams.siteIndex].equipment[$routeParams.equipIndex];
         $scope.equip = $rootScope.equipment[$routeParams.id];
 
         //var len = $scope.equip.shiftData[$rootScope.shift].events.length;
@@ -25,7 +15,6 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
 
         $scope.equipMetric = "";
         for (var key in $scope.equip.shiftData[$rootScope.shift].metric) {
-            //console.log($scope.equip.shiftData[shiftIsDay].metric[key]);
             $scope.equipMetric = $scope.equip.shiftData[$rootScope.shift].metric[key].name + " Per Hour";
         }
     };

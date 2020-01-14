@@ -12,13 +12,13 @@
     --menuDropContentBG :  linear-gradient(20deg, rgb(9, 65, 131) 0, rgb(13, 51, 88) 100%);
 
     /* --site_menu_height: 30px; */
-    --site_body_top: 25px;
+    --site_body_top: 45px;
 }
 
 
 .underline
 {
-  border-bottom:1px solid #8aadcf; 
+  border-bottom:1px solid rgb(138, 173, 207); 
 }
 
 .overline
@@ -126,6 +126,13 @@
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-top:none;
     border-bottom: none;    
+  }
+
+
+  .navItem
+  {
+    margin-left: 10px;
+    margin-right: 10px;
   }
   
   
@@ -251,7 +258,8 @@
   .util .dropdown-content {
     margin-left: 0px;
     /* left: 86%; */
-    min-width: 200px;
+    /* min-width: 200px; */
+    width: 390px;
     right: 0%;
     display: flex;    
     flex-direction: column;

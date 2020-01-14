@@ -29,14 +29,18 @@ const MajorGroup = {
 }
 
 
+// function compareSiteDataOrder(a, b) {
+//     const bandA = a[4].Date;
+//     const bandB = b[4].Date;
 
-
-// const capitalize = (s) => {
-//     if (typeof s !== 'string') return ''
-//     return s.charAt(0).toUpperCase() + s.slice(1)
-// }
-
-
+//     let comparison = 0;
+//     if (bandA > bandB) {
+//       comparison = 1;
+//     } else if (bandA < bandB) {
+//       comparison = -1;
+//     }
+//     return comparison;
+//   }
 
 
 
@@ -55,7 +59,7 @@ var app = angular.module("myApp", ['ngRoute', 'ui.grid', 'ui.grid.resizeColumns'
 
 
 // First run and rootscope
-app.run(function ($rootScope) {
+app.run(function ($rootScope, $http, $route) {
 
     // TODO
     // Shift should at least start correctly
@@ -67,16 +71,27 @@ app.run(function ($rootScope) {
     $rootScope.shiftTitle = shiftTitle[shift];
 
 
+    // Data that the site will use 
+    // Site data represents the current view
+    // Chached data is the last 7 days for quick access
+    $rootScope.siteData = null;
+    $rootScope.cachedData = [];
 
 
 
+
+    // ------------------------------------------------------
 
     /** Set the data object that the core of the SIC
      * tool will interface with. */
     $rootScope.setNewSiteData = function (_data) {
 
+        var jsonString = JSON.stringify(_data);
+        var newData = JSON.parse(jsonString);
+        //var newData = _data;
+
         // All sites
-        $rootScope.siteData = _data;
+        $rootScope.siteData = newData;
 
         // Meta data is last
         $rootScope.meta = $rootScope.siteData.pop();
@@ -85,11 +100,64 @@ app.run(function ($rootScope) {
         $rootScope.equipment = $rootScope.siteData.pop();
 
         $rootScope.siteDataDate = $rootScope.convertToNiceDateObject($rootScope.meta.Date);
+
+        // Debug output
+        console.log("Sites :");
+        console.log($rootScope.siteData);
+
+        console.log("Equipment :");
+        console.log($rootScope.equipment);
+
+        console.log("META :");
+        console.log($rootScope.meta);
+
+        // Update and broadcast message to the app
+        //$rootScope.$apply();
+        $rootScope.$broadcast('newSiteDataSet');
+        $route.reload();
     };
 
 
 
+    $rootScope.fetchSiteData = function (_dates, _setAfterFetch = false) {
+        for (var i = 0; i < _dates.length; i++) {
+            var date = _dates[i];
+            var file = 'http://localhost/web/sitedata/' + date + '.json';
 
+            // THIS WILL CHANGE TO NG PHP CALL
+            fetch(file)
+                .then((response) => {
+                    return response.json();
+                })
+                .then((myJson) => {
+                    // Check if date data already exists
+                    const { length } = $rootScope.cachedData;
+                    const found = $rootScope.cachedData.some(el => el[4].Date === myJson[4].Date);
+
+                    // It's new so add it 
+                    if (!found) {
+                        $rootScope.cachedData.push(myJson);
+                    }
+
+                    // Apply to site if requested
+                    if (_setAfterFetch) {
+                        $rootScope.setNewSiteData(myJson);
+                    }
+                });
+        }
+    };
+
+
+
+    // Hacky shit whilst the site is offline
+    var dates = ['20181010', '20181009', '20181008', '20181007', '20181006', '20181005', '20181004'];
+    $rootScope.fetchSiteData(dates, false);
+    // ------------------------------------------------------
+
+
+
+
+    // ------------------------------------------------------
     $rootScope.equipStyleIcon = {
         OPERATING: 'far fa-arrow-alt-circle-up',
         IDLE: 'fas fa-exclamation-circle',
@@ -101,15 +169,23 @@ app.run(function ($rootScope) {
         IDLE: { 'color': ChartStyles.statusColorsFlat[1] },
         DOWN: { 'color': ChartStyles.statusColorsFlat[2] }
     };
-
+    // ------------------------------------------------------
 
 
 
     /**
-     * Create a nicely formatted date from a numerical date
+     * Pass date as dd-mm-yyy. Creates a nicely formatted date from a numerical date
      */
     $rootScope.convertToNiceDateObject = function (_date) {
-        var date = new Date(_date);
+
+        // Given a date such as 20181010
+        // Split out the day, month, year
+        var tmpDay = _date.substring(6, 8);
+        var tmpMonth = _date.substring(4, 6);
+        var tmpYear = _date.substring(0, 4);
+
+        var tmpDate = tmpMonth + "-" + tmpDay + "-" + tmpYear;
+        var date = new Date(tmpDate);
         var dateDay = days[date.getDay()];
         var dateMonth = month[date.getMonth()];// "September";
 
@@ -163,8 +239,6 @@ app.run(function ($rootScope) {
     // ];
     // ------------------------------------------------------
 
-
-
 });
 
 
@@ -176,53 +250,45 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
 
     console.log("Main App Entry");
 
-
-    $rootScope.setNewSiteData(allData);
-
-    // Debug output
-    console.log("Sites :");
-    console.log($rootScope.siteData);
-
-    console.log("Equipment :");
-    console.log($rootScope.equipment);
-
-    console.log("META :");
-    console.log($rootScope.meta);
+    // Fetch todays data and set it as soon as done
+    $rootScope.fetchSiteData(['20181010'], true);
 
 
+    // Callback for new data being set
+    $rootScope.$on('newSiteDataSet', function () {
 
-
-
-
-    // ------------------------------------------------------
-    // Fake alerts
-    var alerts = [];
-    for (var i = 0; i < Math.round(Math.random() * 10); i++) {
-        var randSite = Math.floor(Math.random() * ($rootScope.siteData.length - 1));
-        var randEquip = Math.floor(Math.random() * $rootScope.siteData[randSite].equipment.length);
-        if (Math.random() > 0.5) {
-            alerts[i] = {
-                level: 0,
-                time: "09:24",
-                siteIndex: randSite,
-                equipIndex: randEquip,
-                message: "Bogger has been in-active for over 15minutes",
-                action: "Get someone on the bogger"
-            };
-        } else {
-            alerts[i] = {
-                level: 1,
-                time: "14:12",
-                siteIndex: randSite,
-                equipIndex: randEquip,
-                message: "TPH has been below target for over 1hr",
-                action: "Get someone on the bogger"
-            };
+        // ------------------------------------------------------
+        // Fake alerts
+        var alerts = [];
+        for (var i = 0; i < Math.round(Math.random() * 10); i++) {
+            var randSite = Math.floor(Math.random() * ($rootScope.siteData.length - 1));
+            var randEquip = Math.floor(Math.random() * $rootScope.siteData[randSite].equipment.length);
+            if (Math.random() > 0.5) {
+                alerts[i] = {
+                    level: 0,
+                    time: "09:24",
+                    siteIndex: randSite,
+                    equipIndex: randEquip,
+                    message: "Bogger has been in-active for over 15minutes",
+                    action: "Get someone on the bogger"
+                };
+            } else {
+                alerts[i] = {
+                    level: 1,
+                    time: "14:12",
+                    siteIndex: randSite,
+                    equipIndex: randEquip,
+                    message: "TPH has been below target for over 1hr",
+                    action: "Get someone on the bogger"
+                };
+            }
         }
-    }
 
-    $rootScope.alerts = alerts;
-    // ------------------------------------------------------
+        $rootScope.alerts = alerts;
+        // ------------------------------------------------------
+
+    });
+
 
 
 
