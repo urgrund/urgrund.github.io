@@ -1,8 +1,7 @@
 <?php
 include_once('header.php');
-include_once('setDebugOff.php');
 include_once('create_site_data.php');
-
+include_once('setDebugOff.php');
 
 // Date should be sent from the client
 if (isset($_POST['date'])) {
@@ -22,7 +21,7 @@ class GetSiteData
         global $allSites;
         global $date;
 
-        $forceRegenation = true; //false;
+        $forceRegenation = false; //false;
 
 
 
@@ -48,7 +47,6 @@ class GetSiteData
     public static function CheckGeneratedDataExists($_date)
     {
         // TODO - sanitise the date input?
-
         $json = @file_get_contents(self::$_fileDir . $_date . self::$_fileExt);
         if ($json === false) {
             Debug::Log("File not found");
@@ -63,7 +61,6 @@ class GetSiteData
     // and upload to the database 
     public static function WriteGeneratedDataToDisk($_date, $_data)
     {
-        //echo ("ASLKDJLASKJDLAKSJD");
         $myFile = $_date;
         if (file_put_contents(self::$_fileDir . $myFile . self::$_fileExt, $_data)) {
         }

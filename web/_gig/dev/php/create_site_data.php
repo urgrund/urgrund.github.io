@@ -47,7 +47,7 @@ static $metricMap = array(
 // ------------------------------------------------------------------
 // ENTRY POINT
 
-Debug::StartProfile("TOTAL SITE GENERATION");
+// Uncomment this to run directly from this file
 if (Debug::enabled() == true) {
     CreateSiteData::Run();
 }
@@ -62,6 +62,8 @@ class CreateSiteData
 
     public static function Run()
     {
+        Debug::StartProfile("TOTAL SITE GENERATION");
+
         // Clean for each run 
         global $allSites;
         global $allEquipment;
@@ -85,9 +87,11 @@ class CreateSiteData
 
         // Wrap up and submit
         AddMetaData();
+
+
+        Debug::EndProfile();
     }
 }
-Debug::EndProfile();
 
 // ------------------------------------------------------------------
 
@@ -126,7 +130,8 @@ function CreateSQLResults()
 
 
 // ------------------------------------------------------------------
-// Add equipment to global total list
+// Add equipment to global total list and then 
+// reduce the data in the Sites for more compact result
 function AddGlobalEquipList()
 {
     global $allSites;
@@ -135,6 +140,9 @@ function AddGlobalEquipList()
         for ($j = 0; $j < count($allSites[$i]->equipment); $j++) {
             $equip = $allSites[$i]->equipment[$j];
             $allEquipment[$equip->id] = $equip;
+
+            // Nuke the sites equip list 
+            $allSites[$i]->equipment[$j] = $equip->id;
         }
     }
     $allSites[] = $allEquipment;
@@ -162,7 +170,7 @@ function AddMetaData()
 
     $allSites[] = array(
         "Day" => $day,
-        "Date" => $d->format('d-m-Y'),
+        "Date" => $date, //$d->format('d-m-Y'),
         "LastUpdate" => $updateTime,
         "IP" => GetClientIP(),
         "User" => "Poo",

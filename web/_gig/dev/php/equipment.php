@@ -48,15 +48,23 @@ class Equipment
         $e->shift = $_eventDataRow[8];
         $e->tumCategory = $_eventDataRow[9];
 
-        // Which shift does this event belong to?        
-        if ($e->shift == "P1")
-            $this->shiftData[0]->events[] = $e;
-        else
-            $this->shiftData[1]->events[] = $e;
-
         // Store all events
         $this->events[] = $e;
+
+        // Which shift does this event belong to?        
+        if ($e->shift == "P1") {
+            $this->shiftData[0]->events[] = $e;
+            //$this->shiftData[0]->events[] = count($this->events);
+        } else {
+            $this->shiftData[1]->events[] = $e;
+            //$this->shiftData[1]->events[] =  count($this->events);
+        }
+
+
+        //Debug::Log($this->shiftData[0]->events);
+        //Debug::Log($this->shiftData[1]->events);
     }
+
 
 
     private function GetSecondsInHour($dateTime)
