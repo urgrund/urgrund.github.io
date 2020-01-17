@@ -162,10 +162,6 @@ p{font-size: 9pt; font-weight: 300;}
 
 
 .chartdivcontent {
-  /* background: var(--bgBlur); */
-  /* background: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url(../img/login_blur.jpg) no-repeat center center fixed;
-  object-fit: cover;  
-  background-size: cover; */
 
   -webkit-box-shadow: var(--divShadow);
   -moz-box-shadow: var(--divShadow);
@@ -182,11 +178,22 @@ p{font-size: 9pt; font-weight: 300;}
 
 
 
+.tumParetoGrid {
+
+  display: grid;
+
+  grid-column-gap: 2%;
+  grid-row-gap: 1%; 
+
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+
+  height: 900px;
+}
+
+
+
 .jumbogrid {  
-    /* display: grid;    
-    grid-template-columns: repeat(auto-fill,minmax( 410px, 410px));
-    grid-gap: 10px;
-    justify-content: center; */
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;

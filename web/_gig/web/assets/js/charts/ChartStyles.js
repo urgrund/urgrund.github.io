@@ -300,8 +300,8 @@ class ChartStyleContainer {
 
     statusItemStyle(_index) {
         return {
-            normal: { color: ChartStyles.statusColors[_index] },
-            emphasis: { color: ChartStyles.statusColorsEmpahsis[_index] }
+            normal: { color: ChartStyles.statusColors[_index] }//,
+            //emphasis: { color: ChartStyles.statusColorsEmpahsis[_index] }
         };
     }
 

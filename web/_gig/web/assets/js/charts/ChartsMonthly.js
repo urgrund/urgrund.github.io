@@ -11,7 +11,15 @@ class ChartsMonthly {
         var valueSpace = [];
 
         var timeSpent = 0;
+
+        // For the marker
+        var biggestTimeIndex = -1;
+        var biggestValue = 0;
+        var biggestStyle = undefined;
+
         for (var i = 0; i < _data.length; i++) {
+
+            _data[i].value = Math.round(_data[i].value / 3600);
 
             var name = _data[i].name;
             //labels[i] = name.replace(" ", "</br>");
@@ -29,13 +37,19 @@ class ChartsMonthly {
                 valueSpace[i] = 0;
             } else {
                 timeSpent += _data[i].value;
-                valueSpace[i] = _data[0].value - timeSpent;
+                valueSpace[i] = (_data[0].value) - timeSpent;
+
+                // Find which TUM is the biggest
+                if (_data[i].value > biggestValue) {
+                    biggestValue = _data[i].value;
+                    biggestTimeIndex = i;
+                    biggestStyle = { color: ChartStyles.TUMColors[_data[i].id] };
+                }
             }
         }
 
-        // console.log(labels);
-        // console.log(valueStack);
-        // console.log(valueSpace);
+        // Need to add back the empty space
+        biggestValue += valueSpace[biggestTimeIndex];
 
 
         var option = {
@@ -63,7 +77,8 @@ class ChartsMonthly {
             yAxis: {
                 type: 'value',
                 splitLine: { show: false },
-                axisLine: ChartStyles.axisLineGrey
+                axisLine: ChartStyles.axisLineGrey,
+                min: 0
             },
             series: [
                 {
@@ -91,9 +106,17 @@ class ChartsMonthly {
                             position: 'top'
                         }
                     },
-                    data: valueStack
+                    data: valueStack,
+                    markPoint: {
+                        data: [{ coord: [biggestTimeIndex, biggestValue] }],
+                        symbolSize: 30,
+                        symbolOffset: [0, -20],
+                        itemStyle: biggestStyle
+                    }
                 }
-            ]
+            ],
+            //,
+            //animationDurationUpdate: 5000
         };
 
         SetOptionOnChart(option, myChart);
@@ -110,72 +133,74 @@ class ChartsMonthly {
 
         var smoothVal = 0;
 
-        if (_lines == true) {
+        // if (_lines == true) {
 
-            var _series = [
-                {
-                    name: _name,
-                    data: _data.Down[1],
-                    type: 'line',
-                    symbol: 'none',
-                    stack: 'stack',
-                    itemStyle: ChartStyles.statusItemStyle(2),
-                    areaStyle: { color: 'rgba(255,0,0,0.4)' },
-                    lineStyle: { width: 1 },
-                    large: true,
-                    smooth: 0.5
-                },
-                {
-                    name: _name,
-                    data: _data.Idle[1],
-                    type: 'line',
-                    symbol: 'none',
-                    stack: 'stack',
-                    itemStyle: ChartStyles.statusItemStyle(1),
-                    areaStyle: { color: 'rgba(255,255,0,0.4)' },
-                    lineStyle: { width: 1 },
-                    large: true,
-                    smooth: 0.5
-                },
-                {
-                    name: _name,
-                    data: _data.Operating[1],
-                    type: 'line',
-                    symbol: 'none',
-                    stack: 'stack',
-                    itemStyle: ChartStyles.statusItemStyle(0),
-                    areaStyle: { color: 'rgba(0,255,0,0.4' },
-                    lineStyle: { width: 1 },
-                    large: true,
-                    smooth: 0.5
-                }
-            ];
-        }
-        else {
-            var ma30 = CalculateMA(30, _data[1]);
-            var ma60 = CalculateMA(60, _data[1]);
+        //     var _series = [
+        //         {
+        //             name: _name,
+        //             data: _data.Down[1],
+        //             type: 'line',
+        //             symbol: 'none',
+        //             stack: 'stack',
+        //             itemStyle: ChartStyles.statusItemStyle(2),
+        //             areaStyle: { color: 'rgba(255,0,0,0.4)' },
+        //             lineStyle: { width: 1 },
+        //             large: true,
+        //             smooth: 0.5
+        //         },
+        //         {
+        //             name: _name,
+        //             data: _data.Idle[1],
+        //             type: 'line',
+        //             symbol: 'none',
+        //             stack: 'stack',
+        //             itemStyle: ChartStyles.statusItemStyle(1),
+        //             areaStyle: { color: 'rgba(255,255,0,0.4)' },
+        //             lineStyle: { width: 1 },
+        //             large: true,
+        //             smooth: 0.5
+        //         },
+        //         {
+        //             name: _name,
+        //             data: _data.Operating[1],
+        //             type: 'line',
+        //             symbol: 'none',
+        //             stack: 'stack',
+        //             itemStyle: ChartStyles.statusItemStyle(0),
+        //             areaStyle: { color: 'rgba(0,255,0,0.4' },
+        //             lineStyle: { width: 1 },
+        //             large: true,
+        //             smooth: 0.5
+        //         }
+        //     ];
+        // }
+        // else {
+        //var ma30 = CalculateMA(30, _data[1]);
+        //var ma60 = CalculateMA(60, _data[1]);
+        var ma30 = CalculateMA(30, _data);
+        var ma60 = CalculateMA(60, _data);
 
-            var _series = [{
-                name: _name,
-                data: _data[1],
-                type: 'line',
-                symbol: 'none',
-                itemStyle: _style,//ChartStyles.statusItemStyle(_colorIndex),
-                lineStyle: { width: 1.5 },
-                large: true,
-                smooth: smoothVal
-            },
-            {
-                name: 'MA30',
-                data: ma30,
-                type: 'line',
-                symbol: 'none',
-                itemStyle: { color: 'white' },
-                lineStyle: { width: 1 },
-                large: true,
-                smooth: true
-            }];
-        }
+        var _series = [{
+            name: _name,
+            data: _data,//[1],
+            type: 'line',
+            symbol: 'none',
+            itemStyle: _style,//ChartStyles.statusItemStyle(_colorIndex),
+            lineStyle: { width: 1.5 },
+            large: true,
+            smooth: smoothVal
+        },
+        {
+            name: 'MA30',
+            data: ma30,
+            type: 'line',
+            symbol: 'none',
+            itemStyle: { color: 'white' },
+            lineStyle: { width: 1 },
+            large: true,
+            smooth: true
+        }];
+        //}
 
 
 
@@ -214,7 +239,7 @@ class ChartsMonthly {
             }],
             xAxis: {
                 type: 'category',
-                data: _lines == true ? _data.Idle[0] : _data[0]
+                data: _data//_lines == true ? _data.Idle[0] : _data[0]
             },
             yAxis: {
                 type: 'value',

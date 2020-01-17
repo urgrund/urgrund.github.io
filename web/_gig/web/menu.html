@@ -244,12 +244,27 @@
             <div>|</div>
         </div>
 
+        <!-- Active Site Date -->
+        <!-- <div class="util">
+            <div class="utilbtn">
+                <h5><i class="far fa-calendar-alt"></i> {{siteDataDate.SHORT}}</h5>
+            </div>
+            <div class="dropdown-content">
+
+                <div class="flex" ng-repeat="x in cachedData">
+                    <button ng-click="setNewSiteData(x)"> {{ convertToNiceDateObject(x[4].Date).LONG }}
+                    </button>
+                </div>
+
+            </div>
+        </div> -->
         <div class="navItem">
             <div>
                 <h5><i class="far fa-calendar-alt"></i> {{siteDataDate.SHORT}}</h5>
             </div>
         </div>
 
+        <!-- Active Day Shift -->
         <div class="navItem">
             <div>
                 <h5 ng-if="shift==0"><i class='shiftIconDay fas fa-sun'></i> {{shiftTitle}}</h5>

@@ -1,6 +1,6 @@
 <div class="cup" style="height: 1400px;">
 
-    <div class="mines-center {{$parent.backGroundClassBlur}}" >
+    <div class="mines-center {{$parent.backGroundClassBlur}}">
         <div class="flex">
             <div class="overline underline">
                 <h4 class="light"><i class="fas fa-clock"></i> Days</h4>
@@ -50,13 +50,10 @@
         <div id="lt_wf" class="h33pc"></div>
 
 
-        <!-- <div id="lt_time" class="h20pc"></div> -->
+        <div class="tumParetoGrid">
+            <drill-down-chart ng-repeat="z in TUMCategories" name="{{z}}" chart="{{z}}"></drill-down-chart>
+        </div>
 
-
-        <!-- <drill-down-chart name="Efficiency" chart="lt_avail" class="h20pc"></drill-down-chart>
-        <drill-down-chart name="Efficiency" chart="lt_uofa" class="h20pc"></drill-down-chart>
-        <drill-down-chart name="Efficiency" chart="lt_total" class="h20pc"></drill-down-chart>
-        <drill-down-chart name="Efficiency" chart="lt_eff" class="h20pc"></drill-down-chart> -->
 
     </div>
 

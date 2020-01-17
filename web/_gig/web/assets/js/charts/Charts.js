@@ -331,7 +331,9 @@ class Charts {
 
         var data = [];
         for (var i = 0; i < _d.events.length; i++) {
-            var majorGroup = _d.events[i].majorGroup;// 
+            var event = _data.events[_d.events[i]];
+
+            var majorGroup = event.majorGroup;// 
 
             var groupIndex;
             if (majorGroup == "OPERATING") groupIndex = 2;
@@ -340,22 +342,22 @@ class Charts {
 
 
             // Convert the date-time to seconds with a 6hr offset
-            var startTime = new Date(_d.events[i].eventTime.date);
+            var startTime = new Date(event.eventTime.date);
             var trueTime = startTime.toLocaleTimeString('it-IT');
 
             // Convert date to seconds considering 0 as 6am 
             // and accounting for dates that go into the next day 
             startTime = (startTime.getHours() * 60 * 60) + (startTime.getMinutes() * 60) + startTime.getSeconds();
-            startTime += 3600 * 24 * _d.events[i].dayAhead;
+            startTime += 3600 * 24 * event.dayAhead;
             startTime -= 3600 * (shift == 0 ? 6 : 18); //(3600 * 6);
 
             //var duration = _data.events[i].duration;
-            var duration = _d.events[i].duration;
+            var duration = event.duration;
 
             //console.log(i + "  st: " + startTime + "   tt: " + trueTime);
             data.push({
                 //name: _data.events[i].status,
-                name: _d.events[i].status,
+                name: event.status,
                 value: [
                     // these relate to the encode in the custom graph
                     groupIndex,
@@ -760,50 +762,39 @@ class Charts {
 
 
     static CreatePareto(_elementID, _data, _colorIndex) {
-        //console.log("Creating Pareto for " + _majorGroup);
-        //var dom = document.getElementById(_elementID);
-        //var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
         var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
 
-        // var _d = _data.shiftData[shift];
-
-        // var eventData = [];
-        // var statusColor;
-        // if (_majorGroup == MajorGroup.IDLE) {
-        //     eventData = _d.eventBreakDown.IDLE;
-        //     statusColor = 1;//ChartStyles.statusColors[1];
-        // }
-        // if (_majorGroup == MajorGroup.OPERATING) {
-        //     eventData = _d.eventBreakDown.OPERATING;
-        //     statusColor = 0;//ChartStyles.statusColors[0];
-        // }
-        // if (_majorGroup == MajorGroup.DOWN) {
-        //     eventData = _d.eventBreakDown.DOWN;
-        //     statusColor = 2;//ChartStyles.statusColors[2];
-        // }
-        //console.log("Creating Pareto");
 
 
+        //var eventData = _data;
 
-        var eventData = _data;
-
+        var eventCategories;
+        var eventTotalDuration;
+        var eventCount;
 
 
 
         // Get data sorted 
-        var minorGroup = new Array();
-        if (eventData == 'undefined' || eventData == null) {
-            eventData = {};
-            eventData.eventCount = 1;
-            eventData.duration = 0;
-            minorGroup.push({ "event": "No Events", "duration": 0 });
+        var newEvents = new Array();
+        if (_data == 'undefined' || _data == null) {
+            eventTotalDuration = 0;
+            eventCount = 1;
+            newEvents.push({ "event": "No Events", "duration": 0 });
         }
         else {
-            //var index = 0;
-            for (var key in eventData.categories)
-                minorGroup.push({ "event": key, "duration": eventData.categories[key] });
-            minorGroup.sort(function (a, b) { return b.duration - a.duration });
+            eventCategories = _data.categories;
+            eventTotalDuration = _data.duration;
+            eventCount = _data.eventCount;
+            var len = 0;
+            for (var prop in eventCategories) {
+                if (eventCategories.hasOwnProperty(prop))
+                    ++len;
+            }
+
+            for (var key in eventCategories)
+                newEvents.push({ "event": key, "duration": eventCategories[key] });
+            newEvents.sort(function (a, b) { return b.duration - a.duration });
         }
 
 
@@ -812,45 +803,38 @@ class Charts {
         var eventBars = [];
         var cumulative = [];
         var tempSum = 0;
-        for (let i = 0; i < minorGroup.length; i++) {
-            tempSum += (minorGroup[i].duration) / eventData.duration;
+        for (let i = 0; i < newEvents.length; i++) {
+            tempSum += (newEvents[i].duration) / eventTotalDuration;
             cumulative.push(tempSum);
-            eventNames[i] = minorGroup[i].event.replace("-", "").replace(/ /g, "\n");
+            eventNames[i] = newEvents[i].event.replace("-", "").replace(/ /g, "\n");
         }
 
         // Get cumulative to %
-        for (let i = 0; i < minorGroup.length; i++) {
+        for (let i = 0; i < newEvents.length; i++) {
             cumulative[i] = cumulative[i] / cumulative[cumulative.length - 1];
             eventBars[i] = {
-                value: minorGroup[i].duration / 3600,
+                value: newEvents[i].duration / 3600,
                 itemStyle: { color: ChartStyles.TUMColors[_colorIndex] }
-            };  //getItemStyle(minorGroup[i], cumulative[i]);
+            };  //getItemStyle(newEvents[i], cumulative[i]);
         }
 
         var barWidth = eventBars.length > 1 ? (eventBars.length > 3 ? '50%' : '20%') : '10%';
         //console.log(cumulative);
 
         // Simple horizontal line to show the 80%
-        var paretoLimit = new Array(minorGroup.length);
-        paretoLimit.fill(0.8, 0, minorGroup.length);
-
-        // move this to a charts utilities class
-        // and deal with different themes
-        // function getItemStyle(_minorGroup, cumulativeVal) {
-        //     return {
-        //         value: _minorGroup.duration / 3600,
-        //         itemStyle: ChartStyles.statusItemStyle(statusColor)
-        //     };
-        // }
+        var paretoLimit = new Array(newEvents.length);
+        paretoLimit.fill(0.8, 0, newEvents.length);
 
 
         // Sub text for each chart
+        var durationAsHours = (eventTotalDuration / 60 / 60).toFixed(2);
+        if (durationAsHours > 999) durationAsHours = (durationAsHours / 1000).toFixed(2) + "k";
         var subText =
-            ((eventData.duration / 60 / 60).toFixed(2)
+            (durationAsHours
                 + ' hours across '
-                + minorGroup.length
-                + (minorGroup.length > 1 ? ' categories' : ' category')
-                + " & " + eventData.eventCount + (eventData.eventCount > 1 ? " events" : " event"));
+                + newEvents.length
+                + (newEvents.length > 1 ? ' categories' : ' category')
+                + " & " + eventCount + (eventCount > 1 ? " events" : " event"));
 
 
 
@@ -879,7 +863,13 @@ class Charts {
                     nameLocation: 'center',
                     nameRotate: 90,
                     nameGap: 20,
-                    interval: 1,
+                    axisLabel: {
+                        fontSize: ChartStyles.fontSizeSmall,
+                        formatter: function (value, index) {
+                            return (value > 999) ? (value / 100) + "k" : value;
+                        }
+                    },
+                    //interval: 1,
                     axisLine: ChartStyles.axisLineGrey
                 },
                 {
@@ -908,15 +898,6 @@ class Charts {
                     yAxisIndex: 1,
                     smooth: true
                 }
-                // {
-                //     // 80% Limit
-                //     type: 'line',
-                //     data: eventBars.length > 1 ? paretoLimit : null,
-                //     lineStyle: { color: 'blue', type: 'dotted' },
-                //     yAxisIndex: 1,
-                //     smooth: true
-                // },
-
             ]
         };
 
@@ -942,7 +923,9 @@ class Charts {
 
         var data = [];
         for (var i = 0; i < _d.events.length; i++) {
-            var majorGroup = _d.events[i].majorGroup;// 
+            var event = _data.events[_d.events[i]];
+
+            var majorGroup = event.majorGroup;// 
 
             var groupIndex;
             if (majorGroup == "OPERATING") groupIndex = 2;
@@ -951,22 +934,22 @@ class Charts {
 
 
             // Convert the date-time to seconds with a 6hr offset
-            var startTime = new Date(_d.events[i].eventTime.date);
+            var startTime = new Date(event.eventTime.date);
             var trueTime = startTime.toLocaleTimeString('it-IT');
 
             // Convert date to seconds considering 0 as 6am 
             // and accounting for dates that go into the next day 
             startTime = (startTime.getHours() * 60 * 60) + (startTime.getMinutes() * 60) + startTime.getSeconds();
-            startTime += 3600 * 24 * _d.events[i].dayAhead;
+            startTime += 3600 * 24 * event.dayAhead;
             startTime -= 3600 * (shift == 0 ? 6 : 18); //(3600 * 6);
 
             //var duration = _data.events[i].duration;
-            var duration = _d.events[i].duration;
+            var duration = event.duration;
 
             //console.log(i + "  st: " + startTime + "   tt: " + trueTime);
             data.push({
                 //name: _data.events[i].status,
-                name: _d.events[i].status,
+                name: event.status,
                 value: [
                     // these relate to the encode in the custom graph
                     groupIndex,

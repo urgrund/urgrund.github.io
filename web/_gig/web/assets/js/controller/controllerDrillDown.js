@@ -10,8 +10,8 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
         $scope.lastEvent = $rootScope.getEquipmentLastEvent($scope.equip);  // $scope.equip.shiftData[$rootScope.shift].events[len - 1];
         //console.log($scope.lastEvent);
 
-        var len = $scope.equip.shiftData[$rootScope.shift].events.length;
-        $scope.lastEvent = $scope.equip.shiftData[$rootScope.shift].events[len - 1];
+        //var len = $scope.equip.shiftData[$rootScope.shift].events.length;
+        //$scope.lastEvent = $scope.equip.shiftData[$rootScope.shift].events[len - 1];
 
         $scope.equipMetric = "";
         for (var key in $scope.equip.shiftData[$rootScope.shift].metric) {
@@ -32,7 +32,11 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
         $timeout(function () { Charts.CreateUofAPie("tus", $scope.equip); }, d); d += t;
         $timeout(function () { uofa = Charts.CreateUofA("uofa", $scope.equip); }, d); d += t;
 
-        $timeout(function () { Charts.CreatePareto("p1", $scope.equip.shiftData[shift].eventBreakDown.OPERATING, 4); }, d); d += t;
+
+        //$timeout(function () { Charts.CreatePareto("p1", $scope.equip.shiftData[shift].eventBreakDown.OPERATING, 4); }, d); d += t;
+        $timeout(function () { Charts.CreatePareto("p1", longTerm2[0]['Primary Operating'], 4); }, d); d += t;
+
+
         $timeout(function () { Charts.CreatePareto("p2", $scope.equip.shiftData[shift].eventBreakDown.IDLE, 1); }, d); d += t;
         $timeout(function () { Charts.CreatePareto("p3", $scope.equip.shiftData[shift].eventBreakDown.DOWN, 0); }, d); d += t;
 
@@ -50,6 +54,9 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
 
     $scope.createEquipmentData();
     $scope.$watch('$viewContentLoaded', function () {
+        // $timeout(function () {
+        //     $scope.createEquipmentCharts();
+        // }, 2000);
 
         $scope.createEquipmentCharts();
     });

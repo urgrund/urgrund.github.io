@@ -51,7 +51,9 @@ app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $ti
             var shiftData = _equip.shiftData[$scope.callUpIsDay ? 1 : 0];
 
             // So that we don't overwrite the original 
-            var callUpEvent = JSON.stringify(($scope.callUpIsFirst == true) ? shiftData.events[shiftData.eventFirstOp] : shiftData.events[shiftData.events.length - 1]);
+            var eventIndex = ($scope.callUpIsFirst == true) ? shiftData.eventFirstOp : shiftData.events[shiftData.events.length - 1];
+            var callUpEvent = JSON.stringify(_equip.events[eventIndex]);
+            //var callUpEvent = JSON.stringify(($scope.callUpIsFirst == true) ? shiftData.events[shiftData.eventFirstOp] : shiftData.events[shiftData.events.length - 1]);
 
             if (callUpEvent == undefined) {
                 console.log("Event was null for " + site + "  " + index);

@@ -29,6 +29,15 @@ const MajorGroup = {
 }
 
 
+const TUMCategories = ['Unplanned Breakdown',
+    'Planned Maintenance',
+    'Unplanned Standby',
+    'Operating Standby',
+    'Secondary Operating',
+    'Primary Operating'
+];
+
+
 // function compareSiteDataOrder(a, b) {
 //     const bandA = a[4].Date;
 //     const bandB = b[4].Date;
@@ -143,6 +152,10 @@ app.run(function ($rootScope, $http, $route) {
                     if (_setAfterFetch) {
                         $rootScope.setNewSiteData(myJson);
                     }
+
+                    // Sort 
+                    //console.log($rootScope.cachedData);
+                    $rootScope.cachedData.sort(function (a, b) { return b[4]['Date'] - a[4]['Date'] });
                 });
         }
     };
@@ -205,7 +218,8 @@ app.run(function ($rootScope, $http, $route) {
      */
     $rootScope.getEquipmentLastEvent = function (_equip) {
         var len = _equip.shiftData[$rootScope.shift].events.length;
-        return _equip.shiftData[$rootScope.shift].events[len - 1];
+        var index = _equip.shiftData[$rootScope.shift].events[len - 1];
+        return _equip.events[index];
     };
 
 
@@ -252,6 +266,9 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
 
     // Fetch todays data and set it as soon as done
     $rootScope.fetchSiteData(['20181010'], true);
+
+
+    //console.log(longTerm2);
 
 
     // Callback for new data being set
@@ -308,6 +325,9 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
         if (_state == true) {
 
             if ($location.$$url.includes("equip")) {
+                if ($rootScope.equipment == undefined)
+                    return;
+
                 var equipFunction = $rootScope.equipment[$location.$$url.slice(7)].function;
 
                 console.log(equipFunction);
@@ -556,7 +576,7 @@ app.component("alertBox", {
     controller: function ($rootScope) {
         this.$onInit = function () {
             this.equipment = $rootScope.siteData[this.alert.siteIndex].equipment[this.alert.equipIndex];
-            //console.log(this.equipment);
+            console.log(this.alert);
         };
     }
 });

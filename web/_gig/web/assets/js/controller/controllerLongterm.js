@@ -1,14 +1,23 @@
 
 app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout) {
     // Temp data
-    $scope.days = 970;
+    $scope.days = longTerm2[1]['Availability'].length;
     $scope.calendarTime = 313.33;
     $scope.totalAvailability = 84;
     $scope.totalUofA = 87;
     $scope.totalEfficiency = 94;
     $scope.totalAssetUtil = 69;
 
+    $scope.dateIndexStart = 0;
+    $scope.dateIndexEnd = longTerm2[1]['Availability'].length;
+    //console.log($scope.dateIndexEnd);
 
+
+    // test?
+    $scope.TUMCategories = TUMCategories;
+
+
+    //NO LONGER NEEDED,  OLD DATA
     $scope.fillDataFromColumn = function (_column) {
         var data = [];
         data.push([]);
@@ -31,22 +40,24 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
 
 
     $scope.createCharts = function () {
-        //console.log(longTermData[0]);
+        console.log(longTerm2[0]);
+
+        //console.log(longTerm2[1]['Availability'][0]);
 
         // Availability
-        $scope.dataAvail = $scope.fillDataFromColumn(9);
+        $scope.dataAvail = longTerm2[1]['Availability']; //$scope.fillDataFromColumn(9);
         var chartAvail = ChartsMonthly.CreateLongTerm("lt_avail", $scope.dataAvail, "Availability", ChartStyles.statusItemStyle(0));
 
         // U of A
-        $scope.dataUofA = $scope.fillDataFromColumn(10);
+        $scope.dataUofA = longTerm2[1]['UofA'];//$scope.fillDataFromColumn(10);
         var chartUofA = ChartsMonthly.CreateLongTerm("lt_uofa", $scope.dataUofA, "Utilisation of Availability", { color: ChartStyles.uofaColor });
 
         // Total 
-        $scope.dataTotal = $scope.fillDataFromColumn(11);
+        $scope.dataTotal = longTerm2[1]['Total Asset Utilisation']; //$scope.fillDataFromColumn(11);
         var chartTotal = ChartsMonthly.CreateLongTerm("lt_total", $scope.dataTotal, "Total Asset Utilisation", ChartStyles.statusItemStyle(2));
 
         // Efficiency 
-        $scope.dataEff = $scope.fillDataFromColumn(12);
+        $scope.dataEff = longTerm2[1]['Efficiency'];//$scope.fillDataFromColumn(12);
         var chartEff = ChartsMonthly.CreateLongTerm("lt_eff", $scope.dataEff, "Efficiency", ChartStyles.statusItemStyle(1));
 
 
@@ -74,39 +85,81 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
         })
 
 
-        // Temp Waterfall
-        // var waterFall = {};
-        // waterFall.calendarTime = 62000;
-        // waterFall.unplannedBreakdown = 6000;
-        // waterFall.plannedMaintenance = 5000;
-        // waterFall.totalAvailability = 51000;
-        // waterFall.unplannedStandby = 500;
-        // waterFall.operatingStandby = 9000;
-        // waterFall.totalUtilisation = 42000;
-        // waterFall.operatingDelay = 3000;
-        // waterFall.operatingTime = 39000;
+        $scope.createParetos();
+        $scope.createWaterfall();
+    }
+
+
+
+    $scope.createParetos = function () {
+        for (var i = 0; i < $scope.TUMCategories.length; i++) {
+            var cat = $scope.TUMCategories[i];
+            Charts.CreatePareto(cat, longTerm2[0][cat], i);
+        }
+    }
+
+
+
+    $scope.getWaterFallTotal = function (_tumIndex) {
+
+        function myFunc(total, num) {
+            return total + num;
+        }
+
+        //console.log($scope.dateIndexStart + "  " + $scope.dateIndexEnd);
+        var splice = longTerm2[0][TUMCategories[_tumIndex]].daily.slice($scope.dateIndexStart, $scope.dateIndexEnd);
+        //console.log(splice.reduce(myFunc));
+        return splice.reduce(myFunc);
+    };
+
+
+
+
+    $scope.createWaterfall = function () {
 
         var waterFall = [];
-        waterFall.push({ 'name': 'Calendar Time', 'value': 62000 });
-        waterFall.push({ 'name': 'Unplanned Breakdown', 'value': 6000, 'id':0 });
-        waterFall.push({ 'name': 'Planned Maintenance', 'value': 5000, 'id':1 });
-        waterFall.push({ 'name': 'Total Availability', 'value': 51000 });
-        waterFall.push({ 'name': 'Unplanned Standy', 'value': 4000, 'id':2 });
-        waterFall.push({ 'name': 'Operating Standy', 'value': 7000, 'id':3 });
-        waterFall.push({ 'name': 'Total Utilisation', 'value': 40000 });
-        waterFall.push({ 'name': 'Operating Delay', 'value': 3000, 'id':4 });
-        waterFall.push({ 'name': 'Operating Time', 'value': 37000, 'id':5 });
+
+        waterFall.push({ 'name': 'Calendar Time', 'value': null });
+        waterFall.push({ 'name': TUMCategories[0], 'value': $scope.getWaterFallTotal(0), 'id': 0 });
+        waterFall.push({ 'name': TUMCategories[1], 'value': $scope.getWaterFallTotal(1), 'id': 1 });
+        waterFall.push({ 'name': 'Total Availability', 'value': null });
+        waterFall.push({ 'name': TUMCategories[2], 'value': $scope.getWaterFallTotal(2), 'id': 2 });
+        waterFall.push({ 'name': TUMCategories[3], 'value': $scope.getWaterFallTotal(3), 'id': 3 });
+        waterFall.push({ 'name': 'Total Utilisation', 'value': null });
+        waterFall.push({ 'name': TUMCategories[4], 'value': $scope.getWaterFallTotal(4), 'id': 4 });
+        waterFall.push({ 'name': TUMCategories[5], 'value': $scope.getWaterFallTotal(5), 'id': 5 });
+
+        waterFall[0].value = waterFall[1].value + waterFall[2].value + waterFall[4].value + waterFall[5].value + waterFall[7].value + waterFall[8].value;
+        waterFall[3].value = waterFall[0].value - waterFall[1].value - waterFall[2].value;
+        waterFall[6].value = waterFall[3].value - waterFall[4].value - waterFall[5].value;
+        //console.log(waterFall);
+        // waterFall.push({ 'name': 'Calendar Time', 'value': total });
+        // waterFall.push({ 'name': TUMCategories[0], 'value': longTerm2[0][TUMCategories[0]].total, 'id': 0 });
+        // waterFall.push({ 'name': TUMCategories[1], 'value': longTerm2[0][TUMCategories[1]].total, 'id': 1 });
+        // waterFall.push({ 'name': 'Total Availability', 'value': totalAvail });
+        // waterFall.push({ 'name': TUMCategories[2], 'value': longTerm2[0][TUMCategories[2]].total, 'id': 2 });
+        // waterFall.push({ 'name': TUMCategories[3], 'value': longTerm2[0][TUMCategories[3]].total, 'id': 3 });
+        // waterFall.push({ 'name': 'Total Utilisation', 'value': totalUtil });
+        // waterFall.push({ 'name': TUMCategories[4], 'value': longTerm2[0][TUMCategories[4]].total, 'id': 4 });
+        // waterFall.push({ 'name': TUMCategories[5], 'value': longTerm2[0][TUMCategories[5]].total, 'id': 5 });
+
 
         var wf = ChartsMonthly.CreateLongTermWaterfall("lt_wf", waterFall);
         //console.log(waterFall);
     }
 
 
+
+
     $scope.updateValuesFromDataZoom = function (evt, _chart) {
         var axis = _chart.getModel().option.xAxis[0];
         var startTime = axis.data[axis.rangeStart];
         var endTime = axis.data[axis.rangeEnd];
-        //console.log(starttime, endtime);
+
+        $scope.dateIndexStart = axis.rangeStart;
+        $scope.dateIndexEnd = axis.rangeEnd;
+
+        //console.log(axis.rangeStart + " - " + axis.rangeEnd);
 
         // To set two dates to two variables 
         var startTime = new Date(startTime);
@@ -123,13 +176,14 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
             }
         }
 
+        $scope.createWaterfall();
         //console.log(Difference_In_Days);
     };
 
     $scope.$watch('$viewContentLoaded', function () {
         $timeout(function () {
             $scope.createCharts();
-        }, 0);
+        }, 100);
         //$scope.createEquipmentCharts();
     });
 
