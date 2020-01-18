@@ -49,7 +49,7 @@ static $metricMap = array(
 
 // Uncomment this to run directly from this file
 if (Debug::enabled() == true) {
-    CreateSiteData::Run();
+    //CreateSiteData::Run();
 }
 
 class CreateSiteData

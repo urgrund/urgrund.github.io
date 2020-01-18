@@ -48,19 +48,19 @@ class Equipment
         $e->shift = $_eventDataRow[8];
         $e->tumCategory = $_eventDataRow[9];
 
-        // Store all events
-        $this->events[] = $e;
 
         // Which shift does this event belong to?        
         if ($e->shift == "P1") {
-            $this->shiftData[0]->events[] = $e;
-            //$this->shiftData[0]->events[] = count($this->events);
+            //$this->shiftData[0]->events[] = $e;
+            $this->shiftData[0]->events[] = count($this->events);
         } else {
-            $this->shiftData[1]->events[] = $e;
-            //$this->shiftData[1]->events[] =  count($this->events);
+            //$this->shiftData[1]->events[] = $e;
+            $this->shiftData[1]->events[] =  count($this->events);
         }
 
 
+        // Store all events
+        $this->events[] = $e;
         //Debug::Log($this->shiftData[0]->events);
         //Debug::Log($this->shiftData[1]->events);
     }
@@ -91,14 +91,16 @@ class Equipment
             // Go through all events for this shift
             // and allocate seconds in each shift hour
             for ($i = 0; $i < count($events); $i++) {
+                //Debug::Log($events[$i]);
+                $event = $this->events[$events[$i]];
 
                 // Get start and end dates
-                $startDate = clone $events[$i]->eventTime;
+                $startDate = clone $event->eventTime;
                 $endDate = clone $startDate;
-                $endDate->add(new DateInterval('PT' . $events[$i]->duration . 'S'));
+                $endDate->add(new DateInterval('PT' . $event->duration . 'S'));
 
                 $startHour = intval($startDate->format('H'));
-                if ($events[$i]->dayAhead == 1)
+                if ($event->dayAhead == 1)
                     $startHour += 24;
 
                 //$startHour = $startHour < 6  ? $startHour + 12 + 6 : $startHour  - 6;
@@ -113,7 +115,7 @@ class Equipment
                 // How many hours this event spans (1 based)
                 $hours = ($endHour - $startHour) + 1;
 
-                //Debug::Log($startHour . "  " . $endHour . "  " . $hours . "  D:" . $events[$i]->duration);
+                //Debug::Log($startHour . "  " . $endHour . "  " . $hours . "  D:" . $event->duration);
 
                 // If there was no span of hours then just add the duration 
                 // Otherwise loop through the span count            
@@ -125,7 +127,7 @@ class Equipment
                     // the duration,  otherwise get the fraction/whole
                     // of each hour this event spans over
                     if ($hours == 1) {
-                        $secondsSpentInHour = $events[$i]->duration;
+                        $secondsSpentInHour = $event->duration;
                     } else {
                         if ($k == 0) {
                             $secondsSpentInHour = 3600 - $this->GetSecondsInHour($startDate);
@@ -154,17 +156,17 @@ class Equipment
 
                     // Time for use in UofA
                     // TODO - I don't think this is used anymore?!
-                    if ($events[$i]->majorGroup != "DOWN") {
+                    if ($event->majorGroup != "DOWN") {
                         $hourDateObj->availability += $secondsSpentInHour;
-                        if ($events[$i]->majorGroup != "IDLE")
+                        if ($event->majorGroup != "IDLE")
                             $hourDateObj->utilisation +=  $secondsSpentInHour;
                     }
 
 
                     // Exclusive time of Down/Idle/Operating
-                    if ($events[$i]->majorGroup == "DOWN") {
+                    if ($event->majorGroup == "DOWN") {
                         $hourDateObj->down += $secondsSpentInHour;
-                    } else if ($events[$i]->majorGroup == "IDLE") {
+                    } else if ($event->majorGroup == "IDLE") {
                         $hourDateObj->idle += $secondsSpentInHour;
                     } else
                         $hourDateObj->operating += $secondsSpentInHour;
@@ -211,28 +213,29 @@ class Equipment
         //Debug::Log($_eventsArray);
         for ($i = 0; $i < count($_eventsArray); $i++) {
 
+            $event = $this->events[$_eventsArray[$i]];
             // Check if major group is already set...   
             // if or if not,  set the event details 
-            if (!isset($breakDown[strval($_eventsArray[$i]->majorGroup)])) {
+            if (!isset($breakDown[strval($event->majorGroup)])) {
                 $e = new EventBreakDown();
-                $e->majorGroup = strval($_eventsArray[$i]->majorGroup);
-                $e->duration += $_eventsArray[$i]->duration;
-                $e->categories[($_eventsArray[$i]->status)] = $_eventsArray[$i]->duration; // 1;
+                $e->majorGroup = strval($event->majorGroup);
+                $e->duration += $event->duration;
+                $e->categories[($event->status)] = $event->duration; // 1;
                 $e->eventCount++;
 
-                $breakDown[strval($_eventsArray[$i]->majorGroup)] = $e;
+                $breakDown[strval($event->majorGroup)] = $e;
             } else {
 
-                $e = $breakDown[strval($_eventsArray[$i]->majorGroup)];
-                $e->duration += $_eventsArray[$i]->duration;
+                $e = $breakDown[strval($event->majorGroup)];
+                $e->duration += $event->duration;
                 $e->eventCount++;
 
                 // If a sub-category doesn't exist then add it
                 // otherwise increment its count 
-                if (!isset($e->categories[($_eventsArray[$i]->status)])) {
-                    $e->categories[($_eventsArray[$i]->status)] = $_eventsArray[$i]->duration; //1;
+                if (!isset($e->categories[($event->status)])) {
+                    $e->categories[($event->status)] = $event->duration; //1;
                 } else
-                    $e->categories[($_eventsArray[$i]->status)] += $_eventsArray[$i]->duration;
+                    $e->categories[($event->status)] += $event->duration;
             }
         }
         return $breakDown;
@@ -253,8 +256,9 @@ class Equipment
     {
         for ($i = 0; $i < count($this->shiftData); $i++) {
             for ($j = 0; $j < count($this->shiftData[$i]->events); $j++) {
+                $event = $this->events[$this->shiftData[$i]->events[$j]];
                 if ($this->shiftData[$i]->eventFirstOp == null) {
-                    if ($this->shiftData[$i]->events[$j]->majorGroup == "OPERATING")
+                    if ($event->majorGroup == "OPERATING")
                         $this->shiftData[$i]->eventFirstOp = $j;
                 }
             }

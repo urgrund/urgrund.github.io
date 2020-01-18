@@ -1,10 +1,11 @@
 <?php
 include_once('header.php');
 include_once('create_site_data.php');
-include_once('setDebugOff.php');
+
 
 // Date should be sent from the client
 if (isset($_POST['date'])) {
+    include_once('setDebugOff.php');
     $date = $_POST['date'];
     new GetSiteData();
 }
