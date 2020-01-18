@@ -29,6 +29,20 @@ function GenerateTimeLabels(_count, _offset) {
     }
     return _array;
 }
+
+
+//console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
+//GenerateDateLabels('20181001', 91);
+//console.log(timeLabelsShift[0]
+function GenerateDateLabels(_startDate, _numberOfDays) {
+    var d = moment(_startDate);
+    var dateLabels = [];
+    for (var i = 0; i < _numberOfDays; i++) {
+        dateLabels.push(d.format('DD-MM-YY'));
+        d.add(1, 'd');
+    }
+    return dateLabels;
+}
 // -----------------------------------------------------------------------
 
 

@@ -38,23 +38,6 @@ const TUMCategories = ['Unplanned Breakdown',
 ];
 
 
-// function compareSiteDataOrder(a, b) {
-//     const bandA = a[4].Date;
-//     const bandB = b[4].Date;
-
-//     let comparison = 0;
-//     if (bandA > bandB) {
-//       comparison = 1;
-//     } else if (bandA < bandB) {
-//       comparison = -1;
-//     }
-//     return comparison;
-//   }
-
-
-
-
-
 
 
 
@@ -189,7 +172,10 @@ app.run(function ($rootScope, $http, $route) {
     /**
      * Pass date as dd-mm-yyy. Creates a nicely formatted date from a numerical date
      */
+
     $rootScope.convertToNiceDateObject = function (_date) {
+
+        console.log("USE MOMENT FOR THIS");
 
         // Given a date such as 20181010
         // Split out the day, month, year
@@ -472,7 +458,7 @@ app.config(
 // =====================================================================================
 // Components
 
-console.log("Setting up Components...");
+//console.log("Setting up Components...");
 
 
 /// ----------------------------------------
@@ -576,7 +562,7 @@ app.component("alertBox", {
     controller: function ($rootScope) {
         this.$onInit = function () {
             this.equipment = $rootScope.siteData[this.alert.siteIndex].equipment[this.alert.equipIndex];
-            console.log(this.alert);
+            //console.log(this.alert);
         };
     }
 });

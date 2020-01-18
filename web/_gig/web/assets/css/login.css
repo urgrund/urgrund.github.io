@@ -3,7 +3,6 @@
   --bgMain: url(../img/login_blur_sat.jpg) no-repeat center center fixed;
   --bgBlur: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url(assets/img/login_blur.jpg) no-repeat center center fixed;
   --divShadow: 9px 14px 10px -5px rgba(0, 0, 0, 0.37);
-  --chartDivHeaderBg: linear-gradient(90deg, rgb(51, 70, 103) 0, rgba(91, 111, 139, 0.6) 100%);
   --chartDivBorder: #007ac7;
 
   --equipGridCSpace: 30%;

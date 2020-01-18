@@ -40,7 +40,7 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
 
 
     $scope.createCharts = function () {
-        console.log(longTerm2[0]);
+        //console.log(longTerm2[0]);
 
         //console.log(longTerm2[1]['Availability'][0]);
 
@@ -132,6 +132,8 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
         waterFall[0].value = waterFall[1].value + waterFall[2].value + waterFall[4].value + waterFall[5].value + waterFall[7].value + waterFall[8].value;
         waterFall[3].value = waterFall[0].value - waterFall[1].value - waterFall[2].value;
         waterFall[6].value = waterFall[3].value - waterFall[4].value - waterFall[5].value;
+
+        $scope.calendarTime = Math.round(waterFall[0].value / 3600, 0) / 1000;
         //console.log(waterFall);
         // waterFall.push({ 'name': 'Calendar Time', 'value': total });
         // waterFall.push({ 'name': TUMCategories[0], 'value': longTerm2[0][TUMCategories[0]].total, 'id': 0 });
@@ -159,24 +161,8 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
         $scope.dateIndexStart = axis.rangeStart;
         $scope.dateIndexEnd = axis.rangeEnd;
 
-        //console.log(axis.rangeStart + " - " + axis.rangeEnd);
-
-        // To set two dates to two variables 
-        var startTime = new Date(startTime);
-        var endTime = new Date(endTime);
-
-
-        var timeDifference = endTime.getTime() - startTime.getTime();
-        var daysDifference = timeDifference / (1000 * 3600 * 24);
-
-        if (daysDifference != undefined) {
-            if ($scope.days != daysDifference) {
-                $scope.days = daysDifference;
-                $scope.$apply();
-            }
-        }
-
         $scope.createWaterfall();
+        $scope.$apply();
         //console.log(Difference_In_Days);
     };
 

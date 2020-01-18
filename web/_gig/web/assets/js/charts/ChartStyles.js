@@ -318,7 +318,7 @@ class ChartStyleContainer {
     timeLineAxisLabel(_rotate) {
         return {
             show: true,
-            interval: 0,//'auto',
+            interval: 'auto',
             rotate: _rotate == undefined ? 45 : _rotate,
             fontSize: ChartStyles.fontSizeSmall
         }

@@ -13,14 +13,12 @@
     <div class="mines-center {{$parent.backGroundClassBlur}}">
 
         <div ng-repeat="z in equipByFunc">
-            <!-- <h4>{{z.name}}</h4> -->
+
 
             <!-- Headings  -->
             <div class="cup-grid underline">
                 <div>
-                    <!-- <h5 class="light">Asset ID</h5> -->
                     <h3 class="bold">{{z.name}}</h3>
-
                 </div>
                 <div class="flex flex-start">
                     <h5 class="light"><i class="far fa-clock"> </i>
@@ -47,9 +45,11 @@
                 </div>
             </div>
 
+
+
             <!-- Call up information -->
             <div ng-repeat="x in z.equipment" ng-init="siteIndex = $index">
-                <div class="cup-grid" ng-init="e = getCallUpEvent(0,0, x)">
+                <div class="cup-grid" ng-init="e = getCallUpEvent(x)">
                     <div><a ng-href="#!equip/{{x.id}}" ng-bind="x.id"></a></div>
                     <div>
                         <p ng-bind="e.eventTime.date"></p>

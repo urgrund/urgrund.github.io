@@ -33,10 +33,7 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
         $timeout(function () { uofa = Charts.CreateUofA("uofa", $scope.equip); }, d); d += t;
 
 
-        //$timeout(function () { Charts.CreatePareto("p1", $scope.equip.shiftData[shift].eventBreakDown.OPERATING, 4); }, d); d += t;
-        $timeout(function () { Charts.CreatePareto("p1", longTerm2[0]['Primary Operating'], 4); }, d); d += t;
-
-
+        $timeout(function () { Charts.CreatePareto("p1", $scope.equip.shiftData[shift].eventBreakDown.OPERATING, 4); }, d); d += t;
         $timeout(function () { Charts.CreatePareto("p2", $scope.equip.shiftData[shift].eventBreakDown.IDLE, 1); }, d); d += t;
         $timeout(function () { Charts.CreatePareto("p3", $scope.equip.shiftData[shift].eventBreakDown.DOWN, 0); }, d); d += t;
 

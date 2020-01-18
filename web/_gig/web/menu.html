@@ -1,9 +1,12 @@
 <div class="navbar">
+
+    <!-- Main Menu  -->
     <div class="navleft">
         <div class="navItem">
             <div><a href="#!">COMPANY LOGO</a></div>
         </div>
 
+        <!-- Short Interval Control -->
         <div class="dropdown">
             <div class="dropbtn">Short Interval Control</div>
             <div class="dropdown-content">
@@ -27,25 +30,33 @@
                     <div class="siteCardGrid">
                         <div>
                             <h4>Boggers</h4>
-                            <div ng-repeat="y in x.equipmentByFunction.LOADING">
-                                <a ng-href="#!equip/{{y.ID}}">{{ y.ID }}</a>
+                            <div ng-repeat="y in x.equipmentByFunction.LOADING"
+                                ng-init="e = getEquipmentLastEvent(equipment[y.ID])">
+                                <a ng-href="#!equip/{{y.ID}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                        ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y.ID].id}}</a>
                             </div>
                         </div>
 
                         <div>
                             <h4>Trucks</h4>
-                            <div ng-repeat="y in x.equipmentByFunction.HAULING">
-                                <a ng-href="#!equip/{{y.ID}}">{{ y.ID }}</a>
+                            <div ng-repeat="y in x.equipmentByFunction.HAULING"
+                                ng-init="e = getEquipmentLastEvent(equipment[y.ID])">
+                                <a ng-href="#!equip/{{y.ID}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                        ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y.ID].id}}</a>
                             </div>
                         </div>
 
                         <div>
                             <h4>Drills</h4>
-                            <div ng-repeat="y in x.equipmentByFunction.P">
-                                <a ng-href="#!equip/{{y.ID}}">{{ y.ID }}</a>
+                            <div ng-repeat="y in x.equipmentByFunction.P"
+                                ng-init="e = getEquipmentLastEvent(equipment[y.ID])">
+                                <a ng-href="#!equip/{{y.ID}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                        ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y.ID].id}}</a>
                             </div>
-                            <div ng-repeat="y in x.equipmentByFunction.D">
-                                <a ng-href="#!equip/{{y.ID}}">{{ y.ID }}</a>
+                            <div ng-repeat="y in x.equipmentByFunction.D"
+                                ng-init="e = getEquipmentLastEvent(equipment[y.ID])">
+                                <a ng-href="#!equip/{{y.ID}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                        ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y.ID].id}}</a>
                             </div>
                         </div>
                     </div>
@@ -98,6 +109,9 @@
         </div>
     </div>
 
+
+
+    <!-- Utilities and Data stuff -->
     <div class="navright">
 
         <!-- User Menu -->
@@ -149,7 +163,7 @@
             </div>
         </div>
 
-        <!-- Connect to DB -->
+        <!-- DB Connection -->
         <div class="util">
             <div class="utilbtn"><i class="fas fa-database"></i></div>
             <div class="dropdown-content">

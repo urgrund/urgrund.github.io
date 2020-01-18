@@ -237,10 +237,12 @@ class ChartsMonthly {
             }, {
                 type: 'slider'
             }],
-            xAxis: {
-                type: 'category',
-                data: _data//_lines == true ? _data.Idle[0] : _data[0]
-            },
+            //xAxis: ChartStyles.xAxis(timeLabelsShift[shift]),
+            xAxis: ChartStyles.xAxis(GenerateDateLabels('20181001', _data.length)),
+            //xAxis: {
+            //type: 'category',
+            //data: _data//_lines == true ? _data.Idle[0] : _data[0]
+            //},
             yAxis: {
                 type: 'value',
                 axisLabel: {
