@@ -1,4 +1,5 @@
 .tooltip {
+  margin-top: 3px;
     position: relative;
     display: inline-block;
     /* border-bottom: 1px dotted black;     */
@@ -16,12 +17,12 @@
     padding: 5px;
     position: absolute;
     text-align: justify;
-    border: 1px solid #ffffff;
+    border: 1px solid #000000;
     box-shadow: 3px 4px 12px 5px black;
     z-index: 1;
     top: 26px;
     /* left: 4px; */
-    margin-left: -225px;
+    margin-left: -208px;
     opacity: 0;
     transition: 0.1s;
     transform: scale(1,0);
@@ -42,10 +43,10 @@
     position: absolute;
     bottom: 100%;
     left: 50%;
-    margin-left: 91px;
-    border-width: 9px;
+    margin-left: 82px;
+    border-width: 10px;
     border-style: solid;
-    border-color: transparent transparent white transparent;
+    border-color: transparent transparent rgb(0, 0, 0) transparent;
 }
   
   .tooltip:hover .tooltiptext {
