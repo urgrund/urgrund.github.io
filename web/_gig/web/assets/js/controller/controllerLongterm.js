@@ -40,7 +40,7 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
 
 
     $scope.createCharts = function () {
-        //console.log(longTerm2[0]);
+        console.log(longTerm2);
 
         //console.log(longTerm2[1]['Availability'][0]);
 
@@ -91,20 +91,22 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
 
 
 
+    function myFunc(total, num) {
+        return total + num;
+    }
+
+
     $scope.createParetos = function () {
         for (var i = 0; i < $scope.TUMCategories.length; i++) {
             var cat = $scope.TUMCategories[i];
+            //var splice = longTerm2[0][TUMCategories[cat]].daily.slice($scope.dateIndexStart, $scope.dateIndexEnd); 
             Charts.CreatePareto(cat, longTerm2[0][cat], i);
         }
     }
 
-
-
     $scope.getWaterFallTotal = function (_tumIndex) {
 
-        function myFunc(total, num) {
-            return total + num;
-        }
+
 
         //console.log($scope.dateIndexStart + "  " + $scope.dateIndexEnd);
         var splice = longTerm2[0][TUMCategories[_tumIndex]].daily.slice($scope.dateIndexStart, $scope.dateIndexEnd);
