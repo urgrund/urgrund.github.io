@@ -40,9 +40,13 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
 
 
     $scope.createCharts = function () {
-        console.log(longTerm2);
+        //console.log(longTerm2);
 
         //console.log(longTerm2[1]['Availability'][0]);
+
+        $scope.createParetos();
+        $scope.createWaterfall();
+
 
         // Availability
         $scope.dataAvail = longTerm2[1]['Availability']; //$scope.fillDataFromColumn(9);
@@ -85,37 +89,67 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
         })
 
 
-        $scope.createParetos();
-        $scope.createWaterfall();
     }
 
 
 
-    function myFunc(total, num) {
+    function sumArrayValues(total, num) {
         return total + num;
     }
 
 
+
+    // -----------------------------------------------------------------------------------
+    // PARETO
     $scope.createParetos = function () {
+
+
         for (var i = 0; i < $scope.TUMCategories.length; i++) {
+            //var i = 1;
             var cat = $scope.TUMCategories[i];
-            //var splice = longTerm2[0][TUMCategories[cat]].daily.slice($scope.dateIndexStart, $scope.dateIndexEnd); 
-            Charts.CreatePareto(cat, longTerm2[0][cat], i);
+
+            var newParetoObject = {};
+            var newDuration = 0;
+            newParetoObject.categories = {};
+            //var newCategories = {};
+
+            for (var key in longTerm2[0][cat].categories) {
+                if (longTerm2[0][cat].categories.hasOwnProperty(key)) {
+                    //console.log(key);
+                    // This is the array with the complete data
+                    // depending on the date range fetched
+                    var categoryArray = longTerm2[0][cat][key];
+
+                    // This is the spliced array 
+                    var splice = longTerm2[0][cat][key].slice($scope.dateIndexStart, $scope.dateIndexEnd);
+                    var reduce = splice.reduce(sumArrayValues);
+                    //console.log(splice);
+                    //console.log(reduce);
+
+                    newParetoObject.categories[key] = reduce;
+                    newDuration += reduce;
+                }
+            }
+
+            newParetoObject.duration = newDuration;
+            //console.log(newParetoObject);
+
+            //Charts.CreatePareto(cat, longTerm2[0][cat], i);
+            Charts.CreatePareto(cat, newParetoObject, i);
         }
     }
+    // -----------------------------------------------------------------------------------
+
+
+
+
+    // -----------------------------------------------------------------------------------
+    // WATERFALL
 
     $scope.getWaterFallTotal = function (_tumIndex) {
-
-
-
-        //console.log($scope.dateIndexStart + "  " + $scope.dateIndexEnd);
         var splice = longTerm2[0][TUMCategories[_tumIndex]].daily.slice($scope.dateIndexStart, $scope.dateIndexEnd);
-        //console.log(splice.reduce(myFunc));
-        return splice.reduce(myFunc);
+        return splice.reduce(sumArrayValues);
     };
-
-
-
 
     $scope.createWaterfall = function () {
 
@@ -136,22 +170,11 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
         waterFall[6].value = waterFall[3].value - waterFall[4].value - waterFall[5].value;
 
         $scope.calendarTime = Math.round(waterFall[0].value / 3600, 0) / 1000;
-        //console.log(waterFall);
-        // waterFall.push({ 'name': 'Calendar Time', 'value': total });
-        // waterFall.push({ 'name': TUMCategories[0], 'value': longTerm2[0][TUMCategories[0]].total, 'id': 0 });
-        // waterFall.push({ 'name': TUMCategories[1], 'value': longTerm2[0][TUMCategories[1]].total, 'id': 1 });
-        // waterFall.push({ 'name': 'Total Availability', 'value': totalAvail });
-        // waterFall.push({ 'name': TUMCategories[2], 'value': longTerm2[0][TUMCategories[2]].total, 'id': 2 });
-        // waterFall.push({ 'name': TUMCategories[3], 'value': longTerm2[0][TUMCategories[3]].total, 'id': 3 });
-        // waterFall.push({ 'name': 'Total Utilisation', 'value': totalUtil });
-        // waterFall.push({ 'name': TUMCategories[4], 'value': longTerm2[0][TUMCategories[4]].total, 'id': 4 });
-        // waterFall.push({ 'name': TUMCategories[5], 'value': longTerm2[0][TUMCategories[5]].total, 'id': 5 });
-
 
         var wf = ChartsMonthly.CreateLongTermWaterfall("lt_wf", waterFall);
         //console.log(waterFall);
     }
-
+    // -----------------------------------------------------------------------------------
 
 
 
@@ -164,8 +187,11 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
         $scope.dateIndexEnd = axis.rangeEnd;
 
         $scope.createWaterfall();
-        $scope.$apply();
-        //console.log(Difference_In_Days);
+        $scope.createParetos();
+
+        //$scope.$apply();
+
+
     };
 
     $scope.$watch('$viewContentLoaded', function () {

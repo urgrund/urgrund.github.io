@@ -112,11 +112,12 @@ app.run(function ($rootScope, $http, $route) {
 
 
     $rootScope.fetchSiteData = function (_dates, _setAfterFetch = false) {
+
+        // THIS WILL CHANGE TO NG PHP CALL
         for (var i = 0; i < _dates.length; i++) {
             var date = _dates[i];
             var file = 'http://localhost/web/sitedata/' + date + '.json';
 
-            // THIS WILL CHANGE TO NG PHP CALL
             fetch(file)
                 .then((response) => {
                     return response.json();

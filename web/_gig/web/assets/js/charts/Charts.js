@@ -51,7 +51,7 @@ function GenerateDateLabels(_startDate, _numberOfDays) {
 // -----------------------------------------------------------------------
 
 
-// On a window resize, resize all current charts
+// Subscribe to resize event to deal with chart resizing
 window.addEventListener('resize', function (event) {
     ResizeAllCharts();
 });
@@ -64,8 +64,7 @@ function ResizeAllCharts() {
             allCharts[i].resize();
 }
 
-// Dispose of the chart through eCharts
-// then null and create new array obj
+// Wipe all chart references
 function ClearAllCharts() {
     console.log("Clearing all charts");
     for (var i = 0; i < allCharts.length; i++) {
@@ -848,7 +847,7 @@ class Charts {
                 + ' hours across '
                 + newEvents.length
                 + (newEvents.length > 1 ? ' categories' : ' category')
-                + " & " + eventCount + (eventCount > 1 ? " events" : " event"));
+                + (eventCount != undefined ? " & " + eventCount + (eventCount > 1 ? " events" : " event") : ""));
 
 
 
