@@ -7,43 +7,56 @@ if (isset($_POST['date'])) {
 }
 
 
-
-class LongTermTumEvents
+abstract class LongTermGenerationType
 {
-    var $tumCategories = array();
+    const EquipID = 0;
+    const EquipFunction = 1;
+    const Site = 2;
 }
 
+
+// Do the stuff
+// Will need a more flexible interface
+// What about combinations? ie) P & HAULING ?
+LongTerm::Generate('HAULING', null, null);
+
+
+/**
+ * Generates long term data
+ */
 class LongTerm
 {
-    // public static $TUM_CATEGORIES = [
-    //     'Unplanned Breakdown',
-    //     'Planned Maintenance',
-    //     'Unplanned Standby',
-    //     'Operating Standby',
-    //     'Secondary Operating',
-    //     'Primary Operating'
-    // ];
-
-
-    private static $TUM_EVENT = 'categories';
+    private static $TUM_CAT = 'categories';
     private static $TUM_DURATION = 'duration';
     private static $TUM_DAILY = 'daily';
 
-    public static function Do()
-    {
+
+    /**
+     * Generate long term data based on a series of inputs
+     * This function loads up previous data cache and if it 
+     * doesn't exist it will generate that dates dat
+     */
+    public static function Generate(
+        $_equipFunctionFilter,
+        $_equipIDFilter,
+        $_siteFilter
+    ) {
         Debug::Enable();
         //Debug::Disable();
 
+        $tempStartDate = '2018-10-01';
+        $tempEndDate = '2018-12-31';
 
+
+        // Construct date time period 
         $period = new DatePeriod(
-            new DateTime('2018-10-01'),
+            new DateTime($tempStartDate),
             new DateInterval('P1D'),
-            new DateTime('2018-12-31')
+            new DateTime($tempEndDate)
         );
 
         $numberOfDays = iterator_count($period);
-        //Debug::Log($numberOfDays);
-
+        $validDays = 0;
 
         // Data arrays 
         $tempTUM = [];
@@ -52,20 +65,30 @@ class LongTerm
         $finalObject = [];
 
 
-        $equipFunctionFilter = 'LOADING';
-        $equipIDFilter = 'BL082';
 
         Debug::StartProfile("Generate Data for " . $numberOfDays . " days");
+
+
+        Debug::StartProfile("TUM Values");
+
         $dayIndex = 0;
-
-
         // Sum the time spent in each TUM category 
         // and sub-category status over all days    
         foreach ($period as $key => $value) {
 
             //Debug::Log($dayIndex);
             $date = $value->format('Ymd');
-            $fileData = json_decode(GetSiteData::CheckGeneratedDataExists($date));
+            $fileData = (GetSiteData::CheckGeneratedDataExists($date));
+
+            if ($fileData == null) {
+                Debug::Log("File was NULL, date invalid? " . $date);
+                continue;
+            }
+
+            // Continue on as the date file was valid
+            $validDays++;
+            $fileData = json_decode($fileData);
+
 
             // Array of equipment for this day
             $equipment = $fileData[3];
@@ -73,81 +96,138 @@ class LongTerm
             // Get the times from each event 
             foreach ($equipment as $key => $value) {
 
+                // Filter by equipment function (ie. HAULING) 
+                // and equipment ID if needed
                 if (
-                    $value->function == $equipFunctionFilter
+                    ($value->function == $_equipFunctionFilter || $_equipFunctionFilter == null)
                     //&& $value->id == $equipIDFilter
                 ) {
-
-                    //if (true) {
                     $events = $value->events;
+
+                    // For all events, grab tum data 
                     for ($i = 0; $i < count($events); $i++) {
                         $tumCat = $events[$i]->tumCategory;
 
+                        // Checks to see if new arrays need to be generated
+                        // ---------------------------------------------------------
                         // Check if total exists
                         if (!isset($tempTUM[$tumCat][self::$TUM_DURATION]))
                             $tempTUM[$tumCat][self::$TUM_DURATION] = 0;
 
-                        // Check if daily needs to be generated
+                        // Check if daily TUM totals need to be generated
                         if (!isset($tempTUM[$tumCat][self::$TUM_DAILY])) {
                             $tempTUM[$tumCat][self::$TUM_DAILY] = [];
                             for ($j = 0; $j < $numberOfDays; $j++)
                                 $tempTUM[$tumCat][self::$TUM_DAILY][$j] = 0;
                         }
 
+
+                        // Check if daily category status needs to be generated
+                        if (!isset($tempTUM[$tumCat][$events[$i]->status])) {
+                            $tempTUM[$tumCat][$events[$i]->status] = [];
+                            for ($j = 0; $j < $numberOfDays; $j++)
+                                $tempTUM[$tumCat][$events[$i]->status][$j] = 0;
+                        }
+                        // ---------------------------------------------------------
+
+
+                        // Actually generating the data
+                        // ---------------------------------------------------------
                         //Debug::Log("Day : " . $dayIndex);
                         //Debug::LogI(" E: " . $i);
-                        if (isset($tempTUM[$tumCat][self::$TUM_EVENT][$events[$i]->status])) {
-                            $tempTUM[$tumCat][self::$TUM_EVENT][$events[$i]->status] += $events[$i]->duration;
+                        if (isset($tempTUM[$tumCat][self::$TUM_CAT][$events[$i]->status])) {
+                            $tempTUM[$tumCat][self::$TUM_CAT][$events[$i]->status] += $events[$i]->duration;
                         } else {
-                            $tempTUM[$tumCat][self::$TUM_EVENT][$events[$i]->status] = $events[$i]->duration;
+                            $tempTUM[$tumCat][self::$TUM_CAT][$events[$i]->status] = $events[$i]->duration;
                         }
 
                         $tempTUM[$tumCat][self::$TUM_DURATION] += $events[$i]->duration;
                         $tempTUM[$tumCat][self::$TUM_DAILY][$dayIndex] += $events[$i]->duration;
+                        $tempTUM[$tumCat][$events[$i]->status][$dayIndex] += $events[$i]->duration;
+                        // ---------------------------------------------------------
                     }
                 }
             }
             $dayIndex++;
         }
 
-        // Sort TUM ready for pareto style chart
-        foreach ($tempTUM as $key => $value) {
-            arsort($tempTUM[$key][self::$TUM_EVENT]);
-        }
-
-        // Get U of A Stuff
-        for ($i = 0; $i < $numberOfDays; $i++) {
-
-            $unplannedBreakdown = $tempTUM[TimeUsageModel::$categories[0]][self::$TUM_DAILY][$i];
-            $plannedMaintenance = $tempTUM[TimeUsageModel::$categories[1]][self::$TUM_DAILY][$i];
-            $unplannedStandby = $tempTUM[TimeUsageModel::$categories[2]][self::$TUM_DAILY][$i];
-            $operatingStandby = $tempTUM[TimeUsageModel::$categories[3]][self::$TUM_DAILY][$i];
-            $secondaryOperating = $tempTUM[TimeUsageModel::$categories[4]][self::$TUM_DAILY][$i];
-            $primaryOperating = $tempTUM[TimeUsageModel::$categories[5]][self::$TUM_DAILY][$i];
+        Debug::EndProfile();
 
 
-            $tempUofA['Availability'][$i] = ($unplannedStandby + $operatingStandby + $secondaryOperating + $primaryOperating)
-                / ($unplannedBreakdown + $plannedMaintenance + $unplannedStandby + $operatingStandby + $secondaryOperating + $primaryOperating);
+        Debug::StartProfile("U of A");
 
+        // Generate U of A if there was
+        // data put into the temporary array
+        if (count($tempTUM)) {
+            // Sort TUM ready for pareto style chart
+            foreach ($tempTUM as $key => $value) {
+                arsort($tempTUM[$key][self::$TUM_CAT]);
+            }
 
-            $tempUofA['UofA'][$i] = ($secondaryOperating + $primaryOperating)
-                / ($unplannedStandby + $operatingStandby + $secondaryOperating + $primaryOperating);
+            // Get U of A Stuff
+            for ($i = 0; $i < $numberOfDays; $i++) {
 
+                $unplannedBreakdown = $tempTUM[TimeUsageModel::$categories[0]][self::$TUM_DAILY][$i];
+                $plannedMaintenance = $tempTUM[TimeUsageModel::$categories[1]][self::$TUM_DAILY][$i];
+                $unplannedStandby = $tempTUM[TimeUsageModel::$categories[2]][self::$TUM_DAILY][$i];
+                $operatingStandby = $tempTUM[TimeUsageModel::$categories[3]][self::$TUM_DAILY][$i];
+                $secondaryOperating = $tempTUM[TimeUsageModel::$categories[4]][self::$TUM_DAILY][$i];
+                $primaryOperating = $tempTUM[TimeUsageModel::$categories[5]][self::$TUM_DAILY][$i];
 
-            if ($primaryOperating + $secondaryOperating == 0)
+                // Set to zero first... then check if sum isn't
+                // to avoid divide by zero when calculating
+                $tempUofA['Availability'][$i] = 0;
+                $tempUofA['UofA'][$i] = 0;
                 $tempUofA['Efficiency'][$i] = 0;
-            else
-                $tempUofA['Efficiency'][$i] = $primaryOperating / ($primaryOperating + $secondaryOperating);
+                $tempUofA['Total Asset Utilisation'][$i] = 0;
 
+                $sumOfTUM = ($unplannedBreakdown + $plannedMaintenance + $unplannedStandby + $operatingStandby + $secondaryOperating + $primaryOperating);
+                $sumOfUofA = ($unplannedStandby + $operatingStandby + $secondaryOperating + $primaryOperating);
 
-            $tempUofA['Total Asset Utilisation'][$i] = $primaryOperating
-                / ($unplannedBreakdown + $plannedMaintenance + $unplannedStandby + $operatingStandby + $secondaryOperating + $primaryOperating);
+                // Generate Availability               
+                if ($sumOfTUM > 0)
+                    $tempUofA['Availability'][$i] = ($unplannedStandby + $operatingStandby + $secondaryOperating + $primaryOperating)
+                        / ($unplannedBreakdown + $plannedMaintenance + $unplannedStandby + $operatingStandby + $secondaryOperating + $primaryOperating);
 
-            //$tempUofA['AUCheck'][$i] =  $tempUofA['Availability'][$i] * $tempUofA['UofA'][$i] * $tempUofA['Efficiency'][$i];
+                // Generate UofA
+                if ($sumOfUofA > 0)
+                    $tempUofA['UofA'][$i] = ($secondaryOperating + $primaryOperating)
+                        / ($unplannedStandby + $operatingStandby + $secondaryOperating + $primaryOperating);
+
+                // Efficency
+                if ($primaryOperating + $secondaryOperating == 0)
+                    $tempUofA['Efficiency'][$i] = 0;
+                else
+                    $tempUofA['Efficiency'][$i] = $primaryOperating / ($primaryOperating + $secondaryOperating);
+
+                // Total Utilisation
+                if ($sumOfTUM > 0)
+                    $tempUofA['Total Asset Utilisation'][$i] = $primaryOperating
+                        / ($unplannedBreakdown + $plannedMaintenance + $unplannedStandby + $operatingStandby + $secondaryOperating + $primaryOperating);
+
+                // Temp check as per Daveo's excel sheet
+                //$tempUofA['AUCheck'][$i] =  $tempUofA['Availability'][$i] * $tempUofA['UofA'][$i] * $tempUofA['Efficiency'][$i];
+            }
         }
 
+        Debug::EndProfile();
+        Debug::Log("\n");
         //Debug::Log($tempTUM);
         //Debug::Log($tempUofA);
+
+        // Summary
+        $summary = array(
+            "DateStart" => $tempStartDate,
+            "DateEnd" => $tempEndDate,
+            "DaysRequested" => $numberOfDays,
+            "DaysProcessed" => $validDays,
+            "Filter" => array(
+                "ByEquipmentFunction" => $_equipFunctionFilter == null ? "none" : $_equipFunctionFilter
+            )
+        );
+
+        //Debug::Log($summary);
+        //Debug::Log($tempTUM);
 
         $finalObject[] = $tempTUM;
         $finalObject[] = $tempUofA;
@@ -157,6 +237,3 @@ class LongTerm
         Debug::EndProfile();
     }
 }
-
-
-LongTerm::Do();
