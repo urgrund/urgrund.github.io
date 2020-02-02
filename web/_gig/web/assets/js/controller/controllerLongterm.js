@@ -198,7 +198,6 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
         $timeout(function () {
             $scope.createCharts();
         }, 100);
-        //$scope.createEquipmentCharts();
     });
 
 

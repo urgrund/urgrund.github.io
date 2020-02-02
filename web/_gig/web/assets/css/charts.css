@@ -105,6 +105,11 @@ p{font-size: 9pt; font-weight: 300;}
   /* align-content: flex-start; */
 }
 
+.flex-center
+{
+  justify-content: center;
+}
+
 .flex-end
 {
   justify-content: flex-end;
@@ -403,6 +408,7 @@ p{font-size: 9pt; font-weight: 300;}
 
 .w100pc { width: 100%}
 .w60pc {width:60%}
+.w50pc {width:50%}
 
 
 /* Colours */

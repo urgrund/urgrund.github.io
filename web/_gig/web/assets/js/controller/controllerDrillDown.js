@@ -4,23 +4,28 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
 
     $scope.createEquipmentData = function () {
 
+        $scope.routeID = $routeParams.id;
         $scope.equip = $rootScope.equipment[$routeParams.id];
 
-        //var len = $scope.equip.shiftData[$rootScope.shift].events.length;
+        //console.log($scope.equip);
+
+        if ($scope.equip == undefined)
+            return;
+
         $scope.lastEvent = $rootScope.getEquipmentLastEvent($scope.equip);  // $scope.equip.shiftData[$rootScope.shift].events[len - 1];
-        //console.log($scope.lastEvent);
-
-        //var len = $scope.equip.shiftData[$rootScope.shift].events.length;
-        //$scope.lastEvent = $scope.equip.shiftData[$rootScope.shift].events[len - 1];
-
         $scope.equipMetric = "";
         for (var key in $scope.equip.shiftData[$rootScope.shift].metric) {
             $scope.equipMetric = $scope.equip.shiftData[$rootScope.shift].metric[key].name + " Per Hour";
         }
+
     };
 
 
     $scope.createEquipmentCharts = function () {
+
+        if ($scope.equip == undefined)
+            return;
+
         // Fancy timing to load charts
         var t = 70;
         var d = 70;
@@ -46,16 +51,19 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
             //timeline.group = 'group1';
             echarts.connect('group1');
         }, d);
+
+        console.log("Done making charts");
     }
 
 
-    $scope.createEquipmentData();
+    //    $scope.createEquipmentData();
     $scope.$watch('$viewContentLoaded', function () {
-        // $timeout(function () {
-        //     $scope.createEquipmentCharts();
-        // }, 2000);
-
-        $scope.createEquipmentCharts();
+        $timeout(function () {
+            $scope.createEquipmentData();
+            $scope.createEquipmentCharts();
+        }, 1);
+        //$scope.createEquipmentData();
+        //$scope.createEquipmentCharts();
     });
 
 
