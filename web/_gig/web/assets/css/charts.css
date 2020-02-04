@@ -1,10 +1,5 @@
-:root {
-  /* *{ */
-  --chartDivRoundness: 8px;
-  
-  /* --bgMain: url(../img/login_dark.jpg) no-repeat center center fixed; */
-  
-  /* --bgBlur: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url(../img/login_blur.jpg) no-repeat center center fixed; */
+:root {  
+  --chartDivRoundness: 8px;  
 
   --divShadow: 9px 14px 10px -5px rgba(0, 0, 0, 0.37);  
   --chartDivBorder: #007ac7;

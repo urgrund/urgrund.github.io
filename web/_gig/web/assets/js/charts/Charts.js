@@ -145,25 +145,25 @@ class Charts {
     static CreateMPH(_elementID, _data, _display) {
         var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
 
-        // Only interested if there was 
-        // any metrics recorded this shift
+        // Grab all the metrics recorded for this equipment 
+        // Only interested if there was any metrics recorded this shift
         var metrics = [];
         for (var i = 0; i < _data.shiftData[shift].metricData.length; i++) {
-            var m = _data.shiftData[shift].metricData[i];
-            if (m.cph[11] > 0)
-                metrics.push(m);
+            var metric = _data.shiftData[shift].metricData[i];
+            if (metric.cph[11] > 0)
+                metrics.push(metric);
         }
-        //console.log(metrics);
-
 
         var cumulative = ArrayOfNumbers(0, 12, 0);
-        //var mergedData = ArrayOfNumbers(0, 12, 0);
 
         // Add all the series together
         // along with legend info 
         var seriesArray = [];
         var legend = [];
-        var siteTotals = [];
+        var perSiteTotals = [];
+        var perHourTotals = ArrayOfNumbers(0, 12, 0);
+
+
         for (var i = 0; i < metrics.length; i++) {
             // Invisible Series
             seriesArray.push(
@@ -179,37 +179,49 @@ class Charts {
                 });
 
 
-            // Legend
+            // Add this site to the Legend
             if (!legend.includes(metrics[i].site))
                 legend.push(metrics[i].site);
-
 
             // Site total
             // See if a site (WF, SLC..etc) exists
             // and create clean empty arrays for it
-            if (!(metrics[i].site in siteTotals)) {
-                siteTotals[metrics[i].site] = ArrayOfNumbers(0, 12, 0);
+            if (!(metrics[i].site in perSiteTotals)) {
+                perSiteTotals[metrics[i].site] = ArrayOfNumbers(0, 12, 0);
             }
 
             // Accumulate values into each site
             for (var j = 0; j < 12; j++) {
                 cumulative[j] += metrics[i].cph[j];
-                siteTotals[metrics[i].site][j] = siteTotals[metrics[i].site][j] + metrics[i].mph[j];
+                perSiteTotals[metrics[i].site][j] = perSiteTotals[metrics[i].site][j] + metrics[i].mph[j];
+                perHourTotals[j] += metrics[i].mph[j];
             }
         }
 
 
-        //console.log(siteTotals);
-        //console.log(mergedData);
+        seriesArray.push(
+            {
+                name: "SLC",
+                type: 'bar',
+                z: 3,
+                barMaxWidth: '15',
+                data: perHourTotals,
+                yAxisIndex: 0,
+                itemStyle: { color: ChartStyles.siteColors[0] },
+                label: { normal: { show: true, position: 'top' } },
+                barGap: '-100%',
+                itemStyle: { color: 'rgba(0,0,0,0)' }
+            });
 
-        // Cumulative setup
-        //console.log(cumulative);
+
+        // ------------------------
+        // Cumulative Line        
         legend.push("Cumulative");
         seriesArray.push(
             {
                 name: "Cumulative",
                 yAxisIndex: 1,
-                // z: 0,
+                z: 2,
                 type: 'line',
                 data: cumulative,
                 itemStyle: { color: ChartStyles.cumulativeColor },
@@ -217,51 +229,57 @@ class Charts {
                 symbol: 'none',
                 lineStyle: ChartStyles.lineShadow()
             });
+        // ------------------------
 
 
 
 
+
+        // ------------------------
         // Add each site data to series
-        for (var key in siteTotals) {
+        for (var key in perSiteTotals) {
             seriesArray.unshift(
                 {
                     name: key,
                     type: 'bar',
                     stack: 'aaa',
                     barMaxWidth: '15',
-                    data: siteTotals[key],
-                    itemStyle: { color: ChartStyles.siteColors[0] },
-                    label: { normal: { show: true, position: 'top' } }
+                    data: perSiteTotals[key],
+                    itemStyle: { color: ChartStyles.siteColors[0] }//,
+                    //label: { normal: { show: true, position: 'top' } }
                 });
         }
+        //console.log(perSiteTotals);
+        //console.log(perHourTotals);
+        // ------------------------
 
 
+
+        // ------------------------
         // Construct the hover over message
         function Label(params) {
             var string = "";
 
             // The time 
-            string += ChartStyles.toolTipTextTitle(params[0].name); //"<h4 class='underline'>" + params[0].name + "</h4>";
+            string += ChartStyles.toolTipTextTitle(params[0].name);
 
             // Labels for each metric
             for (var i = 0; i < params.length; i++) {
                 var metric = metrics[params[i].seriesId];
                 if (typeof metric !== 'undefined') {
                     if (params[i].value > 0) {
-                        //string += "<p>(" + metric.site + ") " + metric.name + " : " + params[i].value + "</p>";
                         string += ChartStyles.toolTipTextEntry("(" + metric.site + ") " + metric.name + " : " + params[i].value);
                     }
                 }
             }
 
-            // The last entry is the cumulative 
+            // The last params element is the cumulative 
             var index = params.length - 1;
-            //string += params[index].seriesName + " : " + params[index].value + "<br/>";
             string += ChartStyles.toolTipTextEntry(params[index].seriesName + " : " + params[index].value, "bold");
             return string;
         }
+        // ------------------------
 
-        //console.log(siteTotals);
 
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
@@ -281,20 +299,11 @@ class Charts {
                 trigger: 'axis',
                 textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),
-                backgroundColor: ChartStyles.toolTipBackgroundColor(),//'rgba(50,50,50,0.9)',
+                backgroundColor: ChartStyles.toolTipBackgroundColor(),
                 formatter: function (params, index) {
                     return Label(params);
                 }
             },
-            // xAxis: {
-            //     type: 'category',
-            //     data: timeLabelsShift[shift],
-            //     axisLabel: ChartStyles.timeLineAxisLabel(),
-            //     axisTick: {
-            //         show: true,                    
-            //         alignWithLabel: false
-            //     }
-            // },
             xAxis: ChartStyles.xAxis(timeLabelsShift[shift]),
             yAxis: [{
                 type: 'value',
@@ -596,7 +605,6 @@ class Charts {
             tooltip: {
                 confine: true,
                 trigger: 'axis',
-                axisPointer: { type: 'shadow' },
                 textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),
                 backgroundColor: ChartStyles.toolTipBackgroundColor(),

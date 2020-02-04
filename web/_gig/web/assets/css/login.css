@@ -19,6 +19,92 @@ html {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
+
+
+.blackfill
+{
+  background-color: rgba(0, 0, 0, 0.514);
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;  
+}
+
+
+
+
+
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+/* Center the image and position the close button */
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 body {
   /* background: black; */
   color: white;
@@ -65,12 +151,14 @@ body {
   position: relative;
   margin-left: auto;
   margin-right: auto;
-  width: 40%;
-  height: 50%;
+  margin-top: -200px;
+  width: 30%;
+  min-width: 450px;
+  height: 430px;
   display: grid;
   box-shadow: 4px 7px 13px 0px #00000078;  
-  
-  grid-template-columns: 1fr 1fr;
+  background: var(--cardColorBG);
+  /* grid-template-columns: 1fr 2fr; */
 
   -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 1s; /* Firefox < 16 */
@@ -88,9 +176,13 @@ body {
 
 .log-inner > .input {
   padding: 2%;
-  color:rgb(82, 82, 82);
-  background-color: rgb(255, 255, 255);
+  /* color:rgb(82, 82, 82);
+  background-color: rgb(255, 255, 255); */
 }
+
+
+
+
 
 
 
