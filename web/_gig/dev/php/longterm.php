@@ -2,9 +2,23 @@
 include_once('header.php');
 include_once('get_site_data.php');
 
-if (isset($_POST['date'])) {
-    // include_once('setDebugOff.php');
+
+// ----------------------------------------------------------
+// ----------------------------------------------------------
+// WEB REQUEST ENTRY POINT
+// This data will be valid with a URL 
+// request from the client
+$postdata = file_get_contents("php://input");
+$request = json_decode($postdata);
+
+
+if (is_object($request)) {
+    include_once('setDebugOff.php');
 }
+// ----------------------------------------------------------
+// ----------------------------------------------------------
+
+
 
 
 abstract class LongTermGenerationType
@@ -45,7 +59,7 @@ class LongTerm
         //Debug::Disable();
 
         $tempStartDate = '2018-10-01';
-        $tempEndDate = '2018-12-31';
+        $tempEndDate = '2018-10-31';
 
 
         // Construct date time period 
@@ -231,6 +245,7 @@ class LongTerm
 
         $finalObject[] = $tempTUM;
         $finalObject[] = $tempUofA;
+        $finalObject[] = $summary;
 
         echo json_encode($finalObject);
 
