@@ -125,9 +125,10 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
                     var reduce = splice.reduce(sumArrayValues);
                     //console.log(splice);
                     //console.log(reduce);
-
-                    newParetoObject.categories[key] = reduce;
-                    newDuration += reduce;
+                    if (reduce > 0) {
+                        newParetoObject.categories[key] = reduce;
+                        newDuration += reduce;
+                    }
                 }
             }
 
