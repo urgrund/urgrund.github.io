@@ -490,6 +490,8 @@ app.component("drillDownHeader", {
     templateUrl: 'components/drillDownHeader.html',
     bindings: {
         shift: '@',
+        styleGroup: '@',
+        styleItem: '@',
         lines: '@',
         equip: '<'
     },
@@ -498,7 +500,7 @@ app.component("drillDownHeader", {
 
         this.$onInit = function () {
 
-            //console.log("ASKDLAJSDK");
+            console.log(this.styleGroup);
             //console.log($rootScope.equipment);
 
             if (this.equip == undefined)
@@ -535,13 +537,13 @@ app.component("drillDownHeader", {
             // ---------------------------------------------
 
 
-            this.flexColumn = "";
-            this.flex = "flex flex-start";
+            // this.flexColumn = "";
+            // this.flex = "flex flex-start";
 
-            if (this.lines == 0) {
-                this.flexColumn = "";
-                this.flex = "";
-            }
+            // if (this.lines == 0) {
+            //     this.flexColumn = "";
+            //     this.flex = "";
+            // }
 
         };
     }

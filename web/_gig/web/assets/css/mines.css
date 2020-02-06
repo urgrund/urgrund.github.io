@@ -139,7 +139,8 @@
   align-items: center;
   grid-template-columns: 3fr 3fr 2fr 1fr;
   width: 50%;
-  min-width: 750px;
+  /* min-width: 750px; */
+  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
 }

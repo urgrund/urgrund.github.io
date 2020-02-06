@@ -1,15 +1,17 @@
 <div class="equipGrid" ng-cloak ng-if="equip != undefined">
-    <div class="equipHeader first">
+    <div class="equipHeader first underline">
         <!-- <div class="img_{{equip.function}}"> -->
         <div>
-            <h1 class="bold shadow">
+            <h2 class="shadow">
                 <i ng-class='equipStyleIcon[lastEvent.majorGroup]' ng-style='equipStyleColor[lastEvent.majorGroup]'>
                 </i> {{equip.id}}
                 </span>
-            </h1>
+
+            </h2>
         </div>
         <div class="right">
-            <drill-down-header shift="{{shift}}" equip="equip" lines=1> </drill-down-header>
+            <drill-down-header shift="{{shift}}" equip="equip" style-group="flex flex-right" style-item="">
+            </drill-down-header>
         </div>
     </div>
 

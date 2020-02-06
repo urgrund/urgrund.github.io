@@ -122,6 +122,16 @@ p{font-size: 9pt; font-weight: 300;}
   flex-direction: column;
 }
 
+.flex-column-rev
+{
+  flex-direction: column-reverse;
+}
+
+.flex-wrap
+{
+  flex-wrap: wrap;
+}
+
 
 .vertical
 {
@@ -305,7 +315,8 @@ p{font-size: 9pt; font-weight: 300;}
   margin: 2px;
   padding: 7px;
   transition: 400ms;
-  min-width: 188px;
+  /* min-width: 188px; */
+  width: 188px;
 }
 
 .reportSmallInfo:hover,
