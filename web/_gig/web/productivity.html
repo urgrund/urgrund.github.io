@@ -1,6 +1,4 @@
 <div class="jumbogrid">
-
-
     <div ng-repeat="y in equipToShow" class="jumbogriditem">
 
         <div class="" ng-init="e = getEquipmentLastEvent(equipment[y.id])">
@@ -14,12 +12,13 @@
         <div>
             <h2 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
             <div ng-repeat="(key, value) in y.shiftData[shift].metricData" class="center flex underline"
-                ng-if="value.total != 0">
+                ng-if="value.total != 0"
+                ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
                 <div class="left">
                     <h4> {{value.name}}</h4>
                     <p class="light">({{value.site}}) {{value.activity}}</p>
                 </div>
-                <h2>{{value.total}}</h2>
+                <h2>{{value.total | number}}</h2>
             </div>
         </div>
 
@@ -29,36 +28,3 @@
         </div>
     </div>
 </div>
-
-
-<!-- 
-<div ng-repeat="x in siteData" ng-init="siteIndex = $index">
-
-    <div class="jumbogrid">
-        <div ng-repeat="y in x.equipmentByFunction[function]" class="jumbogriditem">
-            <div class="">
-                <a ng-href="#!equip/{{siteIndex}}/{{y.Index}}" class="img_{{function}}">
-                    <h1 class="center shadow">{{y.ID}}</h1>
-                </a>
-                <drill-down-header shift="{{shift}}" equip="x.equipment[y.Index]" class="first">
-                </drill-down-header>
-            </div>
-            <div>
-                <h2 class="center underline"><i class="fas fa-chart-bar"></i></h2>
-                <div ng-repeat="(key, value) in x.equipment[y.Index].shiftData[shift].metricData"
-                    class="center flex underline" ng-if="value.total != 0">
-                    <div class="left">
-                        <h4> {{value.name}}</h4>
-                        <p class="light">{{value.activity}}</p>
-                    </div>
-                    <h3>{{value.total}}</h3>
-                </div>
-            </div>
-
-            <div>
-                <drill-down-chart title="Availability & Utilisation" chart="{{siteIndex}}-{{y.Index}}">
-                </drill-down-chart>
-            </div>
-        </div>
-    </div>
-</div> -->

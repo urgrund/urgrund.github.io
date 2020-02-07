@@ -201,18 +201,6 @@ class ChartsMines {
                     avoidLabelOverlap: true,
                     hoverOffset: 3,
                     label: { show: false },
-                    // label: {
-                    //     normal: { show: false, position: 'left' },
-                    //     emphasis: {
-                    //         show: false,
-                    //         position: 'top',
-                    //         formatter: '{b}\n{d}%',
-                    //         textStyle: {
-                    //             fontSize: '10',
-                    //             fontWeight: 'bold'
-                    //         }
-                    //     }
-                    // },
                     labelLine: { normal: { show: false } },
                     data: [
                         {

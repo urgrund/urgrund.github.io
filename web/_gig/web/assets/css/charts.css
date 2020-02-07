@@ -10,7 +10,11 @@
   --equipGridRSpace: 34%;
   --equipGridRTimeLine: 24%;
 
-  --cardColorBG: #22558a;
+  /* --cardColorBG: #22558a; */
+  --cardColorBG: rgba(0, 67, 109, 1);
+  --cardColorFG: rgb(34, 85, 138);
+  
+
 
   --backGroundTint: rgba(0, 0, 0, 0.369);
 }
@@ -212,7 +216,8 @@ p{font-size: 9pt; font-weight: 300;}
 
 .jumbogriditem {
   box-shadow: 4px 6px 8px 0px #000000ba;
-  background-color: rgba(0, 67, 109, 1);  
+   background-color: rgba(0, 67, 109, 1);   
+  /* background-color: var(--cardColorBG); */
   margin: 0.5%;
   margin-bottom: 50px;
   padding: 5px;
@@ -310,7 +315,7 @@ p{font-size: 9pt; font-weight: 300;}
 .equipSmallInfo
 {  
   /* background: #22558a; */
-  background: var(--cardColorBG);
+  background: var(--cardColorFG);
   box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.4);
   margin: 2px;
   padding: 7px;

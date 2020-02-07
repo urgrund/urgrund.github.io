@@ -12,7 +12,9 @@
             <div class="dropdown-content">
                 <div class="siteCard" ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
                     <img class="sitePicSmall" ng-src="assets/img/site_{{siteIndex}}.jpg">
-                    <h3>{{x.name}}</h3>
+                    <a ng-href="#!site/{{siteIndex}}">
+                        <h3>{{x.name}}</h3>
+                    </a>
                     <!-- <h4>Analysis</h4>
                         <div><a ng-href="">Bogger Movements</a></div>
                         <div><a ng-href="">Hauling Movements</a></div>

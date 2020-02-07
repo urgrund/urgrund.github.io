@@ -1,0 +1,46 @@
+<div class="cup">
+    <div class="flex flex-center">
+        <img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg">
+    </div>
+
+    <div class="flex">
+        <div class="siteColumn">
+            <div>
+                <h2 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
+
+                <div ng-repeat="(key, value) in shiftData.metricData" class="center flex underline"
+                    ng-if="value.total != 0"
+                    ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
+                    <div class="left">
+                        <h4> {{value.name}}</h4>
+                        <p class="light">{{value.activity}}</p>
+                    </div>
+                    <h2>{{value.total | number}}</h2>
+                </div>
+            </div>
+            <div></div>
+            <div></div>
+        </div>
+
+
+        <div class="siteColumn">
+            <div>
+                <h2 class="center underline"><i class="fas fa-chart-bar"></i> Progress</h2>
+                <div ng-repeat="x in site.equipment" id="{{x}}">
+                    {{x}}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="siteColumn">
+            <div>
+                <h2 class="center underline"><i class="fas fa-chart-bar"></i> Assets</h2>
+                <div ng-repeat="x in site.equipment" id="{{x}}">
+                    {{x}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

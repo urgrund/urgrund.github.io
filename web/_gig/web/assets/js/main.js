@@ -233,6 +233,9 @@ app.run(function ($rootScope, $http, $route) {
     $rootScope.backGroundClassBlur = $rootScope.backGroundDefault + "Blur";
 
 
+    /** Colour for metrics that are production **/
+    $rootScope.metricProductionColour = "#007260";
+
 
     // $rootScope.backgroundOptions = [
     //     { 'name': 'Navy', 'value': 'bg_navy' },
@@ -303,7 +306,7 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
         // Clear charts for memory/performance
         ClearAllCharts();
 
-        // Update background 
+        // Update background
         $scope.switchBackground($rootScope.backGroundState);
     });
 
@@ -417,20 +420,20 @@ app.config(
             .when("/monthly/:site/:func", {
                 templateUrl: function (params) {
                     return params.func == 0 ? 'monthly.html' : 'monthlyAdjust.html';
-                    console.log(func);
                 },
-                controller: 'Monthly'//,
-                // resolve: { init: function () { ClearAllCharts(); } }
+                controller: 'Monthly'
             })
             .when("/reports/", {
                 templateUrl: 'reports.html',
-                controller: 'Reports'//,
-                //resolve: { init: function () { ClearAllCharts(); } }
+                controller: 'Reports'
             })
             .when("/longterm/", {
                 templateUrl: 'longterm.html',
-                controller: 'LongTerm'//,
-                //resolve: { init: function () { ClearAllCharts(); } }
+                controller: 'LongTerm'
+            })
+            .when("/site/:site", {
+                templateUrl: 'site.html',
+                controller: 'Site'
             });
         // .when("/Mines", {
         //     templateUrl: "dash_mines.html",
@@ -523,7 +526,7 @@ app.component("drillDownHeader", {
             diff = hh + "hr " + mm + "m";
 
 
-            // Can this variable be updated with 
+            // Can this variable be updated with
             // interval check so that its realtime?
             this.late = 0;
             if (hh > 4) {

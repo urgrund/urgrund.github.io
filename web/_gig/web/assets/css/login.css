@@ -156,9 +156,10 @@ body {
   min-width: 450px;
   height: 430px;
   display: grid;
-  box-shadow: 4px 7px 13px 0px #00000078;  
-  background: var(--cardColorBG);
-  /* grid-template-columns: 1fr 2fr; */
+
+  /* box-shadow: 4px 7px 13px 0px #00000078;  
+  background: var(--cardColorBG); */
+ 
 
   -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 1s; /* Firefox < 16 */
