@@ -2,15 +2,6 @@
 
 class SiteShiftData
 {
-    //var $tph = array();
-    //var $cumulative = array();
-    //var $avg;
-
-    // Todo,  create the per-equip totals
-    // like 'all bogger avail/idle/down'
-    //var $availabilityByType = array();
-
-
     // All metrics that come through
     // the site are stored here for all equip
     var $metricData = array();

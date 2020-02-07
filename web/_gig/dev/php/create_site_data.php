@@ -341,11 +341,6 @@ function CreateDataForAllSites()
         }
     }
 
-    // Generate site TPH
-    //for ($i = 0; $i < count($allSites); $i++) {
-    //  $allSites[$i]->CreateTPHData();
-    //}
-
     Debug::EndProfile();
     // -------------------------------------
 
