@@ -9,6 +9,7 @@ app.controller("TimeLine", function ($route, $scope, $rootScope, $routeParams, $
             var x = document.getElementsByClassName("equip-flat-usage");
             Charts.CreateTimeLineFlatTime("equip-timeline-time");
 
+            console.log(x.length);
             for (var i = 0; i < x.length; i++) {
                 var equip = $rootScope.equipment[x[i].id];
                 if (equip != 'undefined') {

@@ -116,7 +116,9 @@ app.run(function ($rootScope, $http, $route) {
         // THIS WILL CHANGE TO NG PHP CALL
         for (var i = 0; i < _dates.length; i++) {
             var date = _dates[i];
-            var file = 'http://localhost/web/sitedata/' + date + '.json';
+
+            //var file = 'http://localhost/web/sitedata/' + date + '.json';
+            var file = '/sitedata/' + date + '.json';
 
             fetch(file)
                 .then((response) => {

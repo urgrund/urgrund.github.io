@@ -25,9 +25,17 @@
 
         <div class="siteColumn">
             <div>
+                <h2 class="center underline"><i class="fas fa-chart-bar"></i> Other</h2>
+            </div>
+        </div>
+
+
+        <div class="siteColumn">
+            <div>
                 <h2 class="center underline"><i class="fas fa-chart-bar"></i> Progress</h2>
-                <div ng-repeat="x in site.equipment" id="{{x}}">
-                    {{x}}
+
+                <h4 class="left">Production Tonnes</h4>
+                <div id="bla" style="height: 400px">
                 </div>
             </div>
         </div>
@@ -36,8 +44,36 @@
         <div class="siteColumn">
             <div>
                 <h2 class="center underline"><i class="fas fa-chart-bar"></i> Assets</h2>
-                <div ng-repeat="x in site.equipment" id="{{x}}">
-                    {{x}}
+
+                <div class="flex flex-even">
+                    <div class="siteTinyChartGroup">
+                        <h4 class="center">Trucks</h4>
+                        <div id="{{assetHaulID}}" class="siteTinyChart">
+                            <p>Loading, please wait...</p>
+                        </div>
+                    </div>
+                    <div class="siteTinyChartGroup">
+                        <h4 class="center">Boggers</h4>
+                        <div id="{{assetLoadID}}" class="siteTinyChart">
+                            <p>Loading, please wait...</p>
+                        </div>
+                    </div>
+                    <div class="siteTinyChartGroup">
+                        <h4 class="center">Drills</h4>
+                        <div id="{{assetDrillID}}" class="siteTinyChart">
+                            <p>Loading, please wait...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-repeat="key in site.equipment" id="{{x}}">
+                    <div class="equipFlatUsage">
+                        <p><a href="#!equip/{{key}}" ng-bind="key"></a></p>
+
+                        <div class="equip-flat-usage" id="{{key}}">
+                            <p>Loading, please wait...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

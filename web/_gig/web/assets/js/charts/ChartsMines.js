@@ -101,7 +101,7 @@ class ChartsMines {
 
 
 
-    static CreateBar(_elementID, _data, _title, _type) {
+    static CreateBar(_elementID, _data, _title) {
 
         // -------------------------------------------------------------        
         var myChart = echarts.init(document.getElementById(_elementID));//, chartTone);        
@@ -138,7 +138,7 @@ class ChartsMines {
             series: [
                 {
                     name: _title,
-                    type: _type,
+                    type: 'bar',
                     barWidth: '60%',
                     areaStyle: {
                         normal: {
@@ -155,7 +155,29 @@ class ChartsMines {
                             shadowBlur: 20
                         }
                     },
-                    data: _data,
+                    data: _data.mph,
+                    itemStyle: { color: ChartStyles.siteColors[0] }
+                },
+                {
+                    name: _title,
+                    type: 'line',
+                    barWidth: '60%',
+                    areaStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                offset: 0,
+                                color: 'rgba(50,222,239,.6)'
+                            },
+                            {
+                                offset: 1,
+                                color: 'rgba(0,111,252,0.2)'
+                            }
+                            ], false),
+                            shadowColor: 'rgba(53,142,215, 0.9)',
+                            shadowBlur: 20
+                        }
+                    },
+                    data: _data.cph,
                     itemStyle: { color: ChartStyles.siteColors[0] }
                 }
             ]
@@ -229,6 +251,10 @@ class ChartsMines {
 
 
 
+    // Sankey 
+    // Takes all site data so that it can build a 
+    // sankey with greyed out areas from other sites
+    // using index to colour the site in focus
     static CreateSankey(_elementID, _data, _index) {
 
         var myChart = echarts.init(document.getElementById(_elementID));
@@ -238,28 +264,39 @@ class ChartsMines {
         var graphData = [];
 
         var linesData = [];
+
+        //console.log(_data);
+
         // Get all unique destinations into an array           
         // and flag if they are from the _index site
         for (var i = 0; i < _data.length; i++) {
-            var _d = _data[i].materialMovement;
+            var _matMovements = _data[i].materialMovement;
 
-            for (var x = 0; x < _d.length; x++) {
+            console.log("Index : " + i);
+            console.log(_matMovements);
 
-                if (!(_d[x][2] in uniqueLocations)) {
-                    uniqueLocations[_d[x][2]] = _d[x][9];
-                    asLocations[_d[x][9]].push([_d[x][2], (i == _index) ? 1 : 0]);
+            for (var x = 0; x < _matMovements.length; x++) {
+                if (!(_matMovements[x][2] in uniqueLocations)) {
+                    uniqueLocations[_matMovements[x][2]] = _matMovements[x][9];
+
+                    if (asLocations[_matMovements[x][9]] == undefined)
+                        asLocations[_matMovements[x][9]] = [];
+
+                    asLocations[_matMovements[x][9]].push([_matMovements[x][2], (i == _index) ? 1 : 0]);
                 }
 
-                if (!(_d[x][4] in uniqueLocations)) {
-                    //if (i == _index)
-                    //  console.log(_d[x][4]);
-                    uniqueLocations[_d[x][4]] = _d[x][10];
-                    asLocations[_d[x][10]].push([_d[x][4], (i == _index) ? 1 : 0]);
+                if (!(_matMovements[x][4] in uniqueLocations)) {
+                    uniqueLocations[_matMovements[x][4]] = _matMovements[x][10];
+
+                    if (asLocations[_matMovements[x][10]] == undefined)
+                        asLocations[_matMovements[x][10]] = [];
+                    asLocations[_matMovements[x][10]].push([_matMovements[x][4], (i == _index) ? 1 : 0]);
                 }
             }
         }
 
 
+        console.log("ASKDJASLKDJSD");
         console.log(asLocations);
 
 

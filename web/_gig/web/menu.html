@@ -31,33 +31,36 @@
 
                     <div class="siteCardGrid">
                         <div>
-                            <h4>Boggers</h4>
+                            <h4 class="left">Boggers</h4>
                             <div ng-repeat="y in x.equipmentByFunction.LOADING"
                                 ng-init="e = getEquipmentLastEvent(equipment[y.ID])">
-                                <a ng-href="#!equip/{{y.ID}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                <a ng-href="#!equip/{{y.ID}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
                                         ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y.ID].id}}</a>
+                                <!-- <p class="left"> <i ng-class='equipStyleIcon[e.majorGroup]'
+                                        ng-style='equipStyleColor[e.majorGroup]'></i>
+                                    {{ equipment[y.ID].id}}</p> -->
                             </div>
                         </div>
 
                         <div>
-                            <h4>Trucks</h4>
+                            <h4 class="left">Trucks</h4>
                             <div ng-repeat="y in x.equipmentByFunction.HAULING"
                                 ng-init="e = getEquipmentLastEvent(equipment[y.ID])">
-                                <a ng-href="#!equip/{{y.ID}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                <a ng-href="#!equip/{{y.ID}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
                                         ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y.ID].id}}</a>
                             </div>
                         </div>
 
                         <div>
-                            <h4>Drills</h4>
+                            <h4 class="left">Drills</h4>
                             <div ng-repeat="y in x.equipmentByFunction.P"
                                 ng-init="e = getEquipmentLastEvent(equipment[y.ID])">
-                                <a ng-href="#!equip/{{y.ID}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                <a ng-href="#!equip/{{y.ID}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
                                         ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y.ID].id}}</a>
                             </div>
                             <div ng-repeat="y in x.equipmentByFunction.D"
                                 ng-init="e = getEquipmentLastEvent(equipment[y.ID])">
-                                <a ng-href="#!equip/{{y.ID}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                <a ng-href="#!equip/{{y.ID}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
                                         ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y.ID].id}}</a>
                             </div>
                         </div>
