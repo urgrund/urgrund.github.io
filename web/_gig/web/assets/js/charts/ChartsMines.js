@@ -113,32 +113,53 @@ class ChartsMines {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
             tooltip: {
+                confine: true,
                 trigger: 'axis',
-                axisPointer: { type: 'shadow' },
-                textStyle: ChartStyles.textStyle
+                textStyle: ChartStyles.toolTipTextStyle(),
+                axisPointer: ChartStyles.toolTipShadow(),
+                backgroundColor: ChartStyles.toolTipBackgroundColor(),
+                formatter: function (params, index) {
+                    return Label(params);
+                }
             },
+            toolbox: ChartStyles.toolBox(myChart.getHeight(), "SiteTPH"),
             grid: {
-                // left: '3%',
-                // right: '4%',
-                // bottom: '3%',
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
                 containLabel: true
             },
 
-            xAxis: [
-                {
-                    type: 'category',
-                    data: timeLabelsShift[shift],
-                    axisTick: { alignWithLabel: true },
-                    splitLine: { show: false }
+            xAxis: ChartStyles.xAxis(timeLabelsShift[shift]),
+            // xAxis: [
+            //     {
+            //         type: 'category',
+            //         data: timeLabelsShift[shift],
+            //         axisTick: { alignWithLabel: true },
+            //         splitLine: { show: false }
+            //     }
+            // ],
+            yAxis: [{
+                type: 'value',
+                splitLine: { show: false },
+                axisLine: ChartStyles.axisLineGrey,
+                axisLabel: {
+                    fontSize: ChartStyles.fontSizeSmall
                 }
-            ],
-            yAxis: [
-                { type: 'value', splitLine: { show: false } }
-            ],
+            },
+            {
+                type: 'value',
+                splitLine: { show: false },
+                axisLine: ChartStyles.axisLineGrey,
+                axisLabel: {
+                    fontSize: ChartStyles.fontSizeSmall
+                }
+            }],
             series: [
                 {
                     name: _title,
                     type: 'bar',
+                    yAxisIndex: 0,
                     barWidth: '60%',
                     areaStyle: {
                         normal: {
@@ -161,24 +182,13 @@ class ChartsMines {
                 {
                     name: _title,
                     type: 'line',
-                    barWidth: '60%',
-                    areaStyle: {
-                        normal: {
-                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                                offset: 0,
-                                color: 'rgba(50,222,239,.6)'
-                            },
-                            {
-                                offset: 1,
-                                color: 'rgba(0,111,252,0.2)'
-                            }
-                            ], false),
-                            shadowColor: 'rgba(53,142,215, 0.9)',
-                            shadowBlur: 20
-                        }
-                    },
+                    yAxisIndex: 1,
+                    itemStyle: { color: ChartStyles.cumulativeColor },
+                    areaStyle: { color: ChartStyles.cumulativeArea },
+                    symbol: 'none',
+                    lineStyle: ChartStyles.lineShadow(),
                     data: _data.cph,
-                    itemStyle: { color: ChartStyles.siteColors[0] }
+
                 }
             ]
         };
