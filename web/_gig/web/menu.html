@@ -241,15 +241,24 @@
                         </div>
                     </div>
                     <div>Specific Date</div>
-                    <div><input type="date"></div>
+                    <div class="group">
+                        <!-- <input type="text" id="calendar-tomorrow"> -->
+                        <input type="text" id="test">
+                    </div>
+
+                    <!-- <div>
+                        <input type="text" id="calendar-specificDate">
+                    </div> -->
                 </div>
 
                 <h3><i class="fas fa-search"></i> Search</h3>
 
                 <input type="text" ng-model="searchText" ng-init="searchText='Enter equipment ID...'"
                     placeholder="Search by ID...">
-                <div ng-init="equipList = createMenuEquipList()">
-                    <div class="droplist" ng-repeat="x in equipList | filter:searchText">
+                <!-- <div ng-init="equipList = createMenuEquipList()"> -->
+                <div>
+                    <!-- <div class="droplist" ng-repeat="x in equipList | filter:searchText"> -->
+                    <div class="droplist" ng-repeat="x in equipList">
                         <!-- TODO - have the status icons next to the ID -->
                         <a ng-href="#!equip/{{x}}">{{ x }}</a>
                     </div>

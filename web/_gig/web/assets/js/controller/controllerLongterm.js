@@ -1,5 +1,12 @@
 
 app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout) {
+
+    flatpickr('#calendar-tomorrow', {
+        //"minDate": new Date().fp_incr(1),
+        inline: true
+    });
+
+
     // Temp data
     $scope.days = longTerm2[1]['Availability'].length;
     $scope.calendarTime = 313.33;

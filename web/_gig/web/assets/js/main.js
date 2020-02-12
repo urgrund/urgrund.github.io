@@ -118,7 +118,7 @@ app.run(function ($rootScope, $http, $route) {
             var date = _dates[i];
 
             //var file = 'http://localhost/web/sitedata/' + date + '.json';
-            var file = '/sitedata/' + date + '.json';
+            var file = '//localhost/web/sitedata/' + date + '.json';
 
             fetch(file)
                 .then((response) => {
@@ -151,6 +151,7 @@ app.run(function ($rootScope, $http, $route) {
     // Hacky shit whilst the site is offline
     var dates = ['20181010', '20181009', '20181008', '20181007', '20181006', '20181005', '20181004'];
     $rootScope.fetchSiteData(dates, false);
+
     // ------------------------------------------------------
 
 
@@ -351,6 +352,7 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
 
         $rootScope.shiftTitle = shiftTitle[$rootScope.shift];
         shift = $rootScope.shift;
+
         $scope.$broadcast('updateShift');
     };
 
@@ -359,21 +361,16 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
     };
 
 
-    $scope.createMenuEquipList = function () {
-        var list = [];
-        for (var key in $rootScope.equipment) {
-            list.push($rootScope.equipment[key].id);
-        }
-        //console.log(list);
-        return list;
-    };
 
 
 
 
-    $scope.$watch('$viewContentLoaded', function () {
-        $scope.createMenuEquipList();
-    });
+    // $scope.$watch('$viewContentLoaded', function () {
+    //     $timeout(function () {
+    //         console.log("ASLKDJLASKDJLASKDJ");
+    //         $scope.setupMenu();
+    //     }, 100);
+    // });
 
 });
 

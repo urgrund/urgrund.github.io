@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="assets/css/alerts.css">
     <link rel="stylesheet" href="assets/css/callup.css">
 
-    <link rel="stylesheet" href="assets/css/datepicker.css">
+    <!-- <link rel="stylesheet" href="assets/css/datepicker.css"> -->
     <link rel="stylesheet" href="assets/css/lock.css">
     <link rel="stylesheet" href="assets/css/landing.css">
 
@@ -35,7 +35,7 @@
 
 
 <body ng-app="myApp" ng-controller="myCtrl" class="{{backGroundClass}}">
-    <div id="site_menu" ng-include src="'menu.html'"></div>
+    <div id="site_menu" ng-controller="Menu" ng-include src="'menu.html'"></div>
     <div id="site_body" ng-view></div>
 </body>
 
@@ -98,6 +98,10 @@
 <script src="vendors/moment/moment.min.js"></script>
 
 
+<!-- flatpickr -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 
 
 <!---------------------------------->
@@ -133,14 +137,4 @@
 <script src="assets/js/controller/controllerReports.js"></script>
 <script src="assets/js/controller/controllerSite.js"></script>
 
-
-<script src="assets/js/moment/moment.min.js"></script>
-
-
 <!---------------------------------->
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-<script type="text/javascript" src="assets/js/main.js"></script> -->
-<!-- <script type="text/javascript">
-    app.controller("myCtrl", function ($scope, $timeout, $element, $document) {
-    });
-</script> -->
