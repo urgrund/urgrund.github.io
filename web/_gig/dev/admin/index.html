@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+
+
+    <link rel="stylesheet" href="charts.css">
+    <link rel="stylesheet" href="callup.css">
+    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+
+
+<body style="background-color: rgb(40, 44, 68);">
+    <div ng-app="myApp" ng-controller="myCtrl" class="cup">
+        <div class="underline">
+            <h1><i class="fas fa-hammer"></i> iMine Admin</h1>
+        </div>
+        <div>
+            <button id="myBtn" ng-click="regenerateMissing()">Regenerate Missing</button>
+            <button id="myBtn" ng-click="regenerateMissing()">Regenerate All</button>
+        </div>
+        </br>
+        <div ng-repeat="x in dataStatus" class="admin-grid overline">
+            <h3 ng-if="x.LastUpdate!=null"><i class="far fa-check-circle green"></i> {{ x.Date}} </h3>
+            <h3 ng-if="x.LastUpdate==null"><i class="far fa-times-circle red"></i> {{ x.Date}} </h3>
+
+            <!-- <div ng-if="x.LastUpdate!=null">
+                <p>Exists</p>
+            </div>
+            <div ng-if="x.LastUpdate==null">
+                <p>NO DATA</p>
+            </div> -->
+            <p>{{x.LastUpdate}}</p>
+
+            <p>{{ x.IP}}</p>
+            <p>{{ x.User}}</p>
+            <p>{{ x.Version}}</p>
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+<!-- Angular -->
+<script type="text/javascript" src="../vendors/ng/angular.min.js"></script>
+<script type="text/javascript" src="../vendors/ng/angular-route.min.js"></script>
+
+<script type="text/javascript" src="admin.js"></script>

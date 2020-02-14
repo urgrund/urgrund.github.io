@@ -17,32 +17,37 @@ static $date = "20181010";
 
 echo 'poo';
 
+$pathInPieces = explode('/', $_SERVER['DOCUMENT_ROOT']);
+echo $pathInPieces[0];
 
 
 
 
-Debug::StartProfile("Open Server Connection");
-//echo "Connecting...";
-global $isConnected;
-global $conn;
 
-//Debug::Log($isConnected);
+function Test()
+{
+    Debug::StartProfile("Open Server Connection");
 
-if ($isConnected == true)
-    return;
+    //echo "Connecting...";
+    global $isConnected;
+    global $conn;
 
-$serverName = "tcp:giggsworthtest.database.windows.net,1433";
-$uid = 'test@giggsworthtest';
-$pwd = "GigWorth666";
-$dbase = "ug_trial";
+    //Debug::Log($isConnected);
 
-/* Establish a Connection to the SQL Server  */
-$connectionInfo = array("Database" => $dbase, "UID" => $uid, "PWD" => $pwd, "CharacterSet" => "UTF-8", "ConnectionPooling" => "1", "MultipleActiveResultSets" => '0');
-$conn = sqlsrv_connect($serverName, $connectionInfo);
-echo ($conn);
-Debug::EndProfile();
+    if ($isConnected == true)
+        return;
 
+    $serverName = "tcp:giggsworthtest.database.windows.net,1433";
+    $uid = 'test@giggsworthtest';
+    $pwd = "GigWorth666";
+    $dbase = "ug_trial";
 
+    /* Establish a Connection to the SQL Server  */
+    $connectionInfo = array("Database" => $dbase, "UID" => $uid, "PWD" => $pwd, "CharacterSet" => "UTF-8", "ConnectionPooling" => "1", "MultipleActiveResultSets" => '0');
+    $conn = sqlsrv_connect($serverName, $connectionInfo);
+    echo ($conn);
+    Debug::EndProfile();
+}
 
 // [PHP_PDO_SQLSRV]
 // extension=pdo_sqlsrv_73_ts_x86

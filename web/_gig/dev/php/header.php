@@ -12,3 +12,4 @@ include_once('equipment_objects.php');
 include_once('site.php');
 
 include_once('time_usage_model.php');
+include_once('siteMetaData.php');

@@ -1,0 +1,22 @@
+
+
+.admin-grid {
+  display: grid;  
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-column-gap: 2px;  
+}
+
+.admin-grid:hover
+{
+  background: rgba(6, 169, 232, 0.21);
+}
+
+
+.green
+{
+  color:rgb(39, 255, 0);
+}
+
+.red{
+  color:rgb(255, 0, 0);
+}

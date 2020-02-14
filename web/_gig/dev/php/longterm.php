@@ -11,7 +11,6 @@ include_once('get_site_data.php');
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
-
 if (is_object($request)) {
     include_once('setDebugOff.php');
 }

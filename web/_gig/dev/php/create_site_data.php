@@ -52,6 +52,7 @@ if (Debug::enabled() == true) {
     //CreateSiteData::Run();
 }
 
+
 class CreateSiteData
 {
     public static function SetDateForCreation($_date)
@@ -172,8 +173,8 @@ function AddMetaData()
         "Day" => $day,
         "Date" => $date, //$d->format('d-m-Y'),
         "LastUpdate" => $updateTime,
-        "IP" => GetClientIP(),
-        "User" => "Poo",
+        "IP" => GetClientIP(),  // the client IP that generated this data
+        "User" => "Poo",   // the user that generated this data
         "Version" => Version::current()
     );
 }
