@@ -20,3 +20,22 @@
 .red{
   color:rgb(255, 0, 0);
 }
+
+.loading{
+  color:rgb(87, 221, 255);
+}
+
+@keyframes spinner {
+  0% {
+      transform:  rotate(0deg);
+  }
+  100% {
+       transform: rotate(360deg);
+  }
+}
+
+
+.spinner {  
+      animation: 2s linear infinite spinner;
+      /* transform-origin: center; */
+}

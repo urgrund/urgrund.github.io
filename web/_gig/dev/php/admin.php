@@ -25,11 +25,34 @@ if (is_object($request)) {
     else if ($request->func == 1) {
         Admin::GetDateStatus($request->date, $request->regen);
     }
+    // Force regenerate data
+    else if ($request->func == 2) {
+        Admin::GenerateDataForDate($request->date);
+    }
 
     return;
 } else {
     //Admin::GetAllDateStatus();
-    Admin::GetDateStatus('20181002', true);
+    //Admin::GenerateDataForDate('20181001');
+
+    $generateEverything = true;
+
+    if ($generateEverything) {
+        // Generate everything
+        $tempStartDate = '2018-10-01';
+        $tempEndDate = '2018-12-31';
+        $period = new DatePeriod(
+            new DateTime($tempStartDate),
+            new DateInterval('P1D'),
+            new DateTime($tempEndDate)
+        );
+
+        include_once('setDebugOff.php');
+        foreach ($period as $key => $value) {
+            $date = $value->format('Ymd');
+            Admin::GetDateStatus($date, true);
+        }
+    }
 }
 // ----------------------------------------------------------
 // ----------------------------------------------------------
@@ -39,6 +62,35 @@ if (is_object($request)) {
 
 class Admin
 {
+    public static function GenerateDataForDate($_date)
+    {
+        // This comes from create_site_data
+        global $allSites;
+
+        $metaData = new SiteMetaData();
+        CreateSiteData::SetDateForCreation($_date);
+        CreateSiteData::Run();
+
+        // The last index of the generated data
+        //Debug::Log($allSites);
+        $metaTemp  = end($allSites);
+        $metaData->FillFromData($metaTemp);
+
+        // Encode and write to disk                
+        GetSiteData::WriteGeneratedDataToDisk($_date, json_encode($allSites));
+
+        $metaData->Date = $_date;
+
+        // Might want this to not encode... as the recursive function could use it
+        echo json_encode($metaData);
+    }
+
+
+
+    /**
+     * Check if this date exists and return the meta data.  If it doesn't exist, 
+     * then pass the boolean option to attempt to generate the data
+     **/
     public static function GetDateStatus($_date, $_generateIfMissing)
     {
         // This comes from create_site_data
@@ -57,7 +109,7 @@ class Admin
                 CreateSiteData::Run();
 
                 // The last index of the generated data
-                $metaTemp  = end($allSites);
+                $metaTemp = end($allSites);
                 $metaData->FillFromData($metaTemp);
 
                 // Encode and write to disk                
@@ -106,16 +158,3 @@ class Admin
         echo json_encode($returnList);
     }
 }
-  // if ($data != null) {
-            //     echo ($date);
-            //     echo " complete. (already generated) </br>";
-            // } else {
-            //     CreateSiteData::SetDateForCreation($date);
-            //     CreateSiteData::Run();
-            //     $resultAsJSON = json_encode($allSites);
-            //     GetSiteData::WriteGeneratedDataToDisk($date, $resultAsJSON);
-            //     echo ($date);
-            //     echo " complete. </br>";
-            // }
-
-            //sleep(1);

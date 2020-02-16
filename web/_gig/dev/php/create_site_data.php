@@ -49,7 +49,7 @@ static $metricMap = array(
 
 // Uncomment this to run directly from this file
 if (Debug::enabled() == true) {
-    //CreateSiteData::Run();
+    CreateSiteData::Run();
 }
 
 
@@ -88,6 +88,8 @@ class CreateSiteData
 
         // Wrap up and submit
         AddMetaData();
+
+        //Debug::Log($allSites[2]);
 
 
         Debug::EndProfile();
@@ -174,7 +176,7 @@ function AddMetaData()
         "Date" => $date, //$d->format('d-m-Y'),
         "LastUpdate" => $updateTime,
         "IP" => GetClientIP(),  // the client IP that generated this data
-        "User" => "Poo",   // the user that generated this data
+        "User" => "User",   // the user that generated this data
         "Version" => Version::current()
     );
 }
@@ -221,7 +223,7 @@ function CreateSitesAndEquipment()
 
     $allSites["SLC"] = new Site("SLC", "Sub Level Caves");
     $allSites["WF"] = new Site("WF", "Western Flanks");
-    $allSites["M%"] = new Site("M%", "M Reefs");
+    $allSites["M%"] = new Site("M%", "M-Reefs");
     //$allSites["MISC"] = new Site("MISC", "Workshop");
 
 

@@ -96,6 +96,10 @@ class MetricData
     public $average;
     public $total;
 
+
+
+    /** Construct new Metric data with the Metric, Site and Activity
+     */
     function __construct($_metric, $_site, $_activity)
     {
         // Maps the metric abbrv to a 'nice name' 

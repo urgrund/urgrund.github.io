@@ -17,25 +17,25 @@
 <body style="background-color: rgb(40, 44, 68);">
     <div ng-app="myApp" ng-controller="myCtrl" class="cup">
         <div class="underline">
-            <h1><i class="fas fa-hammer"></i> iMine Admin</h1>
+            <h1><i class="fas fa-hammer"></i> Admin</h1>
         </div>
         <div>
             <button id="myBtn" ng-click="regenerateMissing()">Regenerate Missing</button>
-            <button id="myBtn" ng-click="regenerateMissing()">Regenerate All</button>
+            <button id="myBtn" ng-click="regenerateAll()">Regenerate All</button>
+            <button id="myBtn" ng-click="createAll()">Create All</button>
         </div>
         </br>
-        <div ng-repeat="x in dataStatus" class="admin-grid overline">
-            <h3 ng-if="x.LastUpdate!=null"><i class="far fa-check-circle green"></i> {{ x.Date}} </h3>
-            <h3 ng-if="x.LastUpdate==null"><i class="far fa-times-circle red"></i> {{ x.Date}} </h3>
 
-            <!-- <div ng-if="x.LastUpdate!=null">
-                <p>Exists</p>
-            </div>
-            <div ng-if="x.LastUpdate==null">
-                <p>NO DATA</p>
-            </div> -->
-            <p>{{x.LastUpdate}}</p>
-
+        <div class="admin-grid underline">
+            <h3>Data</h3>
+            <h3>Timestamp</h3>
+            <h3>IP</h3>
+            <h3>User</h3>
+            <h3>Version</h3>
+        </div>
+        <div ng-repeat="x in dataStatus" class="admin-grid">
+            <h3><i ng-class="x.class"></i> {{ x.Date}} </h3>
+            <h4>{{x.LastUpdate.date}}</h4>
             <p>{{ x.IP}}</p>
             <p>{{ x.User}}</p>
             <p>{{ x.Version}}</p>

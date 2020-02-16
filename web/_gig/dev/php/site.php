@@ -121,19 +121,41 @@ class Site
     function AddMetricDataFromEquipment(Equipment $e)
     {
 
+        //static $sites  = ["SLC", "WF", "M%"];
+        global $sites;
+
         // For each shift, get each 
         // Metric Data and see if it exists
         // yet with the Site, and accumulate it
+
+        // for ($i = 0; $i < 2; $i++) {
+
+        //Debug::Log(count($sites));
+
+        // i < 2 is for Shift 1 and Shift 2
         for ($i = 0; $i < 2; $i++) {
             for ($j = 0; $j < count($e->shiftData[$i]->metricData); $j++) {
 
                 // Metric from the Equipment
                 $metric = $e->shiftData[$i]->metricData[$j];
 
+
+                // Debug::Log($this->name . " - ");
+                // Debug::LogI($metric->site . "(" . $e->id . ")");
+                // Debug::LogI(" - " . ($metric->site == $this->key));
+
+
                 // This equipment metric entry 
                 // doesn't belong to this site?
-                if ($metric->site != $this->key)
+                if (
+                    $this->name != $metric->site
+                    && $this->key != $metric->site
+                ) {
+                    //Debug::Log($this->name . "/" . $this->key . " - ");
+                    //Debug::LogI($metric->site . "     (" . $e->id . ")");
+                    //Debug::LogI(" - " . ($metric->site == $this->key));
                     continue;
+                }
 
                 // See if this already exists...
                 $md = $this->FindMetric($metric->metric, $metric->site, $metric->activity, $i);
@@ -239,7 +261,7 @@ class Site
         } else {
 
 
-            // Todo:  STOP USING MISC?
+            // Todo:  STOP USING MISC? There was no verdict on this
 
 
             // Belongs in the workshop

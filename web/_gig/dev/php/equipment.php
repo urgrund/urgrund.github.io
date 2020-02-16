@@ -267,10 +267,6 @@ class Equipment
 
 
 
-
-
-
-
     // Metric per hour
     function GenerateMPH($_allTPHData)
     {
@@ -325,10 +321,14 @@ class Equipment
                 // I don't think this IF is even needed?
                 // if ($this->sites[$i] == $allSites[$j]->key) {
 
-
                 //if ($this->id == 'LH020')
-                if ($allSites[$j]->key == 'SLC')
-                    $allSites[$j]->AddMetricDataFromEquipment($this);
+
+                //if ($allSites[$j]->key == 'M%')
+                //  Debug::Log($allSites[$j]->key);
+
+                //Debug::Log("AKLSJDLKASD");
+                //if ($allSites[$j]->key == 'SLC')
+                $allSites[$j]->AddMetricDataFromEquipment($this);
                 //}
             }
         }
