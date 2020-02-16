@@ -9,26 +9,27 @@ app.controller('Menu', function ($scope, $routeParams, $rootScope, $timeout) {
     $scope.equipList = null;
 
     $scope.setupMenu = function () {
+
+        $scope.equipList = null;
         var list = [];
         for (var key in $rootScope.equipment) {
             list.push($rootScope.equipment[key].id);
         }
 
         $scope.equipList = list;
-        console.log(list);
+        //console.log(list);
 
 
         var fp = flatpickr('#test', {
             "minDate": new Date().fp_incr(1)
         });
-        console.log(fp);
+        //console.log(fp);
 
         return list;
     };
 
     $scope.$watch('$viewContentLoaded', function () {
         $timeout(function () {
-            console.log("ASLKDJLASKDJLASKDJ");
             $scope.setupMenu();
         }, 100);
     });
@@ -39,7 +40,10 @@ app.controller('Menu', function ($scope, $routeParams, $rootScope, $timeout) {
 
 
     $scope.$on('updateShift', function (event, data) {
-        $scope.setupMenu();
+        $timeout(function () {
+            console.log("Menu Update Shift");
+            $scope.setupMenu();
+        }, 100);
     });
 
 });

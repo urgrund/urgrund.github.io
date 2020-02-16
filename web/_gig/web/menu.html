@@ -255,12 +255,19 @@
 
                 <input type="text" ng-model="searchText" ng-init="searchText='Enter equipment ID...'"
                     placeholder="Search by ID...">
-                <!-- <div ng-init="equipList = createMenuEquipList()"> -->
                 <div>
-                    <!-- <div class="droplist" ng-repeat="x in equipList | filter:searchText"> -->
-                    <div class="droplist" ng-repeat="x in equipList">
+                    <div class="droplist" ng-repeat="x in equipList | filter:searchText"
+                        ng-init="e = getEquipmentLastEvent(equipment[x])">
+                        <!-- <div class="droplist" ng-repeat="x in equipList"> -->
                         <!-- TODO - have the status icons next to the ID -->
-                        <a ng-href="#!equip/{{x}}">{{ x }}</a>
+                        <!-- <a ng-href="#!equip/{{x}}" class="left"></a> -->
+                        <div class="flex underline">
+
+                            <h4><i ng-class='equipStyleIcon[e.majorGroup]' ng-style='equipStyleColor[e.majorGroup]'></i>
+                                {{ x }}</h4> {{ e.status }}
+                            <i>{{ e.operator }}</i>
+
+                        </div>
                     </div>
                 </div>
             </div>

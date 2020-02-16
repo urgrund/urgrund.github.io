@@ -1,8 +1,8 @@
 .landing
 {
   font-family: inherit;
-  margin: 18%;
-  margin-top: 1%;
+  margin: 10%;
+  margin-top: 0%;
 }
 
 .landing > div:first-child
@@ -36,14 +36,12 @@
     min-width: 280px;
     margin: 1%;
     padding: 1%;
-    /* box-shadow: 7px 7px 5px 2px #00000052; */
-    /* background: linear-gradient(0deg, #021129ab, #3864b3bf); */
 }
 
-/* .landcard img
-  {
-    width: 90px;
-    border-radius: 10%;
-    box-shadow: 4px 5px 11px 0px #00000091;
-    border: 1px solid #58739f;
-  } */
+.landCardStats
+{
+  display: grid;
+  grid-template-columns: 1fr 1fr;  
+  grid-column-gap: 4%;
+  width: 100%;
+}

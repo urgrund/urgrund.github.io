@@ -106,6 +106,30 @@ class ChartsMines {
         // -------------------------------------------------------------        
         var myChart = echarts.init(document.getElementById(_elementID));//, chartTone);        
 
+        // ------------------------
+        // Construct the hover over message
+        // function Label(params) {
+        //     var string = "";
+
+        //     // The time 
+        //     string += ChartStyles.toolTipTextTitle(params[0].name);
+
+        //     // Labels for each metric
+        //     for (var i = 0; i < params.length; i++) {
+        //         var metric = metrics[params[i].seriesId];
+        //         if (typeof metric !== 'undefined') {
+        //             if (params[i].value > 0) {
+        //                 string += ChartStyles.toolTipTextEntry("(" + metric.site + ") " + metric.name + " : " + params[i].value);
+        //             }
+        //         }
+        //     }
+
+        //     // The last params element is the cumulative 
+        //     var index = params.length - 1;
+        //     string += ChartStyles.toolTipTextEntry(params[index].seriesName + " : " + params[index].value, "bold");
+        //     return string;
+        // }
+        // ------------------------
 
         var option = {
             // color: ['#3398DB'],
@@ -119,7 +143,10 @@ class ChartsMines {
                 axisPointer: ChartStyles.toolTipShadow(),
                 backgroundColor: ChartStyles.toolTipBackgroundColor(),
                 formatter: function (params, index) {
-                    return Label(params);
+                    var string = ChartStyles.toolTipTextTitle(params[0].name);
+                    string += ChartStyles.toolTipTextEntry(params[0].seriesName + ": " + params[0].value);
+                    string += ChartStyles.toolTipTextEntry(params[1].seriesName + ": " + params[1].value, "bold");
+                    return string;
                 }
             },
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "SiteTPH"),
@@ -129,22 +156,14 @@ class ChartsMines {
                 bottom: '3%',
                 containLabel: true
             },
-
             xAxis: ChartStyles.xAxis(timeLabelsShift[shift]),
-            // xAxis: [
-            //     {
-            //         type: 'category',
-            //         data: timeLabelsShift[shift],
-            //         axisTick: { alignWithLabel: true },
-            //         splitLine: { show: false }
-            //     }
-            // ],
             yAxis: [{
                 type: 'value',
                 splitLine: { show: false },
                 axisLine: ChartStyles.axisLineGrey,
                 axisLabel: {
-                    fontSize: ChartStyles.fontSizeSmall
+                    fontSize: ChartStyles.fontSizeSmall,
+                    formatter: function (value, index) { return ChartStyles.axisFormatThousands(value); }
                 }
             },
             {
@@ -152,12 +171,13 @@ class ChartsMines {
                 splitLine: { show: false },
                 axisLine: ChartStyles.axisLineGrey,
                 axisLabel: {
-                    fontSize: ChartStyles.fontSizeSmall
+                    fontSize: ChartStyles.fontSizeSmall,
+                    formatter: function (value, index) { return ChartStyles.axisFormatThousands(value); }
                 }
             }],
             series: [
                 {
-                    name: _title,
+                    name: "Tonnes",
                     type: 'bar',
                     yAxisIndex: 0,
                     barWidth: '60%',
@@ -180,7 +200,7 @@ class ChartsMines {
                     itemStyle: { color: ChartStyles.siteColors[0] }
                 },
                 {
-                    name: _title,
+                    name: "Cumulative",
                     type: 'line',
                     yAxisIndex: 1,
                     itemStyle: { color: ChartStyles.cumulativeColor },

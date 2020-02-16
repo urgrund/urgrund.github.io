@@ -42,7 +42,7 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
     };
 
     $scope.$watch('$viewContentLoaded', function () {
-
+        //return;
         // Prepare controller data
         $timeout(function () {
             //console.log($routeParams.site);
@@ -51,7 +51,7 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
             $scope.shiftData = $scope.site.shiftData[$rootScope.shift];
 
             $scope.prepareAssetTotals();
-        }, 1);
+        }, 5);
 
 
         // Setup charts 
@@ -81,9 +81,19 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
         //ChartsMines.CreateSankey("bla", allSites, 0);
 
         var barChartData = $scope.shiftData.productionTonnes;
-        ChartsMines.CreateBar("bla", barChartData, "");
-
+        ChartsMines.CreateBar("siteTPH", barChartData, "");
     };
+
+
+    $rootScope.$on('newSiteDataSet', function () {
+        //console.log("KALSDJLKASJDLKASDJLKASJKD");
+        // $scope.siteIndex = $routeParams.site;
+        // $scope.site = $rootScope.siteData[$scope.siteIndex];
+        // $scope.shiftData = $scope.site.shiftData[$rootScope.shift];
+
+        // $scope.prepareAssetTotals();
+        // $scope.createSiteCharts();
+    });
 
 
     $scope.$on('updateShift', function (event, data) {

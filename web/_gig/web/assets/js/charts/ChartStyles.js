@@ -192,9 +192,9 @@ class ChartStyleContainer {
 
 
 
-
-
-
+    axisFormatThousands(_value) {
+        return (_value > 999) ? (_value / 1000) + "k" : _value;
+    }
 
 
 

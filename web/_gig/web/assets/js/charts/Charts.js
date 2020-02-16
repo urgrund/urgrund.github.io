@@ -883,12 +883,10 @@ class Charts {
                     name: 'Hours',
                     nameLocation: 'center',
                     nameRotate: 90,
-                    nameGap: 20,
+                    nameGap: 28,
                     axisLabel: {
                         fontSize: ChartStyles.fontSizeSmall,
-                        formatter: function (value, index) {
-                            return (value > 999) ? (value / 100) + "k" : value;
-                        }
+                        formatter: function (value, index) { return ChartStyles.axisFormatThousands(value); }
                     },
                     //interval: 1,
                     axisLine: ChartStyles.axisLineGrey

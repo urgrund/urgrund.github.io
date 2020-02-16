@@ -47,11 +47,14 @@ const TUMCategories = ['Unplanned Breakdown',
 // =====================================================================================
 
 // Init the Angular application
-var app = angular.module("myApp", ['ngRoute', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.exporter', 'ngMaterial', 'ngMessages']);
+//var app = angular.module("myApp", ['ngRoute', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.exporter', 'ngMaterial', 'ngMessages']);
+var app = angular.module("myApp", ['ngRoute', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.exporter']);
 
 
 // First run and rootscope
 app.run(function ($rootScope, $http, $route) {
+
+    $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
     // TODO
     // Shift should at least start correctly
@@ -149,7 +152,7 @@ app.run(function ($rootScope, $http, $route) {
 
 
     // Hacky shit whilst the site is offline
-    var dates = ['20181010', '20181009', '20181008', '20181007', '20181006', '20181005', '20181004'];
+    var dates = ['20181010', '20181009', '20181008', '20181007', '20181006', '20181005', '20181004', '20181003'];
     $rootScope.fetchSiteData(dates, false);
 
     // ------------------------------------------------------
@@ -176,7 +179,6 @@ app.run(function ($rootScope, $http, $route) {
     /**
      * Pass date as dd-mm-yyy. Creates a nicely formatted date from a numerical date
      */
-
     $rootScope.convertToNiceDateObject = function (_date) {
 
         console.log("USE MOMENT FOR THIS");
