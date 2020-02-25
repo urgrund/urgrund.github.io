@@ -337,17 +337,36 @@
 
 
   
+ #site_body a {   
+   text-decoration: none;
+   border-left: 1px solid #00000000;
+    color:inherit;
+    transition: 0.4s;
+  }
 
-#site_body a {   
+#site_body a:hover {    
+  text-decoration: none;
+  /* border: 1px solid #43c3ff; */
+  border-bottom: 1px solid rgb(0, 255, 242);;
+  color:rgb(0, 255, 242);
+  cursor: pointer;
+  transform: translateX(0px);  
+  transform: translateY(2px);  
+  transition: 0.01s;
+}
+
+
+
+  
+
+/* #site_body a {   
     color: white;
     display:block;
     width: 100%;
     background-color: #0c0e493d;
     position: relative;
     border: 1px solid #5470a3;
-    /*border-radius: 5px; */
     text-decoration: none;
-    /* text-align: center; */
     transition: 0.3s;
   }
 
@@ -364,14 +383,12 @@
   box-shadow: none;
   top: 3px;
   transition: 0.3s;
-}
+} */
+
 
 
   
-  /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+  
   @media screen and (max-width: 600px) {
-    /* .column {
-      width: 100%;
-      height: auto;
-    } */
+
   }

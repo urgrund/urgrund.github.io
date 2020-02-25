@@ -28,7 +28,7 @@ app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $ti
             $scope.equipByFunc[0].equipment.push(e);
     }
 
-    console.log($scope.equipByFunc);
+    //console.log($scope.equipByFunc);
 
 
 

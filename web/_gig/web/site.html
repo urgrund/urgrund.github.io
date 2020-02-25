@@ -5,116 +5,130 @@
 
     <div class="left">
         <div class="flex flex-start">
-            <div class="sitePicMargin rightline">
+            <div class="sitePicMargin">
                 <img class="sitePicSmall" ng-src="assets/img/site_{{siteIndex}}.jpg">
             </div>
-            <h2 class="left"> {{site.name}}</h2>
+            <h1 class="left"> {{site.name}} Overview</h1>
         </div>
     </div>
 
+    <!-- ------------------------------------------------------------------------------------- -->
+
     <div class="flex">
         <div class="siteColumn">
-            <div>
-                <h2 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
+            <h2 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
+            </br>
 
-                <div ng-repeat="(key, value) in shiftData.metricData" class="center flex underline"
-                    ng-if="value.total != 0"
-                    ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
-                    <div class="left">
-                        <h4> {{value.name}}</h4>
-                        <p class="light">{{value.activity}}</p>
-                    </div>
-                    <h2>{{value.total | number}}</h2>
+            <div ng-repeat="(key, value) in shiftData.metricData" class="center flex underline" ng-if="value.total != 0"
+                ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
+                <div class="left">
+                    <h4> {{value.name}}</h4>
+                    <p class="light">{{value.activity}}</p>
                 </div>
+                <h2>{{value.total | number}}</h2>
             </div>
+
 
         </div>
 
+        <!-- ------------------------------------------------------------------------------------- -->
+
+
 
         <div class="siteColumn">
-            <div>
-                <h2 class="center underline"><i class="fas fa-chart-bar"></i> Other</h2>
-            </div>
 
+            <h2 class="center underline"><i class="fas fa-truck-loading"></i> Materials</h2>
+            </br>
+
+            <div class="siteSankey">
+                <drill-down-chart name="Material Movements" chart="sankey"></drill-down-chart>
+            </div>
+            <!-- <div id="sankey" class="siteSankey">
+            </div> -->
         </div>
 
 
-        <div class="siteColumn">
-            <div>
-                <h2 class="center underline"><i class="fas fa-chart-bar"></i> Progress</h2>
 
-                <h4 class="left">Production Tonnes</h4>
-                <div id="siteTPH" style="height: 250px"> </div>
-                <div>
-                    <div class="overline underline">
-                        <!-- <h5 class="light"><i class="fas fa-chart-line"></i> Average</h5>
+        <!-- ------------------------------------------------------------------------------------- -->
+
+        <div class="siteColumn">
+
+            <h2 class="center underline"><i class="fas fa-chart-line"></i> Progress</h2>
+            </br>
+            <!-- <h4 class="left">Production Tonnes</h4> -->
+            <!-- <div id="siteTPH" style="height: 250px"> </div> -->
+            <div style="height: 350px">
+                <drill-down-chart name="Production Tonnes" chart="siteTPH"></drill-down-chart>
+            </div>
+            </br>
+            <div>
+                <div class="overline underline">
+                    <!-- <h5 class="light"><i class="fas fa-chart-line"></i> Average</h5>
                         <h3 class="underline">{{shiftData.productionTonnes.average | number : 0}}</h3> -->
-                        <h4 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Tonnes</h4>
-                        <h1 class="right"> {{shiftData.productionTonnes.total| number:0}}</h1>
-                        <h5 class="light right"><i class="fas fa-chart-line"></i> Average</h5>
-                        <h3 class="underline right">{{shiftData.productionTonnes.average | number : 0}}/hr</h3>
-                    </div>
-                    <div class="underline">
-                        <h4 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Metres</h4>
-                        <h1 class="right"> {{shiftData.productionMetres.total| number:0}}</h1>
-                        <h5 class="light right"><i class="fas fa-chart-line"></i> Average</h5>
-                        <h3 class="underline right">{{shiftData.productionMetres.average | number : 0}}/hr</h3>
-                    </div>
+                    <h4 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Tonnes</h4>
+                    <h1 class="right"> {{shiftData.productionTonnes.total| number:0}}</h1>
+                    <h5 class="light right"><i class="fas fa-chart-line"></i> Average</h5>
+                    <h3 class="underline right">{{shiftData.productionTonnes.average | number : 0}}/hr</h3>
+                </div>
+                <div class="underline">
+                    <h4 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Metres</h4>
+                    <h1 class="right"> {{shiftData.productionMetres.total| number:0}}</h1>
+                    <h5 class="light right"><i class="fas fa-chart-line"></i> Average</h5>
+                    <h3 class="underline right">{{shiftData.productionMetres.average | number : 0}}/hr</h3>
                 </div>
             </div>
+
         </div>
 
 
+        <!-- ------------------------------------------------------------------------------------- -->
         <div class="siteColumn">
-            <div>
-                <h2 class="center underline"><i class="fas fa-chart-bar"></i> Assets</h2>
 
-                <div class="flex flex-even">
-                    <div class="siteTinyChartGroup">
-                        <h4 class="center">Trucks</h4>
-                        <div id="{{assetHaulID}}" class="siteTinyChart">
-                            <p>Loading, please wait...</p>
-                        </div>
-                    </div>
-                    <div class="siteTinyChartGroup">
-                        <h4 class="center">Boggers</h4>
-                        <div id="{{assetLoadID}}" class="siteTinyChart">
-                            <p>Loading, please wait...</p>
-                        </div>
-                    </div>
-                    <div class="siteTinyChartGroup">
-                        <h4 class="center">Drills</h4>
-                        <div id="{{assetDrillID}}" class="siteTinyChart">
-                            <p>Loading, please wait...</p>
-                        </div>
+            <h2 class="center underline"><i class="fas fa-truck"></i> Assets</h2>
+            </br>
+
+            <!-- Mini Pies -->
+            <div class="flex flex-even">
+                <div class="siteTinyChartGroup">
+                    <h4 class="center">Trucks</h4>
+                    <div id="{{assetHaulID}}" class="siteTinyChart">
+                        <p>Loading, please wait...</p>
                     </div>
                 </div>
-
-
-
-                <h4 class="left">Boggers</h4>
-                <div ng-repeat="y in site.equipmentByFunction.LOADING"
-                    ng-init="e = getEquipmentLastEvent(equipment[y.ID])" id="{{x}}">
-                    <div class="equipFlatUsage">
-                        <p ng-href="#!equip/{{y.ID}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
-                                ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y.ID].id}}</p>
-
-                        <div class="equip-flat-usage" id="{{equipment[y.ID].id}}">
-                            <p>Loading, please wait...</p>
-                        </div>
+                <div class="siteTinyChartGroup">
+                    <h4 class="center">Boggers</h4>
+                    <div id="{{assetLoadID}}" class="siteTinyChart">
+                        <p>Loading, please wait...</p>
                     </div>
                 </div>
-
-                <!-- <div ng-repeat="key in site.equipment" id="{{x}}">
-                    <div class="equipFlatUsage">
-                        <p><a href="#!equip/{{key}}" ng-bind="key"></a></p>
-
-                        <div class="equip-flat-usage" id="{{key}}">
-                            <p>Loading, please wait...</p>
-                        </div>
+                <div class="siteTinyChartGroup">
+                    <h4 class="center">Drills</h4>
+                    <div id="{{assetDrillID}}" class="siteTinyChart">
+                        <p>Loading, please wait...</p>
                     </div>
-                </div> -->
+                </div>
             </div>
+
+
+            <div ng-repeat="(key, value) in site.equipmentByFunction">
+                <div class="underline">
+                    <h4> {{ key }} </h4>
+                </div>
+                <div ng-repeat="y in value" ng-init="e = getEquipmentLastEvent(equipment[y])" id="">
+                    <div class="equipFlatUsageSite">
+                        <p ng-href="#!equip/{{y}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y].id}}</p>
+
+                        <!-- This class just helps the JS find all of class for the charts -->
+                        <div class="equip-flat-usage" id="{{equipment[y].id}}">
+                            <p>Loading, please wait...</p>
+                        </div>
+                    </div>
+                </div>
+                </br>
+            </div>
+
+
         </div>
 
     </div>

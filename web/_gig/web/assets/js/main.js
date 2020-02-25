@@ -38,6 +38,12 @@ const TUMCategories = ['Unplanned Breakdown',
 ];
 
 
+const FunctionMapping = {
+    P: "Drills",
+    D: "Drills",
+    LOADING: "Boggers",
+    HAULING: "Trucks"
+};
 
 
 
@@ -597,6 +603,21 @@ app.component("reportItem", {
 });
 /// ----------------------------------------
 
+
+
+
+/// ----------------------------------------
+/// Shift Text
+/// ----------------------------------------
+app.component("shiftText", {
+    templateUrl: 'components/shiftText.html',
+    controller: function ($rootScope) {
+        console.log("SALKDJALSKDJASKJDKASJDJLKASDLJK222222");
+        this.shift = $rootScope.shift;
+        this.shiftTitle = $rootScope.shiftTitle;
+    }
+});
+/// ----------------------------------------
 
 
 

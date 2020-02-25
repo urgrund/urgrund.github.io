@@ -1,7 +1,7 @@
 <div class="jumbogrid">
     <div ng-repeat="y in equipToShow" class="jumbogriditem">
 
-        <div class="" ng-init="e = getEquipmentLastEvent(equipment[y.id])">
+        <div class="" ng-init="e = getEquipmentLastEvent(y)">
             <a ng-href="#!equip/{{y.id}}" class="img_{{y.function}}">
                 <h1 class="center shadow bg_black50"> <i ng-class='equipStyleIcon[e.majorGroup]'
                         ng-style='equipStyleColor[e.majorGroup]'></i> {{y.id}}</h1>

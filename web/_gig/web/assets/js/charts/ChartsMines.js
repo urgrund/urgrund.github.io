@@ -104,35 +104,9 @@ class ChartsMines {
     static CreateBar(_elementID, _data, _title) {
 
         // -------------------------------------------------------------        
-        var myChart = echarts.init(document.getElementById(_elementID));//, chartTone);        
-
-        // ------------------------
-        // Construct the hover over message
-        // function Label(params) {
-        //     var string = "";
-
-        //     // The time 
-        //     string += ChartStyles.toolTipTextTitle(params[0].name);
-
-        //     // Labels for each metric
-        //     for (var i = 0; i < params.length; i++) {
-        //         var metric = metrics[params[i].seriesId];
-        //         if (typeof metric !== 'undefined') {
-        //             if (params[i].value > 0) {
-        //                 string += ChartStyles.toolTipTextEntry("(" + metric.site + ") " + metric.name + " : " + params[i].value);
-        //             }
-        //         }
-        //     }
-
-        //     // The last params element is the cumulative 
-        //     var index = params.length - 1;
-        //     string += ChartStyles.toolTipTextEntry(params[index].seriesName + " : " + params[index].value, "bold");
-        //     return string;
-        // }
-        // ------------------------
+        var myChart = echarts.init(document.getElementById(_elementID));
 
         var option = {
-            // color: ['#3398DB'],
             title: ChartStyles.createTitle(_title),
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
@@ -180,22 +154,6 @@ class ChartsMines {
                     name: "Tonnes",
                     type: 'bar',
                     yAxisIndex: 0,
-                    barWidth: '60%',
-                    areaStyle: {
-                        normal: {
-                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                                offset: 0,
-                                color: 'rgba(50,222,239,.6)'
-                            },
-                            {
-                                offset: 1,
-                                color: 'rgba(0,111,252,0.2)'
-                            }
-                            ], false),
-                            shadowColor: 'rgba(53,142,215, 0.9)',
-                            shadowBlur: 20
-                        }
-                    },
                     data: _data.mph,
                     itemStyle: { color: ChartStyles.siteColors[0] }
                 },
@@ -208,7 +166,6 @@ class ChartsMines {
                     symbol: 'none',
                     lineStyle: ChartStyles.lineShadow(),
                     data: _data.cph,
-
                 }
             ]
         };
@@ -285,109 +242,78 @@ class ChartsMines {
     // Takes all site data so that it can build a 
     // sankey with greyed out areas from other sites
     // using index to colour the site in focus
+
     static CreateSankey(_elementID, _data, _index) {
+
 
         var myChart = echarts.init(document.getElementById(_elementID));
 
-        var asLocations = [[], [], [], []];
-        var uniqueLocations = [];
+
+        // The nodes
         var graphData = [];
 
+        // The lines between the nodes
         var linesData = [];
-
-        //console.log(_data);
-
-        // Get all unique destinations into an array           
-        // and flag if they are from the _index site
-        for (var i = 0; i < _data.length; i++) {
-            var _matMovements = _data[i].materialMovement;
-
-            console.log("Index : " + i);
-            console.log(_matMovements);
-
-            for (var x = 0; x < _matMovements.length; x++) {
-                if (!(_matMovements[x][2] in uniqueLocations)) {
-                    uniqueLocations[_matMovements[x][2]] = _matMovements[x][9];
-
-                    if (asLocations[_matMovements[x][9]] == undefined)
-                        asLocations[_matMovements[x][9]] = [];
-
-                    asLocations[_matMovements[x][9]].push([_matMovements[x][2], (i == _index) ? 1 : 0]);
-                }
-
-                if (!(_matMovements[x][4] in uniqueLocations)) {
-                    uniqueLocations[_matMovements[x][4]] = _matMovements[x][10];
-
-                    if (asLocations[_matMovements[x][10]] == undefined)
-                        asLocations[_matMovements[x][10]] = [];
-                    asLocations[_matMovements[x][10]].push([_matMovements[x][4], (i == _index) ? 1 : 0]);
-                }
-            }
-        }
-
-
-        console.log("ASKDJASLKDJSD");
-        console.log(asLocations);
 
 
         // Build the graph Nodes
-        var ratio = 2;
-        for (var x = 0; x < asLocations.length; x++) {
+
+        // Height to width ratio for the graph
+        var ratio = 0.5;
+        var asLocations = _data[_index].asLocations;
+        var xCount = 0;
+        for (var x in asLocations) {
             for (var y = 0; y < asLocations[x].length; y++) {
+                // Category is whether a 1 or 0 was written
+                // which determines if this is the data set
+                // we want to emphasise 
                 var cat = asLocations[x][y][1];
+                console.log(cat);
+                var xPos = xCount;//(xCount / 1) * ratio;
+                var yPos = (y + 1) / (asLocations[x].length + 1) * (1 / ratio * 2);
                 graphData.push({
                     name: asLocations[x][y][0],
-                    x: (x / asLocations.length) * ratio,
-                    y: (y + 1) / (asLocations[x].length + 1),
-                    category: cat,
-                    symbol: (cat == 1) ? 'circle' : 'diamond',
-                    symbolSize: (cat == 1) ? 13 : 7
+                    x: xPos,
+                    y: yPos,
+                    category: (cat != _index) ? 0 : 1,
+                    symbol: (cat == _index) ? 'circle' : 'path://M499.99 176h-59.87l-16.64-41.6C406.38 91.63 365.57 64 319.5 64h-127c-46.06 0-86.88 27.63-103.99 70.4L71.87 176H12.01C4.2 176-1.53 183.34.37 190.91l6 24C7.7 220.25 12.5 224 18.01 224h20.07C24.65 235.73 16 252.78 16 272v48c0 16.12 6.16 30.67 16 41.93V416c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32v-32h256v32c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32v-54.07c9.84-11.25 16-25.8 16-41.93v-48c0-19.22-8.65-36.27-22.07-48H494c5.51 0 10.31-3.75 11.64-9.09l6-24c1.89-7.57-3.84-14.91-11.65-14.91zm-352.06-17.83c7.29-18.22 24.94-30.17 44.57-30.17h127c19.63 0 37.28 11.95 44.57 30.17L384 208H128l19.93-49.83zM96 319.8c-19.2 0-32-12.76-32-31.9S76.8 256 96 256s48 28.71 48 47.85-28.8 15.95-48 15.95zm320 0c-19.2 0-48 3.19-48-15.95S396.8 256 416 256s32 12.76 32 31.9-12.8 31.9-32 31.9z',
+                    symbolSize: (cat == _index) ? 13 : 7,
                 });
 
-
-                //console.log(asLocations[x][y][0] + " : " + cat);
             }
+            xCount++;
         }
+        //}
 
 
-
-        // Build the links
-        var linkData = _data[_index].materialMovement;
+        // Build the links only for this stie        
         var links = [];
-
-        for (var i = 0; i < linkData.length; i++) {
-            //lines.push({ name: 'A', coord: [linkData[i][2], linkData[i][4]] });
-
-            linesData.push([{
-                coord: [linkData[i][2], linkData[i][2] + 4]
-            }, {
-                coord: [linkData[i][4], linkData[i][4] + 5]
-            }])
-
+        var materialMovement = _data[_index].materialMovement;
+        for (var i = 0; i < materialMovement.length; i++) {
             links.push(
                 {
-                    source: linkData[i][2],
-                    target: linkData[i][4],
+                    source: materialMovement[i][2],
+                    target: materialMovement[i][4],
                     symbolSize: [13, 13],
-                    label: {
-                        normal: {
-                            show: false
-                        }
-                    },
+                    label: { normal: { show: false } },
                     lineStyle: {
                         normal: {
-                            width: linkData[i][7] / 80,
+                            //width: materialMovement[i][7] / 50,
+                            width: 5,
                             curveness: 0.2,
-                            color: ChartStyles.siteColors[0]//'red'
+                            opacity: 1,
+                            color: ChartStyles.siteColors[0]
                         },
                         emphasis: {
+                            opacity: 1,
                             color: ChartStyles.siteColors[1]//'white'
                         }
                     }
                 }
             );
         }
-        //console.log(links);
+
+
 
         const categories = [{
             itemStyle: {
@@ -402,29 +328,40 @@ class ChartsMines {
             },
         }, {
             itemStyle: ChartStyles.statusItemStyle(0),
+            //itemStyle: ChartStyles.siteColors[0],
             label: {
                 normal: {
-                    fontSize: '10',
-                    position: 'left'
+                    fontSize: ChartStyles.fontSizeSmall,
+                    position: 'bottom'
                 }
             },
         }]
 
-
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
-
-            title: { text: 'Graph' },
+            title: ChartStyles.createTitle(''),
+            toolbox: ChartStyles.toolBox(myChart.getHeight(), "Material Movement"),
             grid: {
-                top: '3%',
-                bottom: '3%',
+                top: '1%',
+                bottom: '1%',
                 left: '0%',
                 right: '0%'
             },
+            tooltip: {
+                confine: true,
+                //trigger: 'axis',
+                textStyle: ChartStyles.toolTipTextStyle(),
+                axisPointer: ChartStyles.toolTipShadow(),
+                backgroundColor: ChartStyles.toolTipBackgroundColor(),
+                formatter: function (params) {
+                    var string = ChartStyles.toolTipTextTitle("BLAA...");
+                    string += ChartStyles.toolTipTextEntry("...kkkkkkk");
+                    return string;
+                }
+            },
             xAxis: { show: false, type: 'value' },
             yAxis: { show: false, type: 'value' },
-            tooltip: {},
             series:
                 [
                     {
@@ -438,8 +375,8 @@ class ChartsMines {
                                 textStyle: { fontSize: 2 }
                             }
                         },
-                        edgeSymbol: ['', ''],
-                        edgeSymbolSize: [4, 4],
+                        edgeSymbol: ['', 'arrow'],
+                        edgeSymbolSize: [100, 80],
                         edgeLabel: {
                             normal: { textStyle: { fontSize: 10 } }
                         },
@@ -447,27 +384,34 @@ class ChartsMines {
                         links: links,
                         categories: categories
                     },
-                    {
-                        name: 'A',
-                        type: 'lines',
-                        coordinateSystem: 'cartesian2d',
-                        z: 1,
-                        effect: {
-                            show: true,
-                            smooth: false,
-                            trailLength: 0,
-                            symbol: "arrow",
-                            color: 'rgba(55,155,255,0.5)',
-                            symbolSize: 20
-                        },
-                        data: linesData
-                    }
+                    // {
+                    //     type: 'lines',
+                    //     coordinateSystem: 'cartesian2d',
+                    //     zlevel: 2,
+                    //     effect: {
+                    //         show: true,
+                    //         period: 4,
+                    //         trailLength: 0.02,
+                    //         symbol: 'arrow',
+                    //         symbolSize: 9,
+                    //     },
+                    //     lineStyle: {
+                    //         normal: {
+                    //             color: 'white',
+                    //             width: 1,
+                    //             opacity: 1,
+                    //             curveness: .3
+                    //         }
+                    //     },
+                    //     data: linesData                      
+                    //}
                 ]
         };
 
-
         SetOptionOnChart(option, myChart);
+        return myChart;
     }
+
 
 
 
