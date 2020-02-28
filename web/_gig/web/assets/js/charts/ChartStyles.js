@@ -5,13 +5,16 @@ class ChartStyleContainer {
         this.baseStyle = "dark";
         this.backGroundColor = 'rgba(0, 0, 0, 0)';
 
+        this.textColor = 'rgba(1, 1, 1, 1)';
+
         this.fontSizeAxis = 10;
         this.fontSizeSmall = 10;
         this.fontSizeLarge = 20;
 
         this.textStyle =
         {
-            color: '#fff',
+            //color: 'rgba(1, 1, 1, 1)',
+            color: 'white',
             fontFamily: 'Poppins',
             fontSize: 11
         };
@@ -21,6 +24,7 @@ class ChartStyleContainer {
         {
             show: true,
             lineStyle: {
+                color: 'white',
                 opacity: 0.5
             }
         };
@@ -229,6 +233,8 @@ class ChartStyleContainer {
         return 'rgb(34, 85, 138)';
     }
 
+
+    // Helps build the tooltip labels
     toolTipTextTitle(_string) { return "<h5 class='underline bold'>" + _string + "</h5>"; }
     toolTipTextEntry(_string, _class = "") { return "<p class='" + _class + "'>" + _string + "</p>"; }
 
@@ -280,6 +286,7 @@ class ChartStyleContainer {
             data: _data,
             axisLabel: ChartStyles.timeLineAxisLabel(_rotate),
             splitLine: { show: false },
+            axisLine: ChartStyles.axisLineGrey,
             axisTick: {
                 show: true,
                 alignWithLabel: true
@@ -319,6 +326,7 @@ class ChartStyleContainer {
         return {
             show: true,
             interval: 'auto',
+            color: 'white',
             rotate: _rotate == undefined ? 45 : _rotate,
             fontSize: ChartStyles.fontSizeSmall
         }

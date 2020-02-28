@@ -107,9 +107,10 @@ class ChartsMines {
         var myChart = echarts.init(document.getElementById(_elementID));
 
         var option = {
+            textStyle: ChartStyles.textStyle,
             title: ChartStyles.createTitle(_title),
             backgroundColor: ChartStyles.backGroundColor,
-            textStyle: ChartStyles.textStyle,
+
             tooltip: {
                 confine: true,
                 trigger: 'axis',
@@ -122,6 +123,11 @@ class ChartsMines {
                     string += ChartStyles.toolTipTextEntry(params[1].seriesName + ": " + params[1].value, "bold");
                     return string;
                 }
+            },
+            legend: {
+                textStyle: { color: "#fff" },
+                y: 'top',
+                data: ['Tonnes', 'Cumulative']// 'Target A', 'Target U', 'Target U of A']
             },
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "SiteTPH"),
             grid: {
@@ -136,6 +142,7 @@ class ChartsMines {
                 splitLine: { show: false },
                 axisLine: ChartStyles.axisLineGrey,
                 axisLabel: {
+                    color: 'white',
                     fontSize: ChartStyles.fontSizeSmall,
                     formatter: function (value, index) { return ChartStyles.axisFormatThousands(value); }
                 }
@@ -145,6 +152,7 @@ class ChartsMines {
                 splitLine: { show: false },
                 axisLine: ChartStyles.axisLineGrey,
                 axisLabel: {
+                    color: 'white',
                     fontSize: ChartStyles.fontSizeSmall,
                     formatter: function (value, index) { return ChartStyles.axisFormatThousands(value); }
                 }
@@ -259,7 +267,7 @@ class ChartsMines {
         // Build the graph Nodes
 
         // Height to width ratio for the graph
-        var ratio = 0.5;
+        var ratio = 1;
         var asLocations = _data[_index].asLocations;
         var xCount = 0;
         for (var x in asLocations) {

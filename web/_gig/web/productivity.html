@@ -2,8 +2,8 @@
     <div ng-repeat="y in equipToShow" class="jumbogriditem">
 
         <div class="" ng-init="e = getEquipmentLastEvent(y)">
-            <a ng-href="#!equip/{{y.id}}" class="img_{{y.function}}">
-                <h1 class="center shadow bg_black50"> <i ng-class='equipStyleIcon[e.majorGroup]'
+            <a ng-href="#!equip/{{y.id}}">
+                <h1 class="center shadow bg_black50 img_{{y.function}}"> <i ng-class='equipStyleIcon[e.majorGroup]'
                         ng-style='equipStyleColor[e.majorGroup]'></i> {{y.id}}</h1>
             </a>
             <drill-down-header shift="{{shift}}" equip="y" style-group="flex flex-wrap" style-item="equipSmallInfo">

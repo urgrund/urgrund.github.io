@@ -4,13 +4,16 @@
     </div> -->
 
     <div class="underline">
-        <div class="flex">
+        <!-- <div class="flex flex-center">
+            <img class="sitePic" ng-src="assets/img/site_{{siteIndex}}.jpg">
+        </div> -->
+        <div class="flex flex-center">
             <!-- <div class="sitePicMargin">
                 <img class="sitePicSmall" ng-src="assets/img/site_{{siteIndex}}.jpg">
             </div> -->
-            <div></div>
-            <h1 class="center"> {{site.name}} Overview</h1>
-            <div></div>
+
+            <h1 class="center">{{site.name}}</h1>
+
         </div>
     </div>
 
@@ -20,6 +23,34 @@
         <div class="siteColumn">
             <h2 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
             </br>
+
+            <div>
+                <div class="underline">
+                    <div class="flex">
+                        <div>
+                            <h3 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Tonnes</h3>
+                            <div class="flex flex-start">
+                                <!-- <h5 class="light right"><i class="fas fa-chart-line"></i> Average</h5> -->
+                                <h3 class="left">{{shiftData.productionTonnes.average | number : 0}}/hr</h3>
+                            </div>
+                        </div>
+                        <h1 class="right"> {{shiftData.productionTonnes.total| number:0}}</h1>
+                    </div>
+                </div>
+                <div class="underline">
+                    <div class="flex">
+                        <div>
+                            <h3 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Metres</h3>
+                            <div class="flex flex-start">
+                                <!-- <h5 class="light right"><i class="fas fa-chart-line"></i> Average</h5> -->
+                                <h3 class="right">{{shiftData.productionMetres.average | number : 0}}/hr</h3>
+                            </div>
+                        </div>
+                        <h1 class="right"> {{shiftData.productionMetres.total| number:0}}</h1>
+
+                    </div>
+                </div>
+            </div>
 
             <div ng-repeat="(key, value) in shiftData.metricData" class="center flex underline" ng-if="value.total != 0"
                 ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
@@ -31,24 +62,18 @@
             </div>
 
 
+
         </div>
 
         <!-- ------------------------------------------------------------------------------------- -->
 
 
 
-        <div class="siteColumn">
-
+        <!-- <div class="siteColumn">
             <h2 class="center underline"><i class="fas fa-truck-loading"></i> Materials</h2>
             </br>
-
-            <div class="siteSankey">
-                <drill-down-chart name="Material Movements" chart="sankey"></drill-down-chart>
-            </div>
-            <!-- <div id="sankey" class="siteSankey">
-            </div> -->
         </div>
-
+    -->
 
 
         <!-- ------------------------------------------------------------------------------------- -->
@@ -57,28 +82,17 @@
 
             <h2 class="center underline"><i class="fas fa-chart-line"></i> Progress</h2>
             </br>
+
             <!-- <h4 class="left">Production Tonnes</h4> -->
             <!-- <div id="siteTPH" style="height: 250px"> </div> -->
-            <div style="height: 350px">
+            <div class="siteTPH">
                 <drill-down-chart name="Production Tonnes" chart="siteTPH"></drill-down-chart>
             </div>
             </br>
-            <div>
-                <div class="overline underline">
-                    <!-- <h5 class="light"><i class="fas fa-chart-line"></i> Average</h5>
-                        <h3 class="underline">{{shiftData.productionTonnes.average | number : 0}}</h3> -->
-                    <h4 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Tonnes</h4>
-                    <h1 class="right"> {{shiftData.productionTonnes.total| number:0}}</h1>
-                    <h5 class="light right"><i class="fas fa-chart-line"></i> Average</h5>
-                    <h3 class="underline right">{{shiftData.productionTonnes.average | number : 0}}/hr</h3>
-                </div>
-                <div class="underline">
-                    <h4 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Metres</h4>
-                    <h1 class="right"> {{shiftData.productionMetres.total| number:0}}</h1>
-                    <h5 class="light right"><i class="fas fa-chart-line"></i> Average</h5>
-                    <h3 class="underline right">{{shiftData.productionMetres.average | number : 0}}/hr</h3>
-                </div>
+            <div class="siteSankey">
+                <drill-down-chart name="Material Movements" chart="sankey"></drill-down-chart>
             </div>
+
 
         </div>
 

@@ -6,7 +6,7 @@
   margin-bottom: 50px;
   padding: 5px;
   min-height: 650px;
-  width: 410px;  
+  width: 510px;  
 }
 
 .siteTinyChartGroup
@@ -22,11 +22,13 @@
 }
 
 
-.siteSankey
+.siteSankey, .siteTPH
 {
-  height: 60%;
+  height: 43%;
   width: 100% ;
 }
+
+
 
 .equipFlatUsageSite
 {
