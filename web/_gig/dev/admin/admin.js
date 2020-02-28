@@ -14,6 +14,7 @@ app.controller('myCtrl', function ($scope, $http) {
     $scope.dataStatus = [];
     $scope.dataForView = [];
 
+
     $scope.prepareViewData = function () {
         return;
 

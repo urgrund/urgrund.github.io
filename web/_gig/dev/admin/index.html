@@ -32,6 +32,7 @@
             <h3>IP</h3>
             <h3>User</h3>
             <h3>Version</h3>
+            <!-- <h3>Tools</h3> -->
         </div>
         <div ng-repeat="x in dataStatus" class="admin-grid">
             <h3><i ng-class="x.class"></i> {{ x.Date}} </h3>
@@ -39,6 +40,7 @@
             <p>{{ x.IP}}</p>
             <p>{{ x.User}}</p>
             <p>{{ x.Version}}</p>
+            <!-- <button ng-click="logData(x.Date)">Log</button> -->
         </div>
     </div>
 </body>

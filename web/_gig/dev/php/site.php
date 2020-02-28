@@ -257,7 +257,8 @@ class Site
             }
 
             // Add all equipment into their function category 
-            $this->equipmentByFunction[$_equipmentObject->function][] = array("ID" => $_equipmentObject->id, "Index" => count($this->equipment) - 1);
+            //$this->equipmentByFunction[$_equipmentObject->function][] = array("ID" => $_equipmentObject->id, "Index" => count($this->equipment) - 1);
+            $this->equipmentByFunction[$_equipmentObject->function][] = $_equipmentObject->id;
         } else {
 
 
