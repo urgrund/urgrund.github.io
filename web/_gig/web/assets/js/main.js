@@ -575,7 +575,7 @@ app.component("alertBox", {
     controller: function ($rootScope) {
         this.$onInit = function () {
             this.equipment = $rootScope.siteData[this.alert.siteIndex].equipment[this.alert.equipIndex];
-            //console.log(this.alert);
+            console.log(this.equipment);
         };
     }
 });

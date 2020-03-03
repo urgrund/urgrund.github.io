@@ -66,15 +66,13 @@
   color: black;
 }
 
-.alertgrid a
+/* .alertgrid a
 {  
   border: 1px solid;
-  border-radius: 10px;
-  /* margin: 1px; */
-  /* padding: 2px; */
+  border-radius: 10px;  
   padding-left: 3px;
   padding-right: 3px;
-}
+} */
 
 .alertgrid div
 {

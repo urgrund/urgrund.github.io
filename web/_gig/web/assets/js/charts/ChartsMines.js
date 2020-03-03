@@ -104,7 +104,7 @@ class ChartsMines {
     static CreateBar(_elementID, _data, _title) {
 
         // -------------------------------------------------------------        
-        var myChart = echarts.init(document.getElementById(_elementID));
+        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
 
         var option = {
             textStyle: ChartStyles.textStyle,

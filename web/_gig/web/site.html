@@ -24,8 +24,8 @@
             <h2 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
             </br>
 
-            <div>
-                <div class="underline">
+            <div class="">
+                <div class="">
                     <div class="flex">
                         <div>
                             <h3 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Tonnes</h3>
@@ -37,7 +37,7 @@
                         <h1 class="right"> {{shiftData.productionTonnes.total| number:0}}</h1>
                     </div>
                 </div>
-                <div class="underline">
+                <div class="">
                     <div class="flex">
                         <div>
                             <h3 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Metres</h3>
@@ -51,8 +51,9 @@
                     </div>
                 </div>
             </div>
-
-            <div ng-repeat="(key, value) in shiftData.metricData" class="center flex underline" ng-if="value.total != 0"
+            </br>
+            </br>
+            <div ng-repeat="(key, value) in shiftData.metricData" class="center flex overline " ng-if="value.total != 0"
                 ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
                 <div class="left">
                     <h4> {{value.name}}</h4>
@@ -85,6 +86,16 @@
 
             <!-- <h4 class="left">Production Tonnes</h4> -->
             <!-- <div id="siteTPH" style="height: 250px"> </div> -->
+            <div class="flex flex-even">
+                <div class="">
+                    <p class="light"> Spatial Compliance</p>
+                    <h2> <i style="color: rgb(0, 255, 21);">&#9650;</i>50%</h2>
+                </div>
+                <div class="">
+                    <p class="light"> Volumetric Compliance</p>
+                    <h2> <i style="color: red;">&#9660;</i>50%</h2>
+                </div>
+            </div>
             <div class="siteTPH">
                 <drill-down-chart name="Production Tonnes" chart="siteTPH"></drill-down-chart>
             </div>
@@ -132,8 +143,10 @@
                 </div>
                 <div ng-repeat="y in value" ng-init="e = getEquipmentLastEvent(equipment[y])" id="">
                     <div class="equipFlatUsageSite">
-                        <p ng-href="#!equip/{{y}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
-                                ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y].id}}</p>
+                        <h5 class="left"><a ng-href="#!equip/{{y}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                    ng-style='equipStyleColor[e.majorGroup]'></i> {{equipment[y].id}}</a></h5>
+                        <!-- <p ng-href="#!equip/{{y}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y].id}}</p> -->
 
                         <!-- This class just helps the JS find all of class for the charts -->
                         <div class="equip-flat-usage" id="{{equipment[y].id}}">

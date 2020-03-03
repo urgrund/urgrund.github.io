@@ -50,7 +50,11 @@
             <!-- Call up information -->
             <div ng-repeat="x in z.equipment" ng-init="siteIndex = $index">
                 <div class="cup-grid" ng-init="e = getCallUpEvent(x)">
-                    <div><a ng-href="#!equip/{{x.id}}" ng-bind="x.id"></a></div>
+                    <div>
+                        <!-- <a ng-href="#!equip/{{x.id}}" ng-bind="x.id"></a> -->
+                        <h5 class="bold"><a href="#!equip/{{x.id}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                    ng-style='equipStyleColor[e.majorGroup]'></i> {{x.id}}</a></h5>
+                    </div>
                     <div>
                         <p ng-bind="e.eventTime.date"></p>
                     </div>

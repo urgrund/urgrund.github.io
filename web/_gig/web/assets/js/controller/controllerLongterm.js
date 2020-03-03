@@ -69,7 +69,7 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
 
         // Efficiency 
         $scope.dataEff = longTerm2[1]['Efficiency'];//$scope.fillDataFromColumn(12);
-        var chartEff = ChartsMonthly.CreateLongTerm("lt_eff", $scope.dataEff, "Efficiency", ChartStyles.statusItemStyle(1));
+        var chartEff = ChartsMonthly.CreateLongTerm("lt_eff", $scope.dataEff, "Efficiency", ChartStyles.statusItemStyle(1), true);
 
 
         $scope.dataTime = {};
@@ -91,8 +91,8 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
 
 
         // Callbacks for zoom
-        chartAvail.on('dataZoom', function (evt) {
-            $scope.updateValuesFromDataZoom(evt, chartAvail);
+        chartEff.on('dataZoom', function (evt) {
+            $scope.updateValuesFromDataZoom(evt, chartEff);
         })
 
 

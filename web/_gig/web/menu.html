@@ -136,15 +136,6 @@
                     <a ng-href="#">Legal</a>
                     <a ng-href="#">Web</a>
                 </div>
-                <!-- <h3><i class="far fa-user"></i> User</h3>
-                <div><a href="#">Log-out</a></div>
-                <div><a href="#">Report Issue</a></div>
-                <div><a href="#">User Manual</a></div>
-                <br>
-                <h3><i class="fas fa-info-circle"></i> i-Mine</h3>
-                <div><a href="#">About</a></div>
-                <div><a href="#">Legal</a></div>
-                <div><a href="#">Web</a></div> -->
             </div>
         </div>
 
@@ -184,7 +175,7 @@
                     <div>{{meta.LastUpdate['date']}}</div>
 
                     <div>Next Data Pull</div>
-                    <div>...todo</div>
+                    <div>5m 24s</div>
 
                     <div>Local Data Size</div>
                     <div>...todo</div>
@@ -240,14 +231,10 @@
                             </button>
                         </div>
                     </div>
-                    <div>Specific Date</div>
+                    <!-- <div>Specific Date</div>
                     <div class="group">
-                        <!-- <input type="text" id="calendar-tomorrow"> -->
+                        
                         <input type="text" id="test">
-                    </div>
-
-                    <!-- <div>
-                        <input type="text" id="calendar-specificDate">
                     </div> -->
                 </div>
 
@@ -258,15 +245,14 @@
                 <div>
                     <div class="droplist" ng-repeat="x in equipList | filter:searchText"
                         ng-init="e = getEquipmentLastEvent(equipment[x])">
-                        <!-- <div class="droplist" ng-repeat="x in equipList"> -->
-                        <!-- TODO - have the status icons next to the ID -->
-                        <!-- <a ng-href="#!equip/{{x}}" class="left"></a> -->
-                        <div class="flex underline">
-
-                            <h4><i ng-class='equipStyleIcon[e.majorGroup]' ng-style='equipStyleColor[e.majorGroup]'></i>
-                                {{ x }}</h4> {{ e.status }}
-                            <i>{{ e.operator }}</i>
-
+                        <div class="searchResult underline left">
+                            <a ng-href="#!equip/{{x}}">
+                                <h5><i ng-class='equipStyleIcon[e.majorGroup]'
+                                        ng-style='equipStyleColor[e.majorGroup]'></i>
+                                    {{ x }}</h5>
+                            </a>
+                            <p>{{ e.status }}</p>
+                            <p><i>{{ e.operator }}</i></p>
                         </div>
                     </div>
                 </div>

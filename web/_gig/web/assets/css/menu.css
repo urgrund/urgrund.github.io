@@ -334,6 +334,15 @@
   } */
 
 
+  .searchResult
+  {
+    display: grid;
+    grid-template-columns: 80px 40% auto;
+  }
+
+
+
+
 
 
   
