@@ -1,69 +1,71 @@
-<div class="cup" style="height: 1400px;">
+<div class="cup" style="height: 1210px;">
 
 
     <div class="flex flex-start underline">
-        <h2 class="left"><i class="fas fa-chart-line"></i> Long-term Data</h2>
+        <h2 class="left"><i class="fas fa-chart-line"></i> Long-term Data Example</h2>
     </div>
-    </br>
     </br>
 
 
 
     <div class="mines-center {{$parent.backGroundClassBlur}}">
+
         <div class="flex">
-            <div class="overline underline">
+            <div class="overline">
                 <h4 class="light"><i class="fas fa-clock"></i> Days</h4>
                 <h1 style="text-align: center">
                     {{days | number : 0}}</h1>
             </div>
 
-            <div class="overline underline">
+            <div class="overline">
                 <h4 class="light"><i class="far fa-calendar-alt"></i> Calendar Time</h4>
                 <h1 style="text-align: center">
                     {{calendarTime | number : 2}}k</h1>
             </div>
 
-            <div class="overline underline">
+            <div class="overline">
                 <h4 class="light">Availability</h4>
                 <h1 style="text-align: center">
                     {{totalAvailability}}%</h1>
             </div>
 
-            <div class="overline underline">
+            <div class="overline">
                 <h4 class="light">U of A</h4>
                 <h1 style="text-align: center">
                     {{totalUofA}}%</h1>
             </div>
 
-            <div class="overline underline">
+            <div class="overline">
                 <h4 class="light">Efficiency</h4>
                 <h1 style="text-align: center">
                     {{totalEfficiency}}%</h1>
             </div>
 
-            <div class="overline underline">
+            <div class="overline">
                 <h4 class="light">Total Asset Utilisation</h4>
                 <h1 style="text-align: center">
                     {{totalAssetUtil}}%</h1>
             </div>
         </div>
 
-        <br />
 
-
-        <div id="lt_avail" class="h10pc"></div>
-        <div id="lt_uofa" class="h10pc"></div>
-        <div id="lt_total" class="h10pc"></div>
-        <div id="lt_eff" class="h10pc"></div>
-
-
-
-
-        <div class="tumParetoGrid">
-            <drill-down-chart ng-repeat="z in TUMCategories" name="{{z}}" chart="{{z}}"></drill-down-chart>
+        <div class="flex" style="height: 1000px;">
+            <div style="width:50%;">
+                <div id="lt_avail" class="h25pc"></div>
+                <div id="lt_uofa" class="h25pc"></div>
+                <div id="lt_total" class="h25pc"></div>
+                <div id="lt_eff" class="h25pc"></div>
+            </div>
+            <div style="width:50%;">
+                <div class="tumParetoGrid">
+                    <drill-down-chart ng-repeat="z in TUMCategories" name="{{z}}" chart="{{z}}"></drill-down-chart>
+                </div>
+            </div>
         </div>
-        <div id="lt_wf" class="h33pc"></div>
-
     </div>
+
+
+    <div id="lt_wf" class="h33pc"></div>
+
 
 </div>

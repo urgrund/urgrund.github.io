@@ -55,7 +55,7 @@ class ChartsMonthly {
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
-            title: ChartStyles.createTitle("Time Utilisation Model Breakdown"),
+            //title: ChartStyles.createTitle("Time Utilisation Model Breakdown"),
             tooltip: {
                 confine: true,
                 trigger: 'axis',
@@ -68,9 +68,9 @@ class ChartsMonthly {
                 }
             },
             grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '5%',
+                // left: '3%',
+                // right: '4%',
+                // bottom: '5%',
                 containLabel: true
             },
             xAxis: ChartStyles.xAxis(labels, 0),
