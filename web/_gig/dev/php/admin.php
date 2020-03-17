@@ -132,6 +132,8 @@ class Admin
 
         $returnList = [];
 
+
+        // This will need to be dynamic
         $period = new DatePeriod(
             new DateTime('2018-10-01'),
             new DateInterval('P1D'),

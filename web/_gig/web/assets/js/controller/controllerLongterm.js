@@ -6,6 +6,7 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
         inline: true
     });
 
+    console.log(longTerm2);
 
     // Temp data
     $scope.days = longTerm2[1]['Availability'].length;
