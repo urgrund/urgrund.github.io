@@ -5,6 +5,8 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
     $scope.shiftData = null;
     $scope.siteID = $routeParams.site;
 
+    //$scope.FunctionMapping = FunctionMapping;
+
     // For the chart IDs
     $scope.assetHaulID = "assetHaul";
     $scope.assetLoadID = "assetLoad";

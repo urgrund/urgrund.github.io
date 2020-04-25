@@ -6,10 +6,14 @@ app.controller("TimeLine", function ($route, $scope, $rootScope, $routeParams, $
         $timeout(function () {
 
             // Create flat timelines
-            var x = document.getElementsByClassName("equip-flat-usage");
-            Charts.CreateTimeLineFlatTime("equip-timeline-time");
 
-            console.log(x.length);
+            //Charts.CreateTimeLineFlatTime("equip-timeline-time");
+
+            for (var key in $rootScope.functionMapping) {
+                Charts.CreateTimeLineFlatTime("equip-timeline-time-" + key);
+            }
+
+            var x = document.getElementsByClassName("equip-flat-usage");
             for (var i = 0; i < x.length; i++) {
                 var equip = $rootScope.equipment[x[i].id];
                 if (equip != 'undefined') {

@@ -1066,7 +1066,7 @@ class Charts {
                 top: '3%',
                 bottom: '3%',
                 left: '1%',
-                right: '1%'
+                right: '2%'
             },
             xAxis: [
                 {
@@ -1145,10 +1145,10 @@ class Charts {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
             grid: {
-                top: '3%',
+                top: '2%',
                 bottom: '3%',
                 left: '1%',
-                right: '1%'
+                right: '2%'
             },
             xAxis:
             {
@@ -1162,10 +1162,11 @@ class Charts {
                 maxInterval: 0,
                 axisLabel: {
                     inside: true,
-                    rotate: 90,
+                    rotate: 45,
                     //padding: [0, 0, -10, 60],
                     formatter: '{value}',
                     fontFamily: 'Poppins',
+                    fontWeight: 'lighter',
                     fontSize: 10
                 },
                 axisTick: { inside: true }

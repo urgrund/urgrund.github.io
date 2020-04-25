@@ -4,7 +4,6 @@
 // Variables used outside of particular NG scopes  (ie. charts)
 var shift = 0;
 var shiftTitle = ['Day Shift', 'Night Shift'];
-//var shiftCSS = ["<i style='color: yellow' class='fas fa - sun'></i>", "<i class='fas fa-moon'></i>"];
 
 var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -28,7 +27,6 @@ const MajorGroup = {
     DOWN: 'Down'
 }
 
-
 const TUMCategories = ['Unplanned Breakdown',
     'Planned Maintenance',
     'Unplanned Standby',
@@ -38,11 +36,11 @@ const TUMCategories = ['Unplanned Breakdown',
 ];
 
 
-const FunctionMapping = {
-    P: "Drills",
-    D: "Drills",
+const functionMapping = {
     LOADING: "Boggers",
-    HAULING: "Trucks"
+    HAULING: "Trucks",
+    P: "Production Drills",
+    D: "Development Drills"
 };
 
 
@@ -79,7 +77,7 @@ app.run(function ($rootScope, $http, $route) {
     $rootScope.cachedData = [];
 
 
-
+    $rootScope.functionMapping = functionMapping;
 
     // ------------------------------------------------------
 
@@ -101,6 +99,22 @@ app.run(function ($rootScope, $http, $route) {
         $rootScope.equipment = $rootScope.siteData.pop();
 
         $rootScope.siteDataDate = $rootScope.convertToNiceDateObject($rootScope.meta.Date);
+
+
+        // Create a $root list of equipment by function
+        // use the function mapping table as object keys 
+        // then iterate over site data to populate
+        $rootScope.equipmentByFunction = {};
+        for (var key in $rootScope.functionMapping) {
+            $rootScope.equipmentByFunction[key] = [];
+        }
+        for (var key in $rootScope.equipment) {
+            var asset = $rootScope.equipment[key];
+            $rootScope.equipmentByFunction[asset.function].push(key);
+        }
+        //console.log($rootScope.equipmentByFunction);
+
+
 
         // Debug output
         console.log("Sites :");
@@ -247,11 +261,6 @@ app.run(function ($rootScope, $http, $route) {
     /** Colour for metrics that are production **/
     $rootScope.metricProductionColour = "#007260";
 
-
-    // $rootScope.backgroundOptions = [
-    //     { 'name': 'Navy', 'value': 'bg_navy' },
-    //     { 'name': 'Image', 'value': 'bg_img' }
-    // ];
     // ------------------------------------------------------
 
 });
@@ -575,7 +584,7 @@ app.component("alertBox", {
     controller: function ($rootScope) {
         this.$onInit = function () {
             this.equipment = $rootScope.siteData[this.alert.siteIndex].equipment[this.alert.equipIndex];
-            console.log(this.equipment);
+            //console.log(this.equipment);
         };
     }
 });

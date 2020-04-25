@@ -12,13 +12,13 @@
 
     <div class="mines-center {{$parent.backGroundClassBlur}}">
 
-        <div class="equipFlatUsage h60px">
+        <!-- <div class="equipFlatUsage h60px">
             <div></div>
             <div id="equip-timeline-time"></div>
-        </div>
+        </div> -->
 
 
-        <div ng-repeat="(key, equip) in equipment">
+        <!-- <div ng-repeat="(key, equip) in equipment">
             <div class="equipFlatUsage" ng-init="e = getEquipmentLastEvent(equipment[key])">
 
                 <div class="flex">
@@ -30,6 +30,31 @@
                     <p>Loading, please wait...</p>
                 </div>
             </div>
+        </div> -->
+
+        <div ng-repeat="(func, equip) in equipmentByFunction">
+
+            <!-- Header with hours timeline -->
+            <div class="equipFlatUsage h40px">
+                <div class="flex flex-column-rev underline">
+                    <h4 class="light">{{ functionMapping[func] }}</h4>
+                </div>
+                <div id="equip-timeline-time-{{func}}"></div>
+            </div>
+
+            <!-- Equipment and flat bar -->
+            <div class="equipFlatUsage" ng-repeat="key in equipmentByFunction[func]"
+                ng-init="e = getEquipmentLastEvent(equipment[key])">
+                <div style="width: 200px;" class="">
+                    <h5><a href="#!equip/{{key}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                ng-style='equipStyleColor[e.majorGroup]'></i> {{key}}</a></h5>
+                </div>
+
+                <div class="equip-flat-usage" id="{{key}}">
+                    <p>Loading, please wait...</p>
+                </div>
+            </div>
+            </br>
         </div>
     </div>
 </div>
