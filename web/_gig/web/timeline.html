@@ -45,7 +45,7 @@
             <!-- Equipment and flat bar -->
             <div class="equipFlatUsage" ng-repeat="key in equipmentByFunction[func]"
                 ng-init="e = getEquipmentLastEvent(equipment[key])">
-                <div style="width: 200px;" class="">
+                <div>
                     <h5><a href="#!equip/{{key}}"><i ng-class='equipStyleIcon[e.majorGroup]'
                                 ng-style='equipStyleColor[e.majorGroup]'></i> {{key}}</a></h5>
                 </div>

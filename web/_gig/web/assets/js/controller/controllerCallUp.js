@@ -34,8 +34,6 @@ app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $ti
 
 
 
-    // TODO
-    // Remove Site and Index, use only Equip KEY
     $scope.getCallUpEvent = function (_equip) {
 
         var shiftData = _equip.shiftData[$scope.callUpIsDay ? 1 : 0];

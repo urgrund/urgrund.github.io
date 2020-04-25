@@ -228,7 +228,7 @@ p{font-size: 9pt; font-weight: 300;}
 
   display: grid;
 
-  grid-column-gap: 2%;
+  grid-column-gap: 3%;
   grid-row-gap: 1%; 
 
   grid-template-columns: 30% 30% 30%;
