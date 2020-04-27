@@ -39,8 +39,8 @@ const TUMCategories = ['Unplanned Breakdown',
 const functionMapping = {
     LOADING: "Boggers",
     HAULING: "Trucks",
-    P: "Production Drills",
-    D: "Development Drills"
+    P: "Solos",// "Production Drills",
+    D: "Jumbos"// "Development Drills"
 };
 
 
@@ -396,7 +396,30 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
 // =====================================================================================
 
 
-
+app.directive('fileReader', function () {
+    return {
+        scope: {
+            fileReader: "="
+        },
+        link: function (scope, element) {
+            (element).on('change', function (changeEvent) {
+                var files = changeEvent.target.files;
+                console.log(files);
+                if (files.length) {
+                    Papa.parse(files[0], {
+                        complete: function (results) {
+                            console.log("Finished:", results.data);
+                            scope.fileReader = results.data;
+                            scope.$apply(function () {
+                                scope.fileReader = contents;
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    };
+});
 
 
 
