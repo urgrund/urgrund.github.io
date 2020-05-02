@@ -46,21 +46,21 @@ class Equipment
         $e->status = $_eventDataRow[6];
         $e->majorGroup = $_eventDataRow[7];
         $e->shift = $_eventDataRow[8];
-        $e->tumCategory = $_eventDataRow[9];
+        $e->tumCategory = Config::TUM($e->status);
 
 
         // Which shift does this event belong to?        
+        // Store only the index of this event here
         if ($e->shift == "P1") {
-            //$this->shiftData[0]->events[] = $e;
             $this->shiftData[0]->events[] = count($this->events);
         } else {
-            //$this->shiftData[1]->events[] = $e;
-            $this->shiftData[1]->events[] =  count($this->events);
+            $this->shiftData[1]->events[] = count($this->events);
         }
 
 
-        // Store all events
+        // Store the full event details 
         $this->events[] = $e;
+        //Debug::Log(count($this->events));
         //Debug::Log($this->shiftData[0]->events);
         //Debug::Log($this->shiftData[1]->events);
     }
@@ -91,8 +91,9 @@ class Equipment
             // Go through all events for this shift
             // and allocate seconds in each shift hour
             for ($i = 0; $i < count($events); $i++) {
-                //Debug::Log($events[$i]);
+
                 $event = $this->events[$events[$i]];
+                //Debug::Log($event);
 
                 // Get start and end dates
                 $startDate = clone $event->eventTime;
@@ -268,42 +269,42 @@ class Equipment
 
 
     // Metric per hour
-    function GenerateMPH($_allTPHData)
+    function GenerateMPH()
     {
         // Already generated data?
         if ($this->genComplete)
             return;
 
         global $allSites;
+        global $sqlMetricPerHour;
 
         // Go through all events...
         // Record the hourly data based on shift
         // and based on Metric 
-        for ($i = 0; $i < count($_allTPHData); $i++) {
+        for ($i = 0; $i < count($sqlMetricPerHour); $i++) {
 
             // It's an ID match for this Eqiup!
-            if ($_allTPHData[$i][0] == $this->id) {
+            if ($sqlMetricPerHour[$i][0] == $this->id) {
 
                 // The metric record
-                $e = $_allTPHData[$i];
+                $e = $sqlMetricPerHour[$i];
 
                 // Metric Data for both shifts
-                $mdDay = new MetricData($e[2], $e[1], $e[count($e) - 1]);
-                $mdNight = new MetricData($e[2], $e[1], $e[count($e) - 1]);
+                $mdDay = new MetricData($e[2], $e[1], $e[3]); //$e[count($e) - 1]);
+                $mdNight = new MetricData($e[2], $e[1], $e[3]); //$e[count($e) - 1]);
 
                 // Data start index... for convenience 
-                $dataIdx = 2;
-
+                $dataIdx = 4;
                 // For each hour in the event
-                for ($j = 0; $j < count($e); $j++) {
-                    // To offset in the SQL data, Index >2 is where hourly data starts
-                    if ($j > $dataIdx && $j < count($e) - 1) {
-                        // Which shift to assign?                         
-                        if ($j > $dataIdx + 12)
-                            $mdNight->AddValue($e[$j]);
-                        else
-                            $mdDay->AddValue($e[$j]);
-                    }
+                for ($j = $dataIdx; $j < count($e); $j++) {
+                    // To offset in the SQL data, after dataIdx is where hourly data starts
+                    //if ($j > $dataIdx && $j < count($e) - 1) {
+                    // Which shift to assign?                         
+                    if ($j > $dataIdx + 12 - 1)
+                        $mdNight->AddValue($e[$j]);
+                    else
+                        $mdDay->AddValue($e[$j]);
+                    //}
                 }
 
                 //Debug::Log($e[count($e) - 1]);
@@ -314,23 +315,15 @@ class Equipment
             }
         }
 
+        //Debug::Log($this->shiftData[1]);
+
         // Add this data to its site to tally totals
         for ($i = 0; $i < count($this->sites); $i++) {
-            for ($j = 0; $j < count($allSites); $j++) {
-
-                // I don't think this IF is even needed?
-                // if ($this->sites[$i] == $allSites[$j]->key) {
-
-                //if ($this->id == 'LH020')
-
-                //if ($allSites[$j]->key == 'M%')
-                //  Debug::Log($allSites[$j]->key);
-
-                //Debug::Log("AKLSJDLKASD");
-                //if ($allSites[$j]->key == 'SLC')
-                $allSites[$j]->AddMetricDataFromEquipment($this);
-                //}
-            }
+            $allSites[$this->sites[$i]]->AddMetricDataFromEquipment($this);
+            //Debug::Log($allSites[$this->sites[$i]]);
+            //for ($j = 0; $j < count($allSites); $j++) {
+            //  $allSites[$j]->AddMetricDataFromEquipment($this);
+            //}
         }
 
 

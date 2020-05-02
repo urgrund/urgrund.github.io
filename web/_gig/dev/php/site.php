@@ -38,6 +38,14 @@ class Site
     {
         global $date;
 
+        global $sqlMetricPerHour;
+        global $sqlEquipEventList;
+        global $sqlMineEquipmentList;
+
+        //global $configTUM;
+        //global $configSites;
+
+
         $this->key = $_key;
         $this->name = $_name;
 
@@ -49,14 +57,6 @@ class Site
         $this->tph24 = new SiteShiftData();
         $this->shiftData[] = new SiteShiftData();
         $this->shiftData[] = new SiteShiftData();
-
-        // Fill out shift-data 
-        // for ($j = 0; $j < 2; $j++) {
-        //     for ($i = 0; $i < 12; $i++) {
-        //         $this->shiftData[$j]->tph[$i] = 0;
-        //         $this->shiftData[$j]->cumulative[$i] = 0;
-        //     }
-        // }
 
         // Why have to do this, why can't PHP 
         // initialize with array length?
@@ -74,6 +74,42 @@ class Site
         array_push($this->uoaf24, $tempIdle);
         array_push($this->uoaf24, $tempDown);
 
+
+        // MATT NEW STUFF
+
+        // Get's the equipment belonging to this site
+        $this->equipment = array();
+        for ($i = 1; $i < count($sqlMetricPerHour); $i++) {
+            $eID = $sqlMetricPerHour[$i][0];
+            $eSiteKey = $sqlMetricPerHour[$i][1];
+            $eSiteName = Config::Sites($eSiteKey); //$configSites[$eSiteKey];
+            $eFunction = $sqlMineEquipmentList[$eID][1];
+
+            // Name is valid 
+            if ($eSiteName == $this->name) {
+                // Add equipment to the site list
+                $this->equipment[$eID] = $eFunction;
+
+                // Add all equipment into their function category        
+                if (!array_key_exists($eFunction, $this->equipmentByFunction))
+                    $this->equipmentByFunction[$eFunction] = array();
+                $this->equipmentByFunction[$eFunction][] = $eID;
+            }
+        }
+        //Debug::Log($this->equipment);
+
+
+        //foreach (array_keys($uniqueEquip) as $id) {
+        //  $this->_equipFunction[$result[$i][0]] = $result[$i][1];
+        //}
+
+        //Debug::Log($this->name);
+
+        return;
+
+
+
+
         // For this site, get the function that each 
         // equipment is currently performing
 
@@ -84,6 +120,8 @@ class Site
         for ($i = 1; $i < count($result); $i++) {
             $this->_equipFunction[$result[$i][0]] = $result[$i][1];
         }
+
+        //Debug::Log($sqlMetricPerHour);
     }
 
 
@@ -120,36 +158,23 @@ class Site
      */
     function AddMetricDataFromEquipment(Equipment $e)
     {
-
-        //static $sites  = ["SLC", "WF", "M%"];
-        global $sites;
-
-        // For each shift, get each 
-        // Metric Data and see if it exists
-        // yet with the Site, and accumulate it
-
-        // for ($i = 0; $i < 2; $i++) {
-
-        //Debug::Log(count($sites));
-
-        // i < 2 is for Shift 1 and Shift 2
+        // For each shift, get each Metric Data and
+        // see if it exists yet with the Site
         for ($i = 0; $i < 2; $i++) {
+
             for ($j = 0; $j < count($e->shiftData[$i]->metricData); $j++) {
 
                 // Metric from the Equipment
                 $metric = $e->shiftData[$i]->metricData[$j];
 
-
-                // Debug::Log($this->name . " - ");
-                // Debug::LogI($metric->site . "(" . $e->id . ")");
-                // Debug::LogI(" - " . ($metric->site == $this->key));
+                //Debug::Log($this->name . " - ");
+                //Debug::LogI($metric->site . "(" . $e->id . ")");
 
 
-                // This equipment metric entry 
-                // doesn't belong to this site?
+                // This equipment metric entry doesn't belong to this site?
                 if (
                     $this->name != $metric->site
-                    && $this->key != $metric->site
+                    //&& $this->key != $metric->site
                 ) {
                     //Debug::Log($this->name . "/" . $this->key . " - ");
                     //Debug::LogI($metric->site . "     (" . $e->id . ")");
@@ -157,14 +182,16 @@ class Site
                     continue;
                 }
 
+
                 // See if this already exists...
                 $md = $this->FindMetric($metric->metric, $metric->site, $metric->activity, $i);
 
+
+
                 // If it can't be found, then create a new one 
                 if ($md == null) { //
-                    $md = new MetricData($metric->metric, $metric->site, $metric->activity);
+                    $md = new MetricData($metric->metric, $metric->key, $metric->activity);
                     MetricData::Add($metric, $md);
-
                     // Add a new array to keep track of 
                     // the Equip ID's that added to this metric
                     $md->equip = [];
@@ -178,7 +205,7 @@ class Site
 
 
                 // If a Production TONNE
-                // then add this to the site data
+                // then add this to the production metrics
                 if ($metric->metric == "TONNE") {
 
                     // The activity is production, this is
@@ -187,7 +214,7 @@ class Site
 
                         // Create if haven't already 
                         if ($this->shiftData[$i]->productionTonnes == null)
-                            $this->shiftData[$i]->productionTonnes = new MetricData($metric->metric, $metric->site, $metric->activity);
+                            $this->shiftData[$i]->productionTonnes = new MetricData($metric->metric, $metric->key, $metric->activity);
 
                         // Add this equipments metric (which is production)
                         // to this sites production Metric
@@ -196,8 +223,8 @@ class Site
                 }
 
 
-                // If a Production METRE
-                // then add this to the site data
+                // If a Production METER
+                // then add this to the production metrics
                 if (strpos($metric->metric, 'PROD') !== false) {
 
                     // The activity is production, this is
@@ -206,7 +233,7 @@ class Site
 
                         // Create if haven't already 
                         if ($this->shiftData[$i]->productionMetres == null)
-                            $this->shiftData[$i]->productionMetres = new MetricData($metric->metric, $metric->site, $metric->activity);
+                            $this->shiftData[$i]->productionMetres = new MetricData($metric->metric, $metric->key, $metric->activity);
 
                         // Add this equipments metric (which is production)
                         // to this sites production Metric
@@ -240,39 +267,18 @@ class Site
     // Adds equipment to the Site and maps it to its function
     function AddEquipment(Equipment $_equipmentObject)
     {
-        global $allEquipment;
-
         // Add equipment to sites total list
         $this->equipment[$_equipmentObject->id] = $_equipmentObject;
 
         // Assign the equipment its function
-        if ($this->key != "MISC") {
+        $_equipmentObject->function = $this->_equipFunction[$_equipmentObject->id];
 
-            $_equipmentObject->function = $this->_equipFunction[$_equipmentObject->id];
+        // Put equipment into array based on function        
+        // If the entry doesn't exist,  create it as a new array 
+        if (!array_key_exists($_equipmentObject->function, $this->equipmentByFunction))
+            $this->equipmentByFunction[$_equipmentObject->function] = array();
 
-            // Put equipment into array based on function        
-            // If the entry doesn't exist,  create it as a new array 
-            if (!array_key_exists($_equipmentObject->function, $this->equipmentByFunction)) {
-                $this->equipmentByFunction[$_equipmentObject->function] = array();
-            }
-
-            // Add all equipment into their function category 
-            //$this->equipmentByFunction[$_equipmentObject->function][] = array("ID" => $_equipmentObject->id, "Index" => count($this->equipment) - 1);
-            $this->equipmentByFunction[$_equipmentObject->function][] = $_equipmentObject->id;
-        } else {
-
-
-            // Todo:  STOP USING MISC? There was no verdict on this
-
-
-            // Belongs in the workshop
-            // Same code as above, but taking to account that 'MISC' isn't registered
-
-            // $_equipmentObject->function = "MISC";
-            // if (!array_key_exists($_equipmentObject->function, $this->equipmentByFunction)) {
-            //     $this->equipmentByFunction[$_equipmentObject->function] = array();
-            // }
-            // $this->equipmentByFunction[$_equipmentObject->function][] = array("ID" => $_equipmentObject->id, "Index" => count($this->equipment) - 1);
-        }
+        // Add all equipment into their function category         
+        $this->equipmentByFunction[$_equipmentObject->function][] = $_equipmentObject->id;
     }
 }

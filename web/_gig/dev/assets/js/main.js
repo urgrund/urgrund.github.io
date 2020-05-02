@@ -26,8 +26,7 @@ var app = angular.module("myApp", ["ngRoute"]);
 
 // Page router
 app.config(
-	function ($routeProvider)
-	{
+	function ($routeProvider) {
 		$routeProvider
 			.when("/", {
 				templateUrl: "dash_mines.html",
@@ -43,8 +42,7 @@ app.config(
 			})
 			.when('/abcdefg', {
 				controller: 'BlaBla',
-				templateUrl: function ()
-				{
+				templateUrl: function () {
 					// You can route to different templates
 					return loggedIn ? "app/main/main-loggedIn.html" : "app/main/main-loggedOut.html"
 				}
@@ -53,15 +51,13 @@ app.config(
 );
 
 
-app.controller('DefaultRoute', function ($scope, $timeout) 
-{
+app.controller('DefaultRoute', function ($scope, $timeout) {
 
 });
 
 
 /// App entry 
-app.controller('myCtrl', function ($scope, $interval, $timeout)
-{
+app.controller('myCtrl', function ($scope, $interval, $timeout) {
 	// First run of the site
 	console.log("[Entry Point : Init Everything]");
 
@@ -75,26 +71,23 @@ app.controller('myCtrl', function ($scope, $interval, $timeout)
 
 
 	// Consider for background updates of data
-	$interval(function ()
-	{
+	$interval(function () {
 		console.log("Interval log...  every 30 seconds...");
 	}, 30000);
 
 
 	// Pull the main data from the server
 
-	$scope.getSiteData = function (_date)
-	{
+	$scope.getSiteData = function (_date) {
 		$.ajax({
 			url: "php/get_site_data.php",
 			type: "POST",
 			data: { date: _date },
 			dataType: 'json',
-			success: function (data)
-			{
+			success: function (data) {
 				dataComplete = true;
 
-				//console.log(data);
+				console.log(data);
 				//return;
 
 				var jsonString = JSON.stringify(data);
@@ -118,8 +111,7 @@ app.controller('myCtrl', function ($scope, $interval, $timeout)
 
 				//CreateMenuLinks();
 			},
-			error: function (xhr, ajaxOptions, thrownError)
-			{
+			error: function (xhr, ajaxOptions, thrownError) {
 				console.log(xhr.status);
 				console.log(thrownError);
 			}
@@ -128,8 +120,7 @@ app.controller('myCtrl', function ($scope, $interval, $timeout)
 
 	$scope.getSiteData('20181010');
 
-	$scope.switchShift = function ()
-	{
+	$scope.switchShift = function () {
 		shiftDiv.innerHTML = shiftIsDay == 0 ? nightHTML : dayHTML;
 		shiftIsDay = 1 - shiftIsDay;//!shiftIsDay;
 
@@ -138,14 +129,12 @@ app.controller('myCtrl', function ($scope, $interval, $timeout)
 	}
 
 
-	$scope.$on('child', function (event, data)
-	{
+	$scope.$on('child', function (event, data) {
 		$scope.siteName = currentSite.name;
 	});
 
 
-	$scope.switchToExtraDate = function (index)
-	{
+	$scope.switchToExtraDate = function (index) {
 		var jsonString = JSON.stringify($scope.extraDates[index]);
 		var newData = JSON.parse(jsonString);
 
@@ -164,10 +153,8 @@ app.controller('myCtrl', function ($scope, $interval, $timeout)
 	//var extraDateVals = ['20181009', '20181005'];
 	var hasAllExtraDates = false;
 	var gettingExtraDates = false;
-	$scope.getSiteData2 = function ()
-	{
-		for (i = 0; i < extraDateVals.length; i++)
-		{
+	$scope.getSiteData2 = function () {
+		for (i = 0; i < extraDateVals.length; i++) {
 			var dateToGet = extraDateVals[i];
 			console.log("Getting extra date data for : " + dateToGet);
 			$.ajax({
@@ -175,13 +162,11 @@ app.controller('myCtrl', function ($scope, $interval, $timeout)
 				type: "POST",
 				data: { date: dateToGet },
 				dataType: 'json',
-				success: function (data)
-				{
+				success: function (data) {
 					$scope.extraDates.push(data);
 					$scope.$apply();
 				},
-				error: function (xhr, ajaxOptions, thrownError)
-				{
+				error: function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status);
 					console.log(thrownError);
 				}
@@ -191,10 +176,8 @@ app.controller('myCtrl', function ($scope, $interval, $timeout)
 		hasAllExtraDates = true;
 	}
 
-	$scope.$on('dataComplete', function (event, data)
-	{
-		if (gettingExtraDates == false)
-		{
+	$scope.$on('dataComplete', function (event, data) {
+		if (gettingExtraDates == false) {
 			gettingExtraDates = true;
 			$scope.getSiteData2();
 		}

@@ -90,11 +90,13 @@ class MetricData
     public $activity;
 
     // New
-    public $site;
+    public $site;       // Friendly Site name from config
+    public $key;        // Site key from DB
+
     public $mph = array();  // Metric per hour data
     public $cph = array();  // Cumulative per hour 
-    public $average;
-    public $total;
+    public $average = 0;
+    public $total = 0;
 
 
 
@@ -105,7 +107,9 @@ class MetricData
         // Maps the metric abbrv to a 'nice name' 
         global $metricMap;
 
-        $this->site = $_site;
+        //Debug::Log("Creating Metric with " . $_site);
+        $this->site = Config::Sites($_site);
+        $this->key = $_site;
         $this->metric = $_metric;
         //$this->value = $_value;
         $this->activity = $_activity;
@@ -119,6 +123,11 @@ class MetricData
     // whilst measure the cumulative value
     function AddValue($_value)
     {
+        if ($_value == null)
+            $_value = 0;
+
+        //Debug::Log($_value);
+
         $count = count($this->mph);
         $this->mph[] = $_value;
 
@@ -130,6 +139,9 @@ class MetricData
         // Just always sum totals so it's current
         // and then don't need an extra function 
         $this->total = $this->cph[$count];
+        //Debug::Log($this->total);
+        //Debug::Log($count); // Will be null if 0 because no data yet
+        //Debug::Log($this->average);
         $this->average = round($this->total / ($count + 1), 2);
     }
 

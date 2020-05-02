@@ -116,8 +116,10 @@ class Debug
         if (self::$_debugOff || self::$_debugOffMaster)
             return;
 
+        if ($object == null)
+            $object = "NULL";
+
         print_r("\n");
-        //print_r(debug_backtrace()["file"]);
         print_r($object);
     }
 

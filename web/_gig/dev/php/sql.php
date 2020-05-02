@@ -21,10 +21,15 @@ class SQLUtils
         if ($isConnected == true)
             return;
 
-        $serverName = "tcp:giggsworthtest.database.windows.net,1433";
-        $uid = 'test@giggsworthtest';
-        $pwd = "GigWorth666";
-        $dbase = "ug_trial";
+        // $serverName = "tcp:giggsworthtest.database.windows.net,1433";
+        // $uid = 'test@giggsworthtest';
+        // $pwd = "GigWorth666";
+        // $dbase = "ug_trial";
+
+        $serverName = "tcp:192.168.0.105\SQLEXPRESS, 1433";
+        $uid = 'test';
+        $pwd = "gigworth";
+        $dbase = "test";
 
         /* Establish a Connection to the SQL Server  */
         $connectionInfo = array("Database" => $dbase, "UID" => $uid, "PWD" => $pwd, "CharacterSet" => "UTF-8", "ConnectionPooling" => "1", "MultipleActiveResultSets" => '0');
@@ -116,14 +121,14 @@ class SQLUtils
     /**
      * Execute a Query and return as raw data      
      */
-    public static function QueryToText($sql, $includeKeys = true)
+    public static function QueryToText($sql, $debugName = "Query", $includeKeys = true)
     {
         global $conn;
         global $isConnected;
         if (!$isConnected)
             SQLUtils::OpenConnection();
 
-        Debug::StartProfile("(" . $sql . ")");
+        Debug::StartProfile("SQL " . $debugName);
         $stmt = sqlsrv_query($conn, $sql);
 
         if ($stmt === false) {

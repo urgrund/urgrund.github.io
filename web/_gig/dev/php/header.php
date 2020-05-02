@@ -3,6 +3,7 @@
 include_once('version.php');
 include_once('utils.php');
 include_once('sql.php');
+include_once('siteconfig\config.php');
 
 // Equipment
 include_once('equipment.php');
