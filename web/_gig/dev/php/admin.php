@@ -3,6 +3,7 @@
 
 
 include_once('header.php');
+include_once('setDebugOff.php');
 include_once('get_site_data.php');
 
 // ----------------------------------------------------------
@@ -29,11 +30,21 @@ if (is_object($request)) {
     else if ($request->func == 2) {
         Admin::GenerateDataForDate($request->date);
     }
+    // Download data
+    else if ($request->func == 3) {
+        Admin::DownloadDataForDate($request->date);
+    }
 
     return;
 } else {
     //Admin::GetAllDateStatus();
     //Admin::GenerateDataForDate('20181001');
+
+    //$generateEverything = false;
+    //Admin::GetAllDateStatus();
+    Admin::GenerateDataForDate('20181010');
+    //Admin::DownloadDataForDate('20181010');
+    return;
 
     $generateEverything = true;
 
@@ -85,6 +96,15 @@ class Admin
         echo json_encode($metaData);
     }
 
+    public static function DownloadDataForDate($_date)
+    {
+        $data = GetSiteData::CheckGeneratedDataExists($_date);
+        if ($data != null) {
+            echo $data;
+        } else {
+            echo json_encode(["Error" => "Not found"]);
+        }
+    }
 
 
     /**
@@ -143,7 +163,7 @@ class Admin
 
         foreach ($period as $key => $value) {
             $date = $value->format('Ymd');
-            Debug::Log($date);
+            //Debug::Log($date);
 
             $data = GetSiteData::CheckGeneratedDataExists($date);
             $metaData = new SiteMetaData();
@@ -155,8 +175,14 @@ class Admin
                 $metaData->Date = $date;
             }
 
-            $returnList[$date] = $metaData;
+            if (array_key_exists($date, $returnList))
+                Debug::Log($date . " already exists!");
+
+            //$returnList[$date] = $metaData;
+            $returnList[] = $metaData;
         }
+
+        //Debug::Log($returnList);
         echo json_encode($returnList);
     }
 }

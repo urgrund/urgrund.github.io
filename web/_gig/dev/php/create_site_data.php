@@ -83,25 +83,43 @@ class CreateSiteData
         CreateSQLResults();
 
 
-        // Generate the sites and equipment
+
+        // Generate Sites and Equipment
         CreateSitesAndEquipment();
 
-        // Generate data 
+        // Generate the data 
         CreateDataForAllSites();
         CreateDataForAllEquip();
 
+
+
+        // Make arrays numeric based for both 
+        // the site lists inside a Mine Site 
+        // and the Mine Site array as well 
+        //$tempAllSites = [];
+        //$count = 0;
+        foreach (array_keys($allSites) as $site) {
+            $allSites[$site]->MakeArraysNumeric();
+            $tempAllSites[] = $allSites[$site];
+            //$count++;
+        }
+        $allSites = $tempAllSites;
+
+        //$allSites[] = 
+
         // Make a list of all equipment
         //AddGlobalEquipList();
+        $allSites[] = $allEquipment;
 
         // Wrap up and submit
         AddMetaData();
 
-        //Debug::Log($allSites[2]);
+        //Debug::Log($allSites[0]->equipment);
 
 
         Debug::EndProfile();
 
-        Debug::Log("All Finished..");
+        Debug::Log("Finished...");
     }
 }
 
@@ -128,6 +146,7 @@ function CreateSQLResults()
     global $sqlMineEquipmentList;
 
     // ------------------------------------------------------------------------------------------
+    // All metrics per hour for this date
     $sqlTxt = SQLUtils::FileToQuery('..\assets\sql\Core\ALL_MetricPerHour.sql');
     $sqlTxt = str_replace('@Date', "'" . $date . "'", $sqlTxt);
     $sqlMetricPerHour = SQLUtils::QueryToText($sqlTxt, "All Metric");
@@ -142,6 +161,7 @@ function CreateSQLResults()
 
 
     // ------------------------------------------------------------------------------------------
+    // All events that have been logged for this date
     $sqlTxt = SQLUtils::FileToQuery('..\assets\sql\Core\ALL_EquipmentEventList.sql');
     $sqlTxt = str_replace('@Date', "'" . $date . "'", $sqlTxt);
     //$sqlTxt = "Select * from ALLEquipmentEventList(" . $date . ") order by[Equipment] asc, [Event Time] asc";
@@ -174,21 +194,21 @@ function CreateSQLResults()
 // ------------------------------------------------------------------
 // Add equipment to global total list and then 
 // reduce the data in the Sites for more compact result
-function AddGlobalEquipList()
-{
-    // global $allSites;
-    // global $allEquipment;
-    // for ($i = 0; $i < count($allSites); $i++) {
-    //     for ($j = 0; $j < count($allSites[$i]->equipment); $j++) {
-    //         $equip = $allSites[$i]->equipment[$j];
-    //         $allEquipment[$equip->id] = $equip;
+//function AddGlobalEquipList()
+//{
+// global $allSites;
+// global $allEquipment;
+// for ($i = 0; $i < count($allSites); $i++) {
+//     for ($j = 0; $j < count($allSites[$i]->equipment); $j++) {
+//         $equip = $allSites[$i]->equipment[$j];
+//         $allEquipment[$equip->id] = $equip;
 
-    //         // Nuke the sites equip list 
-    //         $allSites[$i]->equipment[$j] = $equip->id;
-    //     }
-    // }
-    // $allSites[] = $allEquipment;
-}
+//         // Nuke the sites equip list 
+//         $allSites[$i]->equipment[$j] = $equip->id;
+//     }
+// }
+// $allSites[] = $allEquipment;
+//}
 // ------------------------------------------------------------------
 
 
@@ -196,7 +216,7 @@ function AddGlobalEquipList()
 
 
 // ------------------------------------------------------------------
-// Timestamp for when this stie data was generated
+/** Information related to this dates data generation as well **/
 function AddMetaData()
 {
     global $date;
@@ -210,14 +230,28 @@ function AddMetaData()
     $timezone = new DateTimeZone('Asia/Singapore');
     $updateTime->setTimezone($timezone);
 
+    // Append the array
     $allSites[] = array(
         "Day" => $day,
         "Date" => $date, //$d->format('d-m-Y'),
-        "LastUpdate" => $updateTime,
+        "LastUpdate" => $updateTime, // $updateTime->format('d-m-Y'),
         "IP" => GetClientIP(),  // the client IP that generated this data
         "User" => "User",   // the user that generated this data
-        "Version" => Version::current()
+        "Version" => Version::current(),
+        "EquipmentFunctionMap" => GetEquipmentFunctionMap()
     );
+}
+
+/** Array to map function to a descriptive name for front end  **/
+function GetEquipmentFunctionMap()
+{
+    $tmp = array();
+    global $sqlMineEquipmentList;
+    foreach (array_keys($sqlMineEquipmentList) as $id) {
+        $tmp[$sqlMineEquipmentList[$id][1]] = $sqlMineEquipmentList[$id][2];
+    }
+    return $tmp;
+    //Debug::Log($sqlMineEquipmentList);
 }
 
 function GetClientIP()
@@ -258,7 +292,7 @@ function CreateSitesAndEquipment()
 
 
 
-    $result = $sqlEquipEventList;
+    //$result = $sqlEquipEventList;
 
 
     // -----------------------------------------------------------------------------
@@ -275,22 +309,15 @@ function CreateSitesAndEquipment()
     }
 
     foreach (array_keys($allSites) as $id) {
-        $allSites[$id] = new Site("", $id);
+        $allSites[$id] = new Site($id);
     }
 
-
-    // Generate Equipment objects
-    $tempEquip = array();
-
-    $tmpCount = 0;
     // Create a list of all equip and their events 
+    $tempEquip = array();
     for ($i = 1; $i < count($sqlEquipEventList); $i++) {
-        //for ($i = 1; $i < 5; $i++) {
-
         $eID = $sqlEquipEventList[$i][0];
         $eSiteName = $sqlEquipEventList[$i][4];
-        $eSiteName = Config::Sites($eSiteName); // $configSites[$eSiteName];
-
+        $eSiteName = Config::Sites($eSiteName);
 
         // Create equipment if it doesn't exist
         if (!isset($tempEquip[$eID]))
@@ -401,7 +428,7 @@ function CreateDataForAllSites()
 
     // -------------------------------------
     // Production Tonnes for site
-    Debug::StartProfile("PHP: Per-site TPH");
+    Debug::StartProfile("PHP: Per-mine Data");
 
     // Production tonnes for each site
     for ($i = 1; $i < count($sqlMetricPerHour); $i++) {
@@ -422,13 +449,17 @@ function CreateDataForAllSites()
             }
         }
     }
-
-
-    foreach (array_keys($allSites) as $site) {
-        $allSites[$site]->DisassociateArrays();
-    }
-
     Debug::EndProfile();
+
+
+    Debug::StartProfile("SQL Material Movements");
+    foreach (array_keys($allSites) as $site) {
+        $allSites[$site]->GenerateMaterialMovements();
+    }
+    //Debug::Log($allSites["Western Flanks"]->shiftData[0]->materialMovements);
+    Debug::EndProfile();
+
+
     return;
     // -------------------------------------
 
@@ -440,28 +471,28 @@ function CreateDataForAllSites()
     Debug::StartProfile("Create All Site Data");
     // ----------------------
     // Material Movements 
-    Debug::StartProfile("SQL: Mat Movement");
-    Debug::Disable();
+    // Debug::StartProfile("SQL: Mat Movement");
+    // Debug::Disable();
 
-    $sqlPath = "../assets/sql/mine/SP_MATERIAL_ALL_Sankey.sql";
-    $sqlTxt = SQLUtils::FileToQuery($sqlPath);
-    $result = SQLUtils::QueryToText($sqlTxt);
-    Debug::Enable();
-    Debug::EndProfile();
+    // $sqlPath = "../assets/sql/mine/SP_MATERIAL_ALL_Sankey.sql";
+    // $sqlTxt = SQLUtils::FileToQuery($sqlPath);
+    // $result = SQLUtils::QueryToText($sqlTxt);
+    // Debug::Enable();
+    // Debug::EndProfile();
 
-    Debug::StartProfile("PHP: Mat Movement");
+    // Debug::StartProfile("PHP: Mat Movement");
 
-    // WTF is this hack?!
-    for ($i = 1; $i < count($result); $i++) {
-        if ($result[$i][0] == "WF")
-            $allSites[1]->materialMovement[] = $result[$i];
+    // // WTF is this hack?!
+    // for ($i = 1; $i < count($result); $i++) {
+    //     if ($result[$i][0] == "WF")
+    //         $allSites[1]->materialMovement[] = $result[$i];
 
-        if ($result[$i][0] == "SLC")
-            $allSites[0]->materialMovement[] = $result[$i];
+    //     if ($result[$i][0] == "SLC")
+    //         $allSites[0]->materialMovement[] = $result[$i];
 
-        if (1 === preg_match('~[0-9]~',  $result[$i][0]))
-            $allSites[2]->materialMovement[] = $result[$i];
-    }
+    //     if (1 === preg_match('~[0-9]~',  $result[$i][0]))
+    //         $allSites[2]->materialMovement[] = $result[$i];
+    // }
 
 
     // ----------------------
@@ -504,9 +535,8 @@ function CreateDataForAllEquip()
 {
     global $allEquipment;
 
-    Debug::StartProfile("Create All Equip Data");
+    Debug::StartProfile("PHP: All Equipment Data");
     foreach ($allEquipment as $key => $equip) {
-        //Debug::Log($key);
         //if ($key == 'BL085') {
         //Debug::Log("Generating " . $key);
         $equip->GenerateMPH();

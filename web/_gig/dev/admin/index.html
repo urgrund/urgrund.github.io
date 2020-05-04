@@ -34,9 +34,13 @@
             <h3>Version</h3>
             <!-- <h3>Tools</h3> -->
         </div>
-        <div ng-repeat="x in dataStatus" class="admin-grid">
-            <h3><i ng-class="x.class"></i> {{ x.Date}} </h3>
-            <h4>{{x.LastUpdate.date}}</h4>
+        <div ng-repeat="(key, x) in dataStatus" class="admin-grid">
+            <div>
+                <h3><i ng-class="x.class"></i> {{ x.Date}} </h3>
+                <button ng-click="dumpDateToConsole(x.Date)">C</button>
+                <button ng-click="regenerateDataForDate(x.Date)">R</button>
+            </div>
+            <h4>{{x.LastUpdate["date"]}}</h4>
             <p>{{ x.IP}}</p>
             <p>{{ x.User}}</p>
             <p>{{ x.Version}}</p>

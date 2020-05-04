@@ -2,20 +2,21 @@
 
 class SiteShiftData
 {
-    // All metrics that come through
-    // the site are stored here for all equip
+    /** All metrics that come through the site are stored here */
     var $metricData = array();
 
     // Only the Production stuff is here
     var $productionTonnes = null;
     var $productionMetres = null;
+
+    var $materialMovements = null;
 }
 
 
 
 class Site
 {
-    var $key;
+    //var $key;
     var $name;
 
     var $tph24;
@@ -34,7 +35,7 @@ class Site
     // List of possible functions an equipment can do at this site
     private $_equipFunction = array();
 
-    function __construct($_key, $_name)
+    function __construct($_name)
     {
         global $date;
 
@@ -42,11 +43,7 @@ class Site
         global $sqlEquipEventList;
         global $sqlMineEquipmentList;
 
-        //global $configTUM;
-        //global $configSites;
-
-
-        $this->key = $_key;
+        //$this->key = $_key;
         $this->name = $_name;
 
         // Why have to do this, why can't PHP 
@@ -93,7 +90,9 @@ class Site
                 // Add all equipment into their function category        
                 if (!array_key_exists($eFunction, $this->equipmentByFunction))
                     $this->equipmentByFunction[$eFunction] = array();
-                $this->equipmentByFunction[$eFunction][] = $eID;
+
+                if (!in_array($eID, $this->equipmentByFunction[$eFunction]))
+                    $this->equipmentByFunction[$eFunction][] = $eID;
             }
         }
         //Debug::Log($this->equipment);
@@ -115,14 +114,31 @@ class Site
 
         // TODO - move this query back to the main and use site index 
         // on results?  This would be inline with the other queries 
-        $sqlTxt = "Select * from ALLMineEquipmentList(" . $date . ", '" . $this->key . "')";
-        $result = SQLUtils::QueryToText($sqlTxt);
-        for ($i = 1; $i < count($result); $i++) {
-            $this->_equipFunction[$result[$i][0]] = $result[$i][1];
-        }
+        // $sqlTxt = "Select * from ALLMineEquipmentList(" . $date . ", '" . $this->key . "')";
+        // $result = SQLUtils::QueryToText($sqlTxt);
+        // for ($i = 1; $i < count($result); $i++) {
+        //     $this->_equipFunction[$result[$i][0]] = $result[$i][1];
+        // }
 
         //Debug::Log($sqlMetricPerHour);
     }
+
+
+    public function GenerateMaterialMovements()
+    {
+        // TODO
+        // Things like the sql text and the @Date should go into a 
+        // SQL core settings class
+        global $date;
+        $str = SQLUtils::FileToQuery('..\assets\sql\Core\ALL_MaterialMovements.sql');
+        for ($i = 0; $i < 2; $i++) {
+            $sqlTxt = $str;
+            $shift = "P" . ($i + 1);
+            $sqlTxt = str_replace('@Date', "'" . $date . $shift . "'", $sqlTxt);
+            $this->shiftData[$i]->materialMovements = SQLUtils::QueryToText($sqlTxt, "MM " . $shift);
+        }
+    }
+
 
 
     /** See if a Metric exists with this Site for a particular shift **/
@@ -167,26 +183,12 @@ class Site
                 // Metric from the Equipment
                 $metric = $e->shiftData[$i]->metricData[$j];
 
-                //Debug::Log($this->name . " - ");
-                //Debug::LogI($metric->site . "(" . $e->id . ")");
-
-
                 // This equipment metric entry doesn't belong to this site?
-                if (
-                    $this->name != $metric->site
-                    //&& $this->key != $metric->site
-                ) {
-                    //Debug::Log($this->name . "/" . $this->key . " - ");
-                    //Debug::LogI($metric->site . "     (" . $e->id . ")");
-                    //Debug::LogI(" - " . ($metric->site == $this->key));
+                if ($this->name != $metric->site)
                     continue;
-                }
-
 
                 // See if this already exists...
                 $md = $this->FindMetric($metric->metric, $metric->site, $metric->activity, $i);
-
-
 
                 // If it can't be found, then create a new one 
                 if ($md == null) { //
@@ -248,14 +250,18 @@ class Site
 
 
 
-    function DisassociateArrays()
+    function MakeArraysNumeric()
     {
         // Sort by keys so that they are all in same order
         //ksort($this->equipmentByFunction);
 
         // Convert to indexed arrays
         //$this->equipmentByFunction = array_values($this->equipmentByFunction);
-        $this->equipment = array_values($this->equipment);
+        $tmp = [];
+        foreach (array_keys($this->equipment) as $equip)
+            $tmp[] = $equip;
+        $this->equipment = $tmp;
+        //$this->equipment = array_values($this->equipment);
     }
 
 

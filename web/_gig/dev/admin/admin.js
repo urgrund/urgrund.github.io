@@ -12,23 +12,31 @@ app.controller('myCtrl', function ($scope, $http) {
     // $scope.timeRegenEnd;
 
     $scope.dataStatus = [];
-    $scope.dataForView = [];
 
+    $scope.dumpDateToConsole = function ($_date) {
+        //console.log($scope.dataStatus[$_date]);        
+        console.log($_date + " - Downloading...");
 
-    $scope.prepareViewData = function () {
-        return;
+        var _data = { 'func': 3, 'date': $_date };
+        var request = $http({
+            method: 'POST',
+            url: _url,
+            data: _data,
+        })
+        request.then(function (response) {
 
-        // $scope.dataForView = null;
-        // $scope.dataForView = [];
-
-        // for (var key in $scope.dataStatus) {
-        //     $scope.dataForView.push($scope.dataStatus[key]);
-        // }
-        // console.log($scope.dataForView);
+            //var newData = JSON.parse($scope.dataStatus);
+            console.log(response.data);
+            //$scope.prepareViewData();
+        }, function (error) {
+        });
     };
 
 
     $scope.getListOfDates = function () {
+
+        console.log("Getting list of dates...");
+
         var _data = { 'func': 0 };
         var request = $http({
             method: 'POST',
@@ -36,34 +44,45 @@ app.controller('myCtrl', function ($scope, $http) {
             data: _data
         })
         request.then(function (response) {
-            $scope.dataStatus = response.data;
+            //$scope.dataStatus = response.data;
+
+            // Make associative
+            $tmp = {};
+            for (var key in response.data) {
+                $tmp[response.data[key]['Date']] = response.data[key];
+            }
+            $scope.dataStatus = $tmp
+            //console.log($tmp);
+
             for (var key in $scope.dataStatus) {
                 if ($scope.dataStatus[key]['LastUpdate'] != null) {
-                    $scope.dataStatus[key]['class'] = "far fa-check-circle green";//$sce.trustAsHtml("<h1>Poo</h1>");
+                    $scope.dataStatus[key]['class'] = "far fa-check-circle green";
                 } else
                     $scope.dataStatus[key]['class'] = "far fa-times-circle red";
             }
-            console.log($scope.dataStatus);
-            $scope.prepareViewData();
         }, function (error) {
         });
     };
 
 
     $scope.regenerateAll = function () {
-        //$scope.regenerateDataForDate('20181001');
 
         for (var key in $scope.dataStatus) {
+            // console.log(key);
             $scope.regenerateDataForDate(key);
         }
+
+        //$scope.regenerateDataForDate('20181001');
     }
 
 
     $scope.regenerateDataForDate = function (_date) {
         if ($scope.dataStatus[_date] != undefined) {
 
+            console.log("Here");
             $scope.dataStatus[_date]['class'] = "fas fa-sync-alt spinner loading";
 
+            //_tmpDate = $scope.dataStatus[_date]['Date'];
             // Prepare payload
             var _data = {
                 'func': 2,
@@ -76,11 +95,16 @@ app.controller('myCtrl', function ($scope, $http) {
                 data: _data
             })
             request.then(function (response) {
+                console.log("Returned...");
+                console.log(response);
+
                 if ((response.data.Date in $scope.dataStatus)) {
                     $scope.dataStatus[response.data.Date] = response.data;
                     $scope.dataStatus[response.data.Date]['class'] = "far fa-check-circle green";
+                    //$scope.dataStatus[_date] = response.data;
+                    //$scope.dataStatus[_date]['class'] = "far fa-check-circle green";
 
-                    $scope.prepareViewData();
+                    //$scope.prepareViewData();
                 }
             }, function (error) {
             });
@@ -89,22 +113,21 @@ app.controller('myCtrl', function ($scope, $http) {
 
     $scope.regenerateMissing = function () {
 
-        console.log("Regenerating data..." + new Date());
+        //console.log("Regenerating data..." + new Date());
 
 
         // Check if any of the entries have 
         // null updates, then attempt to regenerate
         for (var key in $scope.dataStatus) {
             if ($scope.dataStatus[key]['LastUpdate'] == null) {
-
-                //console.log("Starting regen for " + key + " at " + new Date());
+                console.log("Starting regen for " + $scope.dataStatus[key]['Date']);// + " at " + new Date());
 
                 $scope.dataStatus[key]['class'] = "fas fa-sync-alt spinner loading";
 
                 // Prepare payload
                 var _data = {
                     'func': 1,
-                    'date': key,
+                    'date': $scope.dataStatus[key]['Date'],
                     'regen': true
                 };
                 var request = $http({
@@ -113,20 +136,20 @@ app.controller('myCtrl', function ($scope, $http) {
                     data: _data
                 })
                 request.then(function (response) {
-                    //console.log(response.data);
+                    console.log("Returned...");
+                    console.log(response.data);
 
                     if ((response.data.Date in $scope.dataStatus)) {
                         //console.log("Added new data for " + key + " at " + new Date());
                         $scope.dataStatus[response.data.Date] = response.data;
                         $scope.dataStatus[response.data.Date]['class'] = "far fa-check-circle green";
-
-                        $scope.prepareViewData();
                     }
                 }, function (error) {
                 });
             }
         }
     };
+
 
     $scope.getListOfDates();
 });

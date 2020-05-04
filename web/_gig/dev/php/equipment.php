@@ -22,9 +22,19 @@ class Equipment
 
     function __construct($_id)
     {
+        global $sqlMineEquipmentList;
+
         $this->id = $_id;
         $this->shiftData[] = new EquipmentShiftData();
         $this->shiftData[] = new EquipmentShiftData();
+
+
+        // Function key
+        if (isset($sqlMineEquipmentList[$_id])) {
+            $this->function = $sqlMineEquipmentList[$_id][1];
+        } else {
+            //Debug::Log("Not found for " . $_id);
+        }
     }
 
     function AddEvent($_eventDataRow)

@@ -6,11 +6,14 @@ include_once('create_site_data.php');
 // Date should be sent from the client
 if (isset($_POST['date'])) {
     include_once('setDebugOff.php');
+    Debug::DisableForSession();
     $date = $_POST['date'];
     new GetSiteData();
 }
 
 
+//$date = '20181001';
+//new GetSiteData();
 
 class GetSiteData
 {
@@ -50,7 +53,7 @@ class GetSiteData
         // TODO - sanitise the date input?
         $json = @file_get_contents(self::$_fileDir . $_date . self::$_fileExt);
         if ($json === false) {
-            Debug::Log("File not found");
+            Debug::Log("File not found for" . $_date);
         } else {
             return $json;
         }
