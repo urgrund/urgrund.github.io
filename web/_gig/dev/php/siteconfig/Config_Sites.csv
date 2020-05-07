@@ -1,16 +1,16 @@
 Site Code ,Site Name
 FPM,
-M30,M-Reefs
-M35,M-Reefs
-M50,M-Reefs
-M40,M-Reefs
+M30,M30
+M35,M35
+M50,M50
+M40,M40
 PRI,
 SP,
 WF,Western Flanks
 MISC,
 NULL,
 SLC,Sub Level Caves
-MReef,M-Reefs
+MReef,
 M35SPCE,
 REHAB,
-M50/M40/M35/M30,M-Reefs
+M50/M40/M35/M30,

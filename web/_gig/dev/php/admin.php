@@ -78,22 +78,23 @@ class Admin
         // This comes from create_site_data
         global $allSites;
 
-        $metaData = new SiteMetaData();
+        //$metaData = new SiteMetaData();
         CreateSiteData::SetDateForCreation($_date);
         CreateSiteData::Run();
 
         // The last index of the generated data
         //Debug::Log($allSites);
-        $metaTemp  = end($allSites);
-        $metaData->FillFromData($metaTemp);
+        //$metaTemp  = end($allSites);
+        //$metaData->FillFromData($metaTemp);
 
         // Encode and write to disk                
         GetSiteData::WriteGeneratedDataToDisk($_date, json_encode($allSites));
 
-        $metaData->Date = $_date;
+        //$metaData->Date = $_date;
 
-        // Might want this to not encode... as the recursive function could use it
-        echo json_encode($metaData);
+
+        echo json_encode(end($allSites));
+        //echo json_encode($metaData);
     }
 
     public static function DownloadDataForDate($_date)
@@ -121,7 +122,8 @@ class Admin
 
         if ($data != null) {
             $data = json_decode($data);
-            $metaData->FillFromData(end($data));
+            //$metaData->FillFromData(end($data));
+            $metaData = end($data);
         } else {
             if ($_generateIfMissing == true) {
                 // Generate data for the missing date if possible
@@ -129,8 +131,9 @@ class Admin
                 CreateSiteData::Run();
 
                 // The last index of the generated data
-                $metaTemp = end($allSites);
-                $metaData->FillFromData($metaTemp);
+                //$metaTemp = end($allSites);
+                //$metaData->FillFromData($metaTemp);
+                $metaData = end($allSites);
 
                 // Encode and write to disk                
                 GetSiteData::WriteGeneratedDataToDisk($_date, json_encode($allSites));
@@ -138,7 +141,7 @@ class Admin
                 $metaData->Date = $_date;
         }
 
-        // Might want this to not encode... as the recursive function could use it
+
         echo json_encode($metaData);
     }
 
@@ -170,7 +173,8 @@ class Admin
 
             if ($data != null) {
                 $data = json_decode($data);
-                $metaData->FillFromData(end($data));
+                //$metaData->FillFromData(end($data));
+                $metaData = end($data);
             } else {
                 $metaData->Date = $date;
             }

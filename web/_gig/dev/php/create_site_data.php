@@ -7,7 +7,7 @@ static $allSites = array();
 static $allEquipment = array();
 static $date = '20181010';
 
-
+static $generationStartTime;
 
 
 // Holds the resulting data 
@@ -68,6 +68,10 @@ class CreateSiteData
     public static function Run()
     {
         Debug::StartProfile("TOTAL SITE GENERATION");
+
+        global $generationStartTime;
+        $generationStartTime = microtime(true);
+
 
         // Clean for each run 
         global $allSites;
@@ -222,6 +226,8 @@ function AddMetaData()
     global $date;
     global $allSites;
     global $dayNameMap;
+    global $generationStartTime;
+
 
     $d = DateTime::createFromFormat('Ymd', $date);
     $day = $dayNameMap[$d->format('D')];
@@ -230,16 +236,33 @@ function AddMetaData()
     $timezone = new DateTimeZone('Asia/Singapore');
     $updateTime->setTimezone($timezone);
 
+    $timeToGenerate = (number_format((microtime(true) - $generationStartTime), 4) * 1000);
+    $timeToGenerate = round($timeToGenerate, 0);
+
+    $metaData = new SiteMetaData();
+    $metaData->Day = $day;
+    $metaData->Date = $date;
+    $metaData->LastUpdate = $updateTime;
+    $metaData->IP = GetClientIP();
+    $metaData->User = "User";
+    $metaData->Version = Version::current();
+    $metaData->EquipmentFunctionMap = GetEquipmentFunctionMap();
+    $metaData->TimeToGenerate = $timeToGenerate;
+
+    $allSites[] = $metaData;
+    //return;
+
     // Append the array
-    $allSites[] = array(
-        "Day" => $day,
-        "Date" => $date, //$d->format('d-m-Y'),
-        "LastUpdate" => $updateTime, // $updateTime->format('d-m-Y'),
-        "IP" => GetClientIP(),  // the client IP that generated this data
-        "User" => "User",   // the user that generated this data
-        "Version" => Version::current(),
-        "EquipmentFunctionMap" => GetEquipmentFunctionMap()
-    );
+    // $allSites[] = array(
+    //     "Day" => $day,
+    //     "Date" => $date, //$d->format('d-m-Y'),
+    //     "LastUpdate" => $updateTime, // $updateTime->format('d-m-Y'),
+    //     "IP" => GetClientIP(),  // the client IP that generated this data
+    //     "User" => "User",   // the user that generated this data
+    //     "Version" => Version::current(),
+    //     "EquipmentFunctionMap" => GetEquipmentFunctionMap(),
+    //     "TimeToGenerate" => (number_format((microtime(true) - $generationStartTime), 4) * 1000)
+    // );
 }
 
 /** Array to map function to a descriptive name for front end  **/
