@@ -59,6 +59,10 @@ if (Debug::enabled() == true) {
 
 class CreateSiteData
 {
+    // Equipment list will be stored at len-2
+    public static $INDEX_EQUIP = 2;
+
+
     public static function SetDateForCreation($_date)
     {
         global $date;
@@ -118,11 +122,10 @@ class CreateSiteData
         // Wrap up and submit
         AddMetaData();
 
-        //Debug::Log($allSites[0]->equipment);
 
+        ScrambleData::Scramble();
 
         Debug::EndProfile();
-
         Debug::Log("Finished...");
     }
 }
@@ -220,7 +223,7 @@ function CreateSQLResults()
 
 
 // ------------------------------------------------------------------
-/** Information related to this dates data generation as well **/
+/** Information related to this dates data generation **/
 function AddMetaData()
 {
     global $date;

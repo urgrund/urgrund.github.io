@@ -58,7 +58,7 @@ class LongTerm
         //Debug::Disable();
 
         $tempStartDate = '2018-10-01';
-        $tempEndDate = '2018-10-31';
+        $tempEndDate = '2018-12-31';
 
 
         // Construct date time period 
@@ -88,10 +88,11 @@ class LongTerm
         // Sum the time spent in each TUM category 
         // and sub-category status over all days    
         foreach ($period as $key => $value) {
-
-            //Debug::Log($dayIndex);
             $date = $value->format('Ymd');
+
+            //Debug::StartProfile("Get data from disk");
             $fileData = (GetSiteData::CheckGeneratedDataExists($date));
+            //Debug::EndProfile();
 
             if ($fileData == null) {
                 Debug::Log("File was NULL, date invalid? " . $date);
@@ -102,19 +103,15 @@ class LongTerm
             $validDays++;
             $fileData = json_decode($fileData);
 
-
             // Array of equipment for this day
-            $equipment = $fileData[3];
+            $equipment = $fileData[count($fileData) - CreateSiteData::$INDEX_EQUIP];
 
             // Get the times from each event 
             foreach ($equipment as $key => $value) {
 
                 // Filter by equipment function (ie. HAULING) 
                 // and equipment ID if needed
-                if (
-                    ($value->function == $_equipFunctionFilter || $_equipFunctionFilter == null)
-                    //&& $value->id == $equipIDFilter
-                ) {
+                if ($value->function == $_equipFunctionFilter || $_equipFunctionFilter == null) {
                     $events = $value->events;
 
                     // For all events, grab tum data 
@@ -246,7 +243,7 @@ class LongTerm
         $finalObject[] = $tempUofA;
         $finalObject[] = $summary;
 
-        echo json_encode($finalObject);
+        //echo json_encode($finalObject);
 
         Debug::EndProfile();
     }
