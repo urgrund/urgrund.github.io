@@ -92,6 +92,7 @@ class MetricData
     // New
     public $site;       // Friendly Site name from config
     public $key;        // Site key from DB
+    public $shift;      // Shift this metric was recorded in
 
     public $mph = array();  // Metric per hour data
     public $cph = array();  // Cumulative per hour 
@@ -102,7 +103,7 @@ class MetricData
 
     /** Construct new Metric data with the Metric, Site and Activity
      */
-    function __construct($_metric, $_site, $_activity)
+    function __construct($_metric, $_site, $_activity, $_shift)
     {
         // Maps the metric abbrv to a 'nice name' 
         global $metricMap;
@@ -111,6 +112,7 @@ class MetricData
         $this->site = Config::Sites($_site);
         $this->key = $_site;
         $this->metric = $_metric;
+        $this->shift = $_shift;
         //$this->value = $_value;
         $this->activity = $_activity;
 
@@ -146,12 +148,12 @@ class MetricData
     }
 
 
-    private function SumTotals()
-    {
-        $count = count($this->mph);
-        $this->total = $this->cph[$count];
-        $this->average = round($this->total / ($count + 1), 2);
-    }
+    // private function SumTotals()
+    // {
+    //     $count = count($this->mph);
+    //     $this->total = $this->cph[$count];
+    //     $this->average = round($this->total / ($count + 1), 2);
+    // }
 
 
 

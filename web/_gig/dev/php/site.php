@@ -192,7 +192,7 @@ class Site
 
                 // If it can't be found, then create a new one 
                 if ($md == null) { //
-                    $md = new MetricData($metric->metric, $metric->key, $metric->activity);
+                    $md = new MetricData($metric->metric, $metric->key, $metric->activity, $i);
                     MetricData::Add($metric, $md);
                     // Add a new array to keep track of 
                     // the Equip ID's that added to this metric
@@ -216,7 +216,7 @@ class Site
 
                         // Create if haven't already 
                         if ($this->shiftData[$i]->productionTonnes == null)
-                            $this->shiftData[$i]->productionTonnes = new MetricData($metric->metric, $metric->key, $metric->activity);
+                            $this->shiftData[$i]->productionTonnes = new MetricData($metric->metric, $metric->key, $metric->activity, $i);
 
                         // Add this equipments metric (which is production)
                         // to this sites production Metric
@@ -235,7 +235,7 @@ class Site
 
                         // Create if haven't already 
                         if ($this->shiftData[$i]->productionMetres == null)
-                            $this->shiftData[$i]->productionMetres = new MetricData($metric->metric, $metric->key, $metric->activity);
+                            $this->shiftData[$i]->productionMetres = new MetricData($metric->metric, $metric->key, $metric->activity, $i);
 
                         // Add this equipments metric (which is production)
                         // to this sites production Metric

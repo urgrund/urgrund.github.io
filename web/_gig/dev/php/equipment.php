@@ -300,8 +300,8 @@ class Equipment
                 $e = $sqlMetricPerHour[$i];
 
                 // Metric Data for both shifts
-                $mdDay = new MetricData($e[2], $e[1], $e[3]); //$e[count($e) - 1]);
-                $mdNight = new MetricData($e[2], $e[1], $e[3]); //$e[count($e) - 1]);
+                $mdDay = new MetricData($e[2], $e[1], $e[3], 0); //$e[count($e) - 1]);
+                $mdNight = new MetricData($e[2], $e[1], $e[3], 1); //$e[count($e) - 1]);
 
                 // Data start index... for convenience 
                 $dataIdx = 4;
