@@ -10,35 +10,22 @@
         <div class="dropdown">
             <div class="dropbtn">Short Interval Control</div>
             <div class="dropdown-content">
-                <div class="siteCard" ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
-                    <img class="sitePicSmall" ng-src="assets/img/site_{{siteIndex}}.jpg">
+                <div class="siteCard" ng-repeat="x in siteData" ng-init="siteIndex = $index">
+                    <img class="sitePicSmall" ng-src="assets/img/site_{{siteIndex%3}}.jpg">
                     <a ng-href="#!site/{{siteIndex}}">
                         <h3>{{x.name}}</h3>
                     </a>
-                    <!-- <h4>Analysis</h4>
-                        <div><a ng-href="">Bogger Movements</a></div>
-                        <div><a ng-href="">Hauling Movements</a></div>
-                        <div><a ng-href="">Drill Meters</a></div>
-                        </br>
-
-                        <h4>Materials</h4>
-                        <div><a ng-href="">Production Tonnes</a></div>
-                        <div><a ng-href="">Development Tonnes</a></div> -->
-
                     </br>
                     </br>
 
 
-                    <div class="siteCardGrid">
+                    <!-- <div class="siteCardGrid">
                         <div>
                             <h4 class="left">Boggers</h4>
                             <div ng-repeat="y in x.equipmentByFunction.LOADING"
                                 ng-init="e = getEquipmentLastEvent(equipment[y])">
                                 <a ng-href="#!equip/{{y}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
                                         ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y].id}}</a>
-                                <!-- <p class="left"> <i ng-class='equipStyleIcon[e.majorGroup]'
-                                        ng-style='equipStyleColor[e.majorGroup]'></i>
-                                    {{ equipment[y.ID].id}}</p> -->
                             </div>
                         </div>
 
@@ -51,20 +38,34 @@
                             </div>
                         </div>
 
-                        <div>
-                            <h4 class="left">Drills</h4>
-                            <div ng-repeat="y in x.equipmentByFunction.P"
-                                ng-init="e = getEquipmentLastEvent(equipment[y])">
-                                <a ng-href="#!equip/{{y}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
-                                        ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y].id}}</a>
-                            </div>
-                            <div ng-repeat="y in x.equipmentByFunction.D"
-                                ng-init="e = getEquipmentLastEvent(equipment[y])">
-                                <a ng-href="#!equip/{{y}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
-                                        ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y].id}}</a>
+
+                        <h4 class="left">Drills</h4>
+                        <div ng-repeat="y in x.equipmentByFunction.P" ng-init="e = getEquipmentLastEvent(equipment[y])">
+                            <a ng-href="#!equip/{{y}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                    ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y].id}}</a>
+                        </div>
+                        <h4 class="left">Drills</h4>
+                        <div ng-repeat="y in x.equipmentByFunction.D" ng-init="e = getEquipmentLastEvent(equipment[y])">
+                            <a ng-href="#!equip/{{y}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                    ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y].id}}</a>
+
+                        </div>
+                    </div> -->
+
+                    <div ng-repeat="(key, value) in x.equipmentByFunction">
+                        <div class="underline left">
+                            <h4>{{ functionMapping[key] }}</h4>
+                        </div>
+                        <div ng-repeat="y in value" ng-init="e = getEquipmentLastEvent(equipment[y])" id="">
+                            <div class="equipFlatUsageSite">
+                                <h5 class="left"><a ng-href="#!equip/{{y}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                            ng-style='equipStyleColor[e.majorGroup]'></i> {{equipment[y].id}}</a></h5>
                             </div>
                         </div>
+                        </br>
                     </div>
+
+
                 </div>
             </div>
         </div>
@@ -73,7 +74,7 @@
             <div class="dropbtn">Monthly Compliance</div>
             <div class="dropdown-content">
                 <div>
-                    <div ng-repeat="x in siteData | limitTo:3" ng-init="siteIndex = $index">
+                    <div ng-repeat="x in siteData" ng-init="siteIndex = $index">
                         <div class="droplist">
                             <h3>{{x.name}}</h3>
                             <a ng-href="#!monthly/{{siteIndex}}/0">Plan vs Compliance</a>
@@ -231,7 +232,7 @@
                     <div>Trailing Week</div>
                     <div>
                         <div class="flex" ng-repeat="x in cachedData">
-                            <button ng-click="setNewSiteData(x)"> {{ convertToNiceDateObject(x[4].Date).LONG }}
+                            <button ng-click="setNewSiteData(x)"> {{ convertToNiceDateObject(x[x.length-1].Date).LONG }}
                             </button>
                         </div>
                     </div>

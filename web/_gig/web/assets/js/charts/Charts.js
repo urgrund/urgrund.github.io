@@ -11,7 +11,9 @@ var allCharts = [];
 timeLabelsShift = [];
 timeLabelsShift[0] = GenerateTimeLabels(12, 6);
 timeLabelsShift[1] = GenerateTimeLabels(12, 18);
+timeLabels24hr = GenerateTimeLabels(24, 6);
 
+// extra means it's from, say 6am to 6pm instead of 5pm
 timeLabelsShiftExtra = [];
 timeLabelsShiftExtra[0] = GenerateTimeLabels(13, 6);
 timeLabelsShiftExtra[1] = GenerateTimeLabels(13, 18);
@@ -141,6 +143,226 @@ function CalculateMA(dayCount, data) {
 
 
 class Charts {
+
+
+    static CreateMPH2(_elementID, _data) {
+        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+
+        var fullDay = true;
+
+        // Grab all the metrics recorded for this equipment 
+        // Only interested if there was any metrics recorded this shift
+        var metrics = [];
+        var hourCount = fullDay ? 24 : 12;
+        var equipMetricsToAdd = fullDay ? _data.shiftData[0].metricData.concat(_data.shiftData[1].metricData) : _data.shiftData[shift].metricData;
+
+        // Expand each metric array if full day
+        if (fullDay) {
+            var arrayOfZero = ArrayOfNumbers(0, 12, 0);
+            for (var i = 0; i < equipMetricsToAdd.length; i++) {
+                var metric = equipMetricsToAdd[i];
+                metric.mph = metric.shift == 0 ? metric.mph.concat(arrayOfZero) : arrayOfZero.concat(metric.mph);
+                metric.cph = metric.shift == 0 ? metric.cph.concat(arrayOfZero) : arrayOfZero.concat(metric.cph);
+            }
+        }
+
+        console.log(equipMetricsToAdd);
+
+        //for (var i = 0; i < _data.shiftData[shift].metricData.length; i++) {
+
+        // Finalise with Metrics that have > 0 cumulative
+        for (var i = 0; i < equipMetricsToAdd.length; i++) {
+            var metric = equipMetricsToAdd[i];
+
+            if (fullDay) {
+                if (metric.cph[metric.shift == 0 ? 11 : 23] > 0)
+                    metrics.push(metric);
+            }
+            else {
+                if (metric.cph[11] > 0)
+                    metrics.push(metric);
+            }
+        }
+
+        var cumulative = ArrayOfNumbers(0, hourCount, 0);
+
+        // Add all the series together
+        // along with legend info 
+        var seriesArray = [];
+        var legend = [];
+        var perSiteTotals = [];
+        var perHourTotals = ArrayOfNumbers(0, hourCount, 0);
+
+        for (var i = 0; i < metrics.length; i++) {
+            // Invisible Series
+            seriesArray.push(
+                {
+                    id: i,
+                    name: metrics[i].site,
+                    yAxisIndex: 0,
+                    type: 'bar',
+                    data: metrics[i].mph,
+                    stack: 'mph',
+                    barGap: '-100%',
+                    itemStyle: { color: 'rgba(0,0,0,0)' }
+                });
+
+            // Add this site to the Legend
+            if (!legend.includes(metrics[i].site))
+                legend.push(metrics[i].site);
+
+            // Site total
+            // See if a site (WF, SLC..etc) exists
+            // and create clean empty arrays for it
+            if (!(metrics[i].site in perSiteTotals)) {
+                perSiteTotals[metrics[i].site] = ArrayOfNumbers(0, hourCount, 0);
+            }
+
+            // Accumulate values into each site
+            for (var j = 0; j < hourCount; j++) {
+                //cumulative[j] += metrics[i].cph[j];                
+                perSiteTotals[metrics[i].site][j] = perSiteTotals[metrics[i].site][j] + metrics[i].mph[j];
+                perHourTotals[j] += metrics[i].mph[j];
+            }
+
+            // Total culmulative starting at 1
+            for (var j = 1; j < hourCount; j++) {
+                cumulative[j] = cumulative[j - 1] + perHourTotals[j];
+            }
+        }
+
+
+        seriesArray.push(
+            {
+                name: "SLC",
+                type: 'bar',
+                z: 3,
+                barMaxWidth: '15',
+                data: perHourTotals,
+                yAxisIndex: 0,
+                itemStyle: { color: ChartStyles.siteColors[0] },
+                label: { normal: { show: true, position: 'top' } },
+                barGap: '-100%',
+                itemStyle: { color: 'rgba(0,0,0,0)' }
+            });
+
+
+        // ------------------------
+        // Cumulative Line        
+        legend.push("Cumulative");
+        seriesArray.push(
+            {
+                name: "Cumulative",
+                yAxisIndex: 1,
+                z: 2,
+                type: 'line',
+                data: cumulative,
+                itemStyle: { color: ChartStyles.cumulativeColor },
+                areaStyle: { color: ChartStyles.cumulativeArea },
+                symbol: 'none',
+                lineStyle: ChartStyles.lineShadow()
+            });
+        // ------------------------
+
+
+
+
+
+        // ------------------------
+        // Add each site data to series
+        for (var key in perSiteTotals) {
+            seriesArray.unshift(
+                {
+                    name: key,
+                    type: 'bar',
+                    stack: 'aaa',
+                    barMaxWidth: '15',
+                    data: perSiteTotals[key],
+                    itemStyle: { color: ChartStyles.siteColors[0] }//,
+                    //label: { normal: { show: true, position: 'top' } }
+                });
+        }
+        //console.log(perSiteTotals);
+        //console.log(perHourTotals);
+        // ------------------------
+
+
+
+        // ------------------------
+        // Construct the hover over message
+        function Label(params) {
+            var string = "";
+
+            // The time 
+            string += ChartStyles.toolTipTextTitle(params[0].name);
+
+            // Labels for each metric
+            for (var i = 0; i < params.length; i++) {
+                var metric = metrics[params[i].seriesId];
+                if (typeof metric !== 'undefined') {
+                    if (params[i].value > 0) {
+                        string += ChartStyles.toolTipTextEntry("(" + metric.site + ") " + metric.name + " : " + params[i].value);
+                    }
+                }
+            }
+
+            // The last params element is the cumulative 
+            var index = params.length - 1;
+            string += ChartStyles.toolTipTextEntry(params[index].seriesName + " : " + params[index].value, "bold");
+            return string;
+        }
+        // ------------------------
+
+
+        var option = {
+            backgroundColor: ChartStyles.backGroundColor,
+            textStyle: ChartStyles.textStyle,
+            //tooltip: ChartStyles.toolTip(),
+            legend: { y: 'top', data: legend },
+            grid: {
+                top: '20%',
+                bottom: '5%',
+                left: '3%',
+                right: '3%',
+                containLabel: true
+            },
+            toolbox: ChartStyles.toolBox(myChart.getHeight(), "TPH"),
+            tooltip: {
+                confine: true,
+                trigger: 'axis',
+                textStyle: ChartStyles.toolTipTextStyle(),
+                axisPointer: ChartStyles.toolTipShadow(),
+                backgroundColor: ChartStyles.toolTipBackgroundColor(),
+                formatter: function (params, index) {
+                    return Label(params);
+                }
+            },
+            xAxis: ChartStyles.xAxis(fullDay ? timeLabels24hr : timeLabelsShift[shift]),
+            yAxis: [{
+                type: 'value',
+                splitLine: { show: false },
+                axisLine: ChartStyles.axisLineGrey,
+                axisLabel: {
+                    fontSize: ChartStyles.fontSizeSmall
+                }
+            },
+            {
+                type: 'value',
+                splitLine: { show: false },
+                axisLine: ChartStyles.axisLineGrey,
+                axisLabel: {
+                    fontSize: ChartStyles.fontSizeSmall
+                }
+            }],
+            series: seriesArray
+        };
+
+        SetOptionOnChart(option, myChart);
+        return myChart;
+    }
+
+
+
 
     static CreateMPH(_elementID, _data, _display) {
         var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);

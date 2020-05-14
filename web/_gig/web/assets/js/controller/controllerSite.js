@@ -23,10 +23,10 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
 
 
     $scope.prepareSankey = function () {
-        var matMoveData = [];
-        matMoveData[0] = $rootScope.siteData[0];
-        matMoveData[1] = $rootScope.siteData[1];
-        matMoveData[2] = $rootScope.siteData[2];
+        //var matMoveData = [];
+        //matMoveData[0] = $rootScope.siteData[0];
+        //matMoveData[1] = $rootScope.siteData[1];
+        //matMoveData[2] = $rootScope.siteData[2];
 
         // This should be done in PHP
         for (var i = 0; i < $rootScope.siteData.length; i++) {
@@ -69,7 +69,8 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
         }
     };
 
-
+    // What the fuck...  this should be PHP,  front end shouldn't
+    // be summing up this stuff
     $scope.sumTotalsForFunctionType = function (_equipList, _totalsIndex) {
         if ($scope.site != undefined) {
             for (var i = 0; i < _equipList.length; i++) {

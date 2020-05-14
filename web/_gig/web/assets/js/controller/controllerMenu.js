@@ -4,7 +4,7 @@
 
 app.controller('Menu', function ($scope, $routeParams, $rootScope, $timeout) {
 
-    console.log("MENU CONTROLLER");
+    //console.log("MENU CONTROLLER");
 
     $scope.equipList = null;
 

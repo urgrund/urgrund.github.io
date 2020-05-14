@@ -36,12 +36,12 @@ const TUMCategories = ['Unplanned Breakdown',
 ];
 
 
-const functionMapping = {
-    LOADING: "Boggers",
-    HAULING: "Trucks",
-    P: "Solos",// "Production Drills",
-    D: "Jumbos"// "Development Drills"
-};
+// const functionMapping = {
+//     LOADING: "Boggers",
+//     HAULING: "Trucks",
+//     P: "Solos",// "Production Drills",
+//     D: "Jumbos"// "Development Drills"
+// };
 
 
 
@@ -77,8 +77,6 @@ app.run(function ($rootScope, $http, $route) {
     $rootScope.cachedData = [];
 
 
-    $rootScope.functionMapping = functionMapping;
-
     // ------------------------------------------------------
 
     /** Set the data object that the core of the SIC
@@ -87,7 +85,8 @@ app.run(function ($rootScope, $http, $route) {
 
         var jsonString = JSON.stringify(_data);
         var newData = JSON.parse(jsonString);
-        //var newData = _data;
+
+        //console.log(newData);
 
         // All sites
         $rootScope.siteData = newData;
@@ -98,8 +97,11 @@ app.run(function ($rootScope, $http, $route) {
         // All equip next
         $rootScope.equipment = $rootScope.siteData.pop();
 
+
         $rootScope.siteDataDate = $rootScope.convertToNiceDateObject($rootScope.meta.Date);
 
+
+        $rootScope.functionMapping = $rootScope.meta.EquipmentFunctionMap;
 
         // Create a $root list of equipment by function
         // use the function mapping table as object keys 
@@ -108,11 +110,13 @@ app.run(function ($rootScope, $http, $route) {
         for (var key in $rootScope.functionMapping) {
             $rootScope.equipmentByFunction[key] = [];
         }
+
         for (var key in $rootScope.equipment) {
             var asset = $rootScope.equipment[key];
-            $rootScope.equipmentByFunction[asset.function].push(key);
+            if (asset.function in $rootScope.equipmentByFunction)
+                $rootScope.equipmentByFunction[asset.function].push(key);
         }
-        //console.log($rootScope.equipmentByFunction);
+        console.log($rootScope.equipmentByFunction);
 
 
 
@@ -143,14 +147,20 @@ app.run(function ($rootScope, $http, $route) {
             //var file = 'http://localhost/web/sitedata/' + date + '.json';
             var file = '//localhost/web/sitedata/' + date + '.json';
 
+            //console.log(date);
+
             fetch(file)
                 .then((response) => {
                     return response.json();
                 })
                 .then((myJson) => {
+
+                    //console.log(date);
+                    //console.log(myJson);
+
                     // Check if date data already exists
                     const { length } = $rootScope.cachedData;
-                    const found = $rootScope.cachedData.some(el => el[4].Date === myJson[4].Date);
+                    const found = $rootScope.cachedData.some(el => el[el.length - 1].Date === myJson[el.length - 1].Date);
 
                     // It's new so add it 
                     if (!found) {
@@ -164,7 +174,7 @@ app.run(function ($rootScope, $http, $route) {
 
                     // Sort 
                     //console.log($rootScope.cachedData);
-                    $rootScope.cachedData.sort(function (a, b) { return b[4]['Date'] - a[4]['Date'] });
+                    $rootScope.cachedData.sort(function (a, b) { return b[b.length - 1]['Date'] - a[a.length - 1]['Date'] });
                 });
         }
     };

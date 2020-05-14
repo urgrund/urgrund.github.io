@@ -33,7 +33,10 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
         var mph;
         var uofa;
         var timeline;
-        $timeout(function () { mph = Charts.CreateMPH("mph", $scope.equip, 2); }, d); d += t;
+
+        //$timeout(function () { mph = Charts.CreateMPH("mph", $scope.equip, 2); }, d); d += t;
+        $timeout(function () { mph = Charts.CreateMPH2("mph", $scope.equip, 2); }, d); d += t;
+
         $timeout(function () { Charts.CreateUofAPie("tus", $scope.equip); }, d); d += t;
         $timeout(function () { uofa = Charts.CreateUofA("uofa", $scope.equip); }, d); d += t;
 

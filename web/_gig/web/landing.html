@@ -35,9 +35,9 @@
 
     <!-- Site info -->
     <div>
-        <div class="landcard" ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index">
+        <div class="landcard" ng-repeat="x in siteData" ng-init="siteIndex = $index">
             <!-- <a href=#> LDJLAJSD</a> -->
-            <img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg">
+            <img class="sitePicBig" ng-src="assets/img/site_{{siteIndex%3}}.jpg">
             <!-- <a class="imgLink" href=#><img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg"> </a> -->
             <a ng-href="#!site/{{siteIndex}}">
                 <h2 ng-bind="x.name"></h2>
