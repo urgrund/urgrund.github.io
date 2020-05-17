@@ -123,7 +123,7 @@ class CreateSiteData
         AddMetaData();
 
 
-        //ScrambleData::Scramble();
+        ScrambleData::Scramble();
 
         Debug::EndProfile();
         Debug::Log("Finished...");
@@ -329,7 +329,7 @@ function CreateSitesAndEquipment()
     // Generate the Mine Sites for this day
     // This is filtered based on the client config
     $allSites = array();
-    foreach (array_keys(Config::$instance->resultSites) as $id) {
+    foreach (array_keys(Config::$instance->configSites) as $id) {
         if (Config::Sites($id) != "")
             $allSites[Config::Sites($id)] = "";
     }
@@ -451,7 +451,6 @@ function CreateDataForAllSites()
     global $sqlMetricPerHour;
 
 
-
     // -------------------------------------
     // Production Tonnes for site
     Debug::StartProfile("PHP: Per-mine Data");
@@ -480,74 +479,8 @@ function CreateDataForAllSites()
 
     Debug::StartProfile("SQL Material Movements");
     foreach (array_keys($allSites) as $site) {
-        $allSites[$site]->GenerateMaterialMovements();
+        //$allSites[$site]->GenerateMaterialMovements();
     }
-    //Debug::Log($allSites["Western Flanks"]->shiftData[0]->materialMovements);
-    Debug::EndProfile();
-
-
-    return;
-    // -------------------------------------
-
-
-
-
-
-
-    Debug::StartProfile("Create All Site Data");
-    // ----------------------
-    // Material Movements 
-    // Debug::StartProfile("SQL: Mat Movement");
-    // Debug::Disable();
-
-    // $sqlPath = "../assets/sql/mine/SP_MATERIAL_ALL_Sankey.sql";
-    // $sqlTxt = SQLUtils::FileToQuery($sqlPath);
-    // $result = SQLUtils::QueryToText($sqlTxt);
-    // Debug::Enable();
-    // Debug::EndProfile();
-
-    // Debug::StartProfile("PHP: Mat Movement");
-
-    // // WTF is this hack?!
-    // for ($i = 1; $i < count($result); $i++) {
-    //     if ($result[$i][0] == "WF")
-    //         $allSites[1]->materialMovement[] = $result[$i];
-
-    //     if ($result[$i][0] == "SLC")
-    //         $allSites[0]->materialMovement[] = $result[$i];
-
-    //     if (1 === preg_match('~[0-9]~',  $result[$i][0]))
-    //         $allSites[2]->materialMovement[] = $result[$i];
-    // }
-
-
-    // ----------------------
-    // TPH and total Availability of Site
-
-    // For each site, for each equipment, sum the TPH
-    // of each hour of both shifts into a 24hr summary
-    for ($i = 0; $i < count($allSites); $i++) {
-        for ($j = 0; $j < count($allSites[$i]->equipment); $j++) {
-            $equip = $allSites[$i]->equipment[$j];
-
-            // For each shift
-            for ($k = 0; $k < 2; $k++) {
-
-                // Get the Operating/Idle/Down % from each event
-                for ($z = 0; $z < count($equip->shiftData[$k]->uofa); $z++) {
-
-                    $uofaI = ($k * 12) + $z;
-
-                    $event = $equip->shiftData[$k]->uofa[$z];
-                    $allSites[$i]->uoaf24[0][$uofaI] += $event->operating / 3600;
-                    $allSites[$i]->uoaf24[1][$uofaI] += $event->idle / 3600;
-                    $allSites[$i]->uoaf24[2][$uofaI] += $event->down / 3600;
-                }
-            }
-        }
-        //Debug::Log($allSites[$i]->uoaf24[0]);
-    }
-    Debug::EndProfile();
 
     Debug::EndProfile();
 }

@@ -1,15 +1,7 @@
 <?php
 
-//include_once('..\header.php');
-//Debug::Log(Config::GetConfigSites());
-
-/**
- * Simple class to retrive and store site
- * configuration files 
- **/
 class Config
 {
-
     public static $instance = null;
 
     private static $localDir = "siteconfig\\";
@@ -18,27 +10,26 @@ class Config
     private static $fileTUM = 'TUM';
     private static $fileSites = 'Sites';
 
-    public $resultTUM;
-    public $resultSites;
-
+    public $configTUM;
+    public $configSites;
 
     function __construct()
     {
         Config::$instance = $this;
-        $this->resultSites = Config::GetConfigSites();
-        $this->resultTUM = Config::GetConfigTUM();
+        $this->configSites = Config::GetConfigSites();
+        $this->configTUM = Config::GetConfigTUM();
 
-        //Debug::Log($this->resultSites);
+        //Debug::Log($this->configSites);
     }
 
     public static function Sites($_key)
     {
-        return Config::$instance->resultSites[$_key];
+        return Config::$instance->configSites[$_key];
     }
 
     public static function TUM($_key)
     {
-        return Config::$instance->resultTUM[$_key];
+        return Config::$instance->configTUM[$_key];
     }
 
 
@@ -72,7 +63,11 @@ class Config
             fclose($file);
             return $newArray;
         } else {
-            Debug::Log("Failed to open file - " . getcwd() . "\\" . $_path);
+            // try {
+            //     Debug::Log("Failed to open file - " . getcwd() . "\\" . $_path);
+            // } catch (Exception $e) {
+            //     echo "Hello";
+            // }
             return null;
         }
     }

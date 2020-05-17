@@ -111,6 +111,7 @@ app.controller('myCtrl', function ($scope, $http) {
         }
     }
 
+
     $scope.regenerateMissing = function () {
 
         //console.log("Regenerating data..." + new Date());
@@ -149,6 +150,20 @@ app.controller('myCtrl', function ($scope, $http) {
             }
         }
     };
+
+
+    $scope.getConfigs = function () {
+        var _data = { 'func': 4 };
+        var request = $http({
+            method: 'POST',
+            url: _url,
+            data: _data,
+        })
+        request.then(function (response) {
+            console.log(response.data);
+        }, function (error) {
+        });
+    }
 
 
     $scope.getListOfDates();

@@ -1,7 +1,5 @@
 <?php
 
-
-
 include_once('header.php');
 include_once('setDebugOff.php');
 include_once('get_site_data.php');
@@ -16,6 +14,7 @@ $request = json_decode($postdata);
 
 if (is_object($request)) {
     include_once('setDebugOff.php');
+
 
     // Get all the dates and their status
     // Does not generate anything
@@ -34,6 +33,11 @@ if (is_object($request)) {
     else if ($request->func == 3) {
         Admin::DownloadDataForDate($request->date);
     }
+    // Get CSV config docs
+    else if ($request->func == 4) {
+        Admin::GetCSVConfigs();
+    }
+
 
     return;
 } else {
@@ -73,6 +77,16 @@ if (is_object($request)) {
 
 class Admin
 {
+
+    public static function GetCSVConfigs()
+    {
+        new Config();
+        echo json_encode(Config::$instance);
+    }
+
+
+
+
     public static function GenerateDataForDate($_date)
     {
         // This comes from create_site_data

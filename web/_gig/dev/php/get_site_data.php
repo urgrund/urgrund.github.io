@@ -15,6 +15,9 @@ if (isset($_POST['date'])) {
 //$date = '20181001';
 //new GetSiteData();
 
+
+// This is the main function to manage the 
+// generation of a days data 
 class GetSiteData
 {
     private static $_fileDir = "../sitedata/";
