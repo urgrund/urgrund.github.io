@@ -1231,9 +1231,9 @@ class Charts {
                 var rectShape = echarts.graphic.clipRectByRect(
                     {
                         x: start[0],
-                        y: 0,//start[1] + hOffset,// - height / 2,//hOffset + start[1] - height / 2,
+                        y: 0,
                         width: customType == customTypes[1] ? height / 2 : end[0] - start[0],
-                        height: 1000// -hOffset + categoryIndex// height / 2
+                        height: 1000
                     }
                     ,
                     clipRect
@@ -1242,9 +1242,9 @@ class Charts {
                 var rectShape = echarts.graphic.clipRectByRect(
                     {
                         x: start[0],
-                        y: 0,//hOffset + start[1] - (customType == customTypes[1] ? height / 2 : height / 2),
+                        y: 0,
                         width: customType == customTypes[1] ? height / 8 : end[0] - start[0],
-                        height: 1000////customType == customTypes[1] ? height / 2 : height / 2
+                        height: 1000
                     }
                     ,
                     clipRect

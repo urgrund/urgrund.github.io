@@ -10,15 +10,51 @@
     </div>
     </br>
     <div class="mines-center {{$parent.backGroundClassBlur}}">
+
+        <!-- <input type="file" accept=".csv" on-read-file callback-fn="onFileReadComplete(arg1)" />
+        <div my-directive callback-fn="ctrlFn(arg1)"></div> -->
+
+        <!-- <button id="myBtn" ng-click="getConfigs()">Get Configs</button> -->
         <div class="center">
 
-            <input type="file" accept=".csv" file-reader="fileContent" />
-            <!-- <div>{{fileContent}}</div> -->
-            <div ng-repeat="x in fileContent" class="flex">
-                <div ng-repeat="y in x" class="">
-                    {{y}}
+            <input type="file" accept=".csv" file-reader callback-fn="onFileReadComplete(arg1)" />
+            <button id="myBtn" ng-click="uploadMonthlyPlan()">Upload</button>
+            <button id="myBtn" ng-click="getMonthlyPlan()">Get</button>
+            <input type="text" id="test">
+
+            <div class="jumbogrid">
+                <div ng-repeat="(key, value) in distinctNames track by $index">
+
+                    <!-- <img class="sitePicSmall" ng-src="assets/img/site_{{siteIndex%3}}.jpg"> -->
+                    <h3> {{ configFiles.configSites[value]}}</h3>
+
+                    <!-- Header -->
+                    <div ng-repeat="x in fileContent" class="mnth_target_grid bold underline left light" ng-if="$first">
+                        <div ng-repeat="y in x" ng-if="!$first">
+                            <h4>{{y}}</h4>
+                        </div>
+                    </div>
+
+                    <div ng-repeat="x in fileContent" ng-if="!$first" ng-init="rowIndex = $index">
+                        <div class="mnth_target_grid left" ng-if="fileContent[rowIndex][0] == $parent.value">
+                            <div ng-repeat="y in x" class="left" ng-if="!$first && !$last">
+                                <p>{{y}}</p>
+                            </div>
+
+                            <div ng-repeat="y in x" class="" ng-if="!$first && $last" ng-init="colIndex = $index">
+
+                                <input type="number" string-to-number ng-model="fileContent[rowIndex][colIndex]"
+                                    ng-min="0" required class="right">
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+
             </div>
+
+            <!-- {{fileContent[1]}} -->
 
         </div>
 
@@ -28,7 +64,7 @@
 
 
 
-        <div class="center">
+        <!-- <div class="center">
 
             <h4 class="underline">
                 <div class="monthlyTargetGrid">
@@ -72,7 +108,7 @@
                     <h4>Upload targets to server...</h4>
                 </button>
             </h1>
-        </div>
+        </div> -->
     </div>
 
 

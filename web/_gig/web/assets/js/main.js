@@ -406,23 +406,19 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
 // =====================================================================================
 
 
+
 app.directive('fileReader', function () {
     return {
-        scope: {
-            fileReader: "="
-        },
-        link: function (scope, element) {
+        scope: { someCtrlFn: '&callbackFn' },
+        link: function (scope, element, attrs) {
             (element).on('change', function (changeEvent) {
+
                 var files = changeEvent.target.files;
-                console.log(files);
                 if (files.length) {
                     Papa.parse(files[0], {
                         complete: function (results) {
-                            console.log("Finished:", results.data);
-                            scope.fileReader = results.data;
-                            scope.$apply(function () {
-                                scope.fileReader = contents;
-                            });
+                            //scope.$apply(function () { });
+                            scope.someCtrlFn({ arg1: results.data });
                         }
                     });
                 }
@@ -431,8 +427,19 @@ app.directive('fileReader', function () {
     };
 });
 
-
-
+app.directive('stringToNumber', function () {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attrs, ngModel) {
+            ngModel.$parsers.push(function (value) {
+                return '' + value;
+            });
+            ngModel.$formatters.push(function (value) {
+                return parseFloat(value);
+            });
+        }
+    };
+});
 
 // =====================================================================================
 // Router

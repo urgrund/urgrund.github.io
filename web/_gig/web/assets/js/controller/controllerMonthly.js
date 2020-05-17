@@ -1,7 +1,8 @@
 
-app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout)
-{
+app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $timeout) {
 
+    // --------------------------------------------------------
+    // Old
     $scope.siteIndex = $routeParams.site;
     $scope.site = $rootScope.siteData[$routeParams.site];
 
@@ -9,31 +10,148 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout)
 
     $scope.data = response[0];
     $scope.compliance = response[1];
+    // --------------------------------------------------------
 
 
+    $scope.currentPlanYear = '2018'
+    $scope.currentPlanMonth = '10';
 
-    /*
-        console.log($routeParams.func);
-        console.log($scope.data);
-        console.log($scope.compliance);
-    */
+    $scope.configFiles;
+    $scope.fileContent = [];
 
-    // Chart view of Monthyl Compliance
-    if ($routeParams.func == 0)
-    {
-        ChartsMonthly.CreateMonthlyCompliance("monthlyChart", $scope.data);
+    var fp = flatpickr('#test', {
+        "minDate": new Date().fp_incr(1),
+        "static": true,
+        "altInput": true
+    });
+
+
+    $scope.onFileReadComplete = function ($contents) {
+        if ($contents == undefined) {
+            console.log("File data was undefined...");
+            return;
+        }
+
+        $scope.fileContent = $contents;
+
+        // Map the site data 
+        var lastIndex = $scope.fileContent[0].length - 1;
+        for (var i = 1; i < $scope.fileContent.length; i++) {
+            //$scope.fileContent[i][0] = $scope.configFiles.configSites[$scope.fileContent[i][0]];
+            //var newNum = ($scope.fileContent[i][lastIndex]);
+            //console.log(newNum);
+            //$scope.fileContent[i][lastIndex] = newNum;//parseInt($scope.fileContent[i][lastIndex]);
+            //console.log($scope.fileContent[i][lastIndex]);
+            //$scope.fileContent[i][lastIndex] = 666;
+        }
+
+        // Clear out null values
+        $scope.fileContent = $scope.fileContent.filter(function (el) {
+            if (el != null || el != undefined)
+                return (el[0] != null);
+            return el != null;
+        });
+
+        $scope.createUniqueSiteNames();
+        $scope.$apply();
+    }
+
+    $scope.createUniqueSiteNames = function () {
+
+        // Get unique site names 
+        $scope.distinctNames = [...new Set($scope.fileContent.map(x => x[0]))];
+        $scope.distinctNames.shift();
     }
 
 
-    $scope.getLockClass = function ($index)
-    {
-        if ($scope.entry[$index] != undefined)
-        {
-            if ($scope.entry[$index].lock == true)
-            {
+
+
+    $scope.getMonthlyPlan = function () {
+        var _url = '../dev/php/monthly/monthly.php';
+
+        var _data = {
+            'func': 1,
+            'year': '2018',
+            'month': '10'
+        };
+        var request = $http({
+            method: 'POST',
+            url: _url,
+            data: _data,
+        })
+        request.then(function (response) {
+            console.log(response);
+            //$scope.prepareFileContent(Papa.unparse(response.data));
+            $scope.fileContent = response.data;
+            $scope.createUniqueSiteNames();
+        }, function (error) {
+            console.log(error);
+        });
+    }
+
+
+
+    $scope.uploadMonthlyPlan = function () {
+        var _url = '../dev/php/monthly/monthly.php';
+
+        var _data = {
+            'func': 0,
+            'data': $scope.fileContent,
+            'year': '2018',
+            'month': '10'
+        };
+
+        var request = $http({
+            method: 'POST',
+            url: _url,
+            data: _data,
+        })
+        request.then(function (response) {
+            console.log(response);
+        }, function (error) {
+            console.log(error);
+        });
+    }
+
+
+
+
+    $scope.getConfigs = function () {
+        var _url = '../dev/php/admin.php';
+        var _data = { 'func': 4 };
+        var request = $http({
+            method: 'POST',
+            url: _url,
+            data: _data,
+        })
+        request.then(function (response) {
+            $scope.configFiles = response.data;
+            console.log($scope.configFiles);
+        }, function (error) {
+        });
+    }
+
+
+    $scope.getConfigs();
+
+
+
+    // ----------------------------------------------------
+    // Chart view of Monthyl Compliance
+    if ($routeParams.func == 0) {
+        ChartsMonthly.CreateMonthlyCompliance("monthlyChart", $scope.data);
+    }
+    // ----------------------------------------------------
+
+
+
+    // ----------------------------------------------------
+    // For the input side of monthly targets
+    $scope.getLockClass = function ($index) {
+        if ($scope.entry[$index] != undefined) {
+            if ($scope.entry[$index].lock == true) {
                 return "fas fa-lock locked"
-            } else
-            {
+            } else {
                 return "fas fa-lock-open unlocked";
             }
         }
@@ -41,21 +159,17 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout)
     }
 
 
-    $scope.toggleLock = function ($event, $index)
-    {
+    $scope.toggleLock = function ($event, $index) {
         //console.log($index);
         //console.log($scope.biglock);
         //
         //$scope.biglock == '0'
-        if ($index == -1)
-        {
-            for (var i = 0; i < $scope.entry.length; i++)
-            {
+        if ($index == -1) {
+            for (var i = 0; i < $scope.entry.length; i++) {
                 $scope.entry[i].lock = $scope.biglock == 0 ? true : false;
             }
         }
-        else
-        {
+        else {
             if ($scope.biglock == 1)
                 if ($scope.entry[$index] != undefined)
                     $scope.entry[$index].lock = !$scope.entry[$index].lock;
@@ -64,11 +178,9 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout)
 
 
     // Targets Adjustment 
-    if ($routeParams.func == 1)
-    {
+    if ($routeParams.func == 1) {
         $scope.entry = [];
-        for (var key in $scope.data)
-        {
+        for (var key in $scope.data) {
             $scope.entry.push({ lock: false, data: $scope.data[key][2] });
         }
 
@@ -78,5 +190,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $timeout)
 
         //console.log($scope.entry);
     }
+    // ----------------------------------------------------
+
 
 });
