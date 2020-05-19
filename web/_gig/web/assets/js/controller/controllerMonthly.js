@@ -13,7 +13,9 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $ti
     // --------------------------------------------------------
 
 
-    $scope.currentPlanYear = '2018'
+
+
+    $scope.currentPlanYear = '2018';
     $scope.currentPlanMonth = '10';
 
     $scope.configFiles;
@@ -26,24 +28,40 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $ti
     });
 
 
+
+    $scope.checkSiteValidForLoop = function (siteName, mapName) {
+        return $scope.configFiles.configSites[siteName] == mapName;
+    }
+
+
+
     $scope.onFileReadComplete = function ($contents) {
         if ($contents == undefined) {
             console.log("File data was undefined...");
             return;
         }
-
+        $scope.fileContent = null;
         $scope.fileContent = $contents;
+        $scope.filterFileContent();
+        console.log($scope.fileContent);
 
-        // Map the site data 
-        var lastIndex = $scope.fileContent[0].length - 1;
-        for (var i = 1; i < $scope.fileContent.length; i++) {
-            //$scope.fileContent[i][0] = $scope.configFiles.configSites[$scope.fileContent[i][0]];
-            //var newNum = ($scope.fileContent[i][lastIndex]);
-            //console.log(newNum);
-            //$scope.fileContent[i][lastIndex] = newNum;//parseInt($scope.fileContent[i][lastIndex]);
-            //console.log($scope.fileContent[i][lastIndex]);
-            //$scope.fileContent[i][lastIndex] = 666;
+        $scope.createUniqueSiteNames();
+        $scope.$apply();
+    }
+
+
+
+    $scope.filterFileContent = function () {
+
+        // Remove 1 sized rows
+        var temp = [];
+        for (var i = 0; i < $scope.fileContent.length; i++) {
+            if ($scope.fileContent[i].length > 1)
+                temp.push($scope.fileContent[i]);
+            else
+                console.log("Cleaned row " + i);
         }
+        $scope.fileContent = temp;
 
         // Clear out null values
         $scope.fileContent = $scope.fileContent.filter(function (el) {
@@ -51,16 +69,39 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $ti
                 return (el[0] != null);
             return el != null;
         });
-
-        $scope.createUniqueSiteNames();
-        $scope.$apply();
     }
 
-    $scope.createUniqueSiteNames = function () {
 
-        // Get unique site names 
-        $scope.distinctNames = [...new Set($scope.fileContent.map(x => x[0]))];
+
+    $scope.createUniqueSiteNames = function () {
+        // Get unique site names based on config mapping
+        $scope.distinctNames = [...new Set($scope.fileContent.map(x => $scope.configFiles.configSites[x[0]]))];
         $scope.distinctNames.shift();
+    }
+
+
+
+
+    $scope.uploadMonthlyPlan = function () {
+        var _url = '../dev/php/monthly/monthly.php';
+
+        var _data = {
+            'func': 0,
+            'data': Papa.unparse($scope.fileContent),
+            'year': $scope.currentPlanYear,
+            'month': $scope.currentPlanMonth
+        };
+
+        var request = $http({
+            method: 'POST',
+            url: _url,
+            data: _data,
+        })
+        request.then(function (response) {
+            console.log(response);
+        }, function (error) {
+            console.log(error);
+        });
     }
 
 
@@ -71,8 +112,8 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $ti
 
         var _data = {
             'func': 1,
-            'year': '2018',
-            'month': '10'
+            'year': $scope.currentPlanYear,
+            'month': $scope.currentPlanMonth
         };
         var request = $http({
             method: 'POST',
@@ -80,10 +121,41 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $ti
             data: _data,
         })
         request.then(function (response) {
-            console.log(response);
-            //$scope.prepareFileContent(Papa.unparse(response.data));
+
+            //console.log(response.data);
+            //$scope.fileContent = Papa.unparse(response.data);
             $scope.fileContent = response.data;
+            //$scope.$apply();
+            //$scope.filterFileContent();
+            //console.log($scope.fileContent);
+            //console.log(JSON.stringify(response.data));
+
+
+            $scope.fileContent = [];
+            for (var i = 0; i < response.data.length; i++) {
+                // Check if each property in 
+                // the object can be converted to number
+                var obj = response.data[i];
+                for (var prop in obj) {
+                    if (obj.hasOwnProperty(prop) && !isNaN(obj[prop])) {
+                        obj[prop] = +obj[prop];
+                        obj[prop] = +parseFloat(obj[prop]).toFixed(0);
+                        //toFixed(2); // 2 decimal places
+                        //toFixed(4); // 4 decimal places
+                        //toFixed(0); // integer
+                    }
+
+                    //if (isNaN(obj[prop]))
+                    //  console.log(obj[prop]);
+                }
+
+                // Push to the content array
+                $scope.fileContent.push(response.data[i]);
+            }
+            console.log($scope.fileContent);
+            //$scope.filterFileContent();
             $scope.createUniqueSiteNames();
+
         }, function (error) {
             console.log(error);
         });
@@ -91,16 +163,14 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $ti
 
 
 
-    $scope.uploadMonthlyPlan = function () {
+    $scope.getMonthlyActuals = function () {
         var _url = '../dev/php/monthly/monthly.php';
 
         var _data = {
-            'func': 0,
-            'data': $scope.fileContent,
-            'year': '2018',
-            'month': '10'
+            'func': 3,
+            'year': $scope.currentPlanYear,
+            'month': $scope.currentPlanMonth
         };
-
         var request = $http({
             method: 'POST',
             url: _url,
@@ -112,7 +182,6 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $ti
             console.log(error);
         });
     }
-
 
 
 
@@ -132,16 +201,41 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $ti
     }
 
 
-    $scope.getConfigs();
+
 
 
 
     // ----------------------------------------------------
-    // Chart view of Monthyl Compliance
+    // ----------------------------------------------------
+    // Entry point based on router func
     if ($routeParams.func == 0) {
         ChartsMonthly.CreateMonthlyCompliance("monthlyChart", $scope.data);
     }
+
+    if ($routeParams.func == 1) {
+        $scope.getConfigs();
+    }
     // ----------------------------------------------------
+    // ----------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

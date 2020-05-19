@@ -20,13 +20,17 @@
             <input type="file" accept=".csv" file-reader callback-fn="onFileReadComplete(arg1)" />
             <button id="myBtn" ng-click="uploadMonthlyPlan()">Upload</button>
             <button id="myBtn" ng-click="getMonthlyPlan()">Get</button>
+            <button id="myBtn" ng-click="getMonthlyActuals()">Actuals</button>
             <input type="text" id="test">
+
+            <!-- <div>{{fileContent[1]}}</div>
+            <div>{{distinctNames}}</div> -->
 
             <div class="jumbogrid">
                 <div ng-repeat="(key, value) in distinctNames track by $index">
 
                     <!-- <img class="sitePicSmall" ng-src="assets/img/site_{{siteIndex%3}}.jpg"> -->
-                    <h3> {{ configFiles.configSites[value]}}</h3>
+                    <h3> {{ value }}</h3>
 
                     <!-- Header -->
                     <div ng-repeat="x in fileContent" class="mnth_target_grid bold underline left light" ng-if="$first">
@@ -34,27 +38,24 @@
                             <h4>{{y}}</h4>
                         </div>
                     </div>
+                    <!-- <div class="mnth_target_grid left" ng-if="fileContent[rowIndex][0] == $parent.value"></div> -->
 
                     <div ng-repeat="x in fileContent" ng-if="!$first" ng-init="rowIndex = $index">
-                        <div class="mnth_target_grid left" ng-if="fileContent[rowIndex][0] == $parent.value">
+                        <div class="mnth_target_grid left"
+                            ng-if="checkSiteValidForLoop(fileContent[rowIndex][0],$parent.value)">
                             <div ng-repeat="y in x" class="left" ng-if="!$first && !$last">
                                 <p>{{y}}</p>
                             </div>
 
-                            <div ng-repeat="y in x" class="" ng-if="!$first && $last" ng-init="colIndex = $index">
+                            <div ng-repeat="y in x track by $index" class="" ng-if="!$first && $last">
 
-                                <input type="number" string-to-number ng-model="fileContent[rowIndex][colIndex]"
-                                    ng-min="0" required class="right">
-
+                                <input type="number" string-to-number ng-model="fileContent[rowIndex][$index]" min="0"
+                                    required step="1" class="right">
                             </div>
                         </div>
                     </div>
                 </div>
-
-
             </div>
-
-            <!-- {{fileContent[1]}} -->
 
         </div>
 

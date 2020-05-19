@@ -148,7 +148,7 @@ class Charts {
     static CreateMPH2(_elementID, _data) {
         var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
 
-        var fullDay = true;
+        var fullDay = false;
 
         // Grab all the metrics recorded for this equipment 
         // Only interested if there was any metrics recorded this shift
