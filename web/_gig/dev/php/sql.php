@@ -7,6 +7,12 @@ $conn;
 //SQLUtils::OpenConnection();
 //print($isConnected);
 
+
+/**   
+ * Manages connections and queries and helps convert
+ * text to a query or json format
+ * @author Matthew Bell 2020  
+ */
 class SQLUtils
 {
     public static function OpenConnection()
@@ -26,7 +32,8 @@ class SQLUtils
         // $pwd = "GigWorth666";
         // $dbase = "ug_trial";
 
-        $serverName = "tcp:192.168.0.105\SQLEXPRESS, 1433";
+        //$serverName = "tcp:192.168.0.100\SQLEXPRESS, 1433";
+        $serverName = "tcp:LAPTOP\SQLEXPRESS, 1433"; // <- takes longer but can resolve by name if IP changes
         $uid = 'test';
         $pwd = "gigworth";
         $dbase = "test";

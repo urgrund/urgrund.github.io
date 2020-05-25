@@ -2,82 +2,24 @@
 
 include_once('sql.php');
 
-class HTMLTable
+
+class Utils
 {
-    public static function Create($result)
+    private static $rootFolder = "dev\\php\\";
+    private static $rootFolderLive = "/dev/php/";
+    public static function GetBackEndRoot()
     {
-        echo '<table id="customers">';
-        self::tableHead($result);
-        self::tableBody($result);
-        echo '</table>';
-    }
+        if ($_SERVER['DOCUMENT_ROOT'] == "") {
+            $fileSelf = $_SERVER['PHP_SELF'];
+            $start = strpos($fileSelf, self::$rootFolder);
+            $strLen = strlen(self::$rootFolder);
 
-    private static function tableHead($result)
-    {
-        echo '<thead>';
-        foreach ($result as $x) {
-            echo '<tr>';
-            foreach ($x as $k => $y) {
-                echo '<th>' . ucfirst($k) . '</th>';
-            }
-            echo '</tr>';
-            break;
+            return substr($fileSelf, 0, $start + $strLen);
+        } else {
+            return $_SERVER['DOCUMENT_ROOT'] . self::$rootFolderLive;
         }
-        echo '</thead>';
-    }
-
-    private static function tableBody($result)
-    {
-        echo '<tbody>';
-        foreach ($result as $x) {
-            echo '<tr>';
-            foreach ($x as $y) {
-                print_r('<td>' . json_encode($y) . '</td>');
-            }
-            echo '</tr>';
-        }
-        echo '</tbody>';
-    }
-
-    public static function CreateFromCSV($handle)
-    {
-        $row = 1;
-        echo '<table border="1">';
-
-        while (($data = fgetcsv($handle, 1000)) !== FALSE && $row < 100) {
-            $num = count($data);
-            if ($row == 1) {
-                echo '<thead><tr>';
-            } else {
-                echo '<tr>';
-            }
-
-            for ($c = 0; $c < $num; $c++) {
-                //echo $data[$c] . "<br />\n";
-                if (empty($data[$c])) {
-                    $value = "&nbsp;";
-                } else {
-                    $value = $data[$c];
-                }
-                if ($row == 1) {
-                    echo '<th>' . $value . '</th>';
-                } else {
-                    echo '<td>' . $value . '</td>';
-                }
-            }
-
-            if ($row == 1) {
-                echo '</tr></thead><tbody>';
-            } else {
-                echo '</tr>';
-            }
-            $row++;
-        }
-
-        echo '</tbody></table>';
     }
 }
-
 
 
 
@@ -95,6 +37,7 @@ class Debug
     public static function DisableForSession()
     {
         self::$_debugOffMaster = true;
+        self::$_debugOff = true;
     }
 
     public static function Disable()
@@ -173,5 +116,87 @@ class Debug
 
         $event = array_pop(self::$profileEventList);
         echo $depth . " | " . $event['Event'] . ":  " . (number_format((microtime(true) - $event['StartTime']), 4) * 1000) . "ms";
+    }
+}
+
+
+
+
+
+
+
+class HTMLTable
+{
+    public static function Create($result)
+    {
+        echo '<table id="customers">';
+        self::tableHead($result);
+        self::tableBody($result);
+        echo '</table>';
+    }
+
+    private static function tableHead($result)
+    {
+        echo '<thead>';
+        foreach ($result as $x) {
+            echo '<tr>';
+            foreach ($x as $k => $y) {
+                echo '<th>' . ucfirst($k) . '</th>';
+            }
+            echo '</tr>';
+            break;
+        }
+        echo '</thead>';
+    }
+
+    private static function tableBody($result)
+    {
+        echo '<tbody>';
+        foreach ($result as $x) {
+            echo '<tr>';
+            foreach ($x as $y) {
+                print_r('<td>' . json_encode($y) . '</td>');
+            }
+            echo '</tr>';
+        }
+        echo '</tbody>';
+    }
+
+    public static function CreateFromCSV($handle)
+    {
+        $row = 1;
+        echo '<table border="1">';
+
+        while (($data = fgetcsv($handle, 1000)) !== FALSE && $row < 100) {
+            $num = count($data);
+            if ($row == 1) {
+                echo '<thead><tr>';
+            } else {
+                echo '<tr>';
+            }
+
+            for ($c = 0; $c < $num; $c++) {
+                //echo $data[$c] . "<br />\n";
+                if (empty($data[$c])) {
+                    $value = "&nbsp;";
+                } else {
+                    $value = $data[$c];
+                }
+                if ($row == 1) {
+                    echo '<th>' . $value . '</th>';
+                } else {
+                    echo '<td>' . $value . '</td>';
+                }
+            }
+
+            if ($row == 1) {
+                echo '</tr></thead><tbody>';
+            } else {
+                echo '</tr>';
+            }
+            $row++;
+        }
+
+        echo '</tbody></table>';
     }
 }

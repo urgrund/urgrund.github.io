@@ -400,5 +400,202 @@ class ChartsMonthly {
         SetOptionOnChart(option, myChart);
     }
 
+
+
+
+
+
+    static CreateMonthlyCompliance2(_elementID, _data) {
+
+        var myChart = echarts.init(document.getElementById(_elementID), 'chartTone');
+
+        // 1 - location
+        // 3 - plan
+        // 4 - actuals
+
+        var newData = [[], [], [], [], []];
+
+        var newData = [[], [], [], [], []];
+        for (var i = 0; i < _data.length; i++) {
+            var target = parseInt(_data[i][3]);
+            var actual = parseInt(_data[i][4]);
+
+            //console.log(actual);
+
+            // Add location
+            newData[0].push(_data[i][1]);
+
+            // Current progress related to the target           
+            newData[1].push(Math.min(actual, target));
+
+            // Overmined
+            newData[2].push(Math.max(0, actual - target));
+
+            // The target value 
+            newData[3].push(target);
+
+            // Label, this is a 'dummy' bar to position the label 
+            // by stacking nothing (0) on top of the other values
+            newData[4].push({ value: 0, label: { formatter: String(_data[i][4]) } });
+        }
+
+        //console.log(newData);
+
+
+
+        var borderRadius = '0';
+        var barWidth = 18;
+
+        var option = {
+            backgroundColor: ChartStyles.backGroundColor,
+            textStyle: ChartStyles.textStyle,
+            title: ChartStyles.createTitle(""),
+            toolbox: ChartStyles.toolBox(myChart.getHeight(), "MonthlyCompliance"),
+            legend: {
+
+                textStyle: {
+                    color: "#fff"
+                },
+                orient: 'horizontal',
+                x: 'center',
+                y: 'top',
+                selectedMode: false,
+                data: ['Tonnes', 'Over', 'Target']
+            },
+            tooltip: {
+                trigger: 'axis',
+                confine: true,
+                formatter: function (params, index) {
+                    var target = params[3].value;
+                    var mined = params[0].value + params[1].value;
+                    var over = params[1].value;
+
+                    //var len = _data[params[0].name][1].length;
+                    //var average = (_data[params[0].name][1][len - 1] / len).toFixed(2);
+
+                    var label = "";
+                    // label += ChartStyles.toolTipTextTitle(params[0].name)
+                    //     + ChartStyles.toolTipTextEntry("Target : " + target)
+                    //     + ChartStyles.toolTipTextEntry("Mined : " + mined + (target > 0 ? " (" + RatioToPercent(mined / target) + ")" : ""))
+                    //     + ChartStyles.toolTipTextEntry("Average : " + average);
+                    // if (over > 0 && target > 0)
+                    //     label += ChartStyles.toolTipTextEntry("Over: " + params[1].value + " (" + RatioToPercent(params[1].value / target) + ")", 'cup-redwarn');
+
+                    //label = params;
+                    //console.log(params);
+
+                    label += ChartStyles.toolTipTextTitle(params[0].name)
+                        // + ChartStyles.toolTipTextEntry(params[0].value)
+                        // + ChartStyles.toolTipTextEntry(params[1].value)
+                        // + ChartStyles.toolTipTextEntry(params[2].value)
+                        // + ChartStyles.toolTipTextEntry(params[3].value)
+                        + ChartStyles.toolTipTextEntry("Target : " + target)
+                        + ChartStyles.toolTipTextEntry("Mined  : " + mined + (target > 0 ? " (" + RatioToPercent(mined / target) + ")" : ""));
+                    if (over > 0 && target > 0)
+                        label += ChartStyles.toolTipTextEntry("Over: " + params[1].value + " (" + RatioToPercent(params[1].value / target) + ")", 'cup-redwarn');
+                    return label;
+                },
+                axisPointer: ChartStyles.toolTipShadow(),
+                backgroundColor: ChartStyles.toolTipBackgroundColor()
+            },
+
+            grid: {
+                top: '3%',
+                bottom: '3%',
+                left: '3%',
+                right: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: newData[0],
+                    axisLabel: {
+                        show: true,
+                        interval: 0,
+                        rotate: 90,
+                        fontSize: ChartStyles.fontSizeAxis
+                    },
+                    axisLine: { show: false, lineStyle: { color: '#71a3c5' } },
+                    axisTick: {
+                        alignWithLabel: true,
+                        length: 5
+                    }
+                },
+                { type: 'category', show: false, data: newData[0] }
+            ],
+            yAxis: {
+                type: 'value',
+                name: 'Tonnes',
+                nameLocation: 'center',
+                nameTextStyle: {
+                    fontSize: ChartStyles.fontSizeLarge
+                },
+                nameGap: 40,
+                axisLabel: { fontSize: ChartStyles.fontSizeAxis },
+                splitLine: {
+                    show: true,
+                    lineStyle: { color: 'rgba(126, 134, 136, 0.33)', width: 1 }
+                }
+            },
+            series: [
+                {
+                    data: newData[1],
+                    type: 'bar',
+                    stack: 'stack',
+                    name: 'Tonnes',
+                    itemStyle: { color: ChartStyles.siteColors[0], barBorderRadius: borderRadius },
+                    // barGap: '-100%',
+                    // barWidth: 10,
+                    animationEasing: 'linear',
+                    animationDuration: 500,
+                    animationDelay: 0
+                },
+                {
+                    data: newData[2],
+                    type: 'bar',
+                    stack: 'stack',
+                    name: 'Over',
+                    itemStyle: { color: ChartStyles.statusColors[2], barBorderRadius: borderRadius },
+                    // barGap: '50%',
+                    barWidth: barWidth,
+
+                    animationEasing: 'linear',
+                    animationDuration: 500,
+                    animationDelay: 500,
+                }
+                ,
+                {
+                    data: newData[4],
+                    stack: 'stack',
+                    type: 'bar',
+                    label: { show: true, position: 'top' }
+                },
+                {
+                    data: newData[3],
+                    xAxisIndex: 1,
+                    type: 'bar',
+                    //barGap: '-50%',
+                    barWidth: (barWidth * 1.75),
+                    itemStyle: {
+                        color: 'rgba(0,0,0,0.125)',
+                        barBorderColor: '#02b3ff',
+                        barBorderWidth: 1,
+                        barBorderRadius: 2
+                    },
+                    // label: {
+                    //     show: true,
+                    //     position: 'top',
+                    //     rotate: '90',
+                    //     color: '#70d4ff'
+                    // },
+                    z: 0
+                }
+            ]
+        };
+
+        SetOptionOnChart(option, myChart);
+    }
+
 }
 

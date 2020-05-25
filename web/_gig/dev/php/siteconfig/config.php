@@ -1,5 +1,9 @@
 <?php
 
+// include_once('..\header.php');
+// new Config();
+// Debug::Log(Config::$instance->configSites);
+
 class Config
 {
     public static $instance = null;
@@ -18,17 +22,19 @@ class Config
         Config::$instance = $this;
         $this->configSites = Config::GetConfigSites();
         $this->configTUM = Config::GetConfigTUM();
-
-        //Debug::Log($this->configSites);
     }
 
     public static function Sites($_key)
     {
+        //if (self::$instance == null)
+        //  return null;
         return Config::$instance->configSites[$_key];
     }
 
     public static function TUM($_key)
     {
+        // if (self::$instance == null)
+        //     return null;
         return Config::$instance->configTUM[$_key];
     }
 
@@ -47,7 +53,8 @@ class Config
 
     private static function LoadCSVIntoAssociativeArray($_path)
     {
-        $_path = Config::$localDir . $_path . ".csv";
+        $_path = Utils::GetBackEndRoot() . Config::$localDir . $_path . ".csv";
+        //$_path = "D:\wamp64\www\dev\php\siteconfig\Config_Sites.csv";
 
         if (file_exists($_path)) {
             $newArray = array();
@@ -63,11 +70,10 @@ class Config
             fclose($file);
             return $newArray;
         } else {
-            // try {
-            //     Debug::Log("Failed to open file - " . getcwd() . "\\" . $_path);
-            // } catch (Exception $e) {
-            //     echo "Hello";
-            // }
+
+            Debug::Log(Utils::GetBackEndRoot());
+            //Debug::Log("Failed to open file - " . $_path);
+            echo "<br/>";
             return null;
         }
     }

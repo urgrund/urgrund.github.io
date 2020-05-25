@@ -27,13 +27,13 @@ const MajorGroup = {
     DOWN: 'Down'
 }
 
-const TUMCategories = ['Unplanned Breakdown',
-    'Planned Maintenance',
-    'Unplanned Standby',
-    'Operating Standby',
-    'Secondary Operating',
-    'Primary Operating'
-];
+// const TUMCategories = ['Unplanned Breakdown',
+//     'Planned Maintenance',
+//     'Unplanned Standby',
+//     'Operating Standby',
+//     'Secondary Operating',
+//     'Primary Operating'
+// ];
 
 
 // const functionMapping = {
@@ -210,7 +210,11 @@ app.run(function ($rootScope, $http, $route) {
      * Pass date as dd-mm-yyy. Creates a nicely formatted date from a numerical date
      */
     $rootScope.convertToNiceDateObject = function (_date) {
-
+        var newDateObject = {
+            LONG: moment(_date).format('dddd, DD-MM-YY'),
+            SHORT: moment(_date).format('ddd DD MMM YYYY'),
+        };
+        return newDateObject;
         console.log("USE MOMENT FOR THIS");
 
         // Given a date such as 20181010

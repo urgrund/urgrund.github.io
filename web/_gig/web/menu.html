@@ -4,10 +4,10 @@
     <div class="navleft">
         <div class="navItem">
             <!-- <div><a href="#!">COMPANY LOGO</a></div> -->
-            <img ng-src="assets/img/gigworth_logo_light.png" style="
-            width: 120px;
+            <a href="#!"><img ng-src="assets/img/gigworth_logo_light.png" style="
+            width: 130px;
             height: 30px;
-            margin-top: 6px;" ;>
+            margin-top: 6px;" ;></a>
         </div>
 
         <!-- Short Interval Control -->
@@ -61,10 +61,8 @@
                             <h4>{{ functionMapping[key] }}</h4>
                         </div>
                         <div ng-repeat="y in value" ng-init="e = getEquipmentLastEvent(equipment[y])" id="">
-                            <div class="equipFlatUsageSite">
-                                <h5 class="left"><a ng-href="#!equip/{{y}}"><i ng-class='equipStyleIcon[e.majorGroup]'
-                                            ng-style='equipStyleColor[e.majorGroup]'></i> {{equipment[y].id}}</a></h5>
-                            </div>
+                            <h5 class="left"><a ng-href="#!equip/{{y}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                        ng-style='equipStyleColor[e.majorGroup]'></i> {{equipment[y].id}}</a></h5>
                         </div>
                         </br>
                     </div>

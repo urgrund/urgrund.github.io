@@ -103,7 +103,7 @@ function ArrayOfNumbers(_number, _count, _startIndex) {
 
 // Converts a value into a useable % string
 function RatioToPercent(_value) {
-    return Math.round(_value * 100) + "%";
+    return (Math.round(_value * 1000) / 10) + "%";
 }
 
 function SecondsToHoursAndMinutes(num) {
@@ -1134,7 +1134,7 @@ class Charts {
                     // Pareto
                     type: 'line',
                     data: eventBars.length > 1 ? cumulative : null,
-                    lineStyle: { color: 'red' },
+                    lineStyle: { color: 'red', width: 1.5 },
                     symbol: 'none', // Turn off dots
                     yAxisIndex: 1,
                     smooth: true
