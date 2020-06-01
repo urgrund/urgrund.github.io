@@ -38,15 +38,14 @@ if (is_object($request)) {
         Admin::GetCSVConfigs();
     }
 
-
     return;
 } else {
-    //Admin::GetAllDateStatus();
+    Admin::GetAllDateStatus();
     //Admin::GenerateDataForDate('20181001');
 
     //$generateEverything = false;
     //Admin::GetAllDateStatus();
-    Admin::GenerateDataForDate('20181010');
+    //Admin::GenerateDataForDate('20181010');
     //Admin::DownloadDataForDate('20181010');
     return;
 
@@ -117,7 +116,7 @@ class Admin
         if ($data != null) {
             echo $data;
         } else {
-            echo json_encode(["Error" => "Not found"]);
+            echo json_encode(["Error" => "File not found for " . $_date]);
         }
     }
 

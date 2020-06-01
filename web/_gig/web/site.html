@@ -59,7 +59,7 @@
                     <h4> {{value.name}}</h4>
                     <p class="light">{{value.activity}}</p>
                 </div>
-                <h2>{{value.total | number:1}}</h2>
+                <h2>{{value.total | number:0}}</h2>
             </div>
 
 
@@ -97,7 +97,7 @@
                 </div>
             </div>
             <div class="siteTPH">
-                <drill-down-chart name="Production Tonnes" chart="siteTPH"></drill-down-chart>
+                <drill-down-chart name="Production Tonnes ({{shiftTitle}})" chart="siteTPH"></drill-down-chart>
             </div>
             </br>
             <div class="siteSankey">

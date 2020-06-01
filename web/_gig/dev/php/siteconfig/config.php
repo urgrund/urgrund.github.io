@@ -26,16 +26,17 @@ class Config
 
     public static function Sites($_key)
     {
-        //if (self::$instance == null)
-        //  return null;
-        return Config::$instance->configSites[$_key];
+        return isset(Config::$instance->configSites[$_key]) ? Config::$instance->configSites[$_key] : NULL;
+        //return Config::$instance->configSites[$_key];
     }
 
     public static function TUM($_key)
     {
-        // if (self::$instance == null)
-        //     return null;
-        return Config::$instance->configTUM[$_key];
+        return isset(Config::$instance->configTUM[$_key]) ? Config::$instance->configTUM[$_key] : NULL;
+
+        //if (!isset(Config::$instance->configTUM[$_key]))
+        //  var_dump(debug_backtrace());
+        //return Config::$instance->configTUM[$_key];
     }
 
 
@@ -55,6 +56,7 @@ class Config
     {
         $_path = Utils::GetBackEndRoot() . Config::$localDir . $_path . ".csv";
         //$_path = "D:\wamp64\www\dev\php\siteconfig\Config_Sites.csv";
+
 
         if (file_exists($_path)) {
             $newArray = array();

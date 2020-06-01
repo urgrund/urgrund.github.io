@@ -1,19 +1,36 @@
 <?php
 include_once('header.php');
-include_once('create_site_data.php');
 
 
-// Date should be sent from the client
-if (isset($_POST['date'])) {
+
+// ----------------------------------------------------------
+// ----------------------------------------------------------
+// WEB REQUEST ENTRY POINT
+// This data will be valid with a URL 
+// request from the client
+$postdata = file_get_contents("php://input");
+$request = json_decode($postdata);
+
+if (is_object($request)) {
     include_once('setDebugOff.php');
-    Debug::DisableForSession();
-    $date = $_POST['date'];
-    new GetSiteData();
+    include_once('create_site_data.php');
+    if ($request->func == 0) {
+        //echo "Hello";
+        $date = $request->date;
+        new GetSiteData();
+    }
+    return;
+} else {
+    include_once('create_site_data.php');
+    //$date = '20181001';
+    //new GetSiteData();
 }
+// ----------------------------------------------------------
+// ----------------------------------------------------------
 
 
-//$date = '20181001';
-//new GetSiteData();
+
+
 
 
 // This is the main function to manage the 
@@ -34,6 +51,9 @@ class GetSiteData
 
         $preGenerated = GetSiteData::CheckGeneratedDataExists($date);
 
+        $exists = ($preGenerated != null) ? True : False;
+        Debug::Log($exists);
+
         if ($preGenerated == null || $forceRegenation) {
 
             // If the data doesn't exist then generate and send back
@@ -44,7 +64,6 @@ class GetSiteData
 
             echo $resultAsJSON;
         } else {
-            // pre-generated data already exists!
             echo $preGenerated;
         }
     }
@@ -53,10 +72,22 @@ class GetSiteData
 
     public static function CheckGeneratedDataExists($_date)
     {
+        //  private static $localDir = "siteconfig\\";
+        //private static $filePrefix = 'Config_';
+
+        //$_path = Utils::GetBackEndRoot() . "..\\sitedata\\" . $_date . self::$_fileExt;
+        //Debug::Log($_path);
+        //Debug::Log(Utils::GetBackEndRoot());
+        //$json = @file_get_contents($_path);
+
+
         // TODO - sanitise the date input?
         $json = @file_get_contents(self::$_fileDir . $_date . self::$_fileExt);
+
+
         if ($json === false) {
             Debug::Log("File not found for" . $_date);
+            //echo json_encode(["Error" => "File not found for " . $_date]);
         } else {
             return $json;
         }

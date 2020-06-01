@@ -27,23 +27,6 @@ const MajorGroup = {
     DOWN: 'Down'
 }
 
-// const TUMCategories = ['Unplanned Breakdown',
-//     'Planned Maintenance',
-//     'Unplanned Standby',
-//     'Operating Standby',
-//     'Secondary Operating',
-//     'Primary Operating'
-// ];
-
-
-// const functionMapping = {
-//     LOADING: "Boggers",
-//     HAULING: "Trucks",
-//     P: "Solos",// "Production Drills",
-//     D: "Jumbos"// "Development Drills"
-// };
-
-
 
 
 // =====================================================================================
@@ -60,12 +43,14 @@ app.run(function ($rootScope, $http, $route) {
 
     $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
-    // TODO
-    // Shift should at least start correctly
-    // ie) if it's 6am-6pm,  it's Day Shift
 
-    //if(itsDayShift) shift = 0 else shift = 1;
-
+    // Set the shift upon load of the site
+    // based on the time of day of the client
+    var format = 'hh:mm:ss'
+    var time = moment(),
+        beforeTime = moment('06:00:00', format),
+        afterTime = moment('18:00:00', format);
+    shift = (time.isBetween(beforeTime, afterTime)) ? 0 : 1;
     $rootScope.shift = shift;
     $rootScope.shiftTitle = shiftTitle[shift];
 
@@ -121,15 +106,16 @@ app.run(function ($rootScope, $http, $route) {
 
 
         // Debug output
-        console.log("Sites :");
-        console.log($rootScope.siteData);
+        if (true) {
+            console.log("Sites :");
+            console.log($rootScope.siteData);
 
-        console.log("Equipment :");
-        console.log($rootScope.equipment);
+            console.log("Equipment :");
+            console.log($rootScope.equipment);
 
-        console.log("META :");
-        console.log($rootScope.meta);
-
+            console.log("META :");
+            console.log($rootScope.meta);
+        }
         // Update and broadcast message to the app
         //$rootScope.$apply();
         $rootScope.$broadcast('newSiteDataSet');
@@ -140,49 +126,90 @@ app.run(function ($rootScope, $http, $route) {
 
     $rootScope.fetchSiteData = function (_dates, _setAfterFetch = false) {
 
-        // THIS WILL CHANGE TO NG PHP CALL
+        var urlGetData = '../dev/php/get_site_data.php';
         for (var i = 0; i < _dates.length; i++) {
             var date = _dates[i];
-
-            //var file = 'http://localhost/web/sitedata/' + date + '.json';
-            var file = '//localhost/web/sitedata/' + date + '.json';
-
             //console.log(date);
 
-            fetch(file)
-                .then((response) => {
-                    return response.json();
-                })
-                .then((myJson) => {
+            var _data = { 'func': 0, 'date': date };
+            var request = $http({
+                method: 'POST',
+                url: urlGetData,
+                data: _data
+            })
+            request.then(function (response) {
+                // console.log("Response.....");
+                // console.log(date);
+                // console.log(response.data);
+                //console.log(response);
+                // console.log(".............");
+                const { length } = $rootScope.cachedData;
+                const found = $rootScope.cachedData.some(el => el[el.length - 1].Date === response.data[el.length - 1].Date);
 
-                    //console.log(date);
-                    //console.log(myJson);
+                // It's new so add it 
+                if (!found) {
+                    $rootScope.cachedData.push(response.data);
+                }
 
-                    // Check if date data already exists
-                    const { length } = $rootScope.cachedData;
-                    const found = $rootScope.cachedData.some(el => el[el.length - 1].Date === myJson[el.length - 1].Date);
+                // Apply to site if requested
+                if (_setAfterFetch) {
+                    $rootScope.setNewSiteData(response.data);
+                }
 
-                    // It's new so add it 
-                    if (!found) {
-                        $rootScope.cachedData.push(myJson);
-                    }
+                // Sort 
+                $rootScope.cachedData.sort(function (a, b) { return b[b.length - 1]['Date'] - a[a.length - 1]['Date'] });
 
-                    // Apply to site if requested
-                    if (_setAfterFetch) {
-                        $rootScope.setNewSiteData(myJson);
-                    }
-
-                    // Sort 
-                    //console.log($rootScope.cachedData);
-                    $rootScope.cachedData.sort(function (a, b) { return b[b.length - 1]['Date'] - a[a.length - 1]['Date'] });
-                });
+            }, function (error) {
+                console.error("ERROR FETCHING DATA");
+                console.error(error);
+            });
         }
+
+
+
+        // THIS WILL CHANGE TO NG PHP CALL
+        // for (var i = 0; i < _dates.length; i++) {
+        //     var date = _dates[i];
+
+        //     //var file = 'http://localhost/web/sitedata/' + date + '.json';
+        //     var file = '//localhost/web/sitedata/' + date + '.json';
+
+        //     // console.log(date);console.log(date);
+
+        //     fetch(file)
+        //         .then((response) => {
+        //             return response.json();
+        //         })
+        //         .then((myJson) => {
+
+        //             //console.log(date);
+        //             //console.log(myJson);
+
+        //             // Check if date data already exists
+        //             const { length } = $rootScope.cachedData;
+        //             const found = $rootScope.cachedData.some(el => el[el.length - 1].Date === myJson[el.length - 1].Date);
+
+        //             // It's new so add it 
+        //             if (!found) {
+        //                 $rootScope.cachedData.push(myJson);
+        //             }
+
+        //             // Apply to site if requested
+        //             if (_setAfterFetch) {
+        //                 $rootScope.setNewSiteData(myJson);
+        //             }
+
+        //             // Sort 
+        //             //console.log($rootScope.cachedData);
+        //             $rootScope.cachedData.sort(function (a, b) { return b[b.length - 1]['Date'] - a[a.length - 1]['Date'] });
+        //         });
+        // }
     };
 
 
 
-    // Hacky shit whilst the site is offline
-    var dates = ['20181010', '20181009', '20181008', '20181007', '20181006', '20181005', '20181004', '20181003'];
+    // With real data this should be set to current data
+    var dates = ['20181010', '20181009', '20181008', '20181007', '20181006', '20181005', '20181004'];
     $rootScope.fetchSiteData(dates, false);
 
     // ------------------------------------------------------

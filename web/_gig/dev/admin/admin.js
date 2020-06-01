@@ -26,6 +26,8 @@ app.controller('myCtrl', function ($scope, $http) {
         request.then(function (response) {
 
             //var newData = JSON.parse($scope.dataStatus);
+            //var json = JSON.parse(response.data);
+            //console.log(json);
             console.log(response.data);
             //$scope.prepareViewData();
         }, function (error) {
@@ -44,8 +46,12 @@ app.controller('myCtrl', function ($scope, $http) {
             data: _data
         })
         request.then(function (response) {
-            //$scope.dataStatus = response.data;
 
+            // var str = String(response.data);
+            // if (str.includes("xdebug-error"))
+            //     $scope.errorMsg = response.data;
+
+            console.log(response.data);
             // Make associative
             $tmp = {};
             for (var key in response.data) {
@@ -97,14 +103,9 @@ app.controller('myCtrl', function ($scope, $http) {
             request.then(function (response) {
                 console.log("Returned...");
                 console.log(response);
-
                 if ((response.data.Date in $scope.dataStatus)) {
                     $scope.dataStatus[response.data.Date] = response.data;
                     $scope.dataStatus[response.data.Date]['class'] = "far fa-check-circle green";
-                    //$scope.dataStatus[_date] = response.data;
-                    //$scope.dataStatus[_date]['class'] = "far fa-check-circle green";
-
-                    //$scope.prepareViewData();
                 }
             }, function (error) {
             });
@@ -138,12 +139,21 @@ app.controller('myCtrl', function ($scope, $http) {
                 })
                 request.then(function (response) {
                     console.log("Returned...");
-                    console.log(response.data);
+                    var dataString = String(response.data);
+                    if (dataString.includes("xdebug-error")) {
+                        console.log("THERE WAS AN ERROR");
+                        $scope.dataStatus[key]['Version'] = response.data;
 
-                    if ((response.data.Date in $scope.dataStatus)) {
-                        //console.log("Added new data for " + key + " at " + new Date());
-                        $scope.dataStatus[response.data.Date] = response.data;
-                        $scope.dataStatus[response.data.Date]['class'] = "far fa-check-circle green";
+                        console.log($scope.dataStatus[key]);
+                    }
+                    else {
+                        console.log(response.data);
+
+                        if ((response.data.Date in $scope.dataStatus)) {
+                            //console.log("Added new data for " + key + " at " + new Date());
+                            $scope.dataStatus[response.data.Date] = response.data;
+                            $scope.dataStatus[response.data.Date]['class'] = "far fa-check-circle green";
+                        }
                     }
                 }, function (error) {
                 });

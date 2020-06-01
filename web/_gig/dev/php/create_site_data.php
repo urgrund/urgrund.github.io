@@ -5,7 +5,7 @@ include_once('header.php');
  * for the last time the day was created **/
 static $allSites = array();
 static $allEquipment = array();
-static $date = '20181010';
+static $date = '20181002';
 
 static $generationStartTime;
 
@@ -231,7 +231,6 @@ function AddMetaData()
     global $dayNameMap;
     global $generationStartTime;
 
-
     $d = DateTime::createFromFormat('Ymd', $date);
     $day = $dayNameMap[$d->format('D')];
 
@@ -324,7 +323,6 @@ function CreateSitesAndEquipment()
     // -----------------------------------------------------------------------------
     // -----------------------------------------------------------------------------
     // -------------------------------------------------------
-    // TEST MATT NEW
 
     // Generate the Mine Sites for this day
     // This is filtered based on the client config
@@ -479,7 +477,7 @@ function CreateDataForAllSites()
 
     Debug::StartProfile("SQL Material Movements");
     foreach (array_keys($allSites) as $site) {
-        //$allSites[$site]->GenerateMaterialMovements();
+        $allSites[$site]->GenerateMaterialMovements();
     }
 
     Debug::EndProfile();

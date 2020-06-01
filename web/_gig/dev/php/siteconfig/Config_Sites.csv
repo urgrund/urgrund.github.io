@@ -1,15 +1,15 @@
 Site Code ,Site Name
 FPM,
-M30,M-Reefs
-M35,M-Reefs
-M50,M-Reefs
-M40,M-Reefs
+M30,MineSite 1
+M35,MineSite 1
+M50,MineSite 1
+M40,MineSite 1
 PRI,
 SP,
-WF,Western Flanks
+WF,MineSite 2
 MISC,
 NULL,
-SLC,Sub Level Cave
+SLC,MineSite 3
 MReef,
 M35SPCE,
 REHAB,

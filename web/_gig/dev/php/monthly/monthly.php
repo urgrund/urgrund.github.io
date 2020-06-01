@@ -16,6 +16,10 @@ $request = json_decode($postdata);
 if (is_object($request)) {
     include_once('..\setDebugOff.php');
 
+
+    new Config();
+
+
     if ($request->func == 0) {
         //echo $request->data;
         Monthly::WriteCSV($request->data, $request->year, $request->month);
@@ -37,13 +41,16 @@ if (is_object($request)) {
 // ----------------------------------------------------------
 // ----------------------------------------------------------
 else {
-    //$data = Monthly::GetCSV('2018', '11', true);
-    //Monthly::WriteCSV($data, '2020', '05');
+
+    new Config();
+
+    $data = Monthly::GetCSV('2018', '11', true);
+    Monthly::WriteCSV($data, '2018', '10');
 
     //include_once('..\setDebugOff.php');    
     //Debug::Log(Monthly::GetActuals('2018', '11'));
 
-    $p = Monthly::MapActualsToPlan('2018', '10');
+    //$p = Monthly::MapActualsToPlan('2018', '10');
     //Debug::Log($p);
     //Monthly::MetaData($p);
     //echo 'poo';
@@ -82,11 +89,26 @@ class Monthly
         Monthly::SanitizeCSVData($_data);
         $fileName = self::$_fileName .  $_year . $_month . self::$_fileExt;
 
-        $file = fopen($fileName, "w");
-        foreach ($_data as $line) {
-            fputcsv($file, $line);
+        try {
+            if (is_readable($fileName)) {
+                $file = @fopen($fileName, "w");
+                if (!$file) {
+                    throw new Exception('File open failed for ' . $fileName);
+                }
+
+                foreach ($_data as $line) {
+                    fputcsv($file, $line);
+                }
+                fclose($file);
+            }
+            echo "Wrote file";
+            Debug::Log("Wrote file: " . $fileName);
+        } catch (Exception $e) {
+            Debug::Log($e->getMessage());
+            // Debug::Log($e->getFile());
+            // Debug::LogI(" ln:" . $e->getLine());
+            // Debug::Log($e->getTraceAsString());
         }
-        fclose($file);
     }
 
 
@@ -120,7 +142,6 @@ class Monthly
     {
         Debug::StartProfile("Meta");
 
-        new Config();
         // To hold all the metadata
         $metas = [];
 
@@ -168,16 +189,18 @@ class Monthly
             $m->timePassedInMonth = $meta->timePassedInMonth;
             $m->averageRequired = $m->totalMetricTarget / $d;
             $m->averageCurrent = $m->totalMetricActual / ($d * $m->timePassedInMonth);
-            $m->complianceSpatial = 0.5;
-            $m->complianceVolumetric = 0.5;
+            $m->complianceSpatial = min($m->totalMetricTarget, $m->totalMetricActual) / $m->totalMetricTarget;
+            $m->complianceVolumetric = $m->totalMetricActual / $m->totalMetricTarget;
         }
 
-        Debug::Log($metas);
+        //Debug::Log($metas);
 
         return $metas;
 
         Debug::EndProfile();
     }
+
+
 
     public static function MapActualsToPlan($_year, $_month)
     {
@@ -186,8 +209,6 @@ class Monthly
 
         // From the Plan CSV
         $plan = Monthly::GetCSV($_year, $_month);
-
-        new Config();
 
         Debug::StartProfile("Map Actuals To Plan");
 
@@ -218,7 +239,6 @@ class Monthly
         $plan[0][4] = $_month;
         $plan[0][5] = $_year;
 
-
         for ($i = 1; $i < count($plan); $i++) {
             $mine = ($plan[$i][$planMineIndex]);
 
@@ -241,6 +261,7 @@ class Monthly
         $meta = Monthly::MetaData($plan);
 
         Debug::EndProfile();
+
         return [$plan, $meta];
         //Debug::Log($plan);
     }
