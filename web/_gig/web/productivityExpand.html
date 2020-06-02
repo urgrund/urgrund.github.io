@@ -1,20 +1,15 @@
-<div class="jumbogrid {{$root.backGroundClassBlur}}">
-    <div ng-repeat="y in equipToShow" class="jumbogriditemCompact ">
+<div class="jumbogrid">
+    <div ng-repeat="y in equipToShow" class="jumbogriditem">
 
         <div class="" ng-init="e = getEquipmentLastEvent(y)">
-            <!-- <a ng-href="#!equip/{{y.id}}">
+            <a ng-href="#!equip/{{y.id}}">
                 <h1 class="center shadow bg_black50 img_{{y.function}}"> <i ng-class='equipStyleIcon[e.majorGroup]'
                         ng-style='equipStyleColor[e.majorGroup]'></i> {{y.id}}</h1>
-            </a> -->
-
-            <h1 class="center shadow bg_black50 img_{{y.function}}"> <a ng-href="#!equip/{{y.id}}"><i
-                        ng-class='equipStyleIcon[e.majorGroup]' ng-style='equipStyleColor[e.majorGroup]'></i>
-                    {{y.id}}</a></h1>
-
+            </a>
             <drill-down-header shift="{{shift}}" equip="y" style-group="flex flex-wrap" style-item="equipSmallInfo">
             </drill-down-header>
         </div>
-        <!-- <div>
+        <div>
             <h2 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
             <div ng-repeat="(key, value) in y.shiftData[shift].metricData" class="center flex underline"
                 ng-if="value.total != 0"
@@ -25,11 +20,11 @@
                 </div>
                 <h2>{{value.total | number}}</h2>
             </div>
-        </div> -->
+        </div>
 
-        <!-- <div>
+        <div>
             <drill-down-chart name="Availability & Utilisation" chart="{{y.id}}">
             </drill-down-chart>
-        </div> -->
+        </div>
     </div>
 </div>

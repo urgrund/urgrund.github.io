@@ -348,7 +348,7 @@
   
  #site_body a {   
    text-decoration: none;
-   border-left: 1px solid #00000000;
+   /* border-left: 1px solid #00000000; */
     color:inherit;
     transition: 0.4s;
   }
@@ -356,11 +356,12 @@
 #site_body a:hover {    
   text-decoration: none;
   /* border: 1px solid #43c3ff; */
-  border-bottom: 1px solid rgb(0, 255, 242);;
-  color:rgb(0, 255, 242);
+  color: #a9ebff;
+  /* border-bottom: 1px solid rgb(0, 255, 242);;
+  color:rgb(0, 255, 242); */
   cursor: pointer;
-  transform: translateX(0px);  
-  transform: translateY(2px);  
+  transform: translateX(20px);  
+  transform: translateY(20px);  
   transition: 0.01s;
 }
 

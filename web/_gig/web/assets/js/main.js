@@ -29,6 +29,24 @@ const MajorGroup = {
 
 
 
+// TODO - Remove, I think only longterm is using
+const TUMCategories = ['Unplanned Breakdown',
+    'Planned Maintenance',
+    'Unplanned Standby',
+    'Operating Standby',
+    'Secondary Operating',
+    'Primary Operating'
+];
+
+
+const functionMapping = {
+    LOADING: "Boggers",
+    HAULING: "Trucks",
+    P: "Solos",// "Production Drills",
+    D: "Jumbos"// "Development Drills"
+};
+
+
 // =====================================================================================
 //  MAIN APPLICATION 
 // =====================================================================================

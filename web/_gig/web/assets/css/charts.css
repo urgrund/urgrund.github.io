@@ -244,9 +244,10 @@ input:invalid:required {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    height: 100%;
 }
 
-.jumbogriditem {
+.jumbogriditem, .jumbogriditemCompact {
   box-shadow: 4px 6px 8px 0px #000000ba;
    background-color: rgba(0, 67, 109, 1);   
   /* background-color: var(--cardColorBG); */
@@ -261,6 +262,16 @@ input:invalid:required {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 3fr 3fr 4fr;
+}
+
+.jumbogriditemCompact
+{
+  min-height: 0px;
+  height: 13.3rem;
+  width: 25rem;
+  margin-bottom: 2rem;
+  border: 1px solid #4e5e7e;  
+  padding: 0px;
 }
 
 
@@ -352,14 +363,14 @@ input:invalid:required {
 .reportSmallInfo,
 .equipSmallInfo
 {  
-  /* background: #22558a; */
   background: var(--cardColorFG);
   box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.4);
-  margin: 2px;
-  padding: 7px;
+  margin: 0.1rem;
+  padding: 0.2rem;
   transition: 400ms;
   /* min-width: 188px; */
-  width: 188px;
+  width: 8rem;
+  height: 4rem;
 }
 
 .reportSmallInfo:hover,
