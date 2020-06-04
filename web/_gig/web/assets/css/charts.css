@@ -533,12 +533,12 @@ input:invalid:required {
 
 .img_LOADING, .img_HAULING, .img_D, .img_P
 {  
-  background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_LOADING.jpg);
+  background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.81) 100%), url(../img/equip_LOADING.jpg);
   background-size: cover;  
 }
-.img_HAULING{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_HAULING.jpg); background-size: cover;  }
-.img_D{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_D.jpg);background-size: cover;  }
-.img_P{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.14) 100%), url(../img/equip_P.jpg);background-size: cover;  }
+.img_HAULING{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.81) 100%), url(../img/equip_HAULING.jpg); background-size: cover;  }
+.img_D{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.81) 100%), url(../img/equip_D.jpg);background-size: cover;  }
+.img_P{background: linear-gradient(0deg, rgba(0, 23, 53, 0.83) 0, rgba(40, 84, 126, 0.81) 100%), url(../img/equip_P.jpg);background-size: cover;  }
 
 .imgLink {   
   display: contents;

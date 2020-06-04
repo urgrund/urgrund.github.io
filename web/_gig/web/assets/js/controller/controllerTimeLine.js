@@ -10,7 +10,7 @@ app.controller("TimeLine", function ($route, $scope, $rootScope, $routeParams, $
             //Charts.CreateTimeLineFlatTime("equip-timeline-time");
 
             for (var key in $rootScope.functionMapping) {
-                //Charts.CreateTimeLineFlatTime("equip-timeline-time-" + key);
+                Charts.CreateTimeLineFlatTime("equip-timeline-time-" + key);
             }
 
             var x = document.getElementsByClassName("equip-flat-usage");

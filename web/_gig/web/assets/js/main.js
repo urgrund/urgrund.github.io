@@ -39,12 +39,14 @@ const TUMCategories = ['Unplanned Breakdown',
 ];
 
 
-const functionMapping = {
-    LOADING: "Boggers",
-    HAULING: "Trucks",
-    P: "Solos",// "Production Drills",
-    D: "Jumbos"// "Development Drills"
-};
+
+// TODO - this should be a config?
+//const functionMapping = {
+//LOADING: "Boggers",
+//HAULING: "Trucks",
+//P: "Solos",// "Production Drills",
+//D: "Jumbos"// "Development Drills"
+//};
 
 
 // =====================================================================================
