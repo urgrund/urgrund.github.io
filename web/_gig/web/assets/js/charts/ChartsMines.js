@@ -1,102 +1,6 @@
 
 class ChartsMines {
 
-    static CreateUsageBar(_elementID, _data) {
-        // -------------------------------------------------------------
-        //if (myPie == null)
-        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
-
-        var _d = _data.shiftData[shift];
-
-        //var t = SecondsToMinutes(_d.timeAvailable + (_d.timeAvailable - _d.timeUtilised) + _d.timeDown);
-        //var t = (_d.timeAvailable + (_d.timeAvailable - _d.timeUtilised) + _d.timeDown);
-
-        var t = _d.timeExOperating + _d.timeExIdle + _d.timeExDown;
-
-        //console.log("Total time : " + t);
-        var _barWidth = '12';
-        function getLabel(_val) {
-            if (_val === 0)
-                return "";
-            return Math.round((_val / t) * 100) + "%";
-        }
-
-
-        var option = {
-            backgroundColor: ChartStyleContainer.backGroundColor,
-            textStyle: ChartStyleContainer.textStyle,
-            tooltip: {
-                show: false
-                // trigger: 'axis',
-                // axisPointer: {
-                //     type: 'shadow'
-                // }
-            },
-            grid: {
-                left: '3%',
-                right: '3%',
-                top: '25%',
-                bottom: '0%',
-                // height: '20%',
-                containLabel: true
-            },
-            xAxis: {
-                show: true,
-                type: 'value'
-                // min: 0,
-                , max: t,
-                interval: 3600,
-                axisLine: {
-                    show: true
-                },
-                splitLine: {
-                    show: false,
-                    interval: '100000'
-                },
-                axisLabel: {
-                    show: false
-                }
-            },
-            yAxis: {
-                show: false,
-                type: 'category'
-            },
-            //color: ['green', 'orange', 'red'],
-            series: [
-                {
-                    name: 'Operating',
-                    type: 'bar',
-                    stack: 'a',
-                    barWidth: _barWidth,
-                    label: { formatter: function (params) { return getLabel(params.value); }, show: true, position: ['0%', '-100%'] },
-                    data: [_d.timeExOperating],
-                    itemStyle: ChartStyles.statusItemStyle(0)
-                },
-                {
-                    name: 'Idle',
-                    type: 'bar',
-                    stack: 'a',
-                    barWidth: _barWidth,
-                    label: { formatter: function (params) { return getLabel(params.value); }, show: true, position: ['0%', '-100%'] },
-                    data: [_d.timeExIdle],
-                    itemStyle: ChartStyles.statusItemStyle(1)
-                },
-                {
-                    name: 'Down',
-                    type: 'bar',
-                    stack: 'a',
-                    barWidth: _barWidth,
-                    label: { formatter: function (params) { return getLabel(params.value); }, show: true, position: ['0%', '-100%'] },
-                    data: [_d.timeExDown],
-                    itemStyle: ChartStyles.statusItemStyle(2)
-                }
-            ]
-        };
-
-
-
-        SetOptionOnChart(option, myChart);
-    }
 
 
 
@@ -425,6 +329,7 @@ class ChartsMines {
 
 
 
+
     // static CreateSankey(_elementID, _data) {
 
     //     //var myChart = echarts.init(document.getElementById(_elementID, 'dark'));
@@ -566,3 +471,100 @@ class ChartsMines {
     // }
 }
 
+
+// static CreateUsageBar(_elementID, _data) {
+//     // -------------------------------------------------------------
+//     //if (myPie == null)
+//     var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+
+//     var _d = _data.shiftData[shift];
+
+//     //var t = SecondsToMinutes(_d.timeAvailable + (_d.timeAvailable - _d.timeUtilised) + _d.timeDown);
+//     //var t = (_d.timeAvailable + (_d.timeAvailable - _d.timeUtilised) + _d.timeDown);
+
+//     var t = _d.timeExOperating + _d.timeExIdle + _d.timeExDown;
+
+//     //console.log("Total time : " + t);
+//     var _barWidth = '12';
+//     function getLabel(_val) {
+//         if (_val === 0)
+//             return "";
+//         return Math.round((_val / t) * 100) + "%";
+//     }
+
+
+//     var option = {
+//         backgroundColor: ChartStyleContainer.backGroundColor,
+//         textStyle: ChartStyleContainer.textStyle,
+//         tooltip: {
+//             show: false
+//             // trigger: 'axis',
+//             // axisPointer: {
+//             //     type: 'shadow'
+//             // }
+//         },
+//         grid: {
+//             left: '3%',
+//             right: '3%',
+//             top: '25%',
+//             bottom: '0%',
+//             // height: '20%',
+//             containLabel: true
+//         },
+//         xAxis: {
+//             show: true,
+//             type: 'value'
+//             // min: 0,
+//             , max: t,
+//             interval: 3600,
+//             axisLine: {
+//                 show: true
+//             },
+//             splitLine: {
+//                 show: false,
+//                 interval: '100000'
+//             },
+//             axisLabel: {
+//                 show: false
+//             }
+//         },
+//         yAxis: {
+//             show: false,
+//             type: 'category'
+//         },
+//         //color: ['green', 'orange', 'red'],
+//         series: [
+//             {
+//                 name: 'Operating',
+//                 type: 'bar',
+//                 stack: 'a',
+//                 barWidth: _barWidth,
+//                 label: { formatter: function (params) { return getLabel(params.value); }, show: true, position: ['0%', '-100%'] },
+//                 data: [_d.timeExOperating],
+//                 itemStyle: ChartStyles.statusItemStyle(0)
+//             },
+//             {
+//                 name: 'Idle',
+//                 type: 'bar',
+//                 stack: 'a',
+//                 barWidth: _barWidth,
+//                 label: { formatter: function (params) { return getLabel(params.value); }, show: true, position: ['0%', '-100%'] },
+//                 data: [_d.timeExIdle],
+//                 itemStyle: ChartStyles.statusItemStyle(1)
+//             },
+//             {
+//                 name: 'Down',
+//                 type: 'bar',
+//                 stack: 'a',
+//                 barWidth: _barWidth,
+//                 label: { formatter: function (params) { return getLabel(params.value); }, show: true, position: ['0%', '-100%'] },
+//                 data: [_d.timeExDown],
+//                 itemStyle: ChartStyles.statusItemStyle(2)
+//             }
+//         ]
+//     };
+
+
+
+//     SetOptionOnChart(option, myChart);
+// }
