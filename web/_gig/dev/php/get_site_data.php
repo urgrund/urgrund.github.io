@@ -14,13 +14,15 @@ $request = json_decode($postdata);
 if (is_object($request)) {
     include_once('setDebugOff.php');
     include_once('create_site_data.php');
+
     if ($request->func == 0) {
-        //echo "Hello";
-        $date = $request->date;
-        new GetSiteData();
+        if (isset($request->date)) {
+            GetSiteData::GetDataForDate($request->date);
+        }
     }
     return;
 } else {
+
     include_once('create_site_data.php');
     //$date = '20181001';
     //new GetSiteData();
@@ -68,6 +70,32 @@ class GetSiteData
         }
     }
 
+    public static function GetDataForDate($_date)
+    {
+        global $allSites;
+        global $date;
+
+        $date = $_date;
+
+        $forceRegenation = false;
+        $preGenerated = GetSiteData::CheckGeneratedDataExists($date);
+
+        $exists = ($preGenerated != null) ? True : False;
+        Debug::Log($exists);
+
+        if ($preGenerated == null || $forceRegenation) {
+
+            // If the data doesn't exist then generate and send back
+            // to client whilst also saving this data to server 
+            CreateSiteData::Run();
+            $resultAsJSON = json_encode($allSites);
+            GetSiteData::WriteGeneratedDataToDisk($date, $resultAsJSON);
+
+            echo $resultAsJSON;
+        } else {
+            echo $preGenerated;
+        }
+    }
 
 
     public static function CheckGeneratedDataExists($_date)

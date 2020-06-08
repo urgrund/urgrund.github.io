@@ -21,7 +21,6 @@ if (is_object($request)) {
 
 
     if ($request->func == 0) {
-        //echo $request->data;
         Monthly::WriteCSV($request->data, $request->year, $request->month);
     }
 
@@ -44,11 +43,13 @@ else {
 
     new Config();
 
-    $data = Monthly::GetCSV('2018', '11', true);
-    Monthly::WriteCSV($data, '2018', '10');
+    //$data = Monthly::GetCSV('2018', '11', true);
+    //Monthly::WriteCSV($data, '2018', '10');
 
     //include_once('..\setDebugOff.php');    
     //Debug::Log(Monthly::GetActuals('2018', '11'));
+
+    Monthly::GetActualsArray('2018', '11');
 
     //$p = Monthly::MapActualsToPlan('2018', '10');
     //Debug::Log($p);
@@ -79,6 +80,15 @@ class Monthly
     private static $_fileDir = "";
     private static $_fileName = "Plan_";
     private static $_fileExt = ".csv";
+
+
+    public static function GetActualsArray($_year, $_month)
+    {
+        // THIS IS GOING TO SPLIT OUT THE MONTLY
+        // INTO DATA FOR BASIC BAR CHARTS
+        $actauls = Monthly::GetActuals($_year, $_month);
+        Debug::Log($actauls);
+    }
 
 
     public static function WriteCSV($_data, $_year, $_month)
@@ -132,8 +142,8 @@ class Monthly
         $sqlTxt = str_replace('@MONTH', "'" . $_month . "'", $sqlTxt);
 
         $sqlResult = SQLUtils::QueryToText($sqlTxt, "Get Monthly Actuals");
-        return $sqlResult;
         //Debug::Log($sqlResult);
+        return $sqlResult;
     }
 
 

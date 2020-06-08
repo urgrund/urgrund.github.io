@@ -60,7 +60,7 @@ if (Debug::enabled() == true) {
 class CreateSiteData
 {
     // Equipment list will be stored at len-2
-    public static $INDEX_EQUIP = 2;
+    //public static $INDEX_EQUIP = 2;
 
 
     public static function SetDateForCreation($_date)
@@ -477,7 +477,7 @@ function CreateDataForAllSites()
 
     Debug::StartProfile("SQL Material Movements");
     foreach (array_keys($allSites) as $site) {
-        $allSites[$site]->GenerateMaterialMovements();
+        //$allSites[$site]->GenerateMaterialMovements();
     }
 
     Debug::EndProfile();

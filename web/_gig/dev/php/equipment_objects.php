@@ -123,7 +123,7 @@ class MetricData
 
     // Add & increment the value array
     // whilst measure the cumulative value
-    function AddValue($_value)
+    function AddValue(float $_value)
     {
         if ($_value == null)
             $_value = 0;

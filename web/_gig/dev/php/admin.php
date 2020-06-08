@@ -186,7 +186,6 @@ class Admin
 
             if ($data != null) {
                 $data = json_decode($data);
-                //$metaData->FillFromData(end($data));
                 $metaData = end($data);
             } else {
                 $metaData->Date = $date;

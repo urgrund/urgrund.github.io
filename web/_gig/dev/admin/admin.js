@@ -72,13 +72,10 @@ app.controller('myCtrl', function ($scope, $http) {
 
 
     $scope.regenerateAll = function () {
-
         for (var key in $scope.dataStatus) {
             // console.log(key);
             $scope.regenerateDataForDate(key);
         }
-
-        //$scope.regenerateDataForDate('20181001');
     }
 
 
