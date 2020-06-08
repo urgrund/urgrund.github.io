@@ -104,7 +104,7 @@ class LongTerm
             $fileData = json_decode($fileData);
 
             // Array of equipment for this day
-            $equipment = $fileData[count($fileData) - CreateSiteData::$INDEX_EQUIP];
+            $equipment = $fileData[count($fileData) - CreateSiteData::INDEX_EQUIP];
 
             // Get the times from each event 
             foreach ($equipment as $key => $value) {
