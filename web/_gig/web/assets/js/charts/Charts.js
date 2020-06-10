@@ -1082,6 +1082,7 @@ class Charts {
 
 
         var option = {
+            //animation: false,
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
             title: ChartStyles.createTitle(subText),

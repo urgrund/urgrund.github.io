@@ -1,4 +1,4 @@
-<div class="cup" style="height: 1210px;">
+<div class="cup" style="height: 1410px;">
 
 
     <!-- <div class="flex flex-start underline">
@@ -6,7 +6,7 @@
     </div>
     </br> -->
 
-    <section-title icon="fas fa-chart-line" title="Longterm Example" right="">
+    <section-title icon="fas fa-chart-line" title="Longterm Examples" right="">
     </section-title>
 
 
@@ -50,24 +50,40 @@
             </div>
         </div>
 
+        <!-- <div id="lt_eff" class="h25pc"></div> -->
+        <div class="lt_ParetoGrid">
+            <drill-down-chart name="" chart="lt_avail"></drill-down-chart>
+            <drill-down-chart name="{{TUMCategories[0]}}" chart="{{TUMCategories[0]}}"> </drill-down-chart>
+            <drill-down-chart name="{{TUMCategories[1]}}" chart="{{TUMCategories[1]}}"> </drill-down-chart>
 
-        <div class="flex" style="height: 1000px;">
-            <div style="width:50%;">
-                <div id="lt_avail" class="h25pc"></div>
-                <div id="lt_uofa" class="h25pc"></div>
-                <div id="lt_total" class="h25pc"></div>
-                <div id="lt_eff" class="h25pc"></div>
+        </div>
+        <div class="lt_ParetoGrid">
+            <drill-down-chart name="" chart="lt_uofa"></drill-down-chart>
+            <drill-down-chart name="{{TUMCategories[2]}}" chart="{{TUMCategories[2]}}"> </drill-down-chart>
+            <drill-down-chart name="{{TUMCategories[3]}}" chart="{{TUMCategories[3]}}"> </drill-down-chart>
+
+        </div>
+        <div class="lt_ParetoGrid">
+            <drill-down-chart name="" chart="lt_total"></drill-down-chart>
+            <drill-down-chart name="{{TUMCategories[4]}}" chart="{{TUMCategories[4]}}"> </drill-down-chart>
+            <drill-down-chart name="{{TUMCategories[5]}}" chart="{{TUMCategories[5]}}"> </drill-down-chart>
+        </div>
+
+        <!-- <div class="flex" style="height: 1000px;">
+            <div style="width:50%; height: 700px;">
             </div>
             <div style="width:50%;">
-                <div class="tumParetoGrid">
-                    <drill-down-chart ng-repeat="z in TUMCategories" name="{{z}}" chart="{{z}}"></drill-down-chart>
+                <div class="lt_ParetoGrid">
+                    <drill-down-chart ng-repeat="z in TUMCategories" name="{{z}}" chart="{{z}}">
+                    </drill-down-chart>
                 </div>
             </div>
-        </div>
+        </div> -->
+
+        <div id="lt_wf" class="h33pc"></div>
     </div>
 
 
-    <div id="lt_wf" class="h33pc"></div>
 
 
 </div>

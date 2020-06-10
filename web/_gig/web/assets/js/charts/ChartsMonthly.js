@@ -57,6 +57,7 @@ class ChartsMonthly {
             textStyle: ChartStyles.textStyle,
             //title: ChartStyles.createTitle("Time Utilisation Model Breakdown"),
             tooltip: {
+                show: false,
                 confine: true,
                 trigger: 'axis',
                 textStyle: ChartStyles.toolTipTextStyle(),
@@ -163,13 +164,16 @@ class ChartsMonthly {
             var _dataZoom = [{
                 type: 'inside'
             }, {
-                type: 'slider'
+                type: 'slider',
+                dataBackground: {
+                    lineStyle: { color: 'white' },
+                    areaStyle: _style
+                }
             }];
         }
 
 
         var option = {
-
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
 
@@ -182,26 +186,25 @@ class ChartsMonthly {
                 }
             },
             grid: {
-                top: '4%',
-                bottom: '20%',
+                top: '15%',
+                bottom: '0%',
                 left: '1%',
                 right: '1%',
                 containLabel: true
             },
             tooltip: {
+                //show: false,
                 trigger: 'axis',
                 axisPointer: {
                     type: 'shadow'
                 },
                 textStyle: ChartStyles.toolTipTextStyle(),
-                axisPointer: ChartStyles.toolTipShadow()
+                axisPointer: ChartStyles.toolTipShadow(),
+                formatter: function (params) {
+                    return "";
+                }
             },
             dataZoom: _dataZoom,
-            // [{
-            //     type: 'inside'
-            // }, {
-            //     type: 'slider'
-            // }],
             xAxis: ChartStyles.xAxis(GenerateDateLabels('20181001', _data.length)),
 
             yAxis: {

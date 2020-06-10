@@ -58,19 +58,19 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
 
         // Availability
         $scope.dataAvail = longTerm2[1]['Availability']; //$scope.fillDataFromColumn(9);
-        var chartAvail = ChartsMonthly.CreateLongTerm("lt_avail", $scope.dataAvail, "Availability", ChartStyles.statusItemStyle(0));
+        var chartAvail = ChartsMonthly.CreateLongTerm("lt_avail", $scope.dataAvail, "", ChartStyles.statusItemStyle(2), true);
 
         // U of A
         $scope.dataUofA = longTerm2[1]['UofA'];//$scope.fillDataFromColumn(10);
-        var chartUofA = ChartsMonthly.CreateLongTerm("lt_uofa", $scope.dataUofA, "Utilisation of Availability", { color: ChartStyles.uofaColor });
+        var chartUofA = ChartsMonthly.CreateLongTerm("lt_uofa", $scope.dataUofA, "", { color: ChartStyles.uofaColor }, true);
 
         // Total 
         $scope.dataTotal = longTerm2[1]['Total Asset Utilisation']; //$scope.fillDataFromColumn(11);
-        var chartTotal = ChartsMonthly.CreateLongTerm("lt_total", $scope.dataTotal, "Total Asset Utilisation", ChartStyles.statusItemStyle(2));
+        var chartTotal = ChartsMonthly.CreateLongTerm("lt_total", $scope.dataTotal, "", ChartStyles.statusItemStyle(0), true);
 
         // Efficiency 
-        $scope.dataEff = longTerm2[1]['Efficiency'];//$scope.fillDataFromColumn(12);
-        var chartEff = ChartsMonthly.CreateLongTerm("lt_eff", $scope.dataEff, "Efficiency", ChartStyles.statusItemStyle(1), true);
+        //$scope.dataEff = longTerm2[1]['Efficiency'];//$scope.fillDataFromColumn(12);
+        //var chartEff = ChartsMonthly.CreateLongTerm("lt_eff", $scope.dataEff, "Efficiency", ChartStyles.statusItemStyle(1), true);
 
 
         $scope.dataTime = {};
@@ -86,14 +86,14 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
         chartAvail.group = 'group1';
         chartUofA.group = 'group1';
         chartTotal.group = 'group1';
-        chartEff.group = 'group1';
+        //chartEff.group = 'group1';
 
         echarts.connect('group1');
 
 
         // Callbacks for zoom
-        chartEff.on('dataZoom', function (evt) {
-            $scope.updateValuesFromDataZoom(evt, chartEff);
+        chartTotal.on('dataZoom', function (evt) {
+            $scope.updateValuesFromDataZoom(evt, chartTotal);
         })
 
 
