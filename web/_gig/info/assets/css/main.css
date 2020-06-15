@@ -4195,6 +4195,17 @@ input, select, textarea {
 width: 100%;
 }
 
+img{
+max-width: 100%;
+}
+
+
+.flexIcons
+{
+	display:grid;
+	grid-template-columns: 1fr 1fr 1fr;
+}
+
 
 
 .slideanim {
