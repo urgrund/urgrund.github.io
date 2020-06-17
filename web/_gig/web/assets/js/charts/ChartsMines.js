@@ -324,7 +324,97 @@ class ChartsMines {
         return myChart;
     }
 
+    static CreateSankey2(_elementID, _data, _siteID) {
+        var myChart = echarts.init(document.getElementById(_elementID));
+        var mm = _data[_siteID].shiftData[shift].materialMovements;
+        // console.log(mm);
 
+        // 0: "M30"
+        // 1: "2"
+        // 2: "Development Horizontal"
+        // 3: "5013OD31N___"
+        // 4: "5013 OD 31N ___"
+        // 5: "5013SPDEV___"
+        // 6: "5013 SP DEV __"
+        // 7: "M30"
+        // 8: 36
+        // 9: 1
+        // 10: 0
+        // 11: 1
+
+        var _temp = [];
+        var _locations = [];
+        var _links = [];
+        for (var x = 0; x < mm.length; x++) {
+            // Add unique locations
+            if (!(mm[x][3] in _temp))
+                _temp[mm[x][3]] = 0;
+            if (!(mm[x][5] in _temp))
+                _temp[mm[x][5]] = 0;
+
+            // Add links
+            _links.push({
+                source: mm[x][3],
+                target: mm[x][5],
+                value: mm[x][8],
+            });
+        }
+
+        for (var key in _temp) {
+            _locations.push({
+                name: key,
+                itemStyle: {
+                    normal: { color: ChartStyles.TUMColors[2], }
+                }
+            });
+        }
+
+        console.log(_locations);
+        console.log(_links);
+
+
+
+        var option = {
+            backgroundColor: ChartStyles.backGroundColor,
+            textStyle: ChartStyles.textStyle,
+            tooltip: {
+                confine: true,
+                trigger: 'item',
+                textStyle: ChartStyles.toolTipTextStyle(),
+                axisPointer: ChartStyles.toolTipShadow(),
+                backgroundColor: ChartStyles.toolTipBackgroundColor(),
+                formatter: function (params, index) {
+                    var string = "";
+                    var title = "";
+                    if (params.value == undefined)
+                        title = params.name;
+                    else
+                        title = Math.round(params.value);
+                    string += ChartStyles.toolTipTextTitle(title);
+                    console.log(params);
+                    return string;
+                }
+            },
+            series: {
+                type: 'sankey',
+                //layout: 'none',
+                //focusNodeAdjacency: 'allEdges',
+                data: _locations,
+                links: _links,
+                label: ChartStyles.textStyle,
+                lineStyle: {
+                    color: "source",
+                    curveness: 0.5
+                }
+            }
+        };
+
+        SetOptionOnChart(option, myChart);
+        return myChart;
+    }
+
+
+}
 
 
 
@@ -469,7 +559,6 @@ class ChartsMines {
 
     //     SetOptionOnChart(option, myChart);
     // }
-}
 
 
 // static CreateUsageBar(_elementID, _data) {

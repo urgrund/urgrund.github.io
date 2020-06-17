@@ -6,7 +6,7 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
         inline: true
     });
 
-    console.log(longTerm2);
+    //console.log(longTerm2);
 
     // Temp data
     $scope.days = longTerm2[1]['Availability'].length;
@@ -95,6 +95,11 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
         chartTotal.on('dataZoom', function (evt) {
             $scope.updateValuesFromDataZoom(evt, chartTotal);
         })
+
+
+
+        // TEST NEW SANKEY
+        //console.log($rootScope.siteData[0].shiftData[0].materialMovements);
 
 
     }

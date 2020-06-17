@@ -7,7 +7,7 @@ app.component("sectionTitle", {
     },
     controller: function ($rootScope) {
         this.$onInit = function () {
-            console.log(this.icon);
+            //console.log(this.icon);
             //this.titleTxt = this.title;
             //this.rightTxt = this.right;
         };

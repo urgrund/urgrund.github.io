@@ -65,7 +65,7 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
             $scope.sumTotalsForFunctionType($scope.site.equipmentByFunction.P, 2);
             $scope.sumTotalsForFunctionType($scope.site.equipmentByFunction.D, 2);
 
-            $scope.prepareSankey();
+            //$scope.prepareSankey();
         }
     };
 
@@ -102,7 +102,7 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
 
         // Sankey
         //var allSites = $rootScope.siteData.slice(0, 1);
-        ChartsMines.CreateSankey("sankey", $rootScope.siteData, $scope.siteID);
+        ChartsMines.CreateSankey2("sankey", $rootScope.siteData, $scope.siteID);
 
         var barChartData = $scope.shiftData.productionTonnes;
         ChartsMines.CreateBar("siteTPH", barChartData, "");
