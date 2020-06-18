@@ -9,7 +9,7 @@ class SiteShiftData
     var $productionTonnes = null;
     var $productionMetres = null;
 
-    var $materialMovements = null;
+    var $materialMovements = array();
 }
 
 
@@ -23,9 +23,6 @@ class Site
     var $uoaf24 = array();
 
     var $shiftData = [];
-
-    // Movements out material of the mine
-    var $materialMovement = array();
 
     var $equipmentByFunction = array();
     var $equipment = array();
@@ -124,20 +121,22 @@ class Site
     }
 
 
-    public function GenerateMaterialMovements()
+    public function AddMaterialMovements($_mm)
     {
-        // TODO
-        // Things like the sql text and the @Date should go into a 
-        // SQL core settings class
-        global $date;
-        $str = SQLUtils::FileToQuery('..\assets\sql\Core\ALL_MaterialMovements.sql');
-        for ($i = 0; $i < 2; $i++) {
-            $sqlTxt = $str;
-            $shift = "P" . ($i + 1);
-            $sqlTxt = str_replace('@Date', "'" . $date . $shift . "'", $sqlTxt);
-            $this->shiftData[$i]->materialMovements = SQLUtils::QueryToText($sqlTxt, "MM " . $shift);
-        }
+        //Debug::Log($_mm);
+        $this->shiftData[$_mm[1] - 1]->materialMovements[] = $_mm;
     }
+    // public function GenerateMaterialMovements()
+    // {      
+    //     global $date;
+    //     $str = SQLUtils::FileToQuery('..\assets\sql\Core\ALL_MaterialMovements.sql');
+    //     for ($i = 0; $i < 2; $i++) {
+    //         $sqlTxt = $str;
+    //         $shift = "P" . ($i + 1);
+    //         $sqlTxt = str_replace('@Date', "'" . $date . $shift . "'", $sqlTxt);
+    //         $this->shiftData[$i]->materialMovements = SQLUtils::QueryToText($sqlTxt, "MM " . $shift);
+    //     }
+    // }
 
 
 

@@ -398,7 +398,7 @@ class ChartsMines {
             series: {
                 type: 'sankey',
                 //layout: 'none',
-                //focusNodeAdjacency: 'allEdges',
+                //focusNodeAdjacency: 'inEdges',
                 data: _locations,
                 links: _links,
                 label: ChartStyles.textStyle,

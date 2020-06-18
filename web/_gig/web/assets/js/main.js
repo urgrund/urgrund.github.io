@@ -257,11 +257,15 @@ app.run(function ($rootScope, $http, $route) {
      * Pass date as dd-mm-yyy. Creates a nicely formatted date from a numerical date
      */
     $rootScope.convertToNiceDateObject = function (_date) {
+
+        // NOTE
+        // TEMP ADD OF MONTHS FOR DEMO
         var newDateObject = {
-            LONG: moment(_date).format('dddd, DD-MM-YY'),
-            SHORT: moment(_date).format('ddd DD MMM YYYY'),
+            LONG: moment(_date).add(20, 'months').format('dddd, DD-MM-YY'),
+            SHORT: moment(_date).add(20, 'months').format('ddd DD MMM YYYY'),
         };
         return newDateObject;
+
         console.log("USE MOMENT FOR THIS");
 
         // Given a date such as 20181010

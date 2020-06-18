@@ -4,6 +4,11 @@
 // new Config();
 // Debug::Log(Config::$instance->configSites);
 
+
+/**
+ * Allows an interface to the CSV files that are used 
+ * to map site and equipment specific values to front-end
+ */
 class Config
 {
     public static $instance = null;

@@ -5,12 +5,11 @@
   border: 1px solid red;
   border-radius: 50px;
   font-family: inherit;
-  transform: translate(-1px, -7px);  
+  transform: translate(-1px, -11px);  
   color: white;
   width: 16px;
   height: 16px;
-  /* animation: strobe 1s;
-  animation-iteration-count: infinite; */
+  line-height: 15px;
 }
 
 

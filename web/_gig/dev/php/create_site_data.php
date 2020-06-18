@@ -15,6 +15,7 @@ static $generationStartTime;
 static $sqlMetricPerHour;
 static $sqlEquipEventList;
 static $sqlMineEquipmentList;
+static $sqlMaterialMovements;
 
 
 
@@ -121,6 +122,7 @@ final class CreateSiteData
         global $sqlMetricPerHour;
         global $sqlEquipEventList;
         global $sqlMineEquipmentList;
+        global $sqlMaterialMovements;
 
         // ------------------------------------------------------------------------------------------
         // All metrics per hour for this date
@@ -141,7 +143,6 @@ final class CreateSiteData
         // All events that have been logged for this date
         $sqlTxt = SQLUtils::FileToQuery('..\assets\sql\Core\ALL_EquipmentEventList.sql');
         $sqlTxt = str_replace('@Date', "'" . $date . "'", $sqlTxt);
-        //$sqlTxt = "Select * from ALLEquipmentEventList(" . $date . ") order by[Equipment] asc, [Event Time] asc";
         $sqlEquipEventList = SQLUtils::QueryToText($sqlTxt, "Event List");
         // ------------------------------------------------------------------------------------------
 
@@ -159,6 +160,19 @@ final class CreateSiteData
         $sqlMineEquipmentList = $new_array;
         //Debug::Log($new_array);
         // ------------------------------------------------------------------------------------------
+
+
+
+        // ------------------------------------------------------------------------------------------
+        // Material Movements
+        $sqlTxt = SQLUtils::FileToQuery('..\assets\sql\Core\ALL_MaterialMovements.sql');
+        $sqlTxt = str_replace('@Date', "'" . $date . "'", $sqlTxt);
+        $sqlMaterialMovements = SQLUtils::QueryToText($sqlTxt, "Mat Movements", false);
+
+        //Debug::Log($sqlMaterialMovements);
+        // ------------------------------------------------------------------------------------------
+
+
 
         Debug::EndProfile();
     }
@@ -262,6 +276,7 @@ final class CreateSiteData
     {
         global $allSites;
         global $sqlMetricPerHour;
+        global $sqlMaterialMovements;
 
         // -------------------------------------
         // Production Tonnes for site
@@ -271,9 +286,8 @@ final class CreateSiteData
         for ($i = 1; $i < count($sqlMetricPerHour); $i++) {
             $activity = $sqlMetricPerHour[$i][3];
             $siteName = Config::Sites($sqlMetricPerHour[$i][1]);
-
-            // Only interested if the activity was Production 
             if ($siteName != null || $siteName != '') {
+                // Only interested if the activity was Production 
                 if (preg_match("/production/i", $activity)) {
 
                     // TODO - this is used a few times, so maybe a site wide static config?
@@ -289,11 +303,13 @@ final class CreateSiteData
         Debug::EndProfile();
 
 
-        Debug::StartProfile("SQL Material Movements");
-        foreach (array_keys($allSites) as $site) {
-            //$allSites[$site]->GenerateMaterialMovements();
+        Debug::StartProfile("Material Movements");
+        for ($i = 1; $i < count($sqlMaterialMovements); $i++) {
+            $siteName = Config::Sites($sqlMaterialMovements[$i][0]);
+            if ($siteName != null || $siteName != '') {
+                $allSites[$siteName]->AddMaterialMovements($sqlMaterialMovements[$i]);
+            }
         }
-
         Debug::EndProfile();
     }
     // ------------------------------------------------------------------

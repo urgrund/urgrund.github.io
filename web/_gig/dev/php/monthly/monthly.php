@@ -49,7 +49,7 @@ else {
     //include_once('..\setDebugOff.php');    
     //Debug::Log(Monthly::GetActuals('2018', '11'));
 
-    Monthly::GetActualsArray('2018', '11');
+    Monthly::GetActualsArray('2018', '10');
 
     //$p = Monthly::MapActualsToPlan('2018', '10');
     //Debug::Log($p);
@@ -86,8 +86,25 @@ class Monthly
     {
         // THIS IS GOING TO SPLIT OUT THE MONTLY
         // INTO DATA FOR BASIC BAR CHARTS
-        $actauls = Monthly::GetActuals($_year, $_month);
-        Debug::Log($actauls);
+        $arr = array();
+        $actuals = Monthly::GetActuals($_year, $_month);
+        for ($i = 1; $i < count($actuals); $i++) {
+
+            $siteName = Config::Sites($actuals[$i][1]);
+            if (!isset($arr[$siteName]))
+                $arr[$siteName] = [];
+
+            if (!isset($arr[$siteName][$actuals[$i][0]]))
+                $arr[$siteName][$actuals[$i][0]] = 0;
+
+            $arr[$siteName][$actuals[$i][0]] += $actuals[$i][4];
+            //$arr[$siteName][0][] = $actuals[$i][0];
+            //$arr[$siteName][1][] = $actuals[$i][4];
+            //$arr[$siteName][2][] = 1; //($i > 1)?
+
+        }
+        //Debug::Log($actuals[0]);
+        Debug::Log($arr);
     }
 
 

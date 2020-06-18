@@ -19,7 +19,7 @@ SELECT
 	Join [dbo].[RD_EQUIPMENT_MODEL]		as RDM on RDM.[Equipment_ModelCode] = RDE.[Equipment_Model_Code]
 	Join [dbo].[RD_EQUIPMENT_FUNCTION]	as RDF on RDF.[Equipment_FunctionCode] = RDM.[Equipment_Model_Function_Code]
 	
-	WHERE ATS.ShKey = @Date 
+	WHERE ATS.ShKey LIKE @Date + '%'
 		--and left(RDP.[Source_MineArea_Code],3) Like 'SLC'
 		and RDP.[Source_MineArea_Code] <> 'MISC' 
 		and MTS.[MeasCode] = 'TONNE' 
