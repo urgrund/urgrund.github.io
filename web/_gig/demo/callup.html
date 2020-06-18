@@ -1,0 +1,132 @@
+<div class="cup">
+
+    <section-title icon="fas fa-phone-volume" title="{{calUpTitleFirst}}" right="{{siteDataDate.LONG}}"></section-title>
+
+    <div class="mines-center {{$parent.backGroundClassBlur}}">
+
+        <!-- <div ng-repeat="z in equipByFunc">
+
+            <div class="cup-grid underline">
+                <div>
+                    <h3 class="">{{z.name}}</h3>
+                </div>
+                <div class="flex flex-column-rev">
+                    <h5 class="light"><i class="far fa-clock"> </i>
+                        Event Time</h5>
+                </div>
+                <div class="flex flex-column-rev">
+                    <h5 class="light"><i class="fas fa-info-circle"></i>
+                        Status</h5>
+                </div>
+                <div class="flex flex-column-rev">
+                    <h5 class="light"><i class="far fa-user"></i>
+                        Operator</h5>
+                </div>
+                <div class="flex flex-column-rev">
+                    <h5 class="light"><i class="far fa-map"></i>
+                        Site</h5>
+                </div>
+                <div class="flex flex-column-rev">
+                    <h5 class="light"><i class="fas fa-map-marker-alt"></i>
+                        Location</h5>
+                </div>
+                <div class="flex flex-column-rev">
+                    <h5 class="light">+/- 2hrs</h5>
+                </div>
+            </div>
+
+
+
+            <div ng-repeat="x in z.equipment" ng-init="siteIndex = $index">
+                <div class="cup-grid" ng-init="e = getCallUpEvent(x)">
+                    <div>
+                        <h5 class="bold"><a href="#!equip/{{x.id}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                    ng-style='equipStyleColor[e.majorGroup]'></i> {{x.id}}</a></h5>
+                    </div>
+                    <div>
+                        <p ng-bind="e.eventTime.date"></p>
+                    </div>
+                    <div>
+                        <i ng-class='equipStyleIcon[e.majorGroup]' ng-style='equipStyleColor[e.majorGroup]'></i>
+                        {{e.status}}
+                    </div>
+                    <div ng-init="opName = e.operator == '.' ? ' No Operator' : e.operator"
+                        ng-class="{'cup-redwarn': (e.operator == '.')}">
+                        <i ng-if="e.operator == '.'" class="fas fa-exclamation-triangle"></i>{{opName}}
+                    </div>
+                    <div ng-bind="e.mineArea"></div>
+                    <div ng-bind="e.location"></div>
+                    <div ng-bind="e.timeDiff"></div>
+                </div>
+            </div>
+            </br>
+        </div> -->
+
+
+
+
+        <div ng-repeat="(func, equip) in equipmentByFunction">
+            <!-- Header -->
+            <div class="equipFlatUsage h40px">
+
+                <div class="flex flex-column-rev underline">
+                    <h4 class="light">{{ functionMapping[func] }}</h4>
+                </div>
+
+                <div class="cup-grid underline">
+                    <div class="flex flex-column-rev">
+                        <h5 class="light"><i class="far fa-clock"> </i>
+                            Event Time</h5>
+                    </div>
+                    <div class="flex flex-column-rev">
+                        <h5 class="light"><i class="fas fa-info-circle"></i>
+                            Status</h5>
+                    </div>
+                    <div class="flex flex-column-rev">
+                        <h5 class="light"><i class="far fa-user"></i>
+                            Operator</h5>
+                    </div>
+                    <div class="flex flex-column-rev">
+                        <h5 class="light"><i class="far fa-map"></i>
+                            Site</h5>
+                    </div>
+                    <div class="flex flex-column-rev">
+                        <h5 class="light"><i class="fas fa-map-marker-alt"></i>
+                            Location</h5>
+                    </div>
+                    <div class="flex flex-column-rev">
+                        <h5 class="light">+/- 2hrs</h5>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="equipFlatUsage" ng-repeat="key in equipmentByFunction[func]"
+                ng-init="e = getEquipmentLastEvent(equipment[key])">
+                <div style="width: 200px;" class="">
+                    <h5><a href="#!equip/{{key}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                ng-style='equipStyleColor[e.majorGroup]'></i> {{key}}</a></h5>
+                </div>
+
+
+                <div class="cup-grid" ng-init="e = getCallUpEvent(equipment[key])">
+                    <div>
+                        <p ng-bind="e.eventTime.date"></p>
+                    </div>
+                    <div>
+                        <i ng-class='equipStyleIcon[e.majorGroup]' ng-style='equipStyleColor[e.majorGroup]'></i>
+                        {{e.status}}
+                    </div>
+                    <div ng-init="opName = e.operator == '.' ? ' No Operator' : e.operator"
+                        ng-class="{'cup-redwarn': (e.operator == '.')}">
+                        <i ng-if="e.operator == '.'" class="fas fa-exclamation-triangle"></i>{{opName}}
+                    </div>
+                    <div ng-bind="e.mineArea"></div>
+                    <div ng-bind="e.location"></div>
+                    <div ng-bind="e.timeDiff"></div>
+                </div>
+            </div>
+            </br>
+        </div>
+    </div>
+</div>

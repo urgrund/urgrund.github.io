@@ -1,0 +1,140 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Short Interval Control</title>
+
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+
+    <link rel="stylesheet"
+        href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.css">
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="assets/css/alerts.css">
+    <link rel="stylesheet" href="assets/css/callup.css">
+
+    <link rel="stylesheet" href="assets/css/lock.css">
+    <link rel="stylesheet" href="assets/css/landing.css">
+
+    <link rel="stylesheet" href="assets/css/menu.css">
+    <link rel="stylesheet" href="assets/css/mines.css">
+    <link rel="stylesheet" href="assets/css/switch.css">
+    <link rel="stylesheet" href="assets/css/tooltip.css">
+
+    <link rel="stylesheet" href="assets/css/charts.css">
+    <link rel="stylesheet" href="assets/css/reports.css">
+
+    <link rel="stylesheet" href="assets/css/monthly.css">
+
+</head>
+
+
+
+<body ng-app="myApp" ng-controller="myCtrl" class="{{backGroundClass}}">
+    <div id="site_menu" ng-controller="Menu" ng-include src="'menu.html'"></div>
+    <div id="site_body" ng-view></div>
+</body>
+
+</html>
+
+
+
+
+
+
+<!-- ALL THESE SCRIPTS CAN GO BACK IN A FILE WHEN USING PHP -->
+
+<!-- Charting includes  -->
+<script type="text/javascript" src="vendors/echarts/echarts.min.js"></script>
+
+
+<!-- Angular -->
+<script type="text/javascript" src="vendors/ng/angular.min.js"></script>
+<script type="text/javascript" src="vendors/ng/angular-route.min.js"></script>
+
+<!-- Do we need all this? -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script> -->
+
+<!-- Angular Material Library -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.js"></script> -->
+
+
+<!-- UI-Grid (NG) -->
+<script type="text/javascript" src="vendors/ui-grid/ui-grid.min.js"></script>
+<script type="text/javascript" src="vendors/ui-grid/ui-grid.auto-resize.min.js"></script>
+<script type="text/javascript" src="vendors/ui-grid/ui-grid.exporter.min.js"></script>
+<link rel="stylesheet" href="vendors/ui-grid/ui-grid.min.css">
+
+
+
+<!-- For CSV exporting -->
+
+<!-- 
+<script src="http://ui-grid.info/docs/grunt-scripts/csv.js"></script>
+<script src="http://ui-grid.info/docs/grunt-scripts/pdfmake.js"></script>
+<script src="http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js"></script>
+<script src="http://ui-grid.info/docs/grunt-scripts/lodash.min.js"></script>
+<script src="http://ui-grid.info/docs/grunt-scripts/jszip.min.js"></script>
+<script src="http://ui-grid.info/docs/grunt-scripts/excel-builder.dist.js"></script> -->
+
+<script type="text/javascript" src="vendors/ui-grid/csv.js"></script>
+<script type="text/javascript" src="vendors/ui-grid/pdfmake.js"></script>
+<script type="text/javascript" src="vendors/ui-grid/vfs_fonts.js"></script>
+<script type="text/javascript" src="vendors/ui-grid/lodash.min.js"></script>
+<script type="text/javascript" src="vendors/ui-grid/jszip.min.js"></script>
+<script type="text/javascript" src="vendors/ui-grid/excel-builder.dist.js"></script>
+
+<!-- Papa Parse -->
+<script src="vendors/papa_parse/papaparse.min.js"></script>
+
+<!-- Time  -->
+<script src="vendors/moment/moment.min.js"></script>
+
+<!-- flatpickr -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+
+<!---------------------------------->
+<!-- Gigworth Scripts -->
+
+
+<!-- FAKE DATA TO BE REMOVED -->
+<!-- <script src="assets/js/alldata.js"></script> -->
+<script src="assets/js/tempReport.js"></script>
+
+
+
+<!-- Charts -->
+<script src="assets/js/charts/Charts.js"></script>
+<script src="assets/js/charts/ChartsMines.js"></script>
+<script src="assets/js/charts/ChartsMonthly.js"></script>
+<script src="assets/js/charts/ChartStyles.js"></script>
+
+
+
+<!-- NG Controllers -->
+<script src="assets/js/main.js"></script>
+<script src="assets/js/controller/controllerMenu.js"></script>
+<script src="assets/js/controller/controllerLanding.js"></script>
+<script src="assets/js/controller/controllerDrillDown.js"></script>
+<script src="assets/js/controller/controllerCallUp.js"></script>
+<script src="assets/js/controller/controllerTimeLine.js"></script>
+<script src="assets/js/controller/controllerProductivity.js"></script>
+<script src="assets/js/controller/controllerMonthly.js"></script>
+<script src="assets/js/controller/controllerLongterm.js"></script>
+<script src="assets/js/controller/controllerReports.js"></script>
+<script src="assets/js/controller/controllerSite.js"></script>
+
+
+<script src="components/sectionTitle.js"></script>
+
+<!---------------------------------->
