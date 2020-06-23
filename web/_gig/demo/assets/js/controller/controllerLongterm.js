@@ -27,22 +27,22 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
 
     //NO LONGER NEEDED,  OLD DATA
     $scope.fillDataFromColumn = function (_column) {
-        var data = [];
-        data.push([]);
-        data.push([]);
+        // var data = [];
+        // data.push([]);
+        // data.push([]);
 
-        var tempDates = [];
-        for (var i = 1; i < longTermData.length; i++) {
-            if (!tempDates.includes(longTermData[i][0])) {
-                data[0].push(longTermData[i][0]);
-                data[1].push(longTermData[i][_column]);
+        // var tempDates = [];
+        // for (var i = 1; i < longTermData.length; i++) {
+        //     if (!tempDates.includes(longTermData[i][0])) {
+        //         data[0].push(longTermData[i][0]);
+        //         data[1].push(longTermData[i][_column]);
 
-                tempDates.push(longTermData[i][0]);
-            }
-        }
+        //         tempDates.push(longTermData[i][0]);
+        //     }
+        // }
 
-        tempDates = null;
-        return data;
+        // tempDates = null;
+        // return data;
     }
 
 
@@ -58,15 +58,15 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
 
         // Availability
         $scope.dataAvail = longTerm2[1]['Availability']; //$scope.fillDataFromColumn(9);
-        var chartAvail = ChartsMonthly.CreateLongTerm("lt_avail", $scope.dataAvail, "", ChartStyles.statusItemStyle(2), true);
+        var chartAvail = ChartsMonthly.CreateLongTerm("lt_avail", $scope.dataAvail, "Down", ChartStyles.statusItemStyle(2), true);
 
         // U of A
         $scope.dataUofA = longTerm2[1]['UofA'];//$scope.fillDataFromColumn(10);
-        var chartUofA = ChartsMonthly.CreateLongTerm("lt_uofa", $scope.dataUofA, "", { color: ChartStyles.uofaColor }, true);
+        var chartUofA = ChartsMonthly.CreateLongTerm("lt_uofa", $scope.dataUofA, "Standby", { color: ChartStyles.uofaColor }, true);
 
         // Total 
         $scope.dataTotal = longTerm2[1]['Total Asset Utilisation']; //$scope.fillDataFromColumn(11);
-        var chartTotal = ChartsMonthly.CreateLongTerm("lt_total", $scope.dataTotal, "", ChartStyles.statusItemStyle(0), true);
+        var chartTotal = ChartsMonthly.CreateLongTerm("lt_total", $scope.dataTotal, "Operating", ChartStyles.statusItemStyle(0), true);
 
         // Efficiency 
         //$scope.dataEff = longTerm2[1]['Efficiency'];//$scope.fillDataFromColumn(12);

@@ -146,7 +146,11 @@ class Charts {
 
 
     static CreateMPH2(_elementID, _data) {
-        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+        var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
+        var myChart = echarts.init(dom, ChartStyles.baseStyle);
+
 
         var fullDay = false;
 
@@ -561,6 +565,8 @@ class Charts {
 
     static CreateTimeLine(_elementID, _data) {
         var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
         var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
         var _d = _data.shiftData[shift];

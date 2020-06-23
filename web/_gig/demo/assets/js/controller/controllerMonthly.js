@@ -96,7 +96,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
         //console.log(($scope.fileContent));
         //return;        
-
+        return;
         var _data = {
             'func': 0,
             'data': ($scope.fileContent),
@@ -123,7 +123,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
     $scope.getMonthlyPlan = function () {
         // var _url = '../dev/php/monthly/monthly.php';
-
+        return;
         var _data = {
             'func': 1,
             'year': $scope.currentPlanYear,
@@ -166,7 +166,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
     $scope.getMonthlyActuals = function () {
         //var _url = '../dev/php/monthly/monthly.php';
-
+        return;
         var _data = {
             'func': 3,
             'year': $scope.currentPlanYear,
@@ -187,6 +187,8 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
 
     $scope.getConfigs = function () {
+        return;
+
         var _url = '../dev/php/admin.php';
         var _data = { 'func': 4 };
         var request = $http({
@@ -205,7 +207,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
     $scope.getMappedActualsToPlan = function () {
         //var _url = '../dev/php/monthly/monthly.php';
-
+        return;
         var _data = {
             'func': 4,
             'year': $scope.currentPlanYear,
@@ -219,6 +221,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
         request.then(function (response) {
             console.log(response);
             $scope.mappedPlan = response.data;
+            console.log($scope.mappedPlan);
             if ($routeParams.func == 0)
                 $scope.createMonthlyComplianceChart();
 
@@ -226,6 +229,106 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
             console.log(error);
         });
     }
+
+
+
+
+
+
+
+
+    $scope.createMonthlyComplianceChart = function () {
+        // var chartData = [];
+        // for (var i = 1; i < $scope.mappedPlan[0].length; i++) {
+        //     if ($scope.mappedPlan[0][i][0] == "WF") {
+        //         //if ($scope.mappedPlan[i][4] != undefined && $scope.mappedPlan[i][3] > 0)
+        //         if ($scope.mappedPlan[0][i][3] > 0)
+        //             chartData.push($scope.mappedPlan[0][i]);
+        //     }
+        // }
+
+        // var siteName = $rootScope.siteData[1].name;
+        // console.log(siteName);
+        // $scope.meta = $scope.mappedPlan[1][siteName];
+        // //$scope.meta = $scope.mappedPlan[1]['Western Flanks'];
+        // //console.log("Building chart...");
+        // //console.log(chartData);
+        // console.log(chartData);
+        $scope.meta = {
+            "totalMetricTarget": 91733,
+            "totalMetricActual": 103976,
+            "averageCurrent": 3354.064516129032,
+            "averageRequired": 2959.1290322580644,
+            "complianceSpatial": 1,
+            "complianceVolumetric": 1.133463421015338,
+            "timeRemaining": 0,
+            "timePassedInMonth": 1
+        };
+
+        var chartData = [
+            [
+                "WF",
+                "4540D13",
+                "PROD",
+                15308,
+                14580
+            ],
+            [
+                "WF",
+                "4540D15",
+                "PROD",
+                18469,
+                17876
+            ],
+            [
+                "WF",
+                "4540D17",
+                "PROD",
+                10175,
+                16542
+            ],
+            [
+                "WF",
+                "4540D19",
+                "PROD",
+                2085,
+                36
+            ],
+            [
+                "WF",
+                "4555D30",
+                "PROD",
+                12703,
+                16560
+            ],
+            [
+                "WF",
+                "4555D32",
+                "PROD",
+                13634,
+                18054
+            ],
+            [
+                "WF",
+                "4555D34",
+                "PROD",
+                8613,
+                6000
+            ],
+            [
+                "WF",
+                "4570D28",
+                "PROD",
+                10746,
+                12582
+            ]
+        ];
+
+        ChartsMonthly.CreateMonthlyCompliance2("monthlyChart", chartData);
+    }
+
+
+
 
 
 
@@ -238,12 +341,9 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
     // Entry point for the chart view
     if ($routeParams.func == 0) {
-
-        $interval(function () {
-            //console.log("Interval log... ");
-            $scope.getMappedActualsToPlan();
-        }, 3000);
-        $scope.getMappedActualsToPlan();
+        //$scope.getMappedActualsToPlan();
+        //console.log('poo');
+        $scope.createMonthlyComplianceChart();
     }
 
     // Entry point for the plan view
@@ -252,36 +352,6 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
     }
     // ----------------------------------------------------
     // ----------------------------------------------------
-
-
-
-
-
-
-    $scope.createMonthlyComplianceChart = function () {
-        var chartData = [];
-        for (var i = 1; i < $scope.mappedPlan[0].length; i++) {
-            if ($scope.mappedPlan[0][i][0] == "WF") {
-                //if ($scope.mappedPlan[i][4] != undefined && $scope.mappedPlan[i][3] > 0)
-                if ($scope.mappedPlan[0][i][3] > 0)
-                    chartData.push($scope.mappedPlan[0][i]);
-            }
-        }
-
-        var siteName = $rootScope.siteData[1].name;
-        console.log(siteName);
-        $scope.meta = $scope.mappedPlan[1][siteName];
-        //$scope.meta = $scope.mappedPlan[1]['Western Flanks'];
-        //console.log("Building chart...");
-        //console.log(chartData);
-        console.log(chartData);
-        ChartsMonthly.CreateMonthlyCompliance2("monthlyChart", chartData);
-    }
-
-
-
-
-
 
 
 

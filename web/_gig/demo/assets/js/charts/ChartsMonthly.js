@@ -181,8 +181,7 @@ class ChartsMonthly {
             toolbox: {
                 left: 'center',
                 feature: {
-
-                    restore: {}
+                    restore: { title: 'restore' }
                 }
             },
             grid: {

@@ -27,22 +27,22 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
 
     //NO LONGER NEEDED,  OLD DATA
     $scope.fillDataFromColumn = function (_column) {
-        var data = [];
-        data.push([]);
-        data.push([]);
+        // var data = [];
+        // data.push([]);
+        // data.push([]);
 
-        var tempDates = [];
-        for (var i = 1; i < longTermData.length; i++) {
-            if (!tempDates.includes(longTermData[i][0])) {
-                data[0].push(longTermData[i][0]);
-                data[1].push(longTermData[i][_column]);
+        // var tempDates = [];
+        // for (var i = 1; i < longTermData.length; i++) {
+        //     if (!tempDates.includes(longTermData[i][0])) {
+        //         data[0].push(longTermData[i][0]);
+        //         data[1].push(longTermData[i][_column]);
 
-                tempDates.push(longTermData[i][0]);
-            }
-        }
+        //         tempDates.push(longTermData[i][0]);
+        //     }
+        // }
 
-        tempDates = null;
-        return data;
+        // tempDates = null;
+        // return data;
     }
 
 

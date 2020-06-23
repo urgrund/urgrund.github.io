@@ -187,7 +187,8 @@ app.run(function ($rootScope, $http, $route) {
             var date = _dates[i];
 
             //var file = 'http://localhost/web/sitedata/' + date + '.json';
-            var file = '//localhost/demo/sitedata/' + date + '.json';
+            //var file = '//localhost/demo/sitedata/' + date + '.json';
+            var file = 'sitedata/' + date + '.json';
 
             // console.log(date);console.log(date);
 

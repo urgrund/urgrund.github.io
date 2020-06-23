@@ -122,13 +122,13 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
             $scope.shiftData = $scope.site.shiftData[$rootScope.shift];
 
             $scope.prepareAssetTotals();
-        }, 5);
+        }, 300);
 
 
         // Setup charts 
         $timeout(function () {
             $scope.createSiteCharts();
-        }, 10);
+        }, 400);
     });
 
 
@@ -143,9 +143,11 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
 
     $scope.$on('updateShift', function (event, data) {
         //$route.reload();
-        $scope.shiftData = $scope.site.shiftData[$rootScope.shift];
-        $scope.prepareAssetTotals();
-        $scope.createSiteCharts();
+        $timeout(function () {
+            $scope.shiftData = $scope.site.shiftData[$rootScope.shift];
+            $scope.prepareAssetTotals();
+            $scope.createSiteCharts();
+        }, 100);
     });
 
 });
