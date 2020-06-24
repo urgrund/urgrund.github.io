@@ -31,13 +31,48 @@
 
     <link rel="stylesheet" href="assets/css/monthly.css">
 
+    <link rel="stylesheet" href="assets/css/modal.css">
 </head>
 
 
 
 <body ng-app="myApp" ng-controller="myCtrl" class="{{backGroundClass}}">
+
+    <!-- DEMO OVERLAY -->
+    <div id="myNav" class="overlay">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div class="overlay-content">
+
+            <h1>Discover the Magic in your Data...</h1>
+            <h4>Thanks for your interest in the Mine Mage demo! Mine Mage is a scalable application
+                </br>
+                built up of features and components that are tailored to your needs. Please note that
+                </br>
+                that this demo is a work in progress and will continue to evolve.
+                </br>
+            </h4>
+
+            <a href="javascript:void(0)" onclick="closeNav()">Continue</a>
+
+        </div>
+    </div>
+    <!-- DEMO OVERLAY -->
+
+
+
     <div id="site_menu" ng-controller="Menu" ng-include src="'menu.html'"></div>
     <div id="site_body" ng-view></div>
+
+
+    <!-- DEMO OVERLAY -->
+    <script>
+        //document.getElementById("myNav").style.width = "100%";
+
+        function closeNav() {
+            document.getElementById("myNav").style.opacity = "0";
+        }
+    </script>
+    <!-- DEMO OVERLAY -->
 </body>
 
 </html>

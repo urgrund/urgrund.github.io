@@ -180,7 +180,7 @@ app.run(function ($rootScope, $http, $route) {
         //     });
         // }
 
-
+        return;
 
         // THIS WILL CHANGE TO NG PHP CALL
         for (var i = 0; i < _dates.length; i++) {
