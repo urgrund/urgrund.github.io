@@ -106,7 +106,7 @@ class MetricData
     function __construct($_metric, $_site, $_activity, $_shift)
     {
         // Maps the metric abbrv to a 'nice name' 
-        global $metricMap;
+        //global $metricMap;
 
         //Debug::Log("Creating Metric with " . $_site);
         $this->site = Config::Sites($_site);
@@ -116,8 +116,11 @@ class MetricData
         //$this->value = $_value;
         $this->activity = $_activity;
 
-        if (array_key_exists($_metric, $metricMap))
-            $this->name = $metricMap[$_metric];
+        //if (array_key_exists($_metric, $metricMap))
+        //  $this->name = $metricMap[$_metric];
+
+        if (Config::MetricMap($_metric) != null)
+            $this->name = Config::MetricMap($_metric);
     }
 
 
@@ -141,19 +144,8 @@ class MetricData
         // Just always sum totals so it's current
         // and then don't need an extra function 
         $this->total = $this->cph[$count];
-        //Debug::Log($this->total);
-        //Debug::Log($count); // Will be null if 0 because no data yet
-        //Debug::Log($this->average);
         $this->average = round($this->total / ($count + 1), 2);
     }
-
-
-    // private function SumTotals()
-    // {
-    //     $count = count($this->mph);
-    //     $this->total = $this->cph[$count];
-    //     $this->average = round($this->total / ($count + 1), 2);
-    // }
 
 
 

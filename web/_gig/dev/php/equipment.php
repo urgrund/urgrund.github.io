@@ -1,21 +1,18 @@
 <?php
 
-
-// --------------------------------
-// Equipment Class
-// --------------------------------
+/**
+ * Equipment Class - deals with an equipment asset
+ * storing its shift data & metrics 
+ * @author Matt
+ */
 class Equipment
 {
     // DB Code used to identify this equipment
     var $id;
 
     var $sites = [];
-    //var $tphSites = [];
-
-    //var $metric;
     var $function;
     var $events = array();
-
     var $shiftData = array();
 
     private $genComplete = false;
@@ -330,14 +327,8 @@ class Equipment
         // Add this data to its site to tally totals
         for ($i = 0; $i < count($this->sites); $i++) {
             $allSites[$this->sites[$i]]->AddMetricDataFromEquipment($this);
-            //Debug::Log($allSites[$this->sites[$i]]);
-            //for ($j = 0; $j < count($allSites); $j++) {
-            //  $allSites[$j]->AddMetricDataFromEquipment($this);
-            //}
         }
 
-
-        //Debug::Log($this->shiftData[0]->metricData);
         $this->genComplete = true;
         return;
     }

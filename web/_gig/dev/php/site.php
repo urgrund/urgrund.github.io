@@ -27,15 +27,11 @@ class Site
     var $equipmentByFunction = array();
     var $equipment = array();
 
-
-
-    // List of possible functions an equipment can do at this site
+    // List of possible functions an equipment can have at this site
     private $_equipFunction = array();
 
     function __construct($_name)
     {
-        global $date;
-
         global $sqlMetricPerHour;
         global $sqlEquipEventList;
         global $sqlMineEquipmentList;
@@ -69,8 +65,6 @@ class Site
         array_push($this->uoaf24, $tempDown);
 
 
-        // MATT NEW STUFF
-
         // Get's the equipment belonging to this site
         $this->equipment = array();
         for ($i = 1; $i < count($sqlMetricPerHour); $i++) {
@@ -92,51 +86,14 @@ class Site
                     $this->equipmentByFunction[$eFunction][] = $eID;
             }
         }
-        //Debug::Log($this->equipment);
-
-
-        //foreach (array_keys($uniqueEquip) as $id) {
-        //  $this->_equipFunction[$result[$i][0]] = $result[$i][1];
-        //}
-
-        //Debug::Log($this->name);
-
-        return;
-
-
-
-
-        // For this site, get the function that each 
-        // equipment is currently performing
-
-        // TODO - move this query back to the main and use site index 
-        // on results?  This would be inline with the other queries 
-        // $sqlTxt = "Select * from ALLMineEquipmentList(" . $date . ", '" . $this->key . "')";
-        // $result = SQLUtils::QueryToText($sqlTxt);
-        // for ($i = 1; $i < count($result); $i++) {
-        //     $this->_equipFunction[$result[$i][0]] = $result[$i][1];
-        // }
-
-        //Debug::Log($sqlMetricPerHour);
     }
 
 
     public function AddMaterialMovements($_mm)
     {
-        //Debug::Log($_mm);
+        // TODO - get this prepared here rather than front-end
         $this->shiftData[$_mm[1] - 1]->materialMovements[] = $_mm;
     }
-    // public function GenerateMaterialMovements()
-    // {      
-    //     global $date;
-    //     $str = SQLUtils::FileToQuery('..\assets\sql\Core\ALL_MaterialMovements.sql');
-    //     for ($i = 0; $i < 2; $i++) {
-    //         $sqlTxt = $str;
-    //         $shift = "P" . ($i + 1);
-    //         $sqlTxt = str_replace('@Date', "'" . $date . $shift . "'", $sqlTxt);
-    //         $this->shiftData[$i]->materialMovements = SQLUtils::QueryToText($sqlTxt, "MM " . $shift);
-    //     }
-    // }
 
 
 
@@ -247,28 +204,6 @@ class Site
 
 
 
-
-
-    function MakeArraysNumeric()
-    {
-        // Sort by keys so that they are all in same order
-        //ksort($this->equipmentByFunction);
-
-        // Convert to indexed arrays
-        //$this->equipmentByFunction = array_values($this->equipmentByFunction);
-        $tmp = [];
-        foreach (array_keys($this->equipment) as $equip)
-            $tmp[] = $equip;
-        $this->equipment = $tmp;
-        //$this->equipment = array_values($this->equipment);
-    }
-
-
-
-
-
-
-
     // Adds equipment to the Site and maps it to its function
     function AddEquipment(Equipment $_equipmentObject)
     {
@@ -285,5 +220,14 @@ class Site
 
         // Add all equipment into their function category         
         $this->equipmentByFunction[$_equipmentObject->function][] = $_equipmentObject->id;
+    }
+
+
+    function MakeArraysNumeric()
+    {
+        $tmp = [];
+        foreach (array_keys($this->equipment) as $equip)
+            $tmp[] = $equip;
+        $this->equipment = $tmp;
     }
 }

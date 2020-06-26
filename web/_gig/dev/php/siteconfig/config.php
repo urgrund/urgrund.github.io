@@ -8,6 +8,7 @@
 /**
  * Allows an interface to the CSV files that are used 
  * to map site and equipment specific values to front-end
+ * @author Matthew Bell 2020
  */
 class Config
 {
@@ -18,6 +19,23 @@ class Config
 
     private static $fileTUM = 'TUM';
     private static $fileSites = 'Sites';
+
+    private static $metricMap = array(
+        "FACEMETRE" => "Face Metres",
+        "INSMESHSTROVRLAP" => "Mesh Metres",
+        "INSMESHGALVL" => "Install Mesh",
+        "INSMESHGALV" => "Install Mesh",
+        "TOTALBOLTS" => "Bolts",
+        "TOTGSMTR" => "Ground Support Metres",
+        "TOTOTHERMTRS" => "Jumbo Metres",
+        "TONNE" => "Tonnes",
+        "PRODMTRSDRILL" => "Production Metres"
+    );
+
+    private static $productionActivity = 'Production';
+    private static $productionMetricTonne = 'TONNE';
+    private static $productionMetricMetre = 'PROD';
+
 
     public $configTUM;
     public $configSites;
@@ -44,21 +62,28 @@ class Config
         //return Config::$instance->configTUM[$_key];
     }
 
-
     public static function productionActivity()
     {
-        return 'Production';
+        return Config::$productionActivity;
     }
     public static function productionMetricTonne()
     {
-        return 'TONNE';
+        return Config::$productionMetricTonne;
     }
     public static function productionMetricMetre()
     {
-        return 'PROD';
+        return Config::$productionMetricMetre;
+    }
+
+    public static function MetricMap(string $_metric)
+    {
+        return isset(Config::$metricMap[$_metric]) ? Config::$metricMap[$_metric] : NULL;
     }
 
 
+
+
+    // -------------------------------------------------------------------------
 
     private static function GetConfigSites()
     {
@@ -97,4 +122,5 @@ class Config
             return null;
         }
     }
+    // -------------------------------------------------------------------------
 }

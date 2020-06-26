@@ -19,23 +19,6 @@ static $sqlMaterialMovements;
 
 
 
-
-
-// Maps the SQL metric to a 'friendly' name
-static $metricMap = array(
-    "FACEMETRE" => "Face Metres",
-    "INSMESHSTROVRLAP" => "Mesh Metres",
-    "INSMESHGALVL" => "Install Mesh",
-    "INSMESHGALV" => "Install Mesh",
-    "TOTALBOLTS" => "Bolts",
-    "TOTGSMTR" => "Ground Support Metres",
-    "TOTOTHERMTRS" => "Jumbo Metres",
-    "TONNE" => "Tonnes",
-    "PRODMTRSDRILL" => "Production Metres"
-);
-
-
-
 // ------------------------------------------------------------------
 // ENTRY POINT
 
@@ -127,7 +110,7 @@ final class CreateSiteData
         // ------------------------------------------------------------------------------------------
         // All metrics per hour for this date
         $sqlTxt = SQLUtils::FileToQuery('..\assets\sql\Core\ALL_MetricPerHour.sql');
-        $sqlTxt = str_replace('@Date', "'" . $date . "'", $sqlTxt);
+        $sqlTxt = str_replace(SQLUtils::DateVar, "'" . $date . "'", $sqlTxt);
         $sqlMetricPerHour = SQLUtils::QueryToText($sqlTxt, "All Metric");
         // Sanitize null values 
         for ($i = 0; $i < count($sqlMetricPerHour); $i++) {
@@ -142,7 +125,7 @@ final class CreateSiteData
         // ------------------------------------------------------------------------------------------
         // All events that have been logged for this date
         $sqlTxt = SQLUtils::FileToQuery('..\assets\sql\Core\ALL_EquipmentEventList.sql');
-        $sqlTxt = str_replace('@Date', "'" . $date . "'", $sqlTxt);
+        $sqlTxt = str_replace(SQLUtils::DateVar, "'" . $date . "'", $sqlTxt);
         $sqlEquipEventList = SQLUtils::QueryToText($sqlTxt, "Event List");
         // ------------------------------------------------------------------------------------------
 
@@ -150,7 +133,7 @@ final class CreateSiteData
         // ------------------------------------------------------------------------------------------
         // All the equipment of the entire mine
         $sqlTxt = SQLUtils::FileToQuery('..\assets\sql\Core\ALL_MineEquipmentList.sql');
-        $sqlTxt = str_replace('@Date', "'" . $date . "'", $sqlTxt);
+        $sqlTxt = str_replace(SQLUtils::DateVar, "'" . $date . "'", $sqlTxt);
         $sqlMineEquipmentList = SQLUtils::QueryToText($sqlTxt, "All Mine Equip", false);
 
         // Set the asset ID as the index
@@ -166,7 +149,7 @@ final class CreateSiteData
         // ------------------------------------------------------------------------------------------
         // Material Movements
         $sqlTxt = SQLUtils::FileToQuery('..\assets\sql\Core\ALL_MaterialMovements.sql');
-        $sqlTxt = str_replace('@Date', "'" . $date . "'", $sqlTxt);
+        $sqlTxt = str_replace(SQLUtils::DateVar, "'" . $date . "'", $sqlTxt);
         $sqlMaterialMovements = SQLUtils::QueryToText($sqlTxt, "Mat Movements", false);
 
         //Debug::Log($sqlMaterialMovements);

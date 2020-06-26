@@ -15,6 +15,8 @@ $conn;
  */
 class SQLUtils
 {
+    const DateVar = '@Date';
+
     public static function OpenConnection()
     {
         Debug::StartProfile("Open Server Connection");
