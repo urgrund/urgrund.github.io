@@ -2,9 +2,24 @@
 
 app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout, $route) {
 
+    $scope.routeID = $routeParams.id;
+    $scope.equip = $rootScope.equipment[$routeParams.id];
+
+    if ($scope.equip == undefined)
+        return;
+
+    $scope.lastEvent = $rootScope.getEquipmentLastEvent($scope.equip);
+    $scope.equipMetric = "";
+    for (var key in $scope.equip.shiftData[$rootScope.shift].metric) {
+        $scope.equipMetric = $scope.equip.shiftData[$rootScope.shift].metric[key].name + " Per Hour";
+    }
+
+
+
+
     $scope.createEquipmentData = function () {
 
-        console.log("Creating data for DD");
+        //console.log("Creating data for DD");
 
         $scope.routeID = $routeParams.id;
         $scope.equip = $rootScope.equipment[$routeParams.id];
@@ -14,7 +29,7 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
         if ($scope.equip == undefined)
             return;
 
-        $scope.lastEvent = $rootScope.getEquipmentLastEvent($scope.equip);  // $scope.equip.shiftData[$rootScope.shift].events[len - 1];
+        $scope.lastEvent = $rootScope.getEquipmentLastEvent($scope.equip);
         $scope.equipMetric = "";
         for (var key in $scope.equip.shiftData[$rootScope.shift].metric) {
             $scope.equipMetric = $scope.equip.shiftData[$rootScope.shift].metric[key].name + " Per Hour";
@@ -25,8 +40,7 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
 
     $scope.createEquipmentCharts = function () {
 
-        if ($scope.equip == undefined)
-            return;
+
 
         // Fancy timing to load charts
         var t = 70;
@@ -37,6 +51,9 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
         var timeline;
 
         $timeout(function () {
+            if ($scope.equip == undefined)
+                return;
+
             //$timeout(function () { mph = Charts.CreateMPH2("mph", $scope.equip, 2); }, d); d += t;
             mph = Charts.CreateMPH2("mph", $scope.equip, 2);
 
@@ -58,23 +75,24 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
 
             //$timeout(function () {
             // set group id of each instance respectively.
-            mph.group = 'group1';
-            uofa.group = 'group1';
-            //timeline.group = 'group1';
-            echarts.connect('group1');
+            // if (mph == undefined || uofa == undefined) {
+            //     mph.group = 'group1';
+            //     uofa.group = 'group1';
+            //     echarts.connect('group1');
+            // }
             //}, d * 5);
 
-            console.log("Done making charts");
-        }, 55);
+            //console.log("Done making charts");
+        }, 100);
     }
 
 
     //    $scope.createEquipmentData();
     $scope.$watch('$viewContentLoaded', function () {
         $timeout(function () {
-            $scope.createEquipmentData();
+            //$scope.createEquipmentData();
             $scope.createEquipmentCharts();
-        }, 50);
+        }, 150);
         //$scope.createEquipmentData();
         //$scope.createEquipmentCharts();
     });
@@ -82,7 +100,9 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
 
 
     $scope.$on('updateShift', function (event, data) {
+        //$timeout(function () {
         $route.reload();
+        //}, 10);
     });
 
 });

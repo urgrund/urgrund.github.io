@@ -1,5 +1,5 @@
 
-console.log = function () { }
+//console.log = function () { }
 
 // Variables used outside of particular NG scopes  (ie. charts)
 var shift = 0;
@@ -180,7 +180,6 @@ app.run(function ($rootScope, $http, $route) {
         //     });
         // }
 
-        return;
 
         // THIS WILL CHANGE TO NG PHP CALL
         for (var i = 0; i < _dates.length; i++) {
@@ -610,7 +609,7 @@ app.component("drillDownHeader", {
 
         this.$onInit = function () {
 
-            console.log(this.styleGroup);
+            //console.log(this.styleGroup);
             //console.log($rootScope.equipment);
 
             if (this.equip == undefined)

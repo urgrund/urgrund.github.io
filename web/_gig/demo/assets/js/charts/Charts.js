@@ -369,7 +369,10 @@ class Charts {
 
 
     static CreateMPH(_elementID, _data, _display) {
-        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+        //var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+        var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
 
         // Grab all the metrics recorded for this equipment 
         // Only interested if there was any metrics recorded this shift
@@ -797,7 +800,11 @@ class Charts {
 
 
     static CreateUofA(_elementID, _data) {
-        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+        //var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+        var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
+        var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
         var _d = _data.shiftData[shift].uofa;
 
@@ -931,7 +938,11 @@ class Charts {
     static CreateUofAPie(_elementID, _data) {
         // -------------------------------------------------------------
         //if (myPie == null)
-        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+        //var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+        var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
+        var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
         var _d = _data.shiftData[shift];
 
@@ -1012,8 +1023,12 @@ class Charts {
 
     static CreatePareto(_elementID, _data, _colorIndex) {
 
-        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+        //var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
 
+        var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
+        var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
 
         //var eventData = _data;
@@ -1160,6 +1175,8 @@ class Charts {
 
     static CreateTimeLineFlat(_elementID, _data) {
         var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
         var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
         var _d = _data.shiftData[shift];
@@ -1369,7 +1386,10 @@ class Charts {
 
     static CreateTimeLineFlatTime(_elementID) {
         var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
         var myChart = echarts.init(dom, ChartStyles.baseStyle);
+
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,

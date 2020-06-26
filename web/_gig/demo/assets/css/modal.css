@@ -5,11 +5,11 @@
     width: 100%;
     opacity: 1;
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 10; /* Sit on top */
     left: 0;
     top: 0;
   
-    background: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url(../img/login_blur.jpg) no-repeat center center fixed;
+    background: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126) 100%), url(../img/login_blur.jpg) no-repeat center center fixed;
   object-fit: cover;  
   background-size: cover; 
 

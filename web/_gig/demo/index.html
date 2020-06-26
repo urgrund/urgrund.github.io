@@ -56,6 +56,13 @@
 
         </div>
     </div>
+    <script>
+        function closeNav() {
+            document.getElementById("myNav").style.opacity = 0;
+            setTimeout(function () { document.getElementById("myNav").style.display = "none"; }, 500);
+        }
+    </script>
+
     <!-- DEMO OVERLAY -->
 
 
@@ -64,15 +71,9 @@
     <div id="site_body" ng-view></div>
 
 
-    <!-- DEMO OVERLAY -->
-    <script>
-        //document.getElementById("myNav").style.width = "100%";
 
-        function closeNav() {
-            document.getElementById("myNav").style.opacity = "0";
-        }
-    </script>
-    <!-- DEMO OVERLAY -->
+
+
 </body>
 
 </html>
