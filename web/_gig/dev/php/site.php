@@ -207,11 +207,11 @@ class Site
 
                 // If a Production TONNE
                 // then add this to the production metrics
-                if ($metric->metric == "TONNE") {
+                if ($metric->metric == Config::productionMetricTonne()) {
 
                     // The activity is production, this is
                     // what we want to record 
-                    if (strpos($metric->activity, 'Production') !== false) {
+                    if (strpos($metric->activity, Config::productionActivity()) !== false) {
 
                         // Create if haven't already 
                         if ($this->shiftData[$i]->productionTonnes == null)
@@ -226,11 +226,11 @@ class Site
 
                 // If a Production METER
                 // then add this to the production metrics
-                if (strpos($metric->metric, 'PROD') !== false) {
+                if (strpos($metric->metric, Config::productionMetricMetre()) !== false) {
 
                     // The activity is production, this is
                     // what we want to record 
-                    if (strpos($metric->activity, 'Production') !== false) {
+                    if (strpos($metric->activity, Config::productionActivity()) !== false) {
 
                         // Create if haven't already 
                         if ($this->shiftData[$i]->productionMetres == null)

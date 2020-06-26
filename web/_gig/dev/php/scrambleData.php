@@ -9,8 +9,10 @@ class ScrambleData
         if ($allSites == null)
             return;
 
-        ScrambleData::EventsInEquipment();
         ScrambleData::NamesInSites();
+        ScrambleData::LocationsInMaterialMovements();
+        ScrambleData::EventsInEquipment();
+
         ScrambleData::NamesInEquipment();
     }
 
@@ -22,6 +24,36 @@ class ScrambleData
         for ($i = 0; $i < count($allSites) - 2; $i++) {
             $allSites[$i]->name = "MineSite " . ($i + 1);
         }
+    }
+
+    private static function LocationsInMaterialMovements()
+    {
+        global $allSites;
+        for ($i = 0; $i < count($allSites) - 2; $i++) {
+            $site = $allSites[$i];
+            for ($x = 0; $x < 2; $x++) {
+                $mm = $site->shiftData[$x]->materialMovements;
+                //Debug::Log($mm);
+
+                // Create random value for each unique location
+                $uniqueLocations = array();
+                for ($j = 0; $j < count($mm); $j++) {
+                    if (!isset($uniqueLocations[$mm[$j][3]]))
+                        $uniqueLocations[$mm[$j][3]] = "S" . round(rand());
+                    if (!isset($uniqueLocations[$mm[$j][5]]))
+                        $uniqueLocations[$mm[$j][5]] = "Loc" . round(rand() * 0.01);
+                }
+
+                //  Remap to original
+                for ($j = 0; $j < count($mm); $j++) {
+                    $mm[$j][3] = $uniqueLocations[$mm[$j][3]];
+                    $mm[$j][5] = $uniqueLocations[$mm[$j][5]];
+                }
+                $allSites[$i]->shiftData[$x]->materialMovements = $mm;
+                //Debug::Log($mm);
+            }
+        }
+        //Debug::Log($allSites[0]->shiftData[0]->materialMovements);
     }
 
     private static function EventsInEquipment()

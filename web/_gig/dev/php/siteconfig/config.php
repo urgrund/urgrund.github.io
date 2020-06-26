@@ -45,6 +45,19 @@ class Config
     }
 
 
+    public static function productionActivity()
+    {
+        return 'Production';
+    }
+    public static function productionMetricTonne()
+    {
+        return 'TONNE';
+    }
+    public static function productionMetricMetre()
+    {
+        return 'PROD';
+    }
+
 
 
     private static function GetConfigSites()
