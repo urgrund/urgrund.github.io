@@ -1,0 +1,36 @@
+.topga
+{    
+    background: linear-gradient(-170deg, #005f52, #00061d);
+    padding: 1%;
+    padding: 1%;
+}
+
+
+.content
+{
+    background: rgba(0, 0, 0, 0.95);
+    padding: 10px;
+}
+
+.gaImgGrp
+{
+    display: flex;
+}
+
+.gaImgGrp > img
+{    
+    height: 200px;
+    width: 30%;
+    max-width: 320px;
+    margin: 1%;
+    background: black;
+    box-shadow: 5px 8px 7px 0px rgba(0, 0, 0, 0.5);
+    border: 1px solid #656e74;
+    transition:0.6s;    
+}
+
+.gaImgGrp > img:hover {
+    transform: translate(0px, 3px);
+    border: 1px solid #7bd3ff;
+    transition:0.2s;    
+}
