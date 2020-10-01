@@ -1,3 +1,6 @@
+
+p{font-size: 10pt;}
+
 .topga
 {    
     background: linear-gradient(-170deg, #005f52, #00061d);
@@ -6,15 +9,24 @@
 }
 
 
+
 .content
 {
     background: rgba(0, 0, 0, 0.95);
     padding: 10px;
 }
 
+
+
 .gaImgGrp
 {
     display: flex;
+    justify-content: space-around;
+}
+
+.gaIconGrp{
+    display: flex;
+    justify-content: flex-start;
 }
 
 .gaImgGrp > img
@@ -33,4 +45,12 @@
     transform: translate(0px, 3px);
     border: 1px solid #7bd3ff;
     transition:0.2s;    
+}
+
+
+.gaIconGrp > img
+{    
+    height: 70px;        
+    margin: 1%;    
+    box-shadow: 5px 8px 7px 0px rgba(0, 0, 0, 0.5);        
 }
