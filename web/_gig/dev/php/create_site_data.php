@@ -29,8 +29,6 @@ if (Debug::enabled() == true) {
 }
 
 
-
-
 /**   
  * Generates data for a given date for all 
  * equipment at all locations
