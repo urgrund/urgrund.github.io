@@ -1,0 +1,153 @@
+<!-- <head> -->
+
+<!-- <script src="js/vendor/modernizr-3.6.0.min.js"></script> -->
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="vendors/jquery/dist/jquery.min.js"></script>
+    <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script> -->
+
+<!-- DatePicker -->
+<!-- <link rel="stylesheet" href="vendors/bootstrap-datepicker/css/bootstrap-datepicker.css">
+    <script src="vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+
+
+    <script src="vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> -->
+<!-- </head> -->
+
+<!-- <form>
+    <div class="well span12 main">
+        <i class="far fa-calendar-alt"></i>
+        <input type="text" id="dp1" class="span2 datepicker" placeholder="Custom Date..." name="date">
+
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+</form> -->
+
+<style>
+    /* body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: rgb(0, 0, 0);
+    } */
+
+    .rcorners1 {
+        border-radius: 5px;
+        /* background: #535353dc; */
+        border: 1px solid rgb(131, 168, 192);
+        padding: 0px;
+        width: 100%;
+        height: 300px;
+        margin: auto;
+        margin-bottom: 3px;
+        /* box-shadow: 0px 15px 15px rgba(0, 0, 0, 0.3); */
+    }
+</style>
+
+
+<!-- Right Panel -->
+<!-- Bootstrap Date-Picker Plugin -->
+
+
+<div id="right-panel" class="right-panel">
+    <div class="breadcrumbs">
+        <div class="col-sm-4">
+            <div class="page-header float-left">
+                <div class="page-title">
+                    <h1>{{companyName}}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="page-header float-right">
+                <div class="page-title">
+                    <ol class="breadcrumb text-right">
+                        <li><a href="#">Dashboard</a></li>
+                        <li><a href="#">Sites</a></li>
+                        <li class="active">{{siteName}}</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content mt-3">
+        <div class="">
+            <div class="row">
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="mb-3" id="chartA_Title"></h4>
+                            <div class="rcorners1" id="chartA_ChartCML"> </div>
+                            <div class="rcorners1" id="chartA_ChartTPH"> </div>
+                        </div>
+                    </div>
+                </div><!-- /# column -->
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="mb-3" id="chartB_Title"></h4>
+                            <div class="rcorners1" id="chartB_ChartCML"> </div>
+                            <div class="rcorners1" id="chartB_ChartTPH"> </div>
+                        </div>
+                    </div>
+                </div><!-- /# column -->
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="mb-3">Chart C</h4>
+                            <div class="rcorners1" id="chartC"> </div>
+                        </div>
+                    </div>
+                </div><!-- /# column -->
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="mb-3">Chart D</h4>
+                            <div class="rcorners1" id="chartD"> </div>
+                        </div>
+                    </div>
+                </div><!-- /# column -->
+            </div>
+        </div><!-- .animated -->
+    </div><!-- .content -->
+</div>
+
+<script>
+
+    // console.log("LKSAJDKLAJSDK");
+    // $(function () {
+    //     $('.datepicker').datepicker({
+    //         format: 'mm-dd-yyyy'
+    //     });
+    // });
+
+    // $(document).ready(function () {
+    //     $('#pickyDate').datepicker({
+    //         format: "dd/mm/yyyy"
+    //     });
+    // });
+
+
+
+    // $(function () {
+    //     $('.datepicker').datepicker({
+    //         format: 'mm-dd-yyyy'
+    //     });
+    // });
+    // $(document).ready(function () {
+    //     var date_input = $('input[name="date"]'); //our date input has the name "date"
+    //     var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+    //     var options = {
+    //         format: 'mm/dd/yyyy',
+    //         container: container,
+    //         todayHighlight: true,
+    //         autoclose: true,
+    //     };
+    //     date_input.datepicker(options);
+    // })
+</script>

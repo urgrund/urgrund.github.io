@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+
+    <style>
+        /* Pop up form */
+        body {
+            background-color: #353535;
+        }
+
+
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+
+
+        /* Modal Content */
+        .adj {
+
+            /* Hidden by default */
+
+            /* Stay in place */
+
+            /* Sit on top */
+            padding-top: 100px;
+            /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+
+
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        .adj-content {
+
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 60%;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+
+
+            max-height: 100%;
+            /*calc(100vh - 210px);*/
+
+        }
+
+
+        .adj-header {
+            padding: 2px 16px;
+            background-color: #232130;
+            color: rgb(255, 255, 255);
+        }
+
+        .adj-body {
+            padding: 2px 16px;
+            background-image: linear-gradient(rgb(60, 70, 92), rgb(37, 37, 37));
+            color: rgb(255, 255, 255);
+        }
+
+        .adj-footer {
+            padding: 2px 16px;
+            background-color: #232130;
+            color: white;
+            text-align: center;
+            border-top: 1px solid #888;
+        }
+
+        .adj-card {
+            border: 1px solid #888;
+            margin: 15px 0px;
+            padding: 5px 15px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+        }
+
+        .disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+
+        .mGrid,
+        .mGridOuter {
+            display: grid;
+            grid-gap: 0px;
+            grid-template-columns: 3fr 3fr 3fr 4fr;
+            border-top: 1px solid rgba(128, 128, 128, 0.493);
+            grid-row-gap: 50px;
+        }
+
+        .mGrid-head {
+            font-size: 12pt;
+            font-weight: bold;
+            border-bottom: 1px solid grey;
+        }
+
+        .mGrid-item {
+            font-size: 10pt;
+            background-color: rgba(0, 0, 0, 0);
+        }
+
+        .mGrid-fnLabel {
+            position: relative;
+            left: 30px;
+            transform: rotate(-90deg);
+            border: 3px solid #73AD21;
+        }
+
+        .mGrid-Btn {
+            float: right;
+        }
+
+        .target-grp {
+            display: flex;
+        }
+    </style>
+
+
+</head>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+
+
+
+<body>
+
+
+
+
+    <div ng-app="myApp" ng-controller="reportBuilderCtrl" id="targetsForm">
+        <!-- <div ng-app="myApp" ng-controller="myCtrl"> -->
+
+        <div class="adj-content">
+            <div class="adj-header">
+                <h4>Monthly Compliance Builder</h4>
+                <h2>Western Flanks</h2>
+            </div>
+
+
+            <div class="adj-body">
+
+                <div class="adj-card">
+                    <!-- <h4>
+                        <i class="fas fa-sun"> Shift Date: 123456</i>
+                    </h4> -->
+                    <!-- Test Locking of Forms : <input type="checkbox" ng-model="locked"><br> -->
+
+
+
+                    <div class="mGrid">
+                        <div class="mGrid-head">Mine</div>
+                        <div class="mGrid-head">Level</div>
+                        <div class="mGrid-head">Drive Number</div>
+                        <div class="mGrid-head">Target</div>
+                        <!-- <div class="mGrid-head">[-]</div> -->
+                    </div>
+
+                    <div ng-repeat="entry in targetSites">
+                        <!-- <div class="mGrid" ng-class="{'disabled': entryIndex > 3}"></div> -->
+                        <div class="mGrid">
+                            <div class="mGrid-item" ng-bind="entry[0][3]">Mine</div>
+                            <div class="mGrid-item" ng-bind="entry[0][4]">Level</div>
+                            <div class="mGrid-item" ng-bind="entry[0][5]">Drive Number</div>
+                            <div class="mGrid-item">
+                                <!-- {{complianceEntries[entry[0][7]][1]}} -->
+                                <div ng-if="complianceEntries[entry[0][7]][1]" class="target-grp">
+                                    <!-- <input type="checkbox" ng-model="complianceEntries[entry[0][7]][2]"
+                                        ng-disabled="complianceEntries[entry[0][7]][3]==true"> <i
+                                        class="far fa-eye"></i> -->
+
+                                    <input type="number" ng-model="complianceEntries[entry[0][7]][1]"
+                                        ng-change="updateEntryTarget()"
+                                        ng-disabled="complianceEntries[entry[0][7]][3]==true">
+
+                                    <input type="checkbox" ng-model="complianceEntries[entry[0][7]][3]"> <i
+                                        class="fas fa-unlock-alt"></i>
+
+                                    <button ng-click="removeEntry(entry[0][7])">-</button>
+                                </div>
+
+                                <div ng-if=" complianceEntries[entry[0][7]][1]==undefined" class="target-grp">
+                                    <button ng-click="addNewEntry(entry[0][7])">+</button>
+                                    <i>Click to add data...</i>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="adj-footer">
+                    Update to Server
+                    <button ng-click="uploadData()" ng-model="locked" class="form-control">
+                        <h3><i class="fas fa-cloud-upload-alt"></i></h3>
+                    </button>
+                </div>
+                Note:pressing minus key deletes an entry, need to catch this
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+
+
+
+
+<script>
+
+    var app = angular.module("myApp", []);
+    app.controller("reportBuilderCtrl", function ($scope, $http, $httpParamSerializerJQLike, $timeout)
+    {
+        $scope.selectedItem;
+        $scope.monthlyTargetEntris = [];
+
+        $scope.targetSites;
+        $scope.complianceEntries;
+
+
+        $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+
+        $scope.getMonthlyBuilderData = function ()
+        {
+            // ------------------------------------------------------------------------
+            // Get monthly data
+            var request = $http({
+                method: 'POST', url: 'read.php', data: { 'func': 0 }
+            })
+            request.then(function (response)
+            {
+                $scope.targetSites = response.data;
+                console.log($scope.targetSites);
+            }, function (error)
+            {
+            });
+
+
+            // ------------------------------------------------------------------------
+            // Get user entries
+            var request = $http({
+                method: 'POST', url: 'read.php', data: { 'func': 1 }
+            })
+            request.then(function (response)
+            {
+                $scope.complianceEntries = response.data;
+                console.log($scope.complianceEntries);
+
+                // Turn all the JSON strings back to proper valu
+                for (var key in $scope.complianceEntries)
+                {
+                    $scope.complianceEntries[key][1] = parseInt($scope.complianceEntries[key][1]);
+                    $scope.complianceEntries[key][2] = $scope.complianceEntries[key][2] == '1' ? true : false;   //parseInt($scope.complianceEntries[key][2]);
+                    $scope.complianceEntries[key][3] = $scope.complianceEntries[key][3] == '1' ? true : false;
+                }
+            }, function (error)
+            {
+            });
+        };
+
+        $scope.uploadData = function ()
+        {
+            if ($scope.complianceEntries == 'undefined')
+                return;
+
+            // Convert bools to ints
+            for (var key in $scope.complianceEntries)
+            {
+                $scope.complianceEntries[key][2] = $scope.complianceEntries[key][2] == true ? 1 : 0;   //parseInt($scope.complianceEntries[key][2]);
+                $scope.complianceEntries[key][3] = $scope.complianceEntries[key][3] == true ? 1 : 0;
+            }
+
+            //console.log($scope.complianceEntries);
+
+
+            var request = $http({
+                method: 'POST', url: 'read.php', data: { 'func': 3, 'data': $scope.complianceEntries }
+            })
+            request.then(function (response)
+            {
+                // Return from server...  maybe a "success" alert?
+                //console.log(response.data);
+            }, function (error)
+            {
+            });
+
+            // Back to real data...
+            for (var key in $scope.complianceEntries)
+            {
+                $scope.complianceEntries[key][2] = $scope.complianceEntries[key][2] == '1' ? true : false;   //parseInt($scope.complianceEntries[key][2]);
+                $scope.complianceEntries[key][3] = $scope.complianceEntries[key][3] == '1' ? true : false;
+            }
+        }
+
+        $scope.removeEntry = function (id)
+        {
+            // Todo ...   add as alert            
+            console.log($scope.complianceEntries[id]);
+            delete $scope.complianceEntries[id];
+        }
+
+        $scope.addNewEntry = function (id)
+        {
+            // ID(val) - Target(num) - Active(int) - Locked(int)
+            var newEntry = [];
+            newEntry[0] = (id);
+            newEntry[1] = 18000;//JSON.stringify(5000);
+            newEntry[2] = true;//JSON.stringify(1);
+            newEntry[3] = false;//JSON.stringify(0);
+            $scope.complianceEntries[id] = newEntry;
+            console.log($scope.complianceEntries);
+        }
+
+        $scope.$watch('$viewContentLoaded', function ()
+        {
+            $timeout(function ()
+            {
+                $scope.getMonthlyBuilderData();
+            }, 0);
+        });
+
+
+
+    });
+
+</script>
+
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body style="height: 100%; margin: 0 background:green">
+
+    <div>
+        <h1>Option A : All in one 'block' </h1>
+    </div>
+    <div id="container" style="width: 100%; height:50%;"></div>
+
+
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript"
+        src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+
+    <script type="text/javascript">
+        var dom = document.getElementById("container");
+        var myChart = echarts.init(dom, 'dark');
+        var app = {};
+        option = null;
+
+        var data = [];
+        var tphData = [];
+        var tphDataCumulative = [];
+
+        // Helper function for strings
+        function insert(str, index, value)
+        {
+            return str.substr(0, index) + value + str.substr(index);
+        }
+        // var types = [     
+        //     { name: 'GPU Memory', color: '#dc77dc' },
+        // ];
+
+
+        // ----------------------------------------
+        // All the below will be guided from sql data 
+        // Data categories
+
+        // Temp details whilst using fake data
+        var dataCount = 10;
+        var startTime = 0;
+        var maxTime = 86400;
+        var timeEventRange = 3600;
+        var frac = maxTime / dataCount;
+
+        var categories = ['Offline', 'Maintenance', 'Operational'];
+        var colors = ['red', 'orange', 'green'];
+        var xLabels = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm', '12am', '1am', '2am', '3am', '4am', '5am'];
+
+        var xSeconds = [];
+        for (var i = 1; i <= maxTime; i++) { xSeconds.push(i); }
+        //console.log(xSeconds);
+
+
+        // Temp messages for fake data
+        var messages = [
+            ["Offline", "Dead", "Broken"],  // Red
+            ["Repairing", "Refuel", "Idle"],  // Orange
+            ["Boggin", "More Boggin", "Working Hard"]  // Green
+        ];
+        // ----------------------------------------
+
+
+
+
+        // ----------------------------------------
+        // Fake TPH
+        var tempCumulative = 0;
+        for (var i = 0; i < xLabels.length; i++)
+        {
+            tphData[i] = 50 + (Math.round(Math.random() * 200));//{ name: xLabels[i], value: 50 + (Math.round(Math.random() * 200)) };            
+            tempCumulative += tphData[i];
+            tphDataCumulative[i] = tempCumulative;
+        }
+
+        console.log(tphData);
+
+        // March through the day building fake data
+        for (var i = 0; i < dataCount; i++)
+        {
+            // Pick category
+            var index = Math.round(Math.random() * (categories.length - 1));
+            index = Math.random() > 0.5 ? 2 : index;
+            var messageName = messages[index][Math.round(Math.random() * (messages[index].length - 1))];
+
+            var duration = (frac + (Math.random() * 2 - 1) * timeEventRange) / 60 / 60;
+            data.push({
+                name: messageName,//typeItem.name,
+                value: [
+                    index,
+                    startTime,
+                    startTime + duration,
+                    duration
+                ],
+                itemStyle: {
+                    normal: {
+                        color: colors[index] //typeItem.color
+                    }
+                }
+            });
+
+            startTime += duration;
+        }
+        // ----------------------------------------
+
+
+
+
+        // ----------------------------------------
+        // Custom render for timeline
+        var customTypes = ["Bar", "Box", "Line"];
+        var customTypeOffsets = [80, 60, -260];
+        function renderItem(params, api, customType)
+        {
+            var categoryIndex = api.value(0);
+            var start = api.coord([api.value(1), categoryIndex]);
+            var end = api.coord([api.value(2), categoryIndex]);
+            var height = api.size([0, 1])[1] * 20 //0.6;
+
+            // This is the canvas rect to clip against
+            var clipRect = { x: params.coordSys.x, y: params.coordSys.y - height * 2, width: params.coordSys.width, height: params.coordSys.height * 2 };
+
+            // Offset of each bar
+            var hOffset = customTypeOffsets[categoryIndex];
+
+            if (customType == customTypes[2])
+            {
+                var newY = categoryIndex == 2 ? start[1] + hOffset : start[1];
+                var newH = categoryIndex == 2 ? -hOffset + categoryIndex : hOffset;
+                var rectShape = echarts.graphic.clipRectByRect(
+                    {
+                        x: start[0],
+                        y: newY,//start[1] + hOffset,// - height / 2,//hOffset + start[1] - height / 2,
+                        width: 1,//customType == customTypes[1] ? height / 2 : end[0] - start[0],
+                        height: newH// -hOffset + categoryIndex// height / 2
+                    }
+                    ,
+                    clipRect
+                );
+            } else
+            {
+                var rectShape = echarts.graphic.clipRectByRect(
+                    {
+                        x: start[0],
+                        y: hOffset + start[1] - height / 2,
+                        width: customType == customTypes[1] ? height / 2 : end[0] - start[0],
+                        height: height / 2
+                    }
+                    ,
+                    clipRect
+                );
+            }
+
+            return rectShape && {
+                type: 'rect',
+                shape: rectShape,
+                style: api.style()
+            };
+        }
+        // ----------------------------------------
+
+
+
+
+        option = {
+            tooltip: {
+                // Display info about the events 
+                formatter: function (params)
+                {
+                    //return params.value[1];
+                    //return params.marker + Math.floor((params.value[1] / 3600 + 5) % 24);
+                    var hour = xLabels[Math.floor(params.value[1])];
+                    var minute = Math.floor((params.value[1] % 1) * 60);
+                    var duration = Math.round(params.value[3] * 60);
+                    var time = insert(hour, hour.length - 2, ":" + minute);
+                    return params.marker + time + "<br/ >" + params.name + "<br/ >" + " for " + duration + " min";
+                }
+            },
+            title: {
+                text: 'Bogger Drilldown',
+                left: 'center'
+            },
+
+            grid: {
+                height: 250//'30%'
+            },
+            xAxis: [
+
+                {
+                    type: 'category',
+                    data: xLabels,
+                    axisTick: { show: false },
+                    axisLabel: {
+                        rotate: 90,
+                        fontSize: 8
+                    },
+                    splitLine: { lineStyle: { color: ['darkgrey'], type: 'solid' } }
+                },
+                {
+                    //type: 'category',
+                    show: false,//,
+                    min: 0,
+                    max: 24,
+                    //data: xSeconds,
+                    //interval: 10
+                    // axisTick: { show: false },
+                    // splitLine: { lineStyle: { color: ['darkgrey'], type: 'solid' } }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    name: '',
+                    min: 0,
+                    max: 5000,
+                    position: 'right',
+                    axisLabel: {
+                        fontSize: 10,
+                        formatter: '{value}t',
+                        color: 'cyan'
+                    },
+                    splitLine: { show: false }
+                },
+                {
+                    type: 'value',
+                    name: '',
+                    min: 0,
+                    max: 300,
+                    position: 'left',
+                    axisLabel: {
+                        fontSize: 10,
+                        formatter: '{value}t',
+                        color: 'yellow'
+                    },
+                    splitLine: { show: false }
+                }
+
+            ],
+
+            series:
+                [
+                    {
+                        // Cumulative line
+                        data: tphDataCumulative,
+                        type: 'line',
+                        xAxisIndex: 0,
+                        yAxisIndex: 0,
+                        color: 'cyan',
+                        tooltip: { formatter: '{b0}' + '<br />{c0}t' }
+                    }
+                    ,
+                    {
+                        // TPH bar
+                        data: tphData,
+                        type: 'bar',
+                        barWidth: '20%',
+                        xAxisIndex: 0,
+                        yAxisIndex: 1,
+                        color: 'orange',
+                        tooltip: { formatter: '{b0}' + '<br />{c0} tonnes' }
+                    }
+                    ,
+                    {
+                        // Custom Event Bars
+                        type: 'custom',
+                        renderItem: function (params, api) { return renderItem(params, api, customTypes[0]); },//renderItem,
+                        itemStyle: {
+                            normal: {
+                                opacity: 0.33
+                            }
+                        },
+                        encode: { x: [1, 2], y: 0 },
+                        data: data,
+                        z: 10,
+                        xAxisIndex: 1,
+                        yAxisIndex: 1
+                    }
+                    ,
+                    {
+                        // Custom Event Box
+                        type: 'custom',
+                        renderItem: function (params, api) { return renderItem(params, api, customTypes[1]); },//renderItem,
+                        itemStyle: {
+                            normal: {
+                                opacity: 1.0
+                            }
+                        },
+                        encode: { x: [1, 2], y: 0 },
+                        data: data,
+                        xAxisIndex: 1,
+                        yAxisIndex: 1
+                    }
+                    ,
+                    {
+                        // Custom Event Line to Center
+                        type: 'custom',
+                        renderItem: function (params, api) { return renderItem(params, api, customTypes[2]); },//renderItem,
+                        itemStyle: {
+                            normal: {
+                                opacity: 1.0
+                            }
+                        },
+                        encode: { x: [1, 2], y: 0 },
+                        data: data,
+                        xAxisIndex: 1,
+                        yAxisIndex: 1
+                    }
+                ]
+        };
+
+
+        if (option && typeof option === "object")
+        {
+            myChart.setOption(option, true);
+        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+
+    <style>
+        /* Pop up form */
+        body {
+            background-color: #353535;
+        }
+
+
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+
+
+        /* Modal Content */
+        .adj {
+
+            /* Hidden by default */
+
+            /* Stay in place */
+
+            /* Sit on top */
+            padding-top: 100px;
+            /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+
+
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        .adj-content {
+
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 80%;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+
+
+            max-height: 100%;
+            /*calc(100vh - 210px);*/
+
+        }
+
+
+        .adj-header {
+            padding: 2px 16px;
+            background-color: #232130;
+            color: rgb(255, 255, 255);
+        }
+
+        .adj-body {
+            padding: 2px 16px;
+            background-image: linear-gradient(rgb(60, 70, 92), rgb(37, 37, 37));
+            color: rgb(255, 255, 255);
+        }
+
+        .adj-footer {
+            padding: 2px 16px;
+            background-color: #232130;
+            color: white;
+            text-align: center;
+            border-top: 1px solid #888;
+        }
+
+        .adj-card {
+            border: 1px solid #888;
+            margin: 15px 0px;
+            padding: 5px 15px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+        }
+
+        .disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+
+        .mGrid,
+        .mGridOuter {
+            display: grid;
+            grid-gap: 0px;
+            grid-template-columns: 3fr 3fr 3fr 4fr;
+            border-top: 1px solid rgba(128, 128, 128, 0.493);
+            grid-row-gap: 50px;
+        }
+
+
+        .group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 450px));
+            grid-gap: 10px;
+            text-align: center;
+        }
+
+        .item {
+            box-shadow: 4px 4px 9px 0px #00000042;
+            background: #242d38;
+            border-radius: 0px;
+            text-align: center;
+        }
+
+        .chart {
+            height: 300px;
+            width: 100%;
+            background: black;
+        }
+    </style>
+
+
+</head>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="echarts.min.js"></script>
+
+
+
+
+<body>
+    <div ng-app="myApp" ng-controller="reportBuilderCtrl" id="targetsForm">
+        <!-- <div ng-app="myApp" ng-controller="myCtrl"> -->
+
+        <div class="adj-content">
+            <div class="adj-header">
+                <h2>Western Flanks</h2>
+                <div ng-repeat="(key, value) in totals">
+                    {{key }} : {{value}}
+                </div>
+            </div>
+
+            <div class="adj-body">
+
+                <div class="group">
+                    <div ng-repeat="x in chartData" class="item">
+                        <div id="{{x[2][7]}}" class="chart"> </div>
+                        <h4>{{x[2][4]}} {{x[2][5]}}</h4>
+                        <h4>Target: {{x[2][0]}}</h4>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+
+<script>
+
+    var app = angular.module("myApp", []);
+    app.controller("reportBuilderCtrl", function ($scope, $interval, $http, $httpParamSerializerJQLike, $timeout)
+    {
+        $scope.chartData;
+        $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+
+        $scope.getMonthlyBuilderData = function ()
+        {
+            // ------------------------------------------------------------------------
+            // Get monthly data
+            var request = $http({
+                method: 'POST', url: 'read.php', data: { 'func': 4 }
+            })
+            request.then(function (response)
+            {
+                // Chart Data
+                $scope.chartData = response.data[0];
+
+                // Totals Data
+                $scope.totals = response.data[1];
+
+                //console.log("data receieved...");
+                //console.log(response);
+
+                $timeout(function () { $scope.buildCharts(); });
+
+            }, function (error) { });
+        };
+
+
+        $scope.buildCharts = function ()
+        {
+            var list = document.getElementsByClassName("chart");
+            //console.log(list.length);
+            for (let item of list)
+            {
+                $scope.makaChart(item.id, $scope.chartData[item.id]);
+            }
+        };
+
+
+
+        $scope.getMonthlyBuilderData();
+        $interval(function ()
+        {
+            $scope.getMonthlyBuilderData();
+            //console.log("Interval log...  every 5 seconds...");
+        }, 3000);
+
+
+
+        $scope.makaChart = function (id, _data)
+        {
+            var dom = document.getElementById(id);
+            var myChart = echarts.init(dom, 'dark');
+
+            //console.log(_data);
+
+            var daily = _data[2][0] / _data[0].length;
+            var days = [];
+            var targets = [];
+            for (var i = 0; i < _data[0].length; i++)
+            {
+                days[i] = i + 1;
+                targets[i] = Math.round((i + 1) * daily);
+            }
+            //console.log(targets);
+
+            var option = null;
+            option = {
+                //color: ['#3398DB'],
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '1%',
+                    top: '2%',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: days,
+                        //data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        axisTick: {
+                            alignWithLabel: true
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: 'Daily',
+                        type: 'bar',
+                        //barWidth: '60%',
+                        data: _data[0]
+                    },
+                    {
+                        name: 'Cumulative',
+                        type: 'bar',
+                        //barWidth: '60%',
+                        data: _data[1]
+                    }
+                    ,
+                    {
+                        name: 'Target',
+                        type: 'line',
+                        lineStyle: { color: 'yellow' },
+                        data: targets
+                    }
+                ]
+            };
+
+            if (option && typeof option === "object")
+            {
+                myChart.setOption(option, true);
+            }
+        };
+    });
+
+</script>
+
+</html>

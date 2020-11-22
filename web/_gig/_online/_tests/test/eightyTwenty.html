@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<style>
+    .container {
+        /*/ display: flex;*/
+        /*justify-content: space-between;
+        /*height: 100%;
+        width: 100%;*/
+        margin: auto;
+        clear: both;
+    }
+
+    .box {
+        height: 40%;
+        width: 50%;
+        clear: both;
+    }
+</style>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    /* Create three equal columns that floats next to each other */
+    body {
+        margin: auto;
+        text-align: center;
+        color: rgb(161, 170, 192);
+        font-family: Arial, Helvetica, sans-serif;
+        /*background: rgb(41, 41, 41);*/
+        background: rgb(255, 255, 255);
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .column1,
+    .column2,
+    .column3 {
+        float: left;
+        padding: 10px;
+        height: 300px;
+
+
+    }
+
+    .column1 {
+        width: 100%;
+    }
+
+    .column2 {
+        width: 50%;
+    }
+
+    .column3 {
+        width: 33.33%;
+    }
+
+    .rcorners1 {
+        border-radius: 5px;
+        /* background: #535353dc; */
+        border: 1px solid rgb(96, 122, 139);
+        padding: 0px;
+        /* width: 500px;
+        height: 400px; */
+        margin: auto;
+        margin-bottom: 3px;
+        box-shadow: 0px 15px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+
+    @media screen and (max-width: 600px) {
+
+        .column1,
+        .column2,
+        .column2 {
+            width: 100%;
+        }
+    }
+</style>
+
+<body style="height: 100%; margin: 0">
+
+    <div class="rcorners1">
+        <div class="row">
+            <div id="tph" class="column3"></div>
+            <div id="uofa" class="column3"></div>
+            <div id="pie" class="column3"></div>
+        </div>
+    </div>
+
+    <div class="rcorners1">
+        <div class="row">
+            <div id="idle" class="column3"></div>
+            <div id="operating" class="column3"></div>
+            <div id="down" class="column3"></div>
+        </div>
+    </div>
+
+    <div class="rcorners1">
+        <div class="row">
+            <div id="timeline" class="column1"></div>
+        </div>
+    </div>
+
+
+
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script src=" https://code.jquery.com/jquery-3.3.1.min.js"> </script>
+
+    <!-- Our script -->
+    <script src="assets/js/ChartFactory.js"></script>
+
+    <script type="text/javascript">
+
+
+
+        var assetIDThisPage;
+        const MajorGroup = {
+            IDLE: 'Idle',
+            OPERATING: 'Operating',
+            DOWN: 'Down'
+        }
+
+
+        // NG should call this 
+        // on routing 
+        RefreshPage("BL085");
+
+
+        // Could be all be an async-op on server side?
+        function RefreshPage(_assetID)
+        {
+            assetIDThisPage = _assetID;
+            CreateTPH();
+            CreateUofA();
+            CreateParetosAndTimeline();
+        }
+
+        function CreateTPH()
+        {
+            $.ajax({
+                url: "php/equip_day_tph.php",
+                type: "POST",
+                data: { assetID: assetIDThisPage },
+                dataType: 'json',
+
+                success: function (data)
+                {
+                    Charts.CreateTPH("tph", data);
+                }
+            });
+        }
+
+        function CreateParetosAndTimeline()
+        {
+            $.ajax({
+                url: "php/equip_full_events.php",
+                type: "POST",
+                data: { assetID: assetIDThisPage },
+                dataType: 'json',
+
+                success: function (data)
+                {
+                    Charts.CreatePareto("idle", MajorGroup.IDLE, data);
+                    Charts.CreatePareto("operating", MajorGroup.OPERATING, data);
+                    Charts.CreatePareto("down", MajorGroup.DOWN, data);
+                    Charts.CreateTimeLine("timeline", data);
+                }
+            });
+        }
+
+        function CreateUofA()
+        {
+            $.ajax({
+                url: "php/equip_time_usage_model.php",
+                type: "POST",
+                data: { assetID: assetIDThisPage },
+                dataType: 'json',
+
+                success: function (data)
+                {
+                    Charts.CreateUofA("uofa", data);
+                    Charts.CreateUofAPie("pie", data);
+                }
+            });
+        }
+
+    </script>
+</body>
+
+</html>

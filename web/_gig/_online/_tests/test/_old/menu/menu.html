@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang=''>
+
+<head>
+   <meta charset='utf-8'>
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="menu/styles.css">
+   <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+   <script src="menu/script.js"></script>
+
+   <title>Site</title>
+</head>
+
+<body>
+   <nav>
+      <div id='cssmenu'>
+         <ul>
+            <li><a href='#'>Home</a></li>
+            <li class='active'><a href='#'>NewCrest (example)</a>
+               <ul>
+
+                  <li><a href='#'>Shifts</a>
+                     <ul>
+                        <li><a href='#'>Day</a></li>
+                        <li><a href='#'>Night</a></li>
+                     </ul>
+                  </li>
+                  <li><a href='#'>Sites</a>
+                     <ul>
+                        <li><a href='#' class="test">Mine A</a></li>
+                        <li><a href='#'>Mine B</a></li>
+                        <li><a href='#'>Mine C</a></li>
+                     </ul>
+                  </li>
+                  <li><a href='#'>Equipment</a>
+                     <ul>
+                        <li><a href='#'>Bogger A</a></li>
+                        <li><a href='#'>Bogger B</a></li>
+                        <li><a href='#'>Bogger C</a></li>
+                     </ul>
+                  </li>
+                  <li><a href='#'>Reports</a></li>
+               </ul>
+            </li>
+            <li><a href='#'>System</a>
+               <ul>
+                  <li><a href='#'>Log Out</a></li>
+                  <li><a href='#'>Contact</a></li>
+                  <li><a href='#'>Information</a></li>
+               </ul>
+            </li>
+
+         </ul>
+      </div>
+   </nav>
+
+   <script>
+      $(document).ready(function () {
+         $(".test").click(function () {
+            $('#content').load('charts.html')
+         });
+      });
+   </script>
+
+</body>
+<html>

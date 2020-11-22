@@ -1,0 +1,132 @@
+<div ng-controller="firstCallUp" id="firstCallUp" class="adj-bg">
+    <!-- <div ng-app="myApp" ng-controller="myCtrl"> -->
+
+    <!-- callUpModal content -->
+    <div class="adj-content">
+        <div class="adj-header">
+            <h2 ng-bind="formTitle">First Operating Call-up</h2>
+        </div>
+
+        <div class="adj-body">
+            <h4>
+                {{ shiftTitle }} {{ meta.Date }}
+                <!-- <i class="fas fa-sun" ng-bind="meta.Date"></i> -->
+            </h4>
+
+            <!-- <div ng-repeat="x in data | limitTo:3" ng-init="siteIndex = $index">
+                <div ng-repeat="y in x.equipmentByFunction.LOADING">{{y.ID}}</div>
+            </div> -->
+
+            <div class="adj-card">
+                <div class="cGrid">
+                    <div class="cGrid-head">#</div>
+                    <div class="cGrid-head"><i class="far fa-clock"> Call-up</i></div>
+                    <div class="cGrid-head">Status</div>
+                    <div class="cGrid-head"><i class="far fa-id-card"> Operator</i></div>
+                    <div class="cGrid-head"><i class="far fa-map"> Site</i></div>
+                    <div class="cGrid-head"><i class="fas fa-map-marker-alt"> Location</i></div>
+                    <div class="cGrid-head">{{ timeMarker }}</div>
+                </div>
+
+                <h4>Boggers</h4>
+                <div ng-repeat="x in data | limitTo:3" ng-init="siteIndex = $index">
+                    <div ng-repeat="y in x.equipmentByFunction.LOADING"
+                        ng-init="d = getCallUpDetails(siteIndex, y); equipIndex = $index" ng-if="y.ID != null">
+
+                        <!-- <li><a ng-href="#!equip/{{ $parent.$parent.$index }}/{{ z.Index}}" -->
+                        <!-- <div ng-if="y.function == 'LOADING'" class="cGrid"> -->
+                        <div class="cGrid">
+                            <div class="cGrid-item"><a ng-href="#!equip/{{siteIndex}}/{{y.Index}}"
+                                    ng-click="close()">{{y.ID}}</a>
+                            </div>
+                            <div class="cGrid-item">{{ d[1] }}</div>
+                            <div class="cGrid-item"><span
+                                    ng-style='getEquipStyle(d[0].majorGroup)'>&#9679;</span>{{ d[0].status}}
+                            </div>
+                            <div class="cGrid-item">{{ d[0].operator}}</div>
+                            <div class="cGrid-item">{{ d[0].mineArea}}</div>
+                            <div class="cGrid-item">{{ d[0].location}}</div>
+                            <div ng-if="firstOrLast==0">
+                                <span
+                                    ng-style="{'color': (d[2] > 0) ? 'red' : 'green'}">{{firstOrLast == 0 ? d[2] > 0 ? '&#9660' : '&#9650' : ''}}</span>
+                                {{d[2]}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </br>
+
+                <h4>Trucks</h4>
+                <div ng-repeat="x in data | limitTo:3" ng-init="siteIndex = $index">
+                    <div ng-repeat="y in x.equipmentByFunction.HAULING"
+                        ng-init="d = getCallUpDetails(siteIndex,y); equipIndex = $index" ng-if="y.ID != null">
+                        <div class="cGrid">
+                            <div class="cGrid-item"><a ng-href="#!equip/{{siteIndex}}/{{y.Index}}"
+                                    ng-click="close()">{{ y.ID}}</a></div>
+                            <div class="cGrid-item">{{ d[1] }}</div>
+                            <div class="cGrid-item"><span
+                                    ng-style='getEquipStyle(d[0].majorGroup)'>&#9679;</span>{{ d[0].status}}
+                            </div>
+                            <div class="cGrid-item">{{ d[0].operator}}</div>
+                            <div class="cGrid-item">{{ d[0].mineArea}}</div>
+                            <div class="cGrid-item">{{ d[0].location}}</div>
+                            <div ng-if="firstOrLast==0">
+                                <span
+                                    ng-style="{'color': (d[2] > 0) ? 'red' : 'green'}">{{firstOrLast == 0 ? d[2] > 0 ? '&#9660' : '&#9650' : ''}}</span>
+                                {{d[2]}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </br>
+
+                <h4>Drills</h4>
+                <div ng-repeat="x in data | limitTo:3" ng-init="siteIndex = $index">
+                    <div ng-repeat="y in x.equipmentByFunction.P"
+                        ng-init="d = getCallUpDetails(siteIndex,y); equipIndex = $index" ng-if="y.ID != null">
+                        <div class="cGrid">
+                            <div class="cGrid-item"><a ng-href="#!equip/{{siteIndex}}/{{y.Index}}"
+                                    ng-click="close()">{{ y.ID}}</a></div>
+                            <div class="cGrid-item">{{ d[1] }}</div>
+                            <div class="cGrid-item"><span
+                                    ng-style='getEquipStyle(d[0].majorGroup)'>&#9679;</span>{{ d[0].status}}
+                            </div>
+                            <div class="cGrid-item">{{ d[0].operator}}</div>
+                            <div class="cGrid-item">{{ d[0].mineArea}}</div>
+                            <div class="cGrid-item">{{ d[0].location}}</div>
+                            <div ng-if="firstOrLast==0">
+                                <span
+                                    ng-style="{'color': (d[2] > 0) ? 'red' : 'green'}">{{firstOrLast == 0 ? d[2] > 0 ? '&#9660' : '&#9650' : ''}}</span>
+                                {{d[2]}}
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-repeat="y in x.equipmentByFunction.D"
+                        ng-init="d = getCallUpDetails(siteIndex,y); equipIndex = $index" ng-if="y.ID != null">
+                        <div class="cGrid">
+                            <div class="cGrid-item"><a ng-href="#!equip/{{siteIndex}}/{{y.Index}}"
+                                    ng-click="close()">{{ y.ID}}</a></div>
+                            <div class="cGrid-item">{{ d[1] }}</div>
+                            <div class="cGrid-item"><span
+                                    ng-style='getEquipStyle(d[0].majorGroup)'>&#9679;</span>{{ d[0].status}}
+                            </div>
+                            <div class="cGrid-item">{{ d[0].operator}}</div>
+                            <div class="cGrid-item">{{ d[0].mineArea}}</div>
+                            <div class="cGrid-item">{{ d[0].location}}</div>
+                            <div ng-if="firstOrLast==0">
+                                <span
+                                    ng-style="{'color': (d[2] > 0) ? 'red' : 'green'}">{{firstOrLast == 0 ? d[2] > 0 ? '&#9660' : '&#9650' : ''}}</span>
+                                {{d[2]}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="adj-footer"></div>
+
+        </div>
+    </div>
+
+</div>
