@@ -17,27 +17,36 @@
 
         <?
 $mail_to_send_to = "matt@gigworth.com.au";
-$from_email = "matt@gigworth.com.au";
+$from_email = "contact@gigworth.com.au";
 $sendflag = $_REQUEST['sendflag'];    
 $name=$_REQUEST['name'];
+
+$spacing = "\r\n" . "\r\n";
 
 if ( $sendflag == "send" )
 {
     $subject= "Gigworth Contact [" . $name . "]";
     $email = $_REQUEST['email'] ;
    
-    $message = "\r\n" . "DO NOT REPLY DIRECTLY TO THIS EMAIL";
-    $message .= "\r\n" . "Name: $name" . "\r\n" . "\r\n"; //get recipient name in contact form
+    $message = "";
+    //$message = "\r\n" . "DO NOT REPLY DIRECTLY TO THIS EMAIL";
+    
+    $message .= "\r\n" . "Name:" . "\r\n" . $name;
+    $message .= $spacing; 
+
+    $message .= "\r\n" . "Email:" . "\r\n" . $email;
+    $message .= $spacing; 
+
     $message .= "Message:" . "\r\n";
-    $message = $message.$_REQUEST['message'] . "\r\n" ;//add message from the contact form to existing message(name of the client)
+    $message = $message.$_REQUEST['message'] . "\r\n" ;
    
     $headers = "From: $from_email" . "\r\n" . "Reply-To: $email"  ;
     $a = mail( $mail_to_send_to, $subject, $message, $headers );
     if ($a)
     {
-            print("Thanks for getting in touch! We will return your message shortly.");
+        print("<h2>Thanks for getting in touch! We will return your message shortly.</h2>");
     } else {
-            print("Something went wrong when trying to send your message... please try again.");
+        print("<h2>Something went wrong when trying to send your message... please try again.</h2>");
     }
 }
 
