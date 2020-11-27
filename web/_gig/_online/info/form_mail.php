@@ -16,7 +16,7 @@
     <div class="content" style="display: flex; flex-direction: column;">
 
         <?
-$mail_to_send_to = "matt@gigworth.com.au";
+$mail_to_send_to = "matt@gigworth.com.au, dave@gigworth.com.au";
 $from_email = "contact@gigworth.com.au";
 $sendflag = $_REQUEST['sendflag'];    
 $name=$_REQUEST['name'];
