@@ -1,0 +1,82 @@
+<!-- <link rel="stylesheet" href="assets/css/dash_equip.css"> -->
+
+<div>
+    <div class="equipGrid">
+
+        <div class="equipHeader">
+            <h1 ng-bind="equipName"> {{ equipName }}</h1>
+            <h4> <a href="./"><i class="far fa-arrow-alt-circle-left"></i> Back to sites</a></h4>
+        </div>
+
+        <div class="equipHeader">
+            <i class="fas fa-street-view"></i> Operator : {{ opName }}</br>
+            <i class="fas fa-phone-volume"></i> Last Radio Call-in : {{ opLastRadio | date:'medium' }}</br>
+            <i class="far fa-clock"></i> Time since last call : {{ opTimeSinceLast }}</br>
+        </div>
+
+        <div class="equipHeader">
+            <i class="far fa-map"></i> Mine Area: {{ opMineArea }}</br>
+            <i class="fas fa-globe-americas"></i> Location : {{ opLocation }}</br>
+            <i class="fas fa-info-circle"></i> Current Status : {{ opCurrStatus }}</br>
+        </div>
+
+    </div>
+
+    </br>
+
+
+    <div class="equipGrid">
+
+        <div id="tph" class="equipChart">
+            <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+            <!-- <div id="equipLoader"></div> -->
+        </div>
+        <div id="uofa" class="equipChart">
+            <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+            <!-- <div id="equipLoader"></div> -->
+        </div>
+        <div id="pie" class="equipChart">
+            <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+            <!-- <div id="equipLoader"></div> -->
+        </div>
+    </div>
+
+    <div class="equipGrid">
+
+        <div id="operating" class="equipChart">
+            <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+            <!-- <div id="equipLoader"></div> -->
+        </div>
+        <div id="idle" class="equipChart">
+            <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+            <!-- <div id="equipLoader"></div> -->
+        </div>
+
+        <div id="down" class="equipChart">
+            <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+            <!-- <div id="equipLoader"></div> -->
+        </div>
+
+
+
+    </div>
+
+    <div id="timeline" class="equipChart">
+        <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+        <!-- <div id="equipLoader"></div> -->
+    </div>
+    <!-- 
+    <div class="rcorners1"> -->
+
+    <!-- <div ng-if="equip.function=='D'"> -->
+    <div>
+        <h1>Metric Data</h1>
+
+        <div ng-repeat="(key, value) in equip.shiftData[shift].metricData">
+            {{ value.name }} : (total = {{ value.total }}) | (avg = {{value.average}}) | (act = {{value.activity}})
+        </div>
+    </div>
+
+    <!-- </div> -->
+
+</div>

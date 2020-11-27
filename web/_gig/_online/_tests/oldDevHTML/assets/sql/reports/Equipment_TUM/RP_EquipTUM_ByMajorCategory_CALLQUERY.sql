@@ -1,0 +1,1 @@
+select * from [dbo].[RP_Equip_ByMajorCategory]  ('_startDate','_endDate', '_startShift', '_endShift') order by [date] asc, [equipment] asc 

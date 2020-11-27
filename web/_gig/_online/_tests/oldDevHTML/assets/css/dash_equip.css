@@ -1,0 +1,128 @@
+    /* body {        
+        background: rgb(65, 65, 65);
+    } */
+
+
+.equipGrid
+{
+    display: grid;        
+    overflow: hidden;
+    grid-template-columns: 1fr 1fr 1fr;
+    /* grid-auto-flow: dense;           */
+    /* grid-gap: 0px;   */
+    /* grid-row-gap: 70px; */
+    background-image: linear-gradient(rgb(60, 70, 92), rgb(37, 37, 37));
+}
+
+.equipChart, .equipHeader
+{
+    color: aliceblue;
+    margin-bottom: 15px;
+    /* border: 4px solid red;     */
+}
+.equipHeader
+{
+    height: 60px;     
+}
+.equipChart{
+    min-height: 200px;
+}
+
+
+
+ 
+
+
+
+
+
+
+
+
+    /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+
+  
+    #equipLoader {
+        /* position: inherit;
+        left: 50%;
+        top: 50%; */
+
+        z-index: 1;
+
+        /* width: 100px;*/
+        height: 100px;
+        margin: auto;
+        margin-top: 25%;
+        border: 10px solid #a5a5a5;
+        border-radius: 50%;
+        border-top: 10px solid #3498db;
+        width: 100px;
+        height: 100px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+    }
+
+    @-webkit-keyframes spin {
+        0% {
+            -webkit-transform: rotate(0deg);
+        }
+
+        100% {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Add animation to "page content" */
+    .animate-bottom {
+        position: relative;
+        -webkit-animation-name: animatebottom;
+        -webkit-animation-duration: 0.5s;
+        animation-name: animatebottom;
+        animation-duration: 0.5s
+    }
+
+    @-webkit-keyframes animatebottom {
+        from {
+            bottom: -100px;
+            opacity: 0
+        }
+
+        to {
+            bottom: 0px;
+            opacity: 1
+        }
+    }
+
+    @keyframes animatebottom {
+        from {
+            bottom: -100px;
+            opacity: 0
+        }
+
+        to {
+            bottom: 0;
+            opacity: 1
+        }
+    }
+
+    .rcorners1 {
+        border-radius: 5px;
+        background: #535353dc; 
+        border: 1px solid rgb(96, 122, 139);
+        padding: 0px;
+        /* width: 500px;
+        height: 400px; */
+        margin: auto;
+        margin-bottom: 3px;
+        box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
+    }

@@ -1,0 +1,159 @@
+<!-- <?php
+
+
+header('Location: login.html');
+return;
+
+?> -->
+
+
+<div class="mines-container">
+    <!-- <div ng-repeat="x in siteData  | limitTo:3" ng-init="siteIndex = $index" class="mines-card"> -->
+    <div ng-repeat="x in siteData" ng-init="siteIndex = $index" class="mines-card">
+
+        <h3 ng-bind="x.name"> </h3>
+
+        <!-- N A V I G A T I O N -->
+        <div class="mines-tabdiv">
+            <button class="{{siteIndex}}Btn active" ng-click="tabClick($event, siteIndex, x.name, 0)">Overview</button>
+            <button class="{{siteIndex}}Btn" ng-click="tabClick($event, siteIndex, x.name, 1)">Boggers</button>
+            <button class="{{siteIndex}}Btn" ng-click="tabClick($event, siteIndex, x.name, 2)">Trucks</button>
+            <button class="{{siteIndex}}Btn" ng-click="tabClick($event, siteIndex, x.name, 3)">Drills</button>
+        </div>
+
+
+
+
+        <!-- Overview --------------------------------->
+        <div id="0" class="{{x.name}}Tab mines-inner">
+            <h6>Overview</h6>
+            <!-- <div class="mines-chartdiv">TPH Chart?</div> -->
+            <div>
+                <h6>Average Production TPH: {{x.shiftData[0].avg}}</h6>
+            </div>
+            <div class="mines-chartdiv" id="{{siteIndex}}TPH""></div>
+            <div class=" mines-chartdiv" id="{{siteIndex}}CUMUL""></div>
+            <div class=" mines-chartdiv matMov" id="{{siteIndex}}MM""></div>
+
+            <span><h6>Equipment at Site</h6></span>
+            <div class=" mines-equipgridtitle">Boggers</div>
+            <div class="mines-equipgrid">
+                <div ng-repeat="y in x.equipmentByFunction.LOADING" ng-init="e = getEquipObject(siteIndex, y.Index)">
+                    <a class="mines-equipbtn" ng-href="#!equip/{{siteIndex}}/{{y.Index}}"
+                        ng-style='getEquipButtonSylte({{e}})'>{{ e.id }}</a>
+                </div>
+            </div>
+
+
+            <div class="mines-equipgridtitle">Trucks</div>
+            <div class="mines-equipgrid">
+                <div ng-repeat="y in x.equipmentByFunction.HAULING" ng-init="e = getEquipObject(siteIndex, y.Index)">
+                    <a class="mines-equipbtn" ng-href="#!equip/{{siteIndex}}/{{y.Index}}"
+                        ng-style='getEquipButtonSylte({{e}})'>{{ e.id }}</a>
+                </div>
+            </div>
+
+
+            <div class="mines-equipgridtitle">P Drills</div>
+            <div class="mines-equipgrid">
+                <div ng-repeat="y in x.equipmentByFunction.P" ng-init="e = getEquipObject(siteIndex, y.Index)">
+                    <a class="mines-equipbtn" ng-href="#!equip/{{siteIndex}}/{{y.Index}}"
+                        ng-style='getEquipButtonSylte({{e}})'>{{ e.id }}</a>
+                </div>
+            </div>
+
+            <div class="mines-equipgridtitle">D Drills</div>
+            <div class="mines-equipgrid">
+                <div ng-repeat="y in x.equipmentByFunction.D" ng-init="e = getEquipObject(siteIndex, y.Index)">
+                    <a class="mines-equipbtn" ng-href="#!equip/{{siteIndex}}/{{y.Index}}"
+                        ng-style='getEquipButtonSylte({{e}})'>{{ e.id }}</a>
+                </div>
+            </div>
+        </div>
+        <!-------------------------------------------->
+
+
+
+
+
+
+
+        <!-- Boggers --------------------------------->
+        <div id="1" class="{{x.name}}Tab mines-inner" style="display:none">
+            <h6>{{ titleAvailable }}</h6>
+            <div ng-repeat="y in x.equipmentByFunction.LOADING"
+                ng-init="e = getEquipObject(siteIndex, y.Index); s = getShift()">
+                <div class="mines-bogtphgrid">
+                    <div>
+                        <a class="mines-equipbtn" ng-href="#!equip/{{siteIndex}}/{{y.Index}}"
+                            ng-style='getEquipButtonSylte({{e}})'>{{ e.id }}</a>
+                    </div>
+                    <div id="{{siteIndex}}-{{y.Index}}" class="equipAvailBar"></div>
+                    <div>
+                        <div>
+                            <h4>TPH: {{e.shiftData[0].tphAvg}}</h4>
+                        </div>
+                        <div>
+                            <h4>Total: {{e.shiftData[0].tphTotal}}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h6>{{ titleSummary }}</h6>
+            <div class="mine-sumcharts">
+                <div id="{{siteIndex}}-EquipTypeTPH" class="boggerTPH" style="height: 200px;"></div>
+                <div id="{{siteIndex}}-EquipTypePIE" class="boggerPIE" style="height: 200px;"></div>
+            </div>
+
+        </div>
+        <!-------------------------------------------->
+
+
+
+
+
+        <!-- Trucks --------------------------------->
+        <div id="2" class="{{x.name}}Tab mines-inner" style="display:none">
+            <h6>{{ titleAvailable }}</h6>
+            <div ng-repeat="y in x.equipmentByFunction.HAULING"
+                ng-init="e = getEquipObject(siteIndex, y.Index); s = getShift()">
+                <div class="mines-bogtphgrid">
+                    <div>
+                        <a class="mines-equipbtn" ng-href="#!equip/{{siteIndex}}/{{y.Index}}"
+                            ng-style='getEquipButtonSylte({{e}})'>{{ e.id }}</a>
+                    </div>
+                    <div id="{{siteIndex}}-{{y.Index}}" class="equipAvailBar"></div>
+                    <div>
+                        <div>
+                            <h4>TPH: {{e.shiftData[0].tphAvg}}</h4>
+                        </div>
+                        <div>
+                            <h4>Total: {{e.shiftData[0].tphTotal}}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h6>{{ titleSummary }}</h6>
+            <div class="mine-sumcharts">
+                <div id="{{siteIndex}}-EquipTypeTPH" class="boggerTPH" style="height: 200px;"></div>
+                <div id="{{siteIndex}}-EquipTypePIE" class="boggerPIE" style="height: 200px;"></div>
+            </div>
+        </div>
+        <!-------------------------------------------->
+
+
+
+        <!-- Drills --------------------------------->
+        <div id="3" class="{{x.name}}Tab mines-inner" style="display:none">
+            <div>To be implemented...</div>
+        </div>
+        <!-------------------------------------------->
+
+
+
+
+
+
+    </div>
+</div>
