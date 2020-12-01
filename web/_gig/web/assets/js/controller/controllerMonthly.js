@@ -1,5 +1,5 @@
 
-app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $interval) {
+app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $interval, $timeout) {
 
     // --------------------------------------------------------
     // Old
@@ -14,7 +14,11 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
 
 
-
+    // Set the view choice in the root so its 
+    // persistent with page reloads and equip filter
+    if ($rootScope.monthlyViewAsBars == undefined) {
+        $rootScope.monthlyViewAsBars = true;
+    }
 
 
 
@@ -29,6 +33,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
     $scope.fileContent = [];
 
     $scope.mappedPlan = [];
+    $scope.chartData = [];
 
     var fp = flatpickr('#test', {
         "minDate": new Date().fp_incr(1),
@@ -36,6 +41,15 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
         "altInput": true
     });
 
+
+    $scope.switchView = function (_state) {
+        $rootScope.monthlyViewAsBars = _state;
+        ClearAllCharts();
+        if (_state)
+            $scope.createMonthlyComplianceChart();
+        else
+            $scope.createMonthlyComplianceGauges();
+    }
 
 
     $scope.checkSiteValidForLoop = function (siteName, mapName) {
@@ -219,13 +233,59 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
         request.then(function (response) {
             console.log(response);
             $scope.mappedPlan = response.data;
-            if ($routeParams.func == 0)
-                $scope.createMonthlyComplianceChart();
+
+            // Create the data needed for charts
+            // and force a switch view to create charts
+            if ($routeParams.func == 0) {
+                $scope.prepareChartData();
+                $scope.switchView($rootScope.monthlyViewAsBars);
+            }
 
         }, function (error) {
             console.log(error);
         });
     }
+
+
+    $scope.prepareChartData = function () {
+        $scope.chartData = [];
+        for (var i = 1; i < $scope.mappedPlan[0].length; i++) {
+            if ($scope.mappedPlan[0][i][0] == "WF") {
+                //if ($scope.mappedPlan[i][4] != undefined && $scope.mappedPlan[i][3] > 0)
+                if ($scope.mappedPlan[0][i][3] > 0)
+                    $scope.chartData.push($scope.mappedPlan[0][i]);
+            }
+        }
+
+        var siteName = $rootScope.siteData[1].name;
+        console.log(siteName);
+        $scope.meta = $scope.mappedPlan[1][siteName];
+        //$scope.meta = $scope.mappedPlan[1]['Western Flanks'];
+        //console.log("Building chart...");
+        //console.log(chartData);
+        console.log($scope.chartData);
+    }
+
+
+    $scope.createMonthlyComplianceChart = function () {
+        $timeout(function () {
+            ChartsMonthly.CreateMonthlyCompliance2("monthlyChart", $scope.chartData);
+        }, 1);
+    }
+
+
+    $scope.createMonthlyComplianceGauges = function () {
+        $timeout(function () {
+            var elements = document.getElementsByClassName("chartdivcontent");
+            for (var i = 0; i < $scope.chartData.length; i++) {
+                ChartsMonthly.CreateMonthlyComplianceGauge(elements[i].id, $scope.chartData[i]);
+            }
+        }, 1);
+    }
+
+
+
+
 
 
 
@@ -236,58 +296,27 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
     $scope.getConfigs();
 
-    // Entry point for the chart view
-    if ($routeParams.func == 0) {
 
-        $interval(function () {
-            //console.log("Interval log... ");
-            $scope.getMappedActualsToPlan();
-        }, 3000);
-        $scope.getMappedActualsToPlan();
-    }
+    $scope.$watch('$viewContentLoaded', function () {
+        $timeout(function () {
 
-    // Entry point for the plan view
-    if ($routeParams.func == 1) {
-
-    }
-    // ----------------------------------------------------
-    // ----------------------------------------------------
-
-
-
-
-
-
-    $scope.createMonthlyComplianceChart = function () {
-        var chartData = [];
-        for (var i = 1; i < $scope.mappedPlan[0].length; i++) {
-            if ($scope.mappedPlan[0][i][0] == "WF") {
-                //if ($scope.mappedPlan[i][4] != undefined && $scope.mappedPlan[i][3] > 0)
-                if ($scope.mappedPlan[0][i][3] > 0)
-                    chartData.push($scope.mappedPlan[0][i]);
+            // Entry point for the chart view
+            if ($routeParams.func == 0) {
+                $scope.site = $rootScope.siteData[$scope.siteIndex];
+                // $interval(function () {
+                //     $scope.getMappedActualsToPlan();
+                // }, 3000);
+                $scope.getMappedActualsToPlan();
             }
-        }
 
-        var siteName = $rootScope.siteData[1].name;
-        console.log(siteName);
-        $scope.meta = $scope.mappedPlan[1][siteName];
-        //$scope.meta = $scope.mappedPlan[1]['Western Flanks'];
-        //console.log("Building chart...");
-        //console.log(chartData);
-        console.log(chartData);
-        ChartsMonthly.CreateMonthlyCompliance2("monthlyChart", chartData);
-    }
+            // Entry point for the plan view
+            if ($routeParams.func == 1) {
 
-
-
-
-
-
-
-
-
-
-
+            }
+        }, 1);
+    });
+    // ----------------------------------------------------
+    // ----------------------------------------------------
 
 
 

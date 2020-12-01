@@ -19,9 +19,6 @@
                     <a ng-href="#!site/{{siteIndex}}">
                         <h3>{{x.name}}</h3>
                     </a>
-                    </br>
-                    </br>
-
 
                     <!-- <div class="siteCardGrid">
                         <div>
@@ -194,8 +191,8 @@
                 <div class="utilgrid">
                     <div>Current Shift</div>
                     <div>
-                        <label class="switch"><input ng-init="state=shift" ng-model="state"
-                                ng-change="shiftSwitchChanged(state)" type="checkbox" id="togBtn" checked>
+                        <label class="switch"><input ng-init="state=!shift" ng-model="state"
+                                ng-change="switchShift(state)" type="checkbox" id="togBtn" checked>
                             <div class="slider round" switch-on="Day" switch-off="Night"></div>
                         </label>
                     </div>

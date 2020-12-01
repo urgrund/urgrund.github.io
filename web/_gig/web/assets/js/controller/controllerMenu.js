@@ -1,7 +1,3 @@
-
-
-// NOT CURRENTLY USED
-
 app.controller('Menu', function ($scope, $routeParams, $rootScope, $timeout) {
 
     //console.log("MENU CONTROLLER");

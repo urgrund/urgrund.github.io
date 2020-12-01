@@ -1,24 +1,59 @@
 <div class="cup">
-    <section-title icon="far fa-question-circle" title="Equipment Status" right=""></section-title>
-    <div class=" jumbogrid ">
-        <div ng-repeat=" y in equipToShow" class="jumbogriditemCompact ">
+
+    <section-title icon="far fa-question-circle" title="Equipment Status" right="" page="PRODUCTIVITY"></section-title>
+
+
+    <!-- Compact View -->
+    <div class="jumbogrid" ng-if="productivityViewAsCompact">
+        <div ng-repeat="y in equipToShow" class="jumbogriditemCompact">
             <div class="" ng-init="e = getEquipmentLastEvent(y)">
 
                 <div class="bg_black50 img_{{y.function}}">
-                    <h1 class="shadow" style="margin-left: 1rem;"> <a ng-href="#!equip/{{y.id}}"><i
-                                ng-class='equipStyleIcon[e.majorGroup]'
-                                ng-style='equipStyleColor[e.majorGroup]'></i>{{y.id}}</a></h1>
-
-                    <!-- <a ng-href="#!equip/{{y.id}}">
-                        <h1 class="shadow" style="margin-left: 1rem;"> <i ng-class='equipStyleIcon[e.majorGroup]'
-                                ng-style='equipStyleColor[e.majorGroup]'></i>{{y.id}}</h1>
-                    </a> -->
+                    <h2 class="shadow" style="margin-left: 1rem;"> <a ng-href="#!equip/{{y.id}}"><i
+                                ng-class='equipStyleIcon[e.majorGroup]' ng-style='equipStyleColor[e.majorGroup]'></i>
+                            {{y.id}}</a></h2>
                 </div>
 
                 <drill-down-header shift="{{shift}}" equip="y" style-group="flex flex-wrap" style-item="equipSmallInfo">
                 </drill-down-header>
-
             </div>
         </div>
     </div>
+
+
+    <!-- Expanded View -->
+    <div class="jumbogrid" ng-if="!productivityViewAsCompact">
+        <div ng-repeat="y in equipToShow" class="jumbogriditem">
+            <div class="" ng-init="e = getEquipmentLastEvent(y)">
+
+                <div class="bg_black50 img_{{y.function}}">
+                    <h2 class="shadow" style="margin-left: 1rem;"> <a ng-href="#!equip/{{y.id}}"><i
+                                ng-class='equipStyleIcon[e.majorGroup]' ng-style='equipStyleColor[e.majorGroup]'></i>
+                            {{y.id}}</a></h2>
+                </div>
+
+                <drill-down-header shift="{{shift}}" equip="y" style-group="flex flex-wrap" style-item="equipSmallInfo">
+                </drill-down-header>
+            </div>
+
+            <div>
+                <h2 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
+                <div ng-repeat="(key, value) in y.shiftData[shift].metricData" class="center flex underline"
+                    ng-if="value.total != 0"
+                    ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
+                    <div class="left">
+                        <h4> {{value.name}}</h4>
+                        <p class="light">({{value.site}}) {{value.activity}}</p>
+                    </div>
+                    <h2>{{value.total | number }}</h2>
+                </div>
+            </div>
+
+            <div>
+                <drill-down-chart name="Availability & Utilisation" chart="{{y.id}}">
+                </drill-down-chart>
+            </div>
+        </div>
+    </div>
+
 </div>

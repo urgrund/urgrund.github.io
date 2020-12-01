@@ -190,6 +190,15 @@ class ChartStyleContainer {
                 { offset: 1, color: '#006e53' }]
             }
         ]
+
+        this.TUMColorsByCategory = {
+            'Unplanned Breakdown': this.TUMColors[0],
+            'Planned Maintenance': this.TUMColors[1],
+            'Unplanned Standby': this.TUMColors[2],
+            'Operating Standby': this.TUMColors[3],
+            'Secondary Operating': this.TUMColors[4],
+            'Primary Operating': this.TUMColors[5],
+        }
         // ----------------------------------------------------------
 
     }
@@ -291,6 +300,16 @@ class ChartStyleContainer {
                 show: true,
                 alignWithLabel: true
             }
+        }
+    }
+
+    gridSpacing() {
+        return {
+            top: '10%',
+            bottom: '5%',
+            left: '3%',
+            right: '3%',
+            containLabel: true
         }
     }
 

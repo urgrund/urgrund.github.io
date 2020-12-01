@@ -181,8 +181,7 @@ class ChartsMonthly {
             toolbox: {
                 left: 'center',
                 feature: {
-
-                    restore: {}
+                    restore: { title: 'restore' }
                 }
             },
             grid: {
@@ -409,8 +408,11 @@ class ChartsMonthly {
 
 
     static CreateMonthlyCompliance2(_elementID, _data) {
-
-        var myChart = echarts.init(document.getElementById(_elementID), 'chartTone');
+        var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
+        var myChart = echarts.init(dom, ChartStyles.baseStyle);
+        //var myChart = echarts.init(document.getElementById(_elementID), 'chartTone');
 
         // 1 - location
         // 3 - plan
@@ -598,6 +600,98 @@ class ChartsMonthly {
         };
 
         SetOptionOnChart(option, myChart);
+    }
+
+
+
+
+
+    static CreateMonthlyComplianceGauge(_elementID, _data) {
+        var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
+        var myChart = echarts.init(dom, ChartStyles.baseStyle);
+
+
+        var option = {
+            backgroundColor: ChartStyles.backGroundColor,
+            textStyle: ChartStyles.textStyle,
+            toolbox: ChartStyles.toolBox(myChart.getHeight(), _elementID),
+
+            tooltip: {
+                formatter: "{a} <br/>{b} : {c}%",
+                textStyle: ChartStyles.toolTipTextStyle(),
+                axisPointer: ChartStyles.toolTipShadow(),
+                backgroundColor: ChartStyles.toolTipBackgroundColor()
+            },
+            grid: {
+                left: '0%',
+                right: '0%',
+                height: 80//'30%'
+            },
+            series: [
+                {
+                    name: _elementID,
+                    type: 'gauge',
+                    startAngle: 180,
+                    endAngle: 0,
+                    //detail: {formatter:'{value}%'},
+                    data: [{ value: 40, name: '111' }],
+                    radius: '80%',
+                    pointer: {
+                        //show: false,
+                        length: '100%',
+                        width: 5,
+                        color: ChartStyles.siteColors[0],
+                        textStyle: ChartStyles.textStyle
+                    },
+                    detail: {
+                        //show: false
+                        // formatter: data[3]
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: [
+                                [0.2, ChartStyles.siteColors[0]],
+                                [0.4, ChartStyles.TUMColors[4]],
+                                [1, ChartStyles.statusColors[2]]],
+                            width: 15,
+                            shadowColor: 'rgba(1, 1, 1, 0.4)',
+                            shadowBlur: 7,
+                            shadowOffsetX: 5,
+                            shadowOffsetY: 10
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisTick: ChartStyles.axisLineGrey,
+                    axisLabel: {
+                        textStyle: ChartStyles.textStyle,
+                        lineHeight: 100,
+                        distance: -40,
+                        padding: [0, 0, -15, 0],
+                        formatter: function (v) {
+                            switch (v + '') {
+                                case '0': return ('1st ' + monthShort[10]);
+                                case '100': return ('30th ' + monthShort[10]);
+                                default: return '';
+                            }
+                        },
+                        fontSize: ChartStyles.fontSizeSmall
+                    }
+                }
+            ]
+        };
+
+        setInterval(function () {
+            option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
+            myChart.setOption(option, true);
+        }, 2000);
+
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
     }
 
 }

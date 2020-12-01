@@ -2,31 +2,24 @@
 
 
     <!-- <div class="page-header"> -->
-    <div class="flex flex-start underline">
+    <!-- <div class="flex flex-start underline">
         <div class="sitePicMargin">
             <img class="sitePicTiny" ng-src="assets/img/site_{{siteIndex}}.jpg">
         </div>
-        <h2 class="left">{{site.name }} - Monthly Plan vs. Compliance</h2>
-        <!-- <h4 class="left">Monthly Compliance</h4> -->
+        <h2 class="left">{{site.name}} - <span class="light">Monthly Plan vs. Compliance</span></h2>
+
         <div>
         </div>
     </div>
-    </br>
+    </br> -->
+
+    <section-title icon="far fa-calendar-alt" title="Monthly Plan vs. Compliance" right="" page="MONTHLY">
+    </section-title>
+
 
     <div class="mines-center {{$parent.backGroundClassBlur}}">
 
         <div class="flex">
-            <!-- <div class="left">
-                <div class="flex flex-start">
-                    <div class="sitePicMargin rightline">
-                        <img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg">
-                    </div>
-                    <div>
-                        <h3 class="left"> {{site.name}}</h3>
-                        <h2>Plan vs. Compliance</h2>
-                    </div>
-                </div>
-            </div> -->
 
             <div class="overline underline">
                 <h5 class="light"><i class="fas fa-weight-hanging"></i> Target Tonnes</h5>
@@ -64,7 +57,17 @@
         </br>
         </br>
 
-        <div id="monthlyChart" class="h60pc">asdasd</div>
-        <!-- {{ mappedPlan }} -->
+
+        <div id="monthlyChart" class="h60pc" ng-if="monthlyViewAsBars"></div>
+
+
+
+        <div class="jumbogrid" ng-if="!monthlyViewAsBars">
+            <div ng-repeat="y in chartData" class="mnth_gauge">
+                <drill-down-chart name="{{y[1]}}" chart="{{y[1]}}"></drill-down-chart>
+            </div>
+        </div>
+
+
     </div>
 </div>

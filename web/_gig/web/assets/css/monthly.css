@@ -17,3 +17,9 @@
   .mnth_target_grid:hover {
     background: var(--menubtnhover);
   }
+
+.mnth_gauge
+{
+  width: 15rem;
+  height: 15rem;  
+}

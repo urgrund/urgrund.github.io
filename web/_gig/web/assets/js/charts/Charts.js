@@ -68,7 +68,7 @@ function ResizeAllCharts() {
 
 // Wipe all chart references
 function ClearAllCharts() {
-    console.log("Clearing all charts");
+    //console.log("Clearing all charts");
     for (var i = 0; i < allCharts.length; i++) {
         if (allCharts[i] != null) {
             allCharts[i].dispose();
@@ -146,7 +146,11 @@ class Charts {
 
 
     static CreateMPH2(_elementID, _data) {
-        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+        var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
+        var myChart = echarts.init(dom, ChartStyles.baseStyle);
+
 
         var fullDay = false;
 
@@ -319,13 +323,7 @@ class Charts {
             textStyle: ChartStyles.textStyle,
             //tooltip: ChartStyles.toolTip(),
             legend: { y: 'top', data: legend },
-            grid: {
-                top: '20%',
-                bottom: '5%',
-                left: '3%',
-                right: '3%',
-                containLabel: true
-            },
+            grid: ChartStyles.gridSpacing(),
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "TPH"),
             tooltip: {
                 confine: true,
@@ -335,7 +333,9 @@ class Charts {
                 backgroundColor: ChartStyles.toolTipBackgroundColor(),
                 formatter: function (params, index) {
                     return Label(params);
-                }
+                },
+                showDelay: 0,
+                transitionDuration: 0
             },
             xAxis: ChartStyles.xAxis(fullDay ? timeLabels24hr : timeLabelsShift[shift]),
             yAxis: [{
@@ -365,7 +365,10 @@ class Charts {
 
 
     static CreateMPH(_elementID, _data, _display) {
-        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+        //var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+        var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
 
         // Grab all the metrics recorded for this equipment 
         // Only interested if there was any metrics recorded this shift
@@ -509,7 +512,7 @@ class Charts {
             //tooltip: ChartStyles.toolTip(),
             legend: { y: 'top', data: legend },
             grid: {
-                top: '20%',
+                top: '10%',
                 bottom: '5%',
                 left: '3%',
                 right: '3%',
@@ -561,6 +564,8 @@ class Charts {
 
     static CreateTimeLine(_elementID, _data) {
         var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
         var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
         var _d = _data.shiftData[shift];
@@ -610,11 +615,12 @@ class Charts {
                     duration,
                     trueTime
                 ],
-                itemStyle: {
-                    normal: {
-                        color: ChartStyles.statusColors[colorIndex[groupIndex]] //colors[groupIndex] //typeItem.color
-                    }
-                }
+                itemStyle: { color: ChartStyles.TUMColorsByCategory[event.tumCategory] }
+                //itemStyle: {
+                //  normal: {
+                //    color: ChartStyles.statusColors[colorIndex[groupIndex]] //colors[groupIndex] //typeItem.color
+                //}
+                //}
             });
         }
 
@@ -737,7 +743,7 @@ class Charts {
                         renderItem: function (params, api) { return renderItem(params, api, customTypes[0]); },//renderItem,
                         itemStyle: {
                             normal: {
-                                opacity: 0.5
+                                opacity: 0.66
                             }
                         },
                         encode: { x: [1, 2], y: 0 },
@@ -791,7 +797,11 @@ class Charts {
 
 
     static CreateUofA(_elementID, _data) {
-        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+        var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
+        var myChart = echarts.init(dom, ChartStyles.baseStyle);
+
 
         var _d = _data.shiftData[shift].uofa;
 
@@ -811,19 +821,10 @@ class Charts {
 
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
-            title: ChartStyles.createTitle('Actual Availability, Utilisation & U of A'),// vs Target'),
+            //title: ChartStyles.createTitle('Actual Availability, Utilisation & U of A'),// vs Target'),
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "UofA"),
-            legend: {
-                top: 25,
-                data: ['Availability', 'Utilisation', 'U of A', 'Targets']// 'Target A', 'Target U', 'Target U of A']
-            },
-            grid: {
-                top: '20%',
-                bottom: '5%',
-                left: '3%',
-                right: '3%',
-                containLabel: true
-            },
+            legend: { y: 'top', data: ['Availability', 'Utilisation', 'U of A', 'Targets'] },
+            grid: ChartStyles.gridSpacing(),
             tooltip: {
                 confine: true,
                 trigger: 'axis',
@@ -836,7 +837,9 @@ class Charts {
                     string += ChartStyles.toolTipTextEntry(params[1].seriesName + ": " + RatioToPercent(params[1].value));
                     string += ChartStyles.toolTipTextEntry(params[2].seriesName + ": " + RatioToPercent(params[2].value));
                     return string;
-                }
+                },
+                showDelay: 0,
+                transitionDuration: 0
             },
             xAxis: ChartStyles.xAxis(timeLabelsShift[shift]),
             yAxis: {
@@ -925,17 +928,19 @@ class Charts {
     static CreateUofAPie(_elementID, _data) {
         // -------------------------------------------------------------
         //if (myPie == null)
-        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+        //var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+        var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
+        var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
         var _d = _data.shiftData[shift];
 
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
-            // title: {
-            //     text: "Time Usage Split"
-            // },
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "TimeUsageSplit"),
+
             tooltip: {
                 trigger: 'item',
                 formatter: function (params, index) {
@@ -1005,12 +1010,10 @@ class Charts {
 
 
     static CreatePareto(_elementID, _data, _colorIndex) {
-
-        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
-
-
-
-        //var eventData = _data;
+        var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
+        var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
         var eventCategories;
         var eventTotalDuration;
@@ -1035,8 +1038,11 @@ class Charts {
                     ++len;
             }
 
-            for (var key in eventCategories)
+            for (var key in eventCategories) {
                 newEvents.push({ "event": key, "duration": eventCategories[key] });
+                //console.log(key + "  ->  " + ServerInfo.config.configTUM[key]);
+            }
+
             newEvents.sort(function (a, b) { return b.duration - a.duration });
         }
 
@@ -1057,17 +1063,18 @@ class Charts {
             cumulative[i] = cumulative[i] / cumulative[cumulative.length - 1];
             eventBars[i] = {
                 value: newEvents[i].duration / 3600,
-                itemStyle: { color: ChartStyles.TUMColors[_colorIndex] }
-            };  //getItemStyle(newEvents[i], cumulative[i]);
+                //itemStyle: { color: ChartStyles.TUMColors[_colorIndex] }
+                //ServerInfo.config.configTUM[key]
+                itemStyle: { color: ChartStyles.TUMColorsByCategory[ServerInfo.config.configTUM[newEvents[i].event]] }
+            };
         }
 
         var barWidth = eventBars.length > 1 ? (eventBars.length > 3 ? '50%' : '20%') : '10%';
-        //console.log(cumulative);
+
 
         // Simple horizontal line to show the 80%
         var paretoLimit = new Array(newEvents.length);
         paretoLimit.fill(0.8, 0, newEvents.length);
-
 
         // Sub text for each chart
         var durationAsHours = (eventTotalDuration / 60 / 60).toFixed(2);
@@ -1087,6 +1094,7 @@ class Charts {
             textStyle: ChartStyles.textStyle,
             title: ChartStyles.createTitle(subText),
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "EventBreakdown"),
+            grid: ChartStyles.gridSpacing(),
             tooltip: {
                 trigger: 'axis',
                 //textStyle: ChartStyles.toolTipTextStyle(),
@@ -1154,14 +1162,14 @@ class Charts {
 
     static CreateTimeLineFlat(_elementID, _data) {
         var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
         var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
         var _d = _data.shiftData[shift];
 
-
         var categories = ['Down', 'Idle', 'Operating'];
-        var colorIndex = [2, 1, 0];
-        //var colors = ['red', 'orange', 'green'];
+        //var colorIndex = [2, 1, 0];        
 
         var data = [];
         for (var i = 0; i < _d.events.length; i++) {
@@ -1169,11 +1177,11 @@ class Charts {
 
             var majorGroup = event.majorGroup;// 
 
-            var groupIndex;
-            if (majorGroup == "OPERATING") groupIndex = 2;
-            if (majorGroup == "IDLE") groupIndex = 1;
-            if (majorGroup == "DOWN") groupIndex = 0;
-
+            var groupIndex = 1;
+            // if (majorGroup == "OPERATING") groupIndex = 2;
+            // if (majorGroup == "IDLE") groupIndex = 1;
+            // if (majorGroup == "DOWN") groupIndex = 0;
+            //console.log(event.status + "  ->  " + ServerInfo.config.configTUM[event.status]);
 
             // Convert the date-time to seconds with a 6hr offset
             var startTime = new Date(event.eventTime.date);
@@ -1185,10 +1193,7 @@ class Charts {
             startTime += 3600 * 24 * event.dayAhead;
             startTime -= 3600 * (shift == 0 ? 6 : 18); //(3600 * 6);
 
-            //var duration = _data.events[i].duration;
             var duration = event.duration;
-
-            //console.log(i + "  st: " + startTime + "   tt: " + trueTime);
             data.push({
                 //name: _data.events[i].status,
                 name: event.status,
@@ -1200,7 +1205,8 @@ class Charts {
                     duration,
                     trueTime
                 ],
-                itemStyle: ChartStyles.statusItemStyle(colorIndex[groupIndex])
+                itemStyle: { color: ChartStyles.TUMColorsByCategory[event.tumCategory] }
+                //itemStyle: ChartStyles.statusItemStyle(colorIndex[groupIndex])
             });
         }
 
@@ -1363,7 +1369,10 @@ class Charts {
 
     static CreateTimeLineFlatTime(_elementID) {
         var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
         var myChart = echarts.init(dom, ChartStyles.baseStyle);
+
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,

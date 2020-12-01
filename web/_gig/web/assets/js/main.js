@@ -1,13 +1,19 @@
+/*
+***************************************
+M I N E   M A G E 
+Front-end web application main entry point
+(c) 2020 Gigworth Pty Ltd
+Written by Matt Bell 
+*************************************** 
+*/
 
-
+//console.log = function () { }
 
 // Variables used outside of particular NG scopes  (ie. charts)
 var shift = 0;
-var shiftTitle = ['Day Shift', 'Night Shift'];
-
-var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-var month = new Array();
+const shiftTitle = ['Day Shift', 'Night Shift'];
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const month = new Array();
 month[0] = "January";
 month[1] = "February";
 month[2] = "March";
@@ -21,32 +27,29 @@ month[9] = "October";
 month[10] = "November";
 month[11] = "December";
 
-const MajorGroup = {
-    IDLE: 'Idle',
-    OPERATING: 'Operating',
-    DOWN: 'Down'
-}
+const monthShort = new Array();
+monthShort[0] = "Jan";
+monthShort[1] = "Feb";
+monthShort[2] = "Mar";
+monthShort[3] = "Apr";
+monthShort[4] = "May";
+monthShort[5] = "Jun";
+monthShort[6] = "Jul";
+monthShort[7] = "Aug";
+monthShort[8] = "Sep";
+monthShort[9] = "Oct";
+monthShort[10] = "Nov";
+monthShort[11] = "Dec";
 
 
 
-// TODO - Remove, I think only longterm is using
-const TUMCategories = ['Unplanned Breakdown',
-    'Planned Maintenance',
-    'Unplanned Standby',
-    'Operating Standby',
-    'Secondary Operating',
-    'Primary Operating'
-];
+// const MajorGroup = {
+//     IDLE: 'Idle',
+//     OPERATING: 'Operating',
+//     DOWN: 'Down'
+// }
 
 
-
-// TODO - this should be a config?
-//const functionMapping = {
-//LOADING: "Boggers",
-//HAULING: "Trucks",
-//P: "Solos",// "Production Drills",
-//D: "Jumbos"// "Development Drills"
-//};
 
 
 // =====================================================================================
@@ -54,7 +57,6 @@ const TUMCategories = ['Unplanned Breakdown',
 // =====================================================================================
 
 // Init the Angular application
-//var app = angular.module("myApp", ['ngRoute', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.exporter', 'ngMaterial', 'ngMessages']);
 var app = angular.module("myApp", ['ngRoute', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.exporter']);
 
 
@@ -62,7 +64,6 @@ var app = angular.module("myApp", ['ngRoute', 'ui.grid', 'ui.grid.resizeColumns'
 app.run(function ($rootScope, $http, $route) {
 
     $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
-
 
     // Set the shift upon load of the site
     // based on the time of day of the client
@@ -81,12 +82,19 @@ app.run(function ($rootScope, $http, $route) {
     $rootScope.siteData = null;
     $rootScope.cachedData = [];
 
+    //$rootScope.configs = [];
+
 
     // ------------------------------------------------------
 
     /** Set the data object that the core of the SIC
      * tool will interface with. */
     $rootScope.setNewSiteData = function (_data) {
+
+        if (_data == undefined) {
+            console.log("Trying to set unassigned data");
+            return;
+        }
 
         var jsonString = JSON.stringify(_data);
         var newData = JSON.parse(jsonString);
@@ -102,10 +110,7 @@ app.run(function ($rootScope, $http, $route) {
         // All equip next
         $rootScope.equipment = $rootScope.siteData.pop();
 
-
         $rootScope.siteDataDate = $rootScope.convertToNiceDateObject($rootScope.meta.Date);
-
-
         $rootScope.functionMapping = $rootScope.meta.EquipmentFunctionMap;
 
         // Create a $root list of equipment by function
@@ -146,7 +151,7 @@ app.run(function ($rootScope, $http, $route) {
 
     $rootScope.fetchSiteData = function (_dates, _setAfterFetch = false) {
 
-        var urlGetData = '../dev/php/get_site_data.php';
+        var urlGetData = ServerInfo.URL_CreateSiteData;
         for (var i = 0; i < _dates.length; i++) {
             var date = _dates[i];
             //console.log(date);
@@ -158,11 +163,6 @@ app.run(function ($rootScope, $http, $route) {
                 data: _data
             })
             request.then(function (response) {
-                // console.log("Response.....");
-                // console.log(date);
-                // console.log(response.data);
-                //console.log(response);
-                // console.log(".............");
                 const { length } = $rootScope.cachedData;
                 const found = $rootScope.cachedData.some(el => el[el.length - 1].Date === response.data[el.length - 1].Date);
 
@@ -186,13 +186,14 @@ app.run(function ($rootScope, $http, $route) {
         }
 
 
+        // THIS IS FOR LOCAL OFFLINE DATA, SUCH AS THE ONLINE DEMO
 
-        // THIS WILL CHANGE TO NG PHP CALL
         // for (var i = 0; i < _dates.length; i++) {
         //     var date = _dates[i];
 
         //     //var file = 'http://localhost/web/sitedata/' + date + '.json';
-        //     var file = '//localhost/web/sitedata/' + date + '.json';
+        //     //var file = '//localhost/web/sitedata/' + date + '.json';
+        //     var file = 'sitedata/' + date + '.json';
 
         //     // console.log(date);console.log(date);
 
@@ -229,63 +230,40 @@ app.run(function ($rootScope, $http, $route) {
 
 
     // With real data this should be set to current data
-    var dates = ['20181010', '20181009', '20181008', '20181007', '20181006', '20181005', '20181004'];
+    var dates = ['20181010', '20181009', '20181008', '20181007', '20181006', '20181005', '20181004', '20181003'];
     $rootScope.fetchSiteData(dates, false);
 
     // ------------------------------------------------------
 
 
 
-
-    // ------------------------------------------------------
-    $rootScope.equipStyleIcon = {
-        OPERATING: 'far fa-arrow-alt-circle-up',
-        IDLE: 'fas fa-exclamation-circle',
-        DOWN: 'fas fa-times-circle'
-    };
-
-    $rootScope.equipStyleColor = {
-        OPERATING: { 'color': ChartStyles.statusColorsFlat[0] },
-        IDLE: { 'color': ChartStyles.statusColorsFlat[1] },
-        DOWN: { 'color': ChartStyles.statusColorsFlat[2] }
-    };
-    // ------------------------------------------------------
-
-
+    $rootScope.fetchSiteConfigs = function () {
+        var _data = { 'func': 4 };
+        var request = $http({
+            method: 'POST',
+            url: ServerInfo.URL_Admin,
+            data: _data,
+        })
+        request.then(function (response) {
+            console.log(response.data);
+            //$rootScope.config = response.data;
+            ServerInfo.config = response.data;
+        }, function (error) {
+        });
+    }
 
     /**
-     * Pass date as dd-mm-yyy. Creates a nicely formatted date from a numerical date
+     * Pass date as dd-mm-yyy. Creates a nicely formatted date object from a numerical date
      */
     $rootScope.convertToNiceDateObject = function (_date) {
 
-        // NOTE
-        // TEMP ADD OF MONTHS FOR DEMO
         var newDateObject = {
-            LONG: moment(_date).add(20, 'months').format('dddd, DD-MM-YY'),
-            SHORT: moment(_date).add(20, 'months').format('ddd DD MMM YYYY'),
+            // TEMP ADD OF 20 MONTHS FOR DEMO
+            //LONG: moment(_date).add(20, 'months').format('dddd, DD-MM-YY'),
+            //SHORT: moment(_date).add(20, 'months').format('ddd DD MMM YYYY'),
+            LONG: moment(_date).format('dddd, DD-MM-YY'),
+            SHORT: moment(_date).format('ddd DD MMM YYYY'),
         };
-        return newDateObject;
-
-        console.log("USE MOMENT FOR THIS");
-
-        // Given a date such as 20181010
-        // Split out the day, month, year
-        var tmpDay = _date.substring(6, 8);
-        var tmpMonth = _date.substring(4, 6);
-        var tmpYear = _date.substring(0, 4);
-
-        var tmpDate = tmpMonth + "-" + tmpDay + "-" + tmpYear;
-        var date = new Date(tmpDate);
-        var dateDay = days[date.getDay()];
-        var dateMonth = month[date.getMonth()];// "September";
-
-        var longDate = dateDay + ", " + date.getDate() + " " + dateMonth + " " + date.getFullYear();
-        var shortDate = date.getDate() + "-" + (date.getUTCMonth() + 1) + "-" + date.getFullYear();
-        var newDateObject = {
-            LONG: longDate,
-            SHORT: shortDate
-        };
-
         return newDateObject;
     };
 
@@ -302,9 +280,21 @@ app.run(function ($rootScope, $http, $route) {
 
 
     // ------------------------------------------------------
-    // Background Styles
+    // Styles related stuff
 
     // MAYBE ALL THIS CAN BE IT'S OWN CLASS?
+
+    $rootScope.equipStyleIcon = {
+        OPERATING: 'far fa-arrow-alt-circle-up',
+        IDLE: 'fas fa-exclamation-circle',
+        DOWN: 'fas fa-times-circle'
+    };
+
+    $rootScope.equipStyleColor = {
+        OPERATING: { 'color': ChartStyles.statusColorsFlat[0] },
+        IDLE: { 'color': ChartStyles.statusColorsFlat[1] },
+        DOWN: { 'color': ChartStyles.statusColorsFlat[2] }
+    };
 
     $rootScope.backGroundState = true;
 
@@ -327,7 +317,6 @@ app.run(function ($rootScope, $http, $route) {
     $rootScope.metricProductionColour = "#007260";
 
     // ------------------------------------------------------
-
 });
 
 
@@ -337,13 +326,13 @@ app.run(function ($rootScope, $http, $route) {
 // Main controller
 app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $location) {
 
-    console.log("Main App Entry");
+    console.log("Starting Mine-Mage...");
 
     // Fetch todays data and set it as soon as done
     $rootScope.fetchSiteData(['20181010'], true);
 
+    $rootScope.fetchSiteConfigs();
 
-    //console.log(longTerm2);
 
 
     // Callback for new data being set
@@ -396,6 +385,9 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
     });
 
 
+    // Switch the background visuals 
+    // if it's in an equipment view, need to figure out
+    // which one it is and set the custom image 
     $scope.switchBackground = function (_state) {
         if (_state == true) {
 
@@ -421,12 +413,13 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
         }
 
         $rootScope.backGroundState = _state;
-        //$scope.$broadcast('backGroundChanged');
     }
 
 
 
-    $scope.shiftSwitchChanged = function (_state) {
+    // Change the shift for the current view
+    // and broadcast the event 
+    $scope.switchShift = function (_state) {
         if (_state == true)
             $rootScope.shift = 0;
         else
@@ -441,18 +434,6 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
 
     $scope.getReports = function () {
     };
-
-
-
-
-
-
-    // $scope.$watch('$viewContentLoaded', function () {
-    //     $timeout(function () {
-    //         console.log("ASLKDJLASKDJLASKDJ");
-    //         $scope.setupMenu();
-    //     }, 100);
-    // });
 
 });
 
@@ -507,7 +488,6 @@ app.config(
                 templateUrl: "landing.html",
                 controller: 'Landing'
             })
-            //.when("/equip/:siteIndex/:equipIndex", {
             .when("/equip/:id", {
                 templateUrl: 'drilldown.html',
                 controller: 'DrillDown'//,
@@ -515,18 +495,15 @@ app.config(
             })
             .when("/callup/:cupPeriod", {
                 templateUrl: 'callup.html',
-                controller: 'CallUp'//,
-                //resolve: { init: function () { ClearAllCharts(); } }
+                controller: 'CallUp'
             })
             .when("/timeline/", {
                 templateUrl: 'timeline.html',
-                controller: 'TimeLine'//,
-                //resolve: { init: function () { ClearAllCharts(); } }
+                controller: 'TimeLine'
             })
             .when("/productivity/:filter", {
                 templateUrl: 'productivity.html',
-                controller: 'Productivity'//,
-                // resolve: { init: function () { ClearAllCharts(); } }
+                controller: 'Productivity'
             })
             .when("/monthly/:site/:func", {
                 templateUrl: function (params) {
@@ -599,69 +576,69 @@ app.component("drillDownChart", {
 /// ----------------------------------------
 /// Equipment Header Details
 /// ----------------------------------------
-app.component("drillDownHeader", {
-    //require: { main: '^myCtrl' },
-    templateUrl: 'components/drillDownHeader.html',
-    bindings: {
-        shift: '@',
-        styleGroup: '@',
-        styleItem: '@',
-        lines: '@',
-        equip: '<'
-    },
-    controller: function ($rootScope) {
+// app.component("drillDownHeader", {
+//     //require: { main: '^myCtrl' },
+//     templateUrl: 'components/drillDownHeader.html',
+//     bindings: {
+//         shift: '@',
+//         styleGroup: '@',
+//         styleItem: '@',
+//         lines: '@',
+//         equip: '<'
+//     },
+//     controller: function ($rootScope) {
 
 
-        this.$onInit = function () {
+//         this.$onInit = function () {
 
-            console.log(this.styleGroup);
-            //console.log($rootScope.equipment);
+//             //console.log(this.styleGroup);
+//             //console.log($rootScope.equipment);
 
-            if (this.equip == undefined)
-                return;
+//             if (this.equip == undefined)
+//                 return;
 
-            //var len = this.equip.shiftData[this.shift].events.length;
-            //this.lastEvent = this.equip.shiftData[this.shift].events[len - 1];
-            this.lastEvent = $rootScope.getEquipmentLastEvent(this.equip);
+//             //var len = this.equip.shiftData[this.shift].events.length;
+//             //this.lastEvent = this.equip.shiftData[this.shift].events[len - 1];
+//             this.lastEvent = $rootScope.getEquipmentLastEvent(this.equip);
 
-            // ---------------------------------------------
-            // Get time difference from 8am or 8pm
-            var date1 = new Date(this.lastEvent.eventTime.date);
-            var date2 = new Date();
-            var diff = date2 - date1;
+//             // ---------------------------------------------
+//             // Get time difference from 8am or 8pm
+//             var date1 = new Date(this.lastEvent.eventTime.date);
+//             var date2 = new Date();
+//             var diff = date2 - date1;
 
-            var msec = diff;
-            var hh = Math.floor(msec / 1000 / 60 / 60);
-            msec -= hh * 1000 * 60 * 60;
-            var mm = Math.floor(msec / 1000 / 60);
-            diff = hh + "hr " + mm + "m";
-
-
-            // Can this variable be updated with
-            // interval check so that its realtime?
-            this.late = 0;
-            if (hh > 4) {
-                this.timeSinceLastCall = ">" + 4 + "hrs!";
-                this.late = 1;
-            }
-            else
-                this.timeSinceLastCall = diff;
-
-            this.lastEventTime = this.lastEvent.eventTime.date.split(" ")[1].substring(0, 8);
-            // ---------------------------------------------
+//             var msec = diff;
+//             var hh = Math.floor(msec / 1000 / 60 / 60);
+//             msec -= hh * 1000 * 60 * 60;
+//             var mm = Math.floor(msec / 1000 / 60);
+//             diff = hh + "hr " + mm + "m";
 
 
-            // this.flexColumn = "";
-            // this.flex = "flex flex-start";
+//             // Can this variable be updated with
+//             // interval check so that its realtime?
+//             this.late = 0;
+//             if (hh > 4) {
+//                 this.timeSinceLastCall = ">" + 4 + "hrs!";
+//                 this.late = 1;
+//             }
+//             else
+//                 this.timeSinceLastCall = diff;
 
-            // if (this.lines == 0) {
-            //     this.flexColumn = "";
-            //     this.flex = "";
-            // }
+//             this.lastEventTime = this.lastEvent.eventTime.date.split(" ")[1].substring(0, 8);
+//             // ---------------------------------------------
 
-        };
-    }
-});
+
+//             // this.flexColumn = "";
+//             // this.flex = "flex flex-start";
+
+//             // if (this.lines == 0) {
+//             //     this.flexColumn = "";
+//             //     this.flex = "";
+//             // }
+
+//         };
+//     }
+// });
 /// ----------------------------------------
 
 

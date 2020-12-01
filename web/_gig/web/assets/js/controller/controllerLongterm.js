@@ -21,8 +21,14 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
     //console.log($scope.dateIndexEnd);
 
 
-    // test?
-    $scope.TUMCategories = TUMCategories;
+    // This should be from the TUM config instead    
+    $scope.TUMCategories = ['Unplanned Breakdown',
+        'Planned Maintenance',
+        'Unplanned Standby',
+        'Operating Standby',
+        'Secondary Operating',
+        'Primary Operating'
+    ];
 
 
     //NO LONGER NEEDED,  OLD DATA
@@ -58,15 +64,15 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
 
         // Availability
         $scope.dataAvail = longTerm2[1]['Availability']; //$scope.fillDataFromColumn(9);
-        var chartAvail = ChartsMonthly.CreateLongTerm("lt_avail", $scope.dataAvail, "", ChartStyles.statusItemStyle(2), true);
+        var chartAvail = ChartsMonthly.CreateLongTerm("lt_avail", $scope.dataAvail, "Down", ChartStyles.statusItemStyle(2), true);
 
         // U of A
         $scope.dataUofA = longTerm2[1]['UofA'];//$scope.fillDataFromColumn(10);
-        var chartUofA = ChartsMonthly.CreateLongTerm("lt_uofa", $scope.dataUofA, "", { color: ChartStyles.uofaColor }, true);
+        var chartUofA = ChartsMonthly.CreateLongTerm("lt_uofa", $scope.dataUofA, "Standby", { color: ChartStyles.uofaColor }, true);
 
         // Total 
         $scope.dataTotal = longTerm2[1]['Total Asset Utilisation']; //$scope.fillDataFromColumn(11);
-        var chartTotal = ChartsMonthly.CreateLongTerm("lt_total", $scope.dataTotal, "", ChartStyles.statusItemStyle(0), true);
+        var chartTotal = ChartsMonthly.CreateLongTerm("lt_total", $scope.dataTotal, "Operating", ChartStyles.statusItemStyle(0), true);
 
         // Efficiency 
         //$scope.dataEff = longTerm2[1]['Efficiency'];//$scope.fillDataFromColumn(12);
@@ -161,7 +167,7 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
     // WATERFALL
 
     $scope.getWaterFallTotal = function (_tumIndex) {
-        var splice = longTerm2[0][TUMCategories[_tumIndex]].daily.slice($scope.dateIndexStart, $scope.dateIndexEnd);
+        var splice = longTerm2[0][$scope.TUMCategories[_tumIndex]].daily.slice($scope.dateIndexStart, $scope.dateIndexEnd);
         return splice.reduce(sumArrayValues);
     };
 
@@ -170,14 +176,14 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
         var waterFall = [];
 
         waterFall.push({ 'name': 'Calendar Time', 'value': null });
-        waterFall.push({ 'name': TUMCategories[0], 'value': $scope.getWaterFallTotal(0), 'id': 0 });
-        waterFall.push({ 'name': TUMCategories[1], 'value': $scope.getWaterFallTotal(1), 'id': 1 });
+        waterFall.push({ 'name': $scope.TUMCategories[0], 'value': $scope.getWaterFallTotal(0), 'id': 0 });
+        waterFall.push({ 'name': $scope.TUMCategories[1], 'value': $scope.getWaterFallTotal(1), 'id': 1 });
         waterFall.push({ 'name': 'Total Availability', 'value': null });
-        waterFall.push({ 'name': TUMCategories[2], 'value': $scope.getWaterFallTotal(2), 'id': 2 });
-        waterFall.push({ 'name': TUMCategories[3], 'value': $scope.getWaterFallTotal(3), 'id': 3 });
+        waterFall.push({ 'name': $scope.TUMCategories[2], 'value': $scope.getWaterFallTotal(2), 'id': 2 });
+        waterFall.push({ 'name': $scope.TUMCategories[3], 'value': $scope.getWaterFallTotal(3), 'id': 3 });
         waterFall.push({ 'name': 'Total Utilisation', 'value': null });
-        waterFall.push({ 'name': TUMCategories[4], 'value': $scope.getWaterFallTotal(4), 'id': 4 });
-        waterFall.push({ 'name': TUMCategories[5], 'value': $scope.getWaterFallTotal(5), 'id': 5 });
+        waterFall.push({ 'name': $scope.TUMCategories[4], 'value': $scope.getWaterFallTotal(4), 'id': 4 });
+        waterFall.push({ 'name': $scope.TUMCategories[5], 'value': $scope.getWaterFallTotal(5), 'id': 5 });
 
         waterFall[0].value = waterFall[1].value + waterFall[2].value + waterFall[4].value + waterFall[5].value + waterFall[7].value + waterFall[8].value;
         waterFall[3].value = waterFall[0].value - waterFall[1].value - waterFall[2].value;

@@ -1,6 +1,19 @@
-app.controller('Productivity', function ($routeParams, $rootScope, $route, $scope, $timeout) {
+app.controller('Productivity', function ($routeParams, $rootScope, $route, $scope, $timeout, $interval) {
 
+    // Equip function to filter by
     $scope.function = $routeParams.filter;
+
+    // Set the view choice in the root so its 
+    // persistent with page reloads and equip filter
+    if ($rootScope.productivityViewAsCompact == undefined) {
+        $rootScope.productivityViewAsCompact = true;
+    }
+
+
+    // $scope.foo = function () {
+    //     console.log("CONTROLLER SKDASDL");
+    // }
+
 
 
     $scope.equipToShow = [];
@@ -16,26 +29,37 @@ app.controller('Productivity', function ($routeParams, $rootScope, $route, $scop
     }
 
 
-    //console.log($scope.equipToShow);
-    //console.log($rootScope.equipment);
-
     $scope.createCharts = function () {
         var elements = document.getElementsByClassName("chartdivcontent");
-
-        // Using site and equip indices as element ID
-        // use this to create a chart
         for (var i = 0; i < elements.length; i++) {
             Charts.CreateUofA(elements[i].id, $rootScope.equipment[elements[i].id]);
         }
+        // var i = 0;
+        // $interval(function () {
+        //     Charts.CreateUofA(elements[i].id, $rootScope.equipment[elements[i].id]);
+        //     i++;
+        // }, 500, elements.length);
     }
 
 
+    $scope.switchView = function (_state) {
+        $rootScope.productivityViewAsCompact = _state;
+        if (_state == false) {
+            $timeout(function () {
+                $scope.createCharts();
+            }, 10);
+        }
+        else
+            ClearAllCharts();
+    }
+
 
     $scope.$watch('$viewContentLoaded', function () {
-
-        $timeout(function () {
-            $scope.createCharts();
-        }, 1);
+        if (!$rootScope.productivityViewAsCompact) {
+            $timeout(function () {
+                $scope.createCharts();
+            }, 1);
+        }
     });
 
 
