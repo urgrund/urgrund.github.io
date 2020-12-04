@@ -259,7 +259,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
             "totalMetricActual": 103976,
             "averageCurrent": 3354.064516129032,
             "averageRequired": 2959.1290322580644,
-            "complianceSpatial": 1,
+            "complianceSpatial": 0.92,
             "complianceVolumetric": 1.133463421015338,
             "timeRemaining": 0,
             "timePassedInMonth": 1

@@ -39,24 +39,24 @@ app.controller('Reports', function ($scope, $http, $httpParamSerializerJQLike, $
         enableGridMenu: true,
         exporterMenuCsv: false,
         exporterMenuPdf: false,
-        gridMenuCustomItems: [{
-            title: 'Export to CSV',
-            action: function () {
-                $scope.export('csv');
-            },
-            order: 210
-        }, {
-            title: 'Export to PDF',
-            action: function () {
-                $scope.export('pdf');
-            },
-            order: 250
-        }],
+        // gridMenuCustomItems: [{
+        //     title: 'Export to CSV',
+        //     action: function () {
+        //         $scope.export('csv');
+        //     },
+        //     order: 210
+        // }, {
+        //     title: 'Export to PDF',
+        //     action: function () {
+        //         $scope.export('pdf');
+        //     },
+        //     order: 250
+        // }],
         enableFiltering: true,
         paginationPageSizes: [8, 16, 24],
         paginationPageSize: 8,
-        exporterCsvFilename: 'new_data_file',
-        exporterExcelFilename: 'new_data_file',
+        exporterCsvFilename: 'report.csv',
+        exporterExcelFilename: 'report.xlsx',
         onRegisterApi: function (gridApi) {
             $scope.gridApi = gridApi;
         }
