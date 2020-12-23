@@ -1,12 +1,13 @@
 <?php
 
-// include_once('..\header.php');
-// new Config();
-// Debug::Log(Config::$instance->configSites);
+// For local debug
+//include_once('..\header.php');
+//new Config();
+//Debug::Log(Config::$instance->configSites);
 
 
 /**
- * Allows an interface to the CSV files that are used 
+ * An interface to the CSV files that are used 
  * to map site and equipment specific values to front-end
  * @author Matthew Bell 2020
  */
@@ -20,6 +21,8 @@ class Config
     private static $fileTUM = 'TUM';
     private static $fileSites = 'Sites';
 
+
+    // This should probably be a config file
     private static $metricMap = array(
         "FACEMETRE" => "Face Metres",
         "INSMESHSTROVRLAP" => "Mesh Metres",
@@ -39,12 +42,14 @@ class Config
 
     public $configTUM;
     public $configSites;
+    public $uniqueTUMCategories;
 
     function __construct()
     {
         Config::$instance = $this;
         $this->configSites = Config::GetConfigSites();
         $this->configTUM = Config::GetConfigTUM();
+        $this->uniqueTUMCategories = Config::GetUniqueTUMCategories();
     }
 
     public static function Sites($_key)
@@ -110,7 +115,9 @@ class Config
 
             while (!feof($file)) {
                 $line = fgetcsv($file);
-                $newArray[$line[0]] = $line[1];
+                if ($line != NULL)
+                    $newArray[$line[0]] = $line[1];
+                //Debug::Log($line);
             }
             fclose($file);
             return $newArray;
@@ -121,6 +128,10 @@ class Config
             echo "<br/>";
             return null;
         }
+    }
+
+    private static function GetUniqueTUMCategories()
+    {
     }
     // -------------------------------------------------------------------------
 }

@@ -15,7 +15,6 @@ $request = json_decode($postdata);
 if (is_object($request)) {
     include_once('setDebugOff.php');
 
-
     // Get all the dates and their status
     // Does not generate anything
     if ($request->func == 0) {
@@ -40,7 +39,9 @@ if (is_object($request)) {
 
     return;
 } else {
-    Admin::GetAllDateStatus();
+    include_once('setDebugOff.php');
+    echo "POOO";
+    //Admin::GetAllDateStatus();
     //Admin::GenerateDataForDate('20181001');
 
     //$generateEverything = false;
@@ -48,25 +49,6 @@ if (is_object($request)) {
     //Admin::GenerateDataForDate('20181010');
     //Admin::DownloadDataForDate('20181010');
     return;
-
-    $generateEverything = true;
-
-    if ($generateEverything) {
-        // Generate everything
-        $tempStartDate = '2018-10-01';
-        $tempEndDate = '2018-12-31';
-        $period = new DatePeriod(
-            new DateTime($tempStartDate),
-            new DateInterval('P1D'),
-            new DateTime($tempEndDate)
-        );
-
-        include_once('setDebugOff.php');
-        foreach ($period as $key => $value) {
-            $date = $value->format('Ymd');
-            Admin::GetDateStatus($date, true);
-        }
-    }
 }
 // ----------------------------------------------------------
 // ----------------------------------------------------------
@@ -89,26 +71,17 @@ class Admin
     public static function GenerateDataForDate($_date)
     {
         // This comes from create_site_data
-        global $allSites;
-
-        //$metaData = new SiteMetaData();
-        CreateSiteData::SetDateForCreation($_date);
-        CreateSiteData::Run();
-
-        // The last index of the generated data
-        //Debug::Log($allSites);
-        //$metaTemp  = end($allSites);
-        //$metaData->FillFromData($metaTemp);
+        //global $allSites;
+        //CreateSiteData::Run(new DateTime($_date));
 
         // Encode and write to disk                
-        GetSiteData::WriteGeneratedDataToDisk($_date, json_encode($allSites));
+        //GetSiteData::WriteGeneratedDataToDisk($_date, json_encode($allSites));
 
-        //$metaData->Date = $_date;
-
-
-        echo json_encode(end($allSites));
-        //echo json_encode($metaData);
+        //echo json_encode(end($allSites));
+        GetSiteData::GetDataForDate($_date, true);
     }
+
+
 
     public static function DownloadDataForDate($_date)
     {
@@ -140,8 +113,8 @@ class Admin
         } else {
             if ($_generateIfMissing == true) {
                 // Generate data for the missing date if possible
-                CreateSiteData::SetDateForCreation($_date);
-                CreateSiteData::Run();
+                //CreateSiteData::SetDateForCreation($_date);
+                //CreateSiteData::Run();
 
                 // The last index of the generated data
                 //$metaTemp = end($allSites);

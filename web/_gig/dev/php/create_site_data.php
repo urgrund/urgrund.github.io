@@ -1,22 +1,22 @@
 <?php
+
 include_once('header.php');
 
 /** Final object with all generated data
  * for the last time the day was created **/
-static $allSites = array();
-static $allEquipment = array();
-static $date = '20181002';
+//static $allSites = array();
+//static $allEquipment = array();
+//static $date = '20181002';
 
-static $generationStartTime;
+//static $generationStartTime;
 
 
 // Holds the resulting data 
 // from the core SQL queries
-static $sqlMetricPerHour;
-static $sqlEquipEventList;
-static $sqlMineEquipmentList;
-static $sqlMaterialMovements;
-
+//static $sqlMetricPerHour;
+//static $sqlEquipEventList;
+//static $sqlMineEquipmentList;
+//static $sqlMaterialMovements;
 
 
 // ------------------------------------------------------------------
@@ -25,27 +25,40 @@ static $sqlMaterialMovements;
 // Uncomment this to run directly from this file
 //Debug::Enable();
 if (Debug::enabled() == true) {
-    CreateSiteData::Run();
+    CreateSiteData::Run(new DateTime('20181002'));
 }
 
 
 /**   
  * Generates data for a given date for all 
  * equipment at all locations
+ * 
  * @author Matthew Bell 2020  
  */
 final class CreateSiteData
 {
     const INDEX_EQUIP = 2;
 
-    public static function SetDateForCreation($_date)
+    // Date used for generation 
+    private static $date;
+
+    private static function ValidateDate(DateTime $_date)
     {
-        global $date;
-        $date = $_date;
+        if ($_date == null) {
+            Debug::Log("NULL Date passed");
+            return false;
+        } else {
+            Debug::Log("Using date - " . $_date->format('Ymd'));
+            self::$date = $_date->format('Ymd');
+            return true;
+        }
     }
 
-    public static function Run()
+    public static function Run(DateTime $_date)
     {
+        if (!CreateSiteData::ValidateDate($_date))
+            return;
+
         Debug::StartProfile("TOTAL SITE GENERATION");
 
         global $generationStartTime;
@@ -82,7 +95,7 @@ final class CreateSiteData
         CreateSiteData::AddMetaData();
 
         // Demo mode
-        ScrambleData::Scramble();
+        //ScrambleData::Scramble();
 
         Debug::EndProfile();
         Debug::Log("Finished...");
@@ -96,10 +109,10 @@ final class CreateSiteData
      * Fetch the SQL results first so that 
      * all other functions can use the results
      */
-    static function CreateSQLResults()
+    private static function CreateSQLResults()
     {
-        Debug::StartProfile("Create SQL Results");
-        global $date;
+        Debug::StartProfile("SQL Total");
+        //global $date;
         global $sqlMetricPerHour;
         global $sqlEquipEventList;
         global $sqlMineEquipmentList;
@@ -107,8 +120,8 @@ final class CreateSiteData
 
         // ------------------------------------------------------------------------------------------
         // All metrics per hour for this date
-        $sqlTxt = SQLUtils::FileToQuery('..\assets\sql\Core\ALL_MetricPerHour.sql');
-        $sqlTxt = str_replace(SQLUtils::DateVar, "'" . $date . "'", $sqlTxt);
+        $sqlTxt = SQLUtils::FileToQuery(SQLUtils::QUERY_DIRECTORY . 'Core\ALL_MetricPerHour.sql');
+        $sqlTxt = str_replace(SQLUtils::DateVar, "'" . self::$date . "'", $sqlTxt);
         $sqlMetricPerHour = SQLUtils::QueryToText($sqlTxt, "All Metric");
         // Sanitize null values 
         for ($i = 0; $i < count($sqlMetricPerHour); $i++) {
@@ -122,16 +135,16 @@ final class CreateSiteData
 
         // ------------------------------------------------------------------------------------------
         // All events that have been logged for this date
-        $sqlTxt = SQLUtils::FileToQuery('..\assets\sql\Core\ALL_EquipmentEventList.sql');
-        $sqlTxt = str_replace(SQLUtils::DateVar, "'" . $date . "'", $sqlTxt);
+        $sqlTxt = SQLUtils::FileToQuery(SQLUtils::QUERY_DIRECTORY . "Core\\ALL_EquipmentEventList.sql");
+        $sqlTxt = str_replace(SQLUtils::DateVar, "'" . self::$date . "'", $sqlTxt);
         $sqlEquipEventList = SQLUtils::QueryToText($sqlTxt, "Event List");
         // ------------------------------------------------------------------------------------------
 
 
         // ------------------------------------------------------------------------------------------
         // All the equipment of the entire mine
-        $sqlTxt = SQLUtils::FileToQuery('..\assets\sql\Core\ALL_MineEquipmentList.sql');
-        $sqlTxt = str_replace(SQLUtils::DateVar, "'" . $date . "'", $sqlTxt);
+        $sqlTxt = SQLUtils::FileToQuery(SQLUtils::QUERY_DIRECTORY . 'Core\ALL_MineEquipmentList.sql');
+        $sqlTxt = str_replace(SQLUtils::DateVar, "'" . self::$date . "'", $sqlTxt);
         $sqlMineEquipmentList = SQLUtils::QueryToText($sqlTxt, "All Mine Equip", false);
 
         // Set the asset ID as the index
@@ -146,8 +159,8 @@ final class CreateSiteData
 
         // ------------------------------------------------------------------------------------------
         // Material Movements
-        $sqlTxt = SQLUtils::FileToQuery('..\assets\sql\Core\ALL_MaterialMovements.sql');
-        $sqlTxt = str_replace(SQLUtils::DateVar, "'" . $date . "'", $sqlTxt);
+        $sqlTxt = SQLUtils::FileToQuery(SQLUtils::QUERY_DIRECTORY . 'Core\ALL_MaterialMovements.sql');
+        $sqlTxt = str_replace(SQLUtils::DateVar, "'" . self::$date . "'", $sqlTxt);
         $sqlMaterialMovements = SQLUtils::QueryToText($sqlTxt, "Mat Movements", false);
 
         //Debug::Log($sqlMaterialMovements);
@@ -161,13 +174,13 @@ final class CreateSiteData
 
     // ------------------------------------------------------------------
     /** Information related to this dates data generation **/
-    static function AddMetaData()
+    private static function AddMetaData()
     {
-        global $date;
+        //global $date;
         global $allSites;
         global $generationStartTime;
 
-        $d = DateTime::createFromFormat('Ymd', $date);
+        $d = DateTime::createFromFormat('Ymd', self::$date);
         $day = Utils::dayNameMap[$d->format('D')];
 
         $updateTime = new DateTime();
@@ -179,7 +192,7 @@ final class CreateSiteData
 
         $metaData = new SiteMetaData();
         $metaData->Day = $day;
-        $metaData->Date = $date;
+        $metaData->Date = self::$date;
         $metaData->LastUpdate = $updateTime;
         $metaData->IP = Utils::GetClientIP();
         $metaData->User = "User";
@@ -194,13 +207,13 @@ final class CreateSiteData
 
 
     // ------------------------------------------------------------------
-    static function CreateSitesAndEquipment()
+    private static function CreateSitesAndEquipment()
     {
         Debug::StartProfile("PHP Create Sites");
 
         global $allSites;
         global $allEquipment;
-        global $date;
+        //global $date;
 
         global $sqlEquipEventList;
         global $sqlMetricPerHour;
@@ -234,6 +247,11 @@ final class CreateSiteData
                 $tempEquip[$eID]->sites[] = $eSiteName;
 
             $tempEquip[$eID]->AddEvent($sqlEquipEventList[$i]);
+
+            // Needs to be fixed in SQL, MachineCheck is getting 
+            // assigned as Operating Major when it should be idle
+            //if ($sqlEquipEventList[$i][6] == "Machine Check")
+            //  Debug::Log($sqlEquipEventList[$i][6] . "   " . $sqlEquipEventList[$i][7]);
         }
 
         // Turns the sites this equip belongs to from assoc->numeric
@@ -253,7 +271,7 @@ final class CreateSiteData
 
 
     // ------------------------------------------------------------------
-    static function CreateDataForAllSites()
+    private static function CreateDataForAllSites()
     {
         global $allSites;
         global $sqlMetricPerHour;
@@ -284,7 +302,7 @@ final class CreateSiteData
         Debug::EndProfile();
 
 
-        Debug::StartProfile("Material Movements");
+        Debug::StartProfile("PHP: Material Movements");
         for ($i = 1; $i < count($sqlMaterialMovements); $i++) {
             $siteName = Config::Sites($sqlMaterialMovements[$i][0]);
             if ($siteName != null || $siteName != '') {
@@ -299,7 +317,7 @@ final class CreateSiteData
 
 
     // ------------------------------------------------------------------
-    static function CreateDataForAllEquip()
+    private static function CreateDataForAllEquip()
     {
         global $allEquipment;
 
@@ -324,7 +342,7 @@ final class CreateSiteData
 
 
     /** Array to map function to a descriptive name for front end  **/
-    static function GetEquipmentFunctionMap()
+    private static function GetEquipmentFunctionMap()
     {
         $tmp = array();
         global $sqlMineEquipmentList;

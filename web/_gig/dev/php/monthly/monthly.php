@@ -154,7 +154,7 @@ class Monthly
 
     public static function GetActuals($_year, $_month)
     {
-        $sqlTxt = SQLUtils::FileToQuery('..\..\assets\sql\Core\ALL_MonthlyProductionData.sql');
+        $sqlTxt = SQLUtils::FileToQuery('..\\' . SQLUtils::QUERY_DIRECTORY . 'Core\ALL_MonthlyProductionData.sql');
         $sqlTxt = str_replace('@YEAR', "'" . $_year . "'", $sqlTxt);
         $sqlTxt = str_replace('@MONTH', "'" . $_month . "'", $sqlTxt);
 

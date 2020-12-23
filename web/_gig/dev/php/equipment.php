@@ -3,11 +3,11 @@
 /**
  * Equipment Class - deals with an equipment asset
  * storing its shift data & metrics 
- * @author Matt
+ * @author Matt Bell
  */
 class Equipment
 {
-    // DB Code used to identify this equipment
+    // Asset ID
     var $id;
 
     var $sites = [];
@@ -116,7 +116,7 @@ class Equipment
 
                 // Frustrating that the dateTime diff would not
                 // show a day difference (ie. 11th to the 12th),
-                // so this works but doesn't feel elegent
+                // so this works but doesn't feel elegant
                 if ($endHour < $startHour)
                     $endHour += 24;
 
@@ -210,7 +210,8 @@ class Equipment
 
 
 
-    /** From an array of events this function will
+    /**
+     * From an array of events this function will
      * split out the categories, minor events and 
      * the total time spent in each of these to see
      * how many of each type of event may have occurred
@@ -333,190 +334,3 @@ class Equipment
         return;
     }
 }
-
-
-
-
-
-
-
-
-    /*
-    function GenerateUofAFromEvents_OLD()
-    {
-        Debug::Log("OLD FUNCTION BEING USED");
-        return;
-
-        global $date;
-
-        $hourcount = 24;
-        $hourDateObjs = [];
-        for ($i = 0; $i < $hourcount; $i++) {
-            $hourDateObjs[$i] = new EquipmentUofAHour($i);
-        }
-
-        // Trim the first entry to 6am in case it's just before 6am  (Is this ok?)
-        // if (intval($this->events[0]->eventTime->format('H') == 5)) {
-        //     $this->events[0]->eventTime = new DateTime($date);
-        //     $this->events[0]->eventTime->setTime(6, 00, 00, 0);
-        // }
-
-
-        //Debug::Log("\nEvent Count : " . count($this->events) . "\n");
-
-        for ($i = 0; $i < count($this->events); $i++) {
-
-            // Get start and end dates
-            $startDate = clone $this->events[$i]->eventTime;
-            $endDate = clone $startDate;
-            $endDate->add(new DateInterval('PT' . $this->events[$i]->duration . 'S'));
-
-            // Get start and end hours to determine
-            // how many hours this event spans
-            $startHour = intval($startDate->format('H'));
-            $startHour = $startHour < 6  ? $startHour + 12 + 6 : $startHour  - 6;
-            $endHour = intval($endDate->format('H'));
-            $endHour = $endHour < 6  ? $endHour + 12 + 6 : $endHour  - 6;
-
-            // How many hours this event spans (1 based)
-            $hours = ($endHour - $startHour) + 1;
-
-            // Debug::Log($this->events[$i]->majorGroup . " " . $this->events[$i]->duration . "  Span: " . $hours);
-            // Debug::LogI("   Start: " . $startHour . "   End: " . $endHour);
-            // Debug::LogI("   Start date : " . $startDate->format("h:i:s"));
-            // Debug::LogI("   End date : " . $endDate->format("h:i:s"));
-
-            // If there was no span of hours then just add the duration 
-            // Otherwise loop through the span count            
-            for ($k = 0; $k < $hours; $k++) {
-
-                $secondsSpentInHour = 0;
-
-                // If there's only one hour it spans then it's 
-                // the duration,  otherwise get the fraction/whole
-                // of each hour this event spans over
-                if ($hours == 1) {
-                    $secondsSpentInHour = $this->events[$i]->duration;
-                } else {
-                    if ($k == 0) {
-                        $secondsSpentInHour = 3600 - $this->GetSecondsInHour($startDate);
-                    } else if ($k == $hours - 1) {
-                        $secondsSpentInHour = $this->GetSecondsInHour($endDate);
-                    } else {
-                        $secondsSpentInHour = 3600;
-                    }
-                }
-
-                // If the start hour is at shift end
-                // allow the full duration 
-                // if ($startHour == 11 || $startHour == 23) {
-                //     Debug::Log($this->events[$i]->eventTime->format("H:i"));
-                //     Debug::LogI("  " . $this->events[$i]->mineArea . "  " . $startHour . "  " . $this->events[$i]->duration);
-                //     Debug::LogI("  " . $this->events[$i]->majorGroup);
-                //     $secondsSpentInHour = $this->events[$i]->duration;
-                // }
-
-                // Add time to appropriate hour
-                $hourDateObj = $hourDateObjs[$startHour + $k];
-                $hourDateObj->totalTime += $secondsSpentInHour;
-
-                // Add time to appropriate category
-                if ($this->events[$i]->majorGroup != "DOWN") {
-                    $hourDateObj->availability += $secondsSpentInHour;
-                    if ($this->events[$i]->majorGroup != "IDLE")
-                        $hourDateObj->utilisation +=  $secondsSpentInHour;
-                }
-
-
-                // var $down = 0;
-                // var $idle = 0;
-                // var $operating = 0;
-                if ($this->events[$i]->majorGroup == "DOWN") {
-                    $hourDateObj->down += $secondsSpentInHour;
-                } else if ($this->events[$i]->majorGroup == "IDLE") {
-                    $hourDateObj->idle += $secondsSpentInHour;
-                } else
-                    $hourDateObj->operating += $secondsSpentInHour;
-
-
-                // Debug::LogI($this->id . " : " . $secondsSpentInHour . "   " . $whichHour);
-                // Debug::LogI("   D: " . $this->events[$i]->duration . "   S: " . $this->events[$i]->majorGroup);
-                // Debug::LogI(" (" . $startHour . "-" . $endHour . ") ");
-                // Debug::LogI($hours);
-                // Debug::Log("");
-            }
-        }
-
-        //Debug::Log($hourDateObjs);
-
-        // Split for shift
-        // for ($i = 0; $i < count($hourDateObjs); $i++) {
-        //     if ($i < 12)
-        //         array_push($this->shiftData[0]->uofa, $hourDateObjs[$i]);
-        //     else
-        //         array_push($this->shiftData[1]->uofa, $hourDateObjs[$i]);
-        // }
-
-        $this->shiftData[0]->uofa =  array_slice($hourDateObjs, 0, 12);
-        $this->shiftData[1]->uofa =  array_slice($hourDateObjs, 12, 12);
-
-
-
-        //Debug::Log($this->id);
-        for ($i = 0; $i < count($this->shiftData); $i++) {
-            $this->shiftData[$i]->timeUtilised = 0;
-            $this->shiftData[$i]->timeDown = 0;
-            $this->shiftData[$i]->timeAvailable = 0;
-
-            // Debug::Log("Shift " . $i . " hours : " . count($this->shiftData[$i]->uofa));
-            for ($j = 0; $j < count($this->shiftData[$i]->uofa); $j++) {
-                $hour = $this->shiftData[$i]->uofa[$j];
-                $this->shiftData[$i]->timeUtilised += $hour->utilisation;
-                $this->shiftData[$i]->timeDown += $hour->totalTime - $hour->availability;;
-                $this->shiftData[$i]->timeAvailable += $hour->availability;
-                $this->shiftData[$i]->timeTotal += $hour->totalTime;
-
-
-
-                // Debug::Log("  Util: " . $this->shiftData[$i]->timeUtilised);
-                // Debug::LogI("     Down: " . $this->shiftData[$i]->timeDown);
-                // Debug::LogI("      Avail: " . $this->shiftData[$i]->timeAvailable);
-                // Debug::LogI("      T: " . $this->shiftData[$i]->timeTotal);
-
-                // // Ratio for UofA
-                if ($hour->availability > 0)
-                    $hour->uofa =  $hour->utilisation /  $hour->availability;
-
-                // Debug::Log("   Avail: " . $hour->availability);
-                // Debug::LogI("     Util: " . $hour->utilisation);
-                // Debug::LogI("      Down: " . $hour->uofa);
-
-                // Normalize for UofA graph
-                //$hour->availability = min(3600,  $hour->availability) / 3600;
-                //$hour->utilisation = min(3600,  $hour->utilisation) / 3600;
-            }
-        }
-
-        // Get the UOFA after all time assignments from 
-        // events and also tally totals for each category
-        $this->timeUtilised = 0;
-        $this->timeDown = 0;
-        $this->timeAvailable = 0;
-        for ($i = 0; $i < count($hourDateObjs); $i++) {
-
-            $this->timeUtilised += $hourDateObjs[$i]->utilisation;
-            $this->timeDown += $hourDateObjs[$i]->totalTime - $hourDateObjs[$i]->availability;
-            $this->timeAvailable += $hourDateObjs[$i]->availability;
-
-            // Ratio for UofA
-            if ($hourDateObjs[$i]->availability > 0)
-                $hourDateObjs[$i]->uofa = $hourDateObjs[$i]->utilisation / $hourDateObjs[$i]->availability;
-
-            // Normalize 
-            $hourDateObjs[$i]->availability = min(3600, $hourDateObjs[$i]->availability) / 3600;
-            $hourDateObjs[$i]->utilisation = min(3600, $hourDateObjs[$i]->utilisation) / 3600;
-        }
-
-        $this->uofa = $hourDateObjs;
-    }
-*/

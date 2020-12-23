@@ -80,13 +80,13 @@ class EquipmentShiftData
 
 
 
-/** Holds data related to a specific Metric  
+/** 
+ * Holds data related to a specific Metric  
  */
 class MetricData
 {
     public $metric;
     public $name;
-    //public $value;
     public $activity;
 
     // New
@@ -177,9 +177,5 @@ class MetricData
 
         for ($i = 0; $i < count($newMph); $i++)
             $b->AddValue($newMph[$i]);
-
-
-        //$b->mph = $newMph;
-        //$b->CalculateCumulative();
     }
 }

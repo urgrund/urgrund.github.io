@@ -17,10 +17,6 @@ static $date = "20181010";
 
 echo 'poo';
 
-$pathInPieces = explode('/', $_SERVER['DOCUMENT_ROOT']);
-echo $pathInPieces[0];
-
-
 
 
 

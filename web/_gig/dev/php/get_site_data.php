@@ -1,8 +1,6 @@
 <?php
 include_once('header.php');
 
-
-
 // ----------------------------------------------------------
 // ----------------------------------------------------------
 // WEB REQUEST ENTRY POINT
@@ -22,72 +20,45 @@ if (is_object($request)) {
     }
     return;
 } else {
-
+    // Debug path    
     include_once('create_site_data.php');
-    //$date = '20181001';
-    //new GetSiteData();
+    GetSiteData::GetDataForDate('20181001');
 }
 // ----------------------------------------------------------
 // ----------------------------------------------------------
 
 
-
-
-
-
-// This is the main function to manage the 
-// generation of a days data 
+/**
+ * GetSiteData will attempt to retrive data from 
+ * a particular date and generate it if it does
+ * not exist.   This should be used as the web
+ * interface
+ */
 class GetSiteData
 {
     private static $_fileDir = "../sitedata/";
     private static $_fileExt = ".json";
 
-    function __construct()
-    {
-        global $allSites;
-        global $date;
+    //public static $forceRegenation = false;
 
-        $forceRegenation = false; //false;
-
-
-
-        $preGenerated = GetSiteData::CheckGeneratedDataExists($date);
-
-        $exists = ($preGenerated != null) ? True : False;
-        Debug::Log($exists);
-
-        if ($preGenerated == null || $forceRegenation) {
-
-            // If the data doesn't exist then generate and send back
-            // to client whilst also saving this data to server 
-            CreateSiteData::Run();
-            $resultAsJSON = json_encode($allSites);
-            GetSiteData::WriteGeneratedDataToDisk($date, $resultAsJSON);
-
-            echo $resultAsJSON;
-        } else {
-            echo $preGenerated;
-        }
-    }
-
-    public static function GetDataForDate($_date)
+    public static function GetDataForDate($_date, $_forceRegen = false)
     {
         global $allSites;
         global $date;
 
         $date = $_date;
 
-        $forceRegenation = false;
+        //$forceRegenation = false;
         $preGenerated = GetSiteData::CheckGeneratedDataExists($date);
 
         $exists = ($preGenerated != null) ? True : False;
         Debug::Log($exists);
 
-        if ($preGenerated == null || $forceRegenation) {
+        if ($preGenerated == null || $_forceRegen) {
 
             // If the data doesn't exist then generate and send back
             // to client whilst also saving this data to server 
-            CreateSiteData::Run();
+            CreateSiteData::Run(new DateTime($_date));
             $resultAsJSON = json_encode($allSites);
             GetSiteData::WriteGeneratedDataToDisk($date, $resultAsJSON);
 
@@ -98,20 +69,20 @@ class GetSiteData
     }
 
 
+    private static function CreateDataFolder()
+    {
+        if (!is_dir(self::$_fileDir)) {
+            mkdir(self::$_fileDir, 0777, true);
+        }
+    }
+
+
     public static function CheckGeneratedDataExists($_date)
     {
-        //  private static $localDir = "siteconfig\\";
-        //private static $filePrefix = 'Config_';
-
-        //$_path = Utils::GetBackEndRoot() . "..\\sitedata\\" . $_date . self::$_fileExt;
-        //Debug::Log($_path);
-        //Debug::Log(Utils::GetBackEndRoot());
-        //$json = @file_get_contents($_path);
-
+        GetSiteData::CreateDataFolder();
 
         // TODO - sanitise the date input?
         $json = @file_get_contents(self::$_fileDir . $_date . self::$_fileExt);
-
 
         if ($json === false) {
             Debug::Log("File not found for" . $_date);

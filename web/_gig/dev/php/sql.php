@@ -10,12 +10,15 @@ $conn;
 
 /**   
  * Manages connections and queries and helps convert
- * text to a query or json format
- * @author Matthew Bell 2020  
+ * text to a query or json format 
  */
 class SQLUtils
 {
     const DateVar = '@Date';
+
+    public const QUERY_DIRECTORY = "..\\sql\\";
+
+    //private const serverName = "";
 
     public static function OpenConnection()
     {

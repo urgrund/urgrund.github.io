@@ -1,4 +1,10 @@
 <?php
+
+//namespace MineMage;
+
+/**
+ * Mine-Mage version
+ */
 final class Version
 {
     private static $_version = 2.0;
@@ -6,8 +12,12 @@ final class Version
     {
         return self::$_version;
     }
-}
 
+    final public static function productname()
+    {
+        return "Mine Mage © 2019-2021 Gigworth Pty Ltd";
+    }
+}
 
 // History
 
@@ -18,3 +28,5 @@ final class Version
 // 1.01
 // Initial setup of the data,  not much understood yet of the stucture and how the different
 // tech components will all work together
+
+//phpinfo();

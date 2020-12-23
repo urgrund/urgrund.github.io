@@ -37,7 +37,7 @@ class Utils
         else if (isset($_SERVER['REMOTE_ADDR']))
             $ipaddress = $_SERVER['REMOTE_ADDR'];
         else
-            $ipaddress = 'UNKNOWN';
+            $ipaddress = '0.0.0.0';
         return $ipaddress;
     }
 
