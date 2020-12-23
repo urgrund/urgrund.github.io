@@ -7,14 +7,9 @@ var app = angular.module('myApp', []);
 
 app.controller('myCtrl', function ($scope, $http) {
     var _url = '../php/admin.php';
-
-    // $scope.timeRegenStart;
-    // $scope.timeRegenEnd;
-
     $scope.dataStatus = [];
 
     $scope.dumpDateToConsole = function ($_date) {
-        //console.log($scope.dataStatus[$_date]);        
         console.log($_date + " - Downloading...");
 
         var _data = { 'func': 3, 'date': $_date };
@@ -24,12 +19,7 @@ app.controller('myCtrl', function ($scope, $http) {
             data: _data,
         })
         request.then(function (response) {
-
-            //var newData = JSON.parse($scope.dataStatus);
-            //var json = JSON.parse(response.data);
-            //console.log(json);
             console.log(response.data);
-            //$scope.prepareViewData();
         }, function (error) {
         });
     };
@@ -46,10 +36,6 @@ app.controller('myCtrl', function ($scope, $http) {
             data: _data
         })
         request.then(function (response) {
-
-            // var str = String(response.data);
-            // if (str.includes("xdebug-error"))
-            //     $scope.errorMsg = response.data;
 
             console.log(response.data);
             // Make associative
@@ -73,10 +59,18 @@ app.controller('myCtrl', function ($scope, $http) {
 
     $scope.regenerateAll = function () {
         for (var key in $scope.dataStatus) {
-            // console.log(key);
             $scope.regenerateDataForDate(key);
         }
     }
+
+
+    $scope.regenerateMissing = function () {
+        for (var key in $scope.dataStatus) {
+            if ($scope.dataStatus[key]['LastUpdate'] == null) {
+                $scope.regenerateDataForDate(key);
+            }
+        }
+    };
 
 
     $scope.regenerateDataForDate = function (_date) {
@@ -99,64 +93,22 @@ app.controller('myCtrl', function ($scope, $http) {
             })
             request.then(function (response) {
                 console.log("Returned...");
-                console.log(response);
-                if ((response.data.Date in $scope.dataStatus)) {
-                    $scope.dataStatus[response.data.Date] = response.data;
-                    $scope.dataStatus[response.data.Date]['class'] = "far fa-check-circle green";
-                }
+                console.log(response.data);
+                //console.log($scope.dataStatus);
+
+                var meta = response.data[response.data.length - 1];
+                if (meta.Date in $scope.dataStatus) {
+                    $scope.dataStatus[meta.Date] = meta;
+                    $scope.dataStatus[meta.Date]['class'] = "far fa-check-circle green";
+                } else
+                    $scope.dataStatus[key]['class'] = "far fa-times-circle red";
+
             }, function (error) {
             });
         }
     }
 
 
-    $scope.regenerateMissing = function () {
-
-        //console.log("Regenerating data..." + new Date());
-
-
-        // Check if any of the entries have 
-        // null updates, then attempt to regenerate
-        for (var key in $scope.dataStatus) {
-            if ($scope.dataStatus[key]['LastUpdate'] == null) {
-                console.log("Starting regen for " + $scope.dataStatus[key]['Date']);// + " at " + new Date());
-
-                $scope.dataStatus[key]['class'] = "fas fa-sync-alt spinner loading";
-
-                // Prepare payload
-                var _data = {
-                    'func': 1,
-                    'date': $scope.dataStatus[key]['Date'],
-                    'regen': true
-                };
-                var request = $http({
-                    method: 'POST',
-                    url: _url,
-                    data: _data
-                })
-                request.then(function (response) {
-                    console.log("Returned...");
-                    var dataString = String(response.data);
-                    if (dataString.includes("xdebug-error")) {
-                        console.log("THERE WAS AN ERROR");
-                        $scope.dataStatus[key]['Version'] = response.data;
-
-                        console.log($scope.dataStatus[key]);
-                    }
-                    else {
-                        console.log(response.data);
-
-                        if ((response.data.Date in $scope.dataStatus)) {
-                            //console.log("Added new data for " + key + " at " + new Date());
-                            $scope.dataStatus[response.data.Date] = response.data;
-                            $scope.dataStatus[response.data.Date]['class'] = "far fa-check-circle green";
-                        }
-                    }
-                }, function (error) {
-                });
-            }
-        }
-    };
 
 
     $scope.getConfigs = function () {
