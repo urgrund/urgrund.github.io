@@ -230,7 +230,6 @@ input:invalid:required {
   grid-column-gap: 1%;
   grid-row-gap: 0.25%;
   grid-template-columns: 2fr 1fr 1fr;
-  /* grid-template-rows: 1fr 1fr 1fr; */
   height: 250px;
   margin-top: 1%;
   margin-bottom: 1%;
@@ -396,30 +395,6 @@ input:invalid:required {
   width: 8rem;
 }
 
-
-/* 
-.reportSmallInfo
-{
-  margin:10px 2px 10px 2px;
-  padding: 5px;
-  width: 250px;
-  height: 18px; 
-}
-.reportSmallInfo:hover
-{
-   transform: translate(0px, 2px);
-   border: 1px solid #43c3ff;
-}
-
-.reportReady
-{
-   border:1px solid #00d6ba;
-}
-
-.reportNeedGen
-{
-   border:1px solid #a39154;
-} */
 /* -------------------------------------------------- */
 
 
@@ -478,6 +453,7 @@ input:invalid:required {
 
 /* Percentages */
 .h100pc{ height: 100%;}
+.h80pc{ height: 80%;}
 .h60pc{ height: 60%;}
 .h33pc{ height: 33%;}
 .h25pc{ height: 25%;}

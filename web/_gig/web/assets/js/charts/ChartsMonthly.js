@@ -226,199 +226,33 @@ class ChartsMonthly {
 
 
 
+    static CreateMonthlyComplianceBars(_elementID, _data) {
 
-    static CreateMonthlyCompliance(_elementID, _data) {
-
-        //console.log(_data);
-
-        var myChart = echarts.init(document.getElementById(_elementID), 'chartTone');
-
-        var newData = [[], [], [], [], []];
-
-        var index = 0;
-        for (var key in _data) {
-
-            var len = _data[key][1].length - 1;
-            var target = parseInt(_data[key][2][0]);
-
-            // Add location
-            newData[0].push(key);
-
-            // Add current cumulative            
-            newData[1].push(Math.min(_data[key][1][len], target));
-
-            // Overmined
-            newData[2].push(Math.max(0, _data[key][1][len] - target));
-
-            // Add target
-            newData[3].push(target);
-
-            // Label, it's fake data that is positioned based on cumulative            
-            newData[4].push({ value: 0, label: { formatter: String(_data[key][1][len]) } });//{ value: 0, label: { formatter: 'A', fontSize: '50', color: '#337849' } });
-        }
-        //console.log(newData);
-
-
-
-        var borderRadius = '0';
-        var barWidth = 18;
-
-        var option = {
-            backgroundColor: ChartStyles.backGroundColor,
-            textStyle: ChartStyles.textStyle,
-            title: ChartStyles.createTitle(""),
-            toolbox: ChartStyles.toolBox(myChart.getHeight(), "MonthlyCompliance"),
-            legend: {
-
-                textStyle: {
-                    color: "#fff"
-                },
-                orient: 'horizontal',
-                x: 'center',
-                y: 'top',
-                selectedMode: false,
-                data: ['Tonnes', 'Over', 'Target']
-            },
-            tooltip: {
-                trigger: 'axis',
-                confine: true,
-                formatter: function (params, index) {
-                    var target = params[3].value;
-                    var mined = params[0].value + params[1].value;
-                    var over = params[1].value;
-
-                    var len = _data[params[0].name][1].length;
-                    var average = (_data[params[0].name][1][len - 1] / len).toFixed(2);
-
-                    var label = "";
-                    label += ChartStyles.toolTipTextTitle(params[0].name)
-                        + ChartStyles.toolTipTextEntry("Target : " + target)
-                        + ChartStyles.toolTipTextEntry("Mined : " + mined + (target > 0 ? " (" + RatioToPercent(mined / target) + ")" : ""))
-                        + ChartStyles.toolTipTextEntry("Average : " + average);
-                    if (over > 0 && target > 0)
-                        label += ChartStyles.toolTipTextEntry("Over: " + params[1].value + " (" + RatioToPercent(params[1].value / target) + ")", 'cup-redwarn');
-
-                    return label;
-                },
-                axisPointer: ChartStyles.toolTipShadow(),
-                backgroundColor: ChartStyles.toolTipBackgroundColor()
-            },
-
-            grid: {
-                top: '3%',
-                bottom: '3%',
-                left: '3%',
-                right: '3%',
-                containLabel: true
-            },
-            xAxis: [
-                {
-                    type: 'category',
-                    data: newData[0],
-                    axisLabel: {
-                        show: true,
-                        interval: 0,
-                        rotate: 90,
-                        fontSize: ChartStyles.fontSizeAxis
-                    },
-                    axisLine: { show: false, lineStyle: { color: '#71a3c5' } },
-                    axisTick: {
-                        alignWithLabel: true,
-                        length: 5
-                    }
-                },
-                { type: 'category', show: false, data: newData[0] }
-            ],
-            yAxis: {
-                type: 'value',
-                name: 'Tonnes',
-                nameLocation: 'center',
-                nameTextStyle: {
-                    fontSize: ChartStyles.fontSizeLarge
-                },
-                nameGap: 40,
-                axisLabel: { fontSize: ChartStyles.fontSizeAxis },
-                splitLine: {
-                    show: false,
-                    lineStyle: { color: 'rgba(126, 134, 136, 0.33)', width: 1 }
-                }
-            },
-            series: [
-                {
-                    data: newData[1],
-                    type: 'bar',
-                    stack: 'stack',
-                    name: 'Tonnes',
-                    itemStyle: { color: ChartStyles.siteColors[0], barBorderRadius: borderRadius },
-                    // barGap: '-100%',
-                    // barWidth: 10,
-                    animationEasing: 'linear',
-                    animationDuration: 500,
-                    animationDelay: 0
-                },
-                {
-                    data: newData[2],
-                    type: 'bar',
-                    stack: 'stack',
-                    name: 'Over',
-                    itemStyle: { color: ChartStyles.statusColors[2], barBorderRadius: borderRadius },
-                    // barGap: '50%',
-                    barWidth: barWidth,
-
-                    animationEasing: 'linear',
-                    animationDuration: 500,
-                    animationDelay: 500,
-                }
-                ,
-                {
-                    data: newData[4],
-                    stack: 'stack',
-                    type: 'bar',
-                    label: { show: true, position: 'top' }
-                },
-                {
-                    data: newData[3],
-                    xAxisIndex: 1,
-                    type: 'bar',
-                    //barGap: '-50%',
-                    barWidth: (barWidth * 1.75),
-                    itemStyle: {
-                        color: 'rgba(0,0,0,0.125)',
-                        barBorderColor: '#02b3ff',
-                        barBorderWidth: 1,
-                        barBorderRadius: 2
-                    },
-                    // label: {
-                    //     show: true,
-                    //     position: 'top',
-                    //     rotate: '90',
-                    //     color: '#70d4ff'
-                    // },
-                    z: 0
-                }
-            ]
-        };
-
-        SetOptionOnChart(option, myChart);
-    }
-
-
-
-
-
-
-    static CreateMonthlyCompliance2(_elementID, _data) {
-        var dom = document.getElementById(_elementID);
-        if (dom == null || dom == undefined)
-            return;
-        var myChart = echarts.init(dom, ChartStyles.baseStyle);
-        //var myChart = echarts.init(document.getElementById(_elementID), 'chartTone');
+        // Create an eCharts instance 
+        var myChart = InitChartFromElementID(_elementID);
+        if (myChart == undefined) return;
 
         // 1 - location
         // 3 - plan
         // 4 - actuals
 
-        var newData = [[], [], [], [], []];
+
+        var locationData = [];
+        var markerData = [];
+        for (var i = 0; i < _data.length; i++) {
+            var d = new MonthlyChartDataForLocation(_data[i]);
+            locationData.push(d);
+            markerData.push(
+                {
+                    name: '',
+                    value: '',//d.percentOfTargetToDate,
+                    xAxis: i,
+                    yAxis: d.percentOfTargetToDate,
+                    itemStyle: { color: 'white' }
+                }
+            );
+        }
+
 
         var newData = [[], [], [], [], []];
         for (var i = 0; i < _data.length; i++) {
@@ -475,25 +309,9 @@ class ChartsMonthly {
                     var mined = params[0].value + params[1].value;
                     var over = params[1].value;
 
-                    //var len = _data[params[0].name][1].length;
-                    //var average = (_data[params[0].name][1][len - 1] / len).toFixed(2);
-
                     var label = "";
-                    // label += ChartStyles.toolTipTextTitle(params[0].name)
-                    //     + ChartStyles.toolTipTextEntry("Target : " + target)
-                    //     + ChartStyles.toolTipTextEntry("Mined : " + mined + (target > 0 ? " (" + RatioToPercent(mined / target) + ")" : ""))
-                    //     + ChartStyles.toolTipTextEntry("Average : " + average);
-                    // if (over > 0 && target > 0)
-                    //     label += ChartStyles.toolTipTextEntry("Over: " + params[1].value + " (" + RatioToPercent(params[1].value / target) + ")", 'cup-redwarn');
-
-                    //label = params;
-                    //console.log(params);
 
                     label += ChartStyles.toolTipTextTitle(params[0].name)
-                        // + ChartStyles.toolTipTextEntry(params[0].value)
-                        // + ChartStyles.toolTipTextEntry(params[1].value)
-                        // + ChartStyles.toolTipTextEntry(params[2].value)
-                        // + ChartStyles.toolTipTextEntry(params[3].value)
                         + ChartStyles.toolTipTextEntry("Target : " + target)
                         + ChartStyles.toolTipTextEntry("Mined  : " + mined + (target > 0 ? " (" + RatioToPercent(mined / target) + ")" : ""));
                     if (over > 0 && target > 0)
@@ -505,8 +323,8 @@ class ChartsMonthly {
             },
 
             grid: {
-                top: '3%',
-                bottom: '3%',
+                top: '0%',
+                bottom: '0%',
                 left: '3%',
                 right: '3%',
                 containLabel: true
@@ -568,13 +386,20 @@ class ChartsMonthly {
                     animationEasing: 'linear',
                     animationDuration: 500,
                     animationDelay: 500,
+                    z: 5
                 }
                 ,
                 {
                     data: newData[4],
                     stack: 'stack',
                     type: 'bar',
-                    label: { show: true, position: 'top' }
+                    label: { show: true, position: 'top' },
+                    markPoint: {
+                        symbol: 'rect',
+                        symbolSize: [barWidth * 1.75, 1.5],
+                        data: markerData
+                    },
+                    z: 3
                 },
                 {
                     data: newData[3],
@@ -588,12 +413,6 @@ class ChartsMonthly {
                         barBorderWidth: 1,
                         barBorderRadius: 2
                     },
-                    // label: {
-                    //     show: true,
-                    //     position: 'top',
-                    //     rotate: '90',
-                    //     color: '#70d4ff'
-                    // },
                     z: 0
                 }
             ]
@@ -603,73 +422,129 @@ class ChartsMonthly {
     }
 
 
-
-
-
+    /**
+     * @param {string} _elementID
+     * @param {Array} _data 
+     */
     static CreateMonthlyComplianceGauge(_elementID, _data) {
-        var dom = document.getElementById(_elementID);
-        if (dom == null || dom == undefined)
-            return;
-        var myChart = echarts.init(dom, ChartStyles.baseStyle);
+        var myChart = InitChartFromElementID(_elementID);
+        if (myChart == undefined) return;
+
+        var data = new MonthlyChartDataForLocation(_data);
+
+        //console.log(_data);
+        var strPct = (x) => x.toString().concat("%");
+        var center = ['50%', '75%'];
+        var maxRadius = 120;
+        var radiusThickness = 20;
+        var radiusPadding = 4;
 
 
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
-            toolbox: ChartStyles.toolBox(myChart.getHeight(), _elementID),
+            toolbox: ChartStyles.toolBox(myChart.getHeight(), _elementID + "_MonthlyCompliance"),
 
             tooltip: {
-                formatter: "{a} <br/>{b} : {c}%",
+                trigger: 'item',
+                formatter: function (params, index) {
+                    var string = ChartStyles.toolTipTextTitle(params.name);
+                    string += ChartStyles.toolTipTextEntry((Math.round(params.percent * 2 * 10) / 10) + "%");
+                    return string;
+                },
                 textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),
                 backgroundColor: ChartStyles.toolTipBackgroundColor()
             },
-            grid: {
-                left: '0%',
-                right: '0%',
-                height: 80//'30%'
-            },
             series: [
                 {
-                    name: _elementID,
+                    name: 'Monthly Compliance',
+                    type: 'pie',
+                    center: center,
+                    radius: [strPct(maxRadius - radiusThickness), strPct(maxRadius)],
+                    avoidLabelOverlap: true,
+                    startAngle: 180,
+                    z: 0,
+                    label: {
+                        formatter: '{d}%',
+                        fontSize: ChartStyles.fontSizeAxis
+                    },
+                    data: [
+                        {
+                            value: data.progress,
+                            name: 'Progress',
+                            itemStyle: { color: ChartStyles.siteColors[0] }
+                        },
+                        {
+                            value: data.under,
+                            name: 'Under',
+                            itemStyle: { color: ChartStyles.TUMColors[5] }
+                        },
+                        {
+                            value: data.overForChart,
+                            name: 'Over',
+                            itemStyle: { color: ChartStyles.TUMColors[0] }
+                        },
+                        {
+                            value: data.targetForChart,
+                            name: 'Target',
+                            itemStyle: { color: 'rgba(0,0,0,0)' }
+                        }
+                        ,
+                        {
+                            value: data.target,
+                            name: 'Invisible',
+                            itemStyle: { color: 'rgba(0,0,0,0)' }
+                        }
+                    ]
+                },
+                {
+                    name: 'Target Bucket',
+                    type: 'pie',
+                    center: center,
+                    radius: [strPct(maxRadius - radiusThickness - radiusPadding), strPct(maxRadius + radiusPadding)],
+                    startAngle: 180,
+                    z: 0,
+                    toolTip: { show: false, trigger: 'none', showContent: false },
+                    data: [
+                        {
+                            value: 100,
+                            itemStyle: {
+                                borderRadius: 30,
+                                borderColor: '#02b3ff',
+                                borderWidth: 1.5,
+                                color: 'rgba(0,0,0,0.125)'
+                            }
+                        },
+                        {
+                            value: 100,
+                            name: 'Invisible',
+                            itemStyle: { color: 'rgba(0,0,0,0)' }
+                        }
+                    ]
+                },
+                {
                     type: 'gauge',
+                    radius: strPct(maxRadius),
+                    center: center,
                     startAngle: 180,
                     endAngle: 0,
-                    //detail: {formatter:'{value}%'},
-                    data: [{ value: 40, name: '111' }],
-                    radius: '80%',
-                    pointer: {
-                        //show: false,
-                        length: '100%',
-                        width: 5,
-                        color: ChartStyles.siteColors[0],
-                        textStyle: ChartStyles.textStyle
-                    },
-                    detail: {
-                        //show: false
-                        // formatter: data[3]
-                    },
                     axisLine: {
+                        show: false,
                         lineStyle: {
-                            color: [
-                                [0.2, ChartStyles.siteColors[0]],
-                                [0.4, ChartStyles.TUMColors[4]],
-                                [1, ChartStyles.statusColors[2]]],
-                            width: 15,
-                            shadowColor: 'rgba(1, 1, 1, 0.4)',
-                            shadowBlur: 7,
-                            shadowOffsetX: 5,
-                            shadowOffsetY: 10
+                            width: 0,
+                            color: [[1, '#02b3ff']]
                         }
                     },
-                    splitLine: {
-                        show: false
+                    splitLine: { show: false },
+                    axisTick: { show: false },
+                    pointer: {
+                        width: 4
                     },
-                    axisTick: ChartStyles.axisLineGrey,
                     axisLabel: {
                         textStyle: ChartStyles.textStyle,
                         lineHeight: 100,
-                        distance: -40,
+                        distance: -35,
                         padding: [0, 0, -15, 0],
                         formatter: function (v) {
                             switch (v + '') {
@@ -679,20 +554,38 @@ class ChartsMonthly {
                             }
                         },
                         fontSize: ChartStyles.fontSizeSmall
-                    }
+                    },
+                    detail: { show: false },
+                    data: [{ value: data.monthPassed, name: '' }]
                 }
             ]
+
         };
 
-        setInterval(function () {
-            option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-            myChart.setOption(option, true);
-        }, 2000);
-
-        if (option && typeof option === "object") {
-            myChart.setOption(option, true);
-        }
+        SetOptionOnChart(option, myChart);
+        return myChart;
     }
 
 }
 
+class MonthlyChartDataForLocation {
+    constructor(_data) {
+        this.location = _data[1];
+        this.progress = _data[4];
+        this.target = _data[3];
+        this.monthPassed = 75;
+
+        this.percentOfTargetToDate = this.target * (this.monthPassed / 100);
+        this.bias = this.progress - this.percentOfTargetToDate;
+
+        this.under = Math.abs(Math.min(0, this.bias));
+        this.over = Math.abs(Math.max(0, this.bias));
+
+        // Clamp progress
+        this.progress = Math.min(Math.min(this.progress, this.percentOfTargetToDate), this.target);
+
+        var overDiff = Math.max(0, (this.progress + this.over) - this.target);
+        this.overForChart = this.over - overDiff;
+        this.targetForChart = this.target - Math.min(this.target, this.progress + this.under + this.overForChart);
+    }
+}

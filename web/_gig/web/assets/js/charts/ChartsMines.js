@@ -361,8 +361,19 @@ class ChartsMines {
         }
 
         for (var key in _temp) {
+
+            // Add the values that feed into this
+            // location from each link/path in the sankey
+            var valueIn = 0;
+            for (var i = 0; i < _links.length; i++) {
+                if (_links[i].target == key)
+                    valueIn += _links[i].value;
+                //console.log(_links[i].value);
+            }
+
             _locations.push({
                 name: key,
+                value: valueIn,
                 itemStyle: {
                     normal: { color: ChartStyles.TUMColors[2], }
                 }
@@ -385,12 +396,10 @@ class ChartsMines {
                 backgroundColor: ChartStyles.toolTipBackgroundColor(),
                 formatter: function (params, index) {
                     var string = "";
-                    var title = "";
-                    if (params.value == undefined)
-                        title = params.name;
-                    else
-                        title = Math.round(params.value);
-                    string += ChartStyles.toolTipTextTitle(title);
+                    string += ChartStyles.toolTipTextTitle(params.name);
+                    string += ChartStyles.toolTipTextEntry(Math.round(params.value));
+                    //string += ChartStyles.toolTipTextEntry(params.seriesName);
+
                     console.log(params);
                     return string;
                 }

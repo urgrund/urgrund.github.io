@@ -13,10 +13,10 @@ class ChartStyleContainer {
 
         this.textStyle =
         {
-            //color: 'rgba(1, 1, 1, 1)',
             color: 'white',
             fontFamily: 'Poppins',
-            fontSize: 11
+            fontSize: 11,
+            fontWeight: 150
         };
 
 
@@ -43,23 +43,20 @@ class ChartStyleContainer {
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
-                colorStops: [{ offset: 0, color: '#00ff6a' },
-                { offset: 1, color: '#00b297' }]
+                colorStops: [{ offset: 0, color: '#00ff6a' }, { offset: 1, color: '#00b297' }]
                 //00b285
             },
             // IDLE
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
-                colorStops: [{ offset: 0, color: 'rgb(255,255,0)' },
-                { offset: 1, color: 'rgb(240,169,0)' }]
+                colorStops: [{ offset: 0, color: 'rgb(255,255,0)' }, { offset: 1, color: 'rgb(240,169,0)' }]
             }
             // DOWN
             , {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
-                colorStops: [{ offset: 0, color: 'rgba(255,140,0,1)' },
-                { offset: 1, color: 'rgba(255,0,0,1)' }]
+                colorStops: [{ offset: 0, color: 'rgba(255,140,0,1)' }, { offset: 1, color: 'rgba(255,0,0,1)' }]
             }
         ];
 
@@ -182,7 +179,7 @@ class ChartStyleContainer {
             // Operating Delay
             this.statusColors[0],
 
-            // Operating Time
+            // Primary Operating
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
@@ -194,8 +191,10 @@ class ChartStyleContainer {
         this.TUMColorsByCategory = {
             'Unplanned Breakdown': this.TUMColors[0],
             'Planned Maintenance': this.TUMColors[1],
+
             'Unplanned Standby': this.TUMColors[2],
             'Operating Standby': this.TUMColors[3],
+
             'Secondary Operating': this.TUMColors[4],
             'Primary Operating': this.TUMColors[5],
         }
@@ -305,10 +304,10 @@ class ChartStyleContainer {
 
     gridSpacing() {
         return {
-            top: '10%',
-            bottom: '5%',
-            left: '3%',
-            right: '3%',
+            top: '11%',
+            bottom: '2%',
+            left: '2%',
+            right: '2%',
             containLabel: true
         }
     }

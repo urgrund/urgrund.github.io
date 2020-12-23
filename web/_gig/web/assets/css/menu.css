@@ -47,7 +47,7 @@
    /* background: linear-gradient(-1deg, rgba(1, 19, 41, 1) 0, rgba(0, 74, 144, 1) 100%);  */
    background: linear-gradient(0deg, rgb(10, 42, 82) 0, rgba(0, 74, 144, 1) 100%);      
   box-shadow: 0px 2px 11px 1px black;  
-  border-bottom: 1px solid #303e4e;
+  /* border-bottom: 1px solid #303e4e; */
 }
  
 #site_body { 

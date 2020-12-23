@@ -1,10 +1,7 @@
 
 
-
 // Holds all chart instances
 var allCharts = [];
-
-
 
 // -----------------------------------------------------------------------
 // Convenience arrays for time labels 
@@ -33,9 +30,6 @@ function GenerateTimeLabels(_count, _offset) {
 }
 
 
-//console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
-//GenerateDateLabels('20181001', 91);
-//console.log(timeLabelsShift[0]
 function GenerateDateLabels(_startDate, _numberOfDays) {
     var d = moment(_startDate);
     var dateLabels = [];
@@ -45,12 +39,6 @@ function GenerateDateLabels(_startDate, _numberOfDays) {
     }
     return dateLabels;
 }
-// -----------------------------------------------------------------------
-
-
-
-
-// -----------------------------------------------------------------------
 
 
 // Subscribe to resize event to deal with chart resizing
@@ -79,16 +67,17 @@ function ClearAllCharts() {
 }
 
 
+/**
+ * Assignes the option object to the echart instance
+ * and updates the global list of all charts
+ */
 function SetOptionOnChart(_option, _chart) {
     if (_option && typeof _option === "object") {
         _chart.setOption(_option, true);
         allCharts.push(_chart);
     }
 }
-// -----------------------------------------------------------------------
 
-
-// -----------------------------------------------------------------------
 // Time and other functions
 function SecondsToMinutes(_seconds) {
     return _seconds / 60;
@@ -137,21 +126,34 @@ function CalculateMA(dayCount, data) {
     }
     return result;
 }
-// -----------------------------------------------------------------------
 
+/**
+ * Find a DOM Element by ID and attempt
+ * to init an echarts instance in it
+ */
+function InitChartFromElementID(_elementID) {
+    var dom = document.getElementById(_elementID);
+    if (dom == null || dom == undefined)
+        return undefined;
+    var myChart = echarts.init(dom, ChartStyles.baseStyle);
+    return myChart;
+}
+
+
+// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 
 
 
 class Charts {
 
-
     static CreateMPH2(_elementID, _data) {
-        var dom = document.getElementById(_elementID);
-        if (dom == null || dom == undefined)
-            return;
-        var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
+        // Create an eCharts instance 
+        var myChart = InitChartFromElementID(_elementID);
+        if (myChart == undefined) return;
 
+        // Testing out 24hr stuff
         var fullDay = false;
 
         // Grab all the metrics recorded for this equipment 
@@ -160,6 +162,7 @@ class Charts {
         var hourCount = fullDay ? 24 : 12;
         var equipMetricsToAdd = fullDay ? _data.shiftData[0].metricData.concat(_data.shiftData[1].metricData) : _data.shiftData[shift].metricData;
 
+        // EXPERIMENTAL 24HR
         // Expand each metric array if full day
         if (fullDay) {
             var arrayOfZero = ArrayOfNumbers(0, 12, 0);
@@ -170,9 +173,7 @@ class Charts {
             }
         }
 
-        console.log(equipMetricsToAdd);
-
-        //for (var i = 0; i < _data.shiftData[shift].metricData.length; i++) {
+        //console.log(equipMetricsToAdd);        
 
         // Finalise with Metrics that have > 0 cumulative
         for (var i = 0; i < equipMetricsToAdd.length; i++) {
@@ -216,15 +217,13 @@ class Charts {
                 legend.push(metrics[i].site);
 
             // Site total
-            // See if a site (WF, SLC..etc) exists
-            // and create clean empty arrays for it
+            // See if a site exists and create clean empty arrays for it
             if (!(metrics[i].site in perSiteTotals)) {
                 perSiteTotals[metrics[i].site] = ArrayOfNumbers(0, hourCount, 0);
             }
 
             // Accumulate values into each site
             for (var j = 0; j < hourCount; j++) {
-                //cumulative[j] += metrics[i].cph[j];                
                 perSiteTotals[metrics[i].site][j] = perSiteTotals[metrics[i].site][j] + metrics[i].mph[j];
                 perHourTotals[j] += metrics[i].mph[j];
             }
@@ -238,7 +237,7 @@ class Charts {
 
         seriesArray.push(
             {
-                name: "SLC",
+                name: "Invisible",
                 type: 'bar',
                 z: 3,
                 barMaxWidth: '15',
@@ -321,7 +320,6 @@ class Charts {
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
-            //tooltip: ChartStyles.toolTip(),
             legend: { y: 'top', data: legend },
             grid: ChartStyles.gridSpacing(),
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "TPH"),
@@ -797,11 +795,15 @@ class Charts {
 
 
     static CreateUofA(_elementID, _data) {
-        var dom = document.getElementById(_elementID);
-        if (dom == null || dom == undefined)
-            return;
-        var myChart = echarts.init(dom, ChartStyles.baseStyle);
+        // var dom = document.getElementById(_elementID);
+        // if (dom == null || dom == undefined)
+        //     return;
+        // var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
+
+        // Create an eCharts instance 
+        var myChart = InitChartFromElementID(_elementID);
+        if (myChart == undefined) return;
 
         var _d = _data.shiftData[shift].uofa;
 
@@ -817,13 +819,18 @@ class Charts {
         }
 
 
+        var labels = ['Availability', 'Utilisation', 'U of A'];
+
         var option = {
 
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
             //title: ChartStyles.createTitle('Actual Availability, Utilisation & U of A'),// vs Target'),
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "UofA"),
-            legend: { y: 'top', data: ['Availability', 'Utilisation', 'U of A', 'Targets'] },
+            legend: {
+                y: 'top',
+                data: labels
+            },
             grid: ChartStyles.gridSpacing(),
             tooltip: {
                 confine: true,
@@ -856,8 +863,7 @@ class Charts {
             },
             series: [
                 {
-                    name: "Availability",
-                    color: 'green',
+                    name: labels[0],
                     data: availability,
                     itemStyle: ChartStyles.statusItemStyle(0),
                     type: 'line',
@@ -867,8 +873,7 @@ class Charts {
 
                 },
                 {
-                    name: "Utilisation",
-                    color: 'orange',
+                    name: labels[1],
                     data: utilisation,
                     itemStyle: ChartStyles.statusItemStyle(1),
                     type: 'line',
@@ -877,8 +882,7 @@ class Charts {
                     z: 1
                 },
                 {
-                    name: "U of A",
-                    color: 'blue',
+                    name: labels[2],
                     data: uofa,
                     type: 'line',
                     symbol: 'none',
@@ -926,9 +930,7 @@ class Charts {
 
 
     static CreateUofAPie(_elementID, _data) {
-        // -------------------------------------------------------------
-        //if (myPie == null)
-        //var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+
         var dom = document.getElementById(_elementID);
         if (dom == null || dom == undefined)
             return;
@@ -936,6 +938,8 @@ class Charts {
 
         var _d = _data.shiftData[shift];
 
+
+        var labels = ['Availability', 'Utilisation', 'U of A'];
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
@@ -957,7 +961,7 @@ class Charts {
                 orient: 'horizontal',
                 x: 'center',
                 y: 'top',
-                data: ['Available', 'Non-Utilised', 'Downtime']
+                data: labels
             },
             series: [
                 {
@@ -982,17 +986,17 @@ class Charts {
                     data: [
                         {
                             value: SecondsToMinutes(_d.timeExOperating),
-                            name: 'Available',
+                            name: labels[0],
                             itemStyle: ChartStyles.statusItemStyle(0)
                         },
                         {
                             value: SecondsToMinutes(_d.timeExIdle),
-                            name: 'Non-Utilised',
+                            name: labels[1],
                             itemStyle: ChartStyles.statusItemStyle(1)
                         },
                         {
                             value: SecondsToMinutes(_d.timeExDown),
-                            name: 'Downtime',
+                            name: labels[2],
                             itemStyle: ChartStyles.statusItemStyle(2)
                         }
                     ]
@@ -1358,15 +1362,15 @@ class Charts {
                 ]
         };
 
-
-
         SetOptionOnChart(option, myChart);
     }
 
 
 
 
-
+    /**
+    * This is just the hour axis labels to use with the other Timeline charts    
+    */
     static CreateTimeLineFlatTime(_elementID) {
         var dom = document.getElementById(_elementID);
         if (dom == null || dom == undefined)

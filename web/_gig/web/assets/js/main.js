@@ -89,7 +89,7 @@ app.run(function ($rootScope, $http, $route) {
 
     /** Set the data object that the core of the SIC
      * tool will interface with. */
-    $rootScope.setNewSiteData = function (_data) {
+    $rootScope.setNewSiteData = function (_data, _test = false) {
 
         if (_data == undefined) {
             console.log("Trying to set unassigned data");
@@ -98,6 +98,11 @@ app.run(function ($rootScope, $http, $route) {
 
         var jsonString = JSON.stringify(_data);
         var newData = JSON.parse(jsonString);
+
+        // if (_test) {
+        //     console.log("returned...");
+        //     return;
+        // }
 
         //console.log(newData);
 
@@ -126,12 +131,13 @@ app.run(function ($rootScope, $http, $route) {
             if (asset.function in $rootScope.equipmentByFunction)
                 $rootScope.equipmentByFunction[asset.function].push(key);
         }
-        console.log($rootScope.equipmentByFunction);
+        //console.log($rootScope.equipmentByFunction);
 
 
 
         // Debug output
-        if (true) {
+        if (!true) {
+            console.log("[" + $rootScope.meta.Date + "]");
             console.log("Sites :");
             console.log($rootScope.siteData);
 
@@ -143,37 +149,57 @@ app.run(function ($rootScope, $http, $route) {
         }
         // Update and broadcast message to the app
         //$rootScope.$apply();
+
+        jsonString = null;
+        newData = null;
+
         $rootScope.$broadcast('newSiteDataSet');
         $route.reload();
     };
 
 
 
-    $rootScope.fetchSiteData = function (_dates, _setAfterFetch = false) {
+    $rootScope.fetchSiteData = function (_dates, _setAfterFetch = false, _replace = false) {
 
-        var urlGetData = ServerInfo.URL_CreateSiteData;
+        //var urlGetData = ServerInfo.URL_CreateSiteData;
         for (var i = 0; i < _dates.length; i++) {
+
+
             var date = _dates[i];
             //console.log(date);
 
             var _data = { 'func': 0, 'date': date };
             var request = $http({
                 method: 'POST',
-                url: urlGetData,
+                url: ServerInfo.URL_CreateSiteData,
                 data: _data
             })
             request.then(function (response) {
-                const { length } = $rootScope.cachedData;
-                const found = $rootScope.cachedData.some(el => el[el.length - 1].Date === response.data[el.length - 1].Date);
+                //const { length } = $rootScope.cachedData;
+
+                // Does this exist?
+                var found = $rootScope.cachedData.some(el => el[el.length - 1].Date === response.data[el.length - 1].Date);
+
+
 
                 // It's new so add it 
                 if (!found) {
+                    console.log("Wasn't found...");
                     $rootScope.cachedData.push(response.data);
                 }
 
+                if (!true) {
+                    console.log("[" + response.data[response.data.length - 1].Date + "] was added...");
+                    console.log(response.data);
+                    console.log($rootScope.cachedData.length + " days of data in memory");
+                }
+
+                //if (_replace)
+                //  return;
+
                 // Apply to site if requested
                 if (_setAfterFetch) {
-                    $rootScope.setNewSiteData(response.data);
+                    $rootScope.setNewSiteData(response.data, _replace);
                 }
 
                 // Sort 
@@ -184,6 +210,7 @@ app.run(function ($rootScope, $http, $route) {
                 console.error(error);
             });
         }
+        //window.CollectGarbage();
 
 
         // THIS IS FOR LOCAL OFFLINE DATA, SUCH AS THE ONLINE DEMO
@@ -245,6 +272,7 @@ app.run(function ($rootScope, $http, $route) {
             data: _data,
         })
         request.then(function (response) {
+            console.log("[Configs]");
             console.log(response.data);
             //$rootScope.config = response.data;
             ServerInfo.config = response.data;
@@ -324,15 +352,24 @@ app.run(function ($rootScope, $http, $route) {
 
 
 // Main controller
-app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $location) {
+app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $location, $interval) {
 
     console.log("Starting Mine-Mage...");
 
+
+    // ------------------------------------------------------
     // Fetch todays data and set it as soon as done
     $rootScope.fetchSiteData(['20181010'], true);
-
     $rootScope.fetchSiteConfigs();
 
+    // Interval function to update the current days data
+    $scope.updateIntervalForTodaysData = function () {
+        $rootScope.fetchSiteData(['20181003'], true, true);
+        //console.log("FOOOOOO");
+    }
+
+    //$interval(function () { $scope.updateIntervalForTodaysData(); }, 5000);
+    // ------------------------------------------------------
 
 
     // Callback for new data being set
@@ -341,6 +378,7 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
         // ------------------------------------------------------
         // Fake alerts
         var alerts = [];
+        $rootScope.alerts = null;
         for (var i = 0; i < Math.round(Math.random() * 10); i++) {
             var randSite = Math.floor(Math.random() * ($rootScope.siteData.length - 1));
             var randEquip = Math.floor(Math.random() * $rootScope.siteData[randSite].equipment.length);
@@ -369,9 +407,6 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
         // ------------------------------------------------------
 
     });
-
-
-
 
 
 
@@ -523,17 +558,6 @@ app.config(
                 templateUrl: 'site.html',
                 controller: 'Site'
             });
-        // .when("/Mines", {
-        //     templateUrl: "dash_mines.html",
-        //     controller: 'MineRoute'
-        // })
-        // .when('/abcdefg', {
-        //     controller: 'BlaBla',
-        //     templateUrl: function () {
-        //         // You can route to different templates
-        //         return loggedIn ? "app/main/main-loggedIn.html" : "app/main/main-loggedOut.html"
-        //     }
-        // });
     }
 );
 
@@ -549,9 +573,7 @@ app.config(
 
 // =====================================================================================
 // Components
-
-//console.log("Setting up Components...");
-
+// TODO: Move this into component files
 
 /// ----------------------------------------
 /// Drill Down Chart Container
@@ -568,80 +590,6 @@ app.component("drillDownChart", {
     }
 });
 /// ----------------------------------------
-
-
-
-
-
-/// ----------------------------------------
-/// Equipment Header Details
-/// ----------------------------------------
-// app.component("drillDownHeader", {
-//     //require: { main: '^myCtrl' },
-//     templateUrl: 'components/drillDownHeader.html',
-//     bindings: {
-//         shift: '@',
-//         styleGroup: '@',
-//         styleItem: '@',
-//         lines: '@',
-//         equip: '<'
-//     },
-//     controller: function ($rootScope) {
-
-
-//         this.$onInit = function () {
-
-//             //console.log(this.styleGroup);
-//             //console.log($rootScope.equipment);
-
-//             if (this.equip == undefined)
-//                 return;
-
-//             //var len = this.equip.shiftData[this.shift].events.length;
-//             //this.lastEvent = this.equip.shiftData[this.shift].events[len - 1];
-//             this.lastEvent = $rootScope.getEquipmentLastEvent(this.equip);
-
-//             // ---------------------------------------------
-//             // Get time difference from 8am or 8pm
-//             var date1 = new Date(this.lastEvent.eventTime.date);
-//             var date2 = new Date();
-//             var diff = date2 - date1;
-
-//             var msec = diff;
-//             var hh = Math.floor(msec / 1000 / 60 / 60);
-//             msec -= hh * 1000 * 60 * 60;
-//             var mm = Math.floor(msec / 1000 / 60);
-//             diff = hh + "hr " + mm + "m";
-
-
-//             // Can this variable be updated with
-//             // interval check so that its realtime?
-//             this.late = 0;
-//             if (hh > 4) {
-//                 this.timeSinceLastCall = ">" + 4 + "hrs!";
-//                 this.late = 1;
-//             }
-//             else
-//                 this.timeSinceLastCall = diff;
-
-//             this.lastEventTime = this.lastEvent.eventTime.date.split(" ")[1].substring(0, 8);
-//             // ---------------------------------------------
-
-
-//             // this.flexColumn = "";
-//             // this.flex = "flex flex-start";
-
-//             // if (this.lines == 0) {
-//             //     this.flexColumn = "";
-//             //     this.flex = "";
-//             // }
-
-//         };
-//     }
-// });
-/// ----------------------------------------
-
-
 
 
 
