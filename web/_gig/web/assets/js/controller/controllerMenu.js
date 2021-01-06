@@ -13,16 +13,42 @@ app.controller('Menu', function ($scope, $routeParams, $rootScope, $timeout) {
         }
 
         $scope.equipList = list;
-        //console.log(list);
 
+        //$scope.setupCalendar();
 
-        var fp = flatpickr('#test', {
-            "minDate": new Date().fp_incr(1)
-        });
-        //console.log(fp);
 
         return list;
     };
+
+    $scope.setupCalendar = function () {
+
+        var minDate = ServerInfo.availableDates[ServerInfo.availableDates.length - 1];
+        var maxDate = ServerInfo.availableDates[0];
+
+        minDate = moment(minDate).format('YYYY-MM-DD').toString();
+        maxDate = moment(maxDate).format('YYYY-MM-DD').toString();
+
+        flatpickr('#menuDataDatePick', {
+            enable: [
+                {
+                    from: minDate,
+                    to: maxDate
+                }
+            ],
+            defaultDate: maxDate,
+            inline: true,
+            onChange: function (selectedDates, dateStr, instance) {
+                //...
+                var date = dateStr.replace("-", "");
+                date = date.replace("-", "");
+                console.log(date);
+                $rootScope.fetchSiteData([date], true);
+            }
+        });
+    }
+
+    //$scope.calendarHover
+
 
     $scope.$watch('$viewContentLoaded', function () {
         $timeout(function () {
@@ -31,7 +57,15 @@ app.controller('Menu', function ($scope, $routeParams, $rootScope, $timeout) {
     });
 
     $rootScope.$on('newSiteDataSet', function () {
-        $scope.setupMenu();
+        $timeout(function () {
+            $scope.setupMenu();
+        }, 100);
+    });
+
+    $rootScope.$on('availableDatesSet', function () {
+        $timeout(function () {
+            $scope.setupCalendar();
+        }, 100);
     });
 
 

@@ -11,7 +11,11 @@ Written by Matt Bell
 
 // Variables used outside of particular NG scopes  (ie. charts)
 var shift = 0;
+var fullDayView = 0;
+
 const shiftTitle = ['Day Shift', 'Night Shift'];
+
+
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const month = new Array();
 month[0] = "January";
@@ -133,10 +137,8 @@ app.run(function ($rootScope, $http, $route) {
         }
         //console.log($rootScope.equipmentByFunction);
 
-
-
         // Debug output
-        if (!true) {
+        if (true) {
             console.log("[" + $rootScope.meta.Date + "]");
             console.log("Sites :");
             console.log($rootScope.siteData);
@@ -171,7 +173,7 @@ app.run(function ($rootScope, $http, $route) {
             var _data = { 'func': 0, 'date': date };
             var request = $http({
                 method: 'POST',
-                url: ServerInfo.URL_CreateSiteData,
+                url: ServerInfo.URL_GetSiteData,
                 data: _data
             })
             request.then(function (response) {
@@ -257,8 +259,8 @@ app.run(function ($rootScope, $http, $route) {
 
 
     // With real data this should be set to current data
-    var dates = ['20181010', '20181009', '20181008', '20181007', '20181006', '20181005', '20181004', '20181003'];
-    $rootScope.fetchSiteData(dates, false);
+    //var dates = ['20181010', '20181009', '20181008', '20181007', '20181006', '20181005', '20181004', '20181003'];
+    //$rootScope.fetchSiteData(dates, false);
 
     // ------------------------------------------------------
 
@@ -279,6 +281,35 @@ app.run(function ($rootScope, $http, $route) {
         }, function (error) {
         });
     }
+
+
+    /**
+     * Get the available data dates from the server and set trailing week
+     */
+    $rootScope.fetchAvailableDates = function (_setTrailingWeek = true) {
+        var _data = { 'func': 1 };
+        var request = $http({
+            method: 'POST',
+            url: ServerInfo.URL_GetSiteData,
+            data: _data,
+        })
+        request.then(function (response) {
+            //console.log("[Available Dates]");
+            //console.log(response.data);
+            ServerInfo.availableDates = response.data;
+
+            if (_setTrailingWeek) {
+                var trailingWeek = ServerInfo.availableDates.slice(1, 7);
+                $rootScope.fetchSiteData([ServerInfo.availableDates[0]], true);
+                $rootScope.fetchSiteData(trailingWeek, false);
+            }
+
+            $rootScope.$broadcast('availableDatesSet');
+
+        }, function (error) {
+        });
+    }
+
 
     /**
      * Pass date as dd-mm-yyy. Creates a nicely formatted date object from a numerical date
@@ -359,8 +390,9 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
 
     // ------------------------------------------------------
     // Fetch todays data and set it as soon as done
-    $rootScope.fetchSiteData(['20181010'], true);
+    //$rootScope.fetchSiteData(['20181010'], true);
     $rootScope.fetchSiteConfigs();
+    $rootScope.fetchAvailableDates();
 
     // Interval function to update the current days data
     $scope.updateIntervalForTodaysData = function () {
@@ -455,6 +487,7 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
     // Change the shift for the current view
     // and broadcast the event 
     $scope.switchShift = function (_state) {
+
         if (_state == true)
             $rootScope.shift = 0;
         else
@@ -463,6 +496,16 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
         $rootScope.shiftTitle = shiftTitle[$rootScope.shift];
         shift = $rootScope.shift;
 
+        // Only broadcast if not in day view
+        if ($rootScope.fullDayView === 1)
+            return;
+        else
+            $scope.$broadcast('updateShift');
+    };
+
+    $scope.switchDayView = function (_state) {
+        $rootScope.fullDayView = (_state == true) ? 0 : 1;
+        fullDayView = $rootScope.fullDayView;
         $scope.$broadcast('updateShift');
     };
 

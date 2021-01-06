@@ -8,32 +8,10 @@ app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $ti
     $scope.callUpTitleShift = $scope.callUpIsDay == true ? " Day Shift" : " Night Shift";
 
 
-    //console.log($scope.siteData);
-    //console.log($scope.calUpTitle);
-
-
-    // Create arrays for call-up
-    $scope.equipByFunc = [];
-    $scope.equipByFunc.push({ 'name': "Trucks", 'equipment': [] });
-    $scope.equipByFunc.push({ 'name': "Boggers", 'equipment': [] });
-    $scope.equipByFunc.push({ 'name': "Drills", 'equipment': [] });
-
-    for (var key in $rootScope.equipment) {
-        var e = $rootScope.equipment[key];
-        if (e.function == 'P' || e.function == 'D')
-            $scope.equipByFunc[2].equipment.push(e);
-        else if (e.function == 'LOADING')
-            $scope.equipByFunc[1].equipment.push(e);
-        else if (e.function == 'HAULING')
-            $scope.equipByFunc[0].equipment.push(e);
-    }
-
-    //console.log($scope.equipByFunc);
-
-
-
-
-
+    /** 
+     * Get the event for this call up
+     * depending on first/last day/night
+     **/
     $scope.getCallUpEvent = function (_equip) {
 
         var shiftData = _equip.shiftData[$scope.callUpIsDay ? 1 : 0];
@@ -49,6 +27,9 @@ app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $ti
 
         // And... turn it back into an object...
         callUpEvent = JSON.parse(callUpEvent);
+
+
+        // WHY CAN"T ALL THIS BE IN THE PHP?
 
         // ---------------------------------------------
         // Get time difference from 8am or 8pm

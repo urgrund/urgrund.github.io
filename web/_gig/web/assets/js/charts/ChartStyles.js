@@ -66,20 +66,17 @@ class ChartStyleContainer {
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
-                colorStops: [{ offset: 0, color: '#00ff6a' },
-                { offset: 1, color: '#00b285' }]
+                colorStops: [{ offset: 0, color: '#00ff6a' }, { offset: 1, color: '#00b285' }]
             },
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
-                colorStops: [{ offset: 0, color: '#ffff00' },
-                { offset: 1, color: '#eab300' }]
+                colorStops: [{ offset: 0, color: '#ffff00' }, { offset: 1, color: '#eab300' }]
             }
             , {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
-                colorStops: [{ offset: 0, color: 'rgba(255,180,50,1)' },
-                { offset: 1, color: 'rgba(255,100,100,1)' }]
+                colorStops: [{ offset: 0, color: 'rgba(255,180,50,1)' }, { offset: 1, color: 'rgba(255,100,100,1)' }]
             }
         ];
         // -----------------------------------------------------------------------------
@@ -89,14 +86,12 @@ class ChartStyleContainer {
         this.siteColors = [{
             type: 'linear',
             x: 0, y: 0, x2: 0, y2: 1,
-            colorStops: [{ offset: 0, color: 'rgba(0,178,255,1)' },
-            { offset: 1, color: 'rgba(0,12,255,1)' }]
+            colorStops: [{ offset: 0, color: 'rgba(0,178,255,1)' }, { offset: 1, color: 'rgba(0,12,255,1)' }]
         },
         {
             type: 'linear',
             x: 0, y: 0, x2: 0, y2: 1,
-            colorStops: [{ offset: 0, color: 'rgba(0,220,205,1)' },
-            { offset: 1, color: 'rgba(0,152,205,1)' }]
+            colorStops: [{ offset: 0, color: 'rgba(0,220,205,1)' }, { offset: 1, color: 'rgba(0,152,205,1)' }]
         }];
 
 
@@ -136,15 +131,13 @@ class ChartStyleContainer {
         this.uofaColor = {
             type: 'linear',
             x: 0, y: 0, x2: 0, y2: 1,
-            colorStops: [{ offset: 0, color: '#00b2ff' },
-            { offset: 1, color: '#000cff' }]
+            colorStops: [{ offset: 0, color: '#00b2ff' }, { offset: 1, color: '#000cff' }]
         };
 
         this.darkColor = {
             type: 'linear',
             x: 0, y: 0, x2: 0, y2: 1,
-            colorStops: [{ offset: 0, color: 'rgba(15,15,15,1)' },
-            { offset: 1, color: 'rgba(15,15,15,0.25)' }]
+            colorStops: [{ offset: 0, color: 'rgba(15,15,15,1)' }, { offset: 1, color: 'rgba(15,15,15,0.25)' }]
         };
 
         this.pieRadii = ['60%', '75%'];
@@ -157,24 +150,30 @@ class ChartStyleContainer {
 
         this.TUMColors = [
             // Unplanned Breakdown
-            this.statusColors[2],
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [{ offset: 0, color: 'rgba(255,140,0,1)' }, { offset: 1, color: 'rgba(255,0,0,1)' }]
+            },
 
             // Planned Maintenance
-            this.statusColors[1],
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [{ offset: 0, color: 'rgb(255,255,0)' }, { offset: 1, color: 'rgb(240,169,0)' }]
+            },
 
             //Unplanned Standby
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
-                colorStops: [{ offset: 0, color: '#00b2ff' },
-                { offset: 1, color: '#000cff' }]
+                colorStops: [{ offset: 0, color: '#00b2ff' }, { offset: 1, color: '#000cff' }]
             },
             // Operating Standby
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
-                colorStops: [{ offset: 0, color: '#71d4ff' },
-                { offset: 1, color: '#1a85fe' }]
+                colorStops: [{ offset: 0, color: '#71d4ff' }, { offset: 1, color: '#1a85fe' }]
             },
             // Operating Delay
             this.statusColors[0],
@@ -183,8 +182,7 @@ class ChartStyleContainer {
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
-                colorStops: [{ offset: 0, color: '#00d646' },
-                { offset: 1, color: '#006e53' }]
+                colorStops: [{ offset: 0, color: '#00d646' }, { offset: 1, color: '#006e53' }]
             }
         ]
 
@@ -200,6 +198,7 @@ class ChartStyleContainer {
         }
         // ----------------------------------------------------------
 
+        this.barMaxWidth = '15';
     }
 
 
@@ -318,7 +317,7 @@ class ChartStyleContainer {
             subtext: _content,
             subtextStyle: { color: '#fff' },
             left: '4px',
-            top: '-3%'
+            top: '-10px'
         };
     }
 

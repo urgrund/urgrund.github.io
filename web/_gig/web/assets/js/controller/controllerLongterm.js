@@ -1,10 +1,26 @@
 
 app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout) {
 
-    flatpickr('#calendar-tomorrow', {
-        //"minDate": new Date().fp_incr(1),
-        inline: true
-    });
+
+    $scope.calendar = function () {
+
+        var minDate = ServerInfo.availableDates[ServerInfo.availableDates.length - 1];
+        var maxDate = ServerInfo.availableDates[0];
+
+        minDate = moment(minDate).format('YYYY-MM-DD').toString();
+        maxDate = moment(maxDate).format('YYYY-MM-DD').toString();
+
+        flatpickr('#calendar', {
+            enable: [
+                {
+                    from: minDate,
+                    to: maxDate
+                }
+            ],
+            defaultDate: maxDate,
+            inline: true
+        });
+    }
 
     //console.log(longTerm2);
 
@@ -217,6 +233,7 @@ app.controller('LongTerm', function ($scope, $routeParams, $rootScope, $timeout)
     $scope.$watch('$viewContentLoaded', function () {
         $timeout(function () {
             $scope.createCharts();
+            $scope.calendar();
         }, 100);
     });
 

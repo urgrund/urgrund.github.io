@@ -1,6 +1,9 @@
 
 class ChartsMonthly {
 
+    /**
+     * Create a waterfall chart based on TUM values
+     **/
     static CreateLongTermWaterfall(_elementID, _data) {
 
         var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
@@ -22,13 +25,11 @@ class ChartsMonthly {
             _data[i].value = Math.round(_data[i].value / 3600);
 
             var name = _data[i].name;
-            //labels[i] = name.replace(" ", "</br>");
             labels[i] = _data[i].name;
 
             valueStack[i] = {
                 value: _data[i].value,
                 itemStyle: { color: _data[i].id == undefined ? ChartStyles.darkColor : ChartStyles.TUMColors[_data[i].id] }
-                //itemStyle: { color: ChartStyles.getTUMColor(i) }
             };
 
             // Because Dave version has full
@@ -55,25 +56,19 @@ class ChartsMonthly {
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
-            //title: ChartStyles.createTitle("Time Utilisation Model Breakdown"),
             tooltip: {
                 show: false,
                 confine: true,
                 trigger: 'axis',
                 textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),
-                backgroundColor: ChartStyles.toolTipBackgroundColor(),//'rgba(50,50,50,0.9)',               
+                backgroundColor: ChartStyles.toolTipBackgroundColor(),
                 formatter: function (params) {
                     var tar = params[1];
                     return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value;
                 }
             },
-            grid: {
-                // left: '3%',
-                // right: '4%',
-                // bottom: '5%',
-                containLabel: true
-            },
+            grid: ChartStyles.gridSpacing(),
             xAxis: ChartStyles.xAxis(labels, 0),
             yAxis: {
                 type: 'value',
@@ -116,8 +111,6 @@ class ChartsMonthly {
                     }
                 }
             ],
-            //,
-            //animationDurationUpdate: 5000
         };
 
         SetOptionOnChart(option, myChart);
@@ -478,12 +471,12 @@ class ChartsMonthly {
                         {
                             value: data.under,
                             name: 'Under',
-                            itemStyle: { color: ChartStyles.TUMColors[5] }
+                            itemStyle: { color: ChartStyles.TUMColors[0] }
                         },
                         {
                             value: data.overForChart,
                             name: 'Over',
-                            itemStyle: { color: ChartStyles.TUMColors[0] }
+                            itemStyle: { color: ChartStyles.TUMColors[5] }
                         },
                         {
                             value: data.targetForChart,

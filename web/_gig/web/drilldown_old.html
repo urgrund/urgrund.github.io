@@ -1,4 +1,4 @@
-<div class="equipGrid2" ng-cloak ng-if="equip != undefined">
+<div class="equipGrid" ng-cloak ng-if="equip != undefined">
     <div class="equipHeader first underline">
         <!-- <div class="img_{{equip.function}}"> -->
         <div>
@@ -16,21 +16,15 @@
     </div>
 
     <drill-down-chart name="Metrics Per Hour" chart="mph"></drill-down-chart>
-    <!-- <drill-down-chart name="Time Usage Split" chart="tus"></drill-down-chart> -->
+    <drill-down-chart name="Time Usage Split" chart="tus"></drill-down-chart>
+
     <drill-down-chart name="Availability & Utilisation" chart="uofa"></drill-down-chart>
-    <drill-down-chart name="Time Usage Model Waterfall" chart="tumwf"></drill-down-chart>
 
+    <drill-down-chart name="Operating Events" chart="p1"></drill-down-chart>
+    <drill-down-chart name="Idle Events" chart="p2"></drill-down-chart>
+    <drill-down-chart name="Down Events" chart="p3"></drill-down-chart>
 
-    <drill-down-chart name="Unplanned Breakdown" chart="p1"></drill-down-chart>
-    <drill-down-chart name="Unplanned Standy" chart="p2"></drill-down-chart>
-    <drill-down-chart name="Secondary Operating" chart="p3"></drill-down-chart>
-
-    <drill-down-chart name="Planned Maintenance" chart="p4"></drill-down-chart>
-    <drill-down-chart name="Operating Standby" chart="p5"></drill-down-chart>
-    <drill-down-chart name="Primary Operating" chart="p6"></drill-down-chart>
-
-    <drill-down-chart name="Event Timeline" chart="timeline" class="last2"></drill-down-chart>
-
+    <drill-down-chart name="Event Timeline" chart="timeline" class="last"></drill-down-chart>
 </div>
 
 

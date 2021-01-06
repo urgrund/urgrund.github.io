@@ -236,7 +236,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
     $scope.prepareChartData = function () {
         $scope.chartData = [];
         for (var i = 1; i < $scope.mappedPlan[0].length; i++) {
-            if ($scope.mappedPlan[0][i][0] == "WF") {
+            if ($scope.mappedPlan[0][i][0] == "SLC") {
                 if ($scope.mappedPlan[0][i][3] > 0)
                     $scope.chartData.push($scope.mappedPlan[0][i]);
             }

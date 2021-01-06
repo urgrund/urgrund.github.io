@@ -6,7 +6,8 @@
   margin-bottom: 50px;
   padding: 5px;
   min-height: 650px;
-  width: 510px;  
+  /* width: 510px;   */
+  width: 32% ;  
 }
 
 .siteTinyChartGroup

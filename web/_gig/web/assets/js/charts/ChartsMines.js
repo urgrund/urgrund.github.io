@@ -3,12 +3,57 @@ class ChartsMines {
 
 
 
+    static CreateBar2(_elementID, _data, _title) {
+
+        // Create an eCharts instance 
+        var myChart = InitChartFromElementID(_elementID);
+        if (myChart == undefined) return;
 
 
-    static CreateBar(_elementID, _data, _title) {
+        // The monthly target for this day
+        var tempTarget = 120000;
+        var daysInMonth = 31;
+        var dailyTarget = tempTarget / daysInMonth;
+        var target = [];
+        for (var i = 0; i < 12; i++) {
+            var frac = (i / (12 - 1)) * dailyTarget;
+            target.push(frac);
+        }
 
-        // -------------------------------------------------------------        
-        var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+
+        // Get all the tonnes data
+        var tph = ArrayOfNumbers(0, 12, 0);     // Tonnes
+        var pph = ArrayOfNumbers(0, 12, 0);     // Production
+        var cph = ArrayOfNumbers(0, 12, 0);     // Cumulative
+
+        for (var i = 0; i < _data.length; i++) {
+            if (_data[i].metric == "TONNE") {
+                for (var j = 0; j < _data[i].mph.length; j++) {
+                    cph[j] += _data[i].cph[j];
+                    tph[j] += _data[i].mph[j];
+                }
+            }
+            if (_data[i].activity.includes("Production")) {
+                for (var j = 0; j < _data[i].mph.length; j++) {
+                    cph[j] += _data[i].cph[j];
+                    pph[j] += _data[i].mph[j];
+                }
+            }
+        }
+
+        // Conditional colour coding for the TPH bars
+        for (var i = 0; i < tph.length; i++) {
+            tph[i] = {
+                value: tph[i],
+                itemStyle: {
+                    color: (cph[i] > target[i]) ? ChartStyles.TUMColors[2] : ChartStyles.TUMColors[0]
+                }
+            };
+        }
+
+
+
+
 
         var option = {
             textStyle: ChartStyles.textStyle,
@@ -31,7 +76,7 @@ class ChartsMines {
             legend: {
                 textStyle: { color: "#fff" },
                 y: 'top',
-                data: ['Tonnes', 'Cumulative']// 'Target A', 'Target U', 'Target U of A']
+                data: ['Tonnes', 'Production', 'Cumulative', 'Target']
             },
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "SiteTPH"),
             grid: {
@@ -65,9 +110,18 @@ class ChartsMines {
                 {
                     name: "Tonnes",
                     type: 'bar',
-                    yAxisIndex: 0,
-                    data: _data.mph,
+                    barMaxWidth: ChartStyles.barMaxWidth,
+                    stack: "TPH",
+                    data: tph,
                     itemStyle: { color: ChartStyles.siteColors[0] }
+                },
+                {
+                    name: "Production",
+                    type: 'bar',
+                    barMaxWidth: ChartStyles.barMaxWidth,
+                    stack: "TPH",
+                    data: pph,
+                    itemStyle: { color: ChartStyles.TUMColors[1] }
                 },
                 {
                     name: "Cumulative",
@@ -77,7 +131,17 @@ class ChartsMines {
                     areaStyle: { color: ChartStyles.cumulativeArea },
                     symbol: 'none',
                     lineStyle: ChartStyles.lineShadow(),
-                    data: _data.cph,
+                    data: cph,
+                },
+                {
+                    name: "Target",
+                    type: 'line',
+                    yAxisIndex: 1,
+                    itemStyle: { color: ChartStyles.TUMColors[0] },
+                    //areaStyle: { color: ChartStyles.cumulativeArea },
+                    symbol: 'none',
+                    lineStyle: ChartStyles.lineShadow(),
+                    data: target,
                 }
             ]
         };
@@ -85,6 +149,93 @@ class ChartsMines {
         SetOptionOnChart(option, myChart);
         return myChart;
     }
+
+
+
+
+
+
+
+    // static CreateBar(_elementID, _data, _title) {
+
+    //     // -------------------------------------------------------------        
+    //     var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
+
+    //     var option = {
+    //         textStyle: ChartStyles.textStyle,
+    //         title: ChartStyles.createTitle(_title),
+    //         backgroundColor: ChartStyles.backGroundColor,
+
+    //         tooltip: {
+    //             confine: true,
+    //             trigger: 'axis',
+    //             textStyle: ChartStyles.toolTipTextStyle(),
+    //             axisPointer: ChartStyles.toolTipShadow(),
+    //             backgroundColor: ChartStyles.toolTipBackgroundColor(),
+    //             formatter: function (params, index) {
+    //                 var string = ChartStyles.toolTipTextTitle(params[0].name);
+    //                 string += ChartStyles.toolTipTextEntry(params[0].seriesName + ": " + params[0].value);
+    //                 string += ChartStyles.toolTipTextEntry(params[1].seriesName + ": " + params[1].value, "bold");
+    //                 return string;
+    //             }
+    //         },
+    //         legend: {
+    //             textStyle: { color: "#fff" },
+    //             y: 'top',
+    //             data: ['Tonnes', 'Cumulative']// 'Target A', 'Target U', 'Target U of A']
+    //         },
+    //         toolbox: ChartStyles.toolBox(myChart.getHeight(), "SiteTPH"),
+    //         grid: {
+    //             left: '3%',
+    //             right: '4%',
+    //             bottom: '3%',
+    //             containLabel: true
+    //         },
+    //         xAxis: ChartStyles.xAxis(timeLabelsShift[shift]),
+    //         yAxis: [{
+    //             type: 'value',
+    //             splitLine: { show: false },
+    //             axisLine: ChartStyles.axisLineGrey,
+    //             axisLabel: {
+    //                 color: 'white',
+    //                 fontSize: ChartStyles.fontSizeSmall,
+    //                 formatter: function (value, index) { return ChartStyles.axisFormatThousands(value); }
+    //             }
+    //         },
+    //         {
+    //             type: 'value',
+    //             splitLine: { show: false },
+    //             axisLine: ChartStyles.axisLineGrey,
+    //             axisLabel: {
+    //                 color: 'white',
+    //                 fontSize: ChartStyles.fontSizeSmall,
+    //                 formatter: function (value, index) { return ChartStyles.axisFormatThousands(value); }
+    //             }
+    //         }],
+    //         series: [
+    //             {
+    //                 name: "Tonnes",
+    //                 type: 'bar',
+    //                 yAxisIndex: 0,
+    //                 data: _data.mph,
+    //                 itemStyle: { color: ChartStyles.siteColors[0] }
+    //             },
+    //             {
+    //                 name: "Cumulative",
+    //                 type: 'line',
+    //                 yAxisIndex: 1,
+    //                 itemStyle: { color: ChartStyles.cumulativeColor },
+    //                 areaStyle: { color: ChartStyles.cumulativeArea },
+    //                 symbol: 'none',
+    //                 lineStyle: ChartStyles.lineShadow(),
+    //                 data: _data.cph,
+    //             }
+    //         ]
+    //     };
+
+    //     SetOptionOnChart(option, myChart);
+    //     return myChart;
+    // }
 
 
 
@@ -380,8 +531,8 @@ class ChartsMines {
             });
         }
 
-        console.log(_locations);
-        console.log(_links);
+        //console.log(_locations);
+        //console.log(_links);
 
 
 

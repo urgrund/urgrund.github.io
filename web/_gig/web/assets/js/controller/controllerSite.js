@@ -28,7 +28,6 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
         //matMoveData[1] = $rootScope.siteData[1];
         //matMoveData[2] = $rootScope.siteData[2];
 
-        // This should be done in PHP
         for (var i = 0; i < $rootScope.siteData.length; i++) {
             var asLocations = { "Left": [], "Middle": [], "Middle2": [], "Right": [] };
             var uniqueLocations = [];
@@ -59,7 +58,7 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
 
     $scope.prepareAssetTotals = function () {
         if ($scope.site != undefined) {
-
+            // DO THIS IN PHP
             $scope.sumTotalsForFunctionType($scope.site.equipmentByFunction.LOADING, 0);
             $scope.sumTotalsForFunctionType($scope.site.equipmentByFunction.HAULING, 1);
             $scope.sumTotalsForFunctionType($scope.site.equipmentByFunction.P, 2);
@@ -75,7 +74,7 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
         if ($scope.site != undefined) {
             for (var i = 0; i < _equipList.length; i++) {
                 var equip = $rootScope.equipment[_equipList[i]]
-                var shiftData = equip.shiftData[$rootScope.shift];
+                var shiftData = equip.shiftData[ShiftIndex()];
                 $scope.assetTotals[_totalsIndex][0] += shiftData.timeExOperating;
                 $scope.assetTotals[_totalsIndex][1] += shiftData.timeExIdle;
                 $scope.assetTotals[_totalsIndex][2] += shiftData.timeExDown;
@@ -104,8 +103,9 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
         //var allSites = $rootScope.siteData.slice(0, 1);
         ChartsMines.CreateSankey2("sankey", $rootScope.siteData, $scope.siteID);
 
-        var barChartData = $scope.shiftData.productionTonnes;
-        ChartsMines.CreateBar("siteTPH", barChartData, "");
+        //var barChartData = $scope.shiftData.productionTonnes;
+        //ChartsMines.CreateBar("siteTPH", barChartData, "");
+        ChartsMines.CreateBar2("siteTPH", $scope.shiftData.metricData, "");
     };
 
 
@@ -144,9 +144,9 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
     $scope.$on('updateShift', function (event, data) {
         //$route.reload();
         $timeout(function () {
-        $scope.shiftData = $scope.site.shiftData[$rootScope.shift];
-        $scope.prepareAssetTotals();
-        $scope.createSiteCharts();
+            $scope.shiftData = $scope.site.shiftData[$rootScope.shift];
+            $scope.prepareAssetTotals();
+            $scope.createSiteCharts();
         }, 100);
     });
 

@@ -192,7 +192,7 @@ input:invalid:required {
   border-bottom: none;
 
   width: 100%;
-  height: 24px;
+  height: 20px;
 }
 
 
@@ -292,18 +292,11 @@ input:invalid:required {
   display: grid;
 
   grid-column-gap: 3%;
-  grid-row-gap: 1%; 
+  grid-row-gap: 1%;   
+  grid-template-columns: 31% 31% 31%;
+  grid-template-rows: 5% 34% 34% 20%;  
 
-  grid-template-columns: 30% 30% 30%;
-  grid-template-rows: 5% 34% 34% 20%;
-  /* grid-template-columns: var(--equipGridCSpace) var(--equipGridCSpace) var(--equipGridCSpace);
-  grid-template-rows: var(--equipGridRTitle) var(--equipGridRSpace) var(--equipGridRSpace) var(--equipGridRTimeLine); */
-  
-
-  justify-content: center;
-  /* justify-content: space-evenly; */
-
-  /* align-content: center; */
+  justify-content: center;    
   align-content: space-evenly;
 
   width: 100%;
@@ -313,6 +306,41 @@ input:invalid:required {
   background: linear-gradient(rgba(0, 0, 0, 0.644), rgba(0, 0, 0, 0.322), black);
   opacity: 1;
 }
+
+
+.equipGrid2 {
+
+  display: grid;
+
+  grid-column-gap: 1%;
+  grid-row-gap: 1%; 
+  grid-template-columns: 31% 31% 31%;
+  grid-template-rows: 5% 31% 24% 24% 10%;  
+
+  justify-content: center;    
+  align-content: space-evenly;
+
+  width: 100%;
+  height: 100%;
+
+  /* Consider fading in between shifts?*/
+  background: linear-gradient(rgba(0, 0, 0, 0.644), rgba(0, 0, 0, 0.322), black);
+  opacity: 1;
+}
+
+.last2 {
+  grid-column-start: 1;
+  grid-column-end: 4;
+  grid-row-start: 5;
+  grid-row-end: 5;
+}
+
+
+
+
+
+
+
 
 /* Special layout for the timeline */
 .first {

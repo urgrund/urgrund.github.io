@@ -197,6 +197,14 @@
                         </label>
                     </div>
 
+                    <div>View</div>
+                    <div>
+                        <label class="switch"><input ng-init="fullDayView=true" ng-model="fullDayView"
+                                ng-change="switchDayView(fullDayView)" type="checkbox" id="togBtn">
+                            <div class="slider round" switch-on="12hr Shift" switch-off="Full 24hr"></div>
+                        </label>
+                    </div>
+
                     <div>Equipment Alerts</div>
                     <div>
                         <label class="switch"><input type="checkbox" id="togBtn" checked>
@@ -212,12 +220,6 @@
                         </label>
                     </div>
 
-                    <!-- <div>24hr View</div>
-                    <div>
-                        <label class="switch"><input type="checkbox" id="togBtn">
-                            <div class="slider round" switch-on="On (24hr)" switch-off="Off (12hr)"></div>
-                        </label>
-                    </div> -->
                 </div>
 
                 <h3><i class="far fa-calendar-alt"></i> Data</h3>
@@ -233,11 +235,6 @@
                             </button>
                         </div>
                     </div>
-                    <!-- <div>Specific Date</div>
-                    <div class="group">
-                        
-                        <input type="text" id="test">
-                    </div> -->
                 </div>
 
                 <h3><i class="fas fa-search"></i> Search</h3>
@@ -267,25 +264,48 @@
             <div>|</div>
         </div>
 
-        <!-- Active Site Date -->
-        <!-- <div class="util">
-            <div class="utilbtn">
-                <h5><i class="far fa-calendar-alt"></i> {{siteDataDate.SHORT}}</h5>
-            </div>
-            <div class="dropdown-content">
 
-                <div class="flex" ng-repeat="x in cachedData">
-                    <button ng-click="setNewSiteData(x)"> {{ convertToNiceDateObject(x[4].Date).LONG }}
-                    </button>
-                </div>
-
-            </div>
-        </div> -->
-        <div class="navItem">
+        <!-- <div class="navItem">
             <div>
                 <h5><i class="far fa-calendar-alt"></i> {{siteDataDate.SHORT}}</h5>
             </div>
+        </div> -->
+
+        <!-- Active Date for Site Data -->
+        <div class="dropdown">
+            <div class="dropbtn">
+                <h5><i class="far fa-calendar-alt"></i> {{siteDataDate.SHORT}}</h5>
+            </div>
+            <div class="dropdown-content">
+                <div class="droplist">
+
+
+
+                    <!-- Select any date to load.. -->
+                    <h3><i class="far fa-calendar-alt"></i> Active Date</h3>
+                    <div>
+                        <h4>{{siteDataDate.SHORT}}</h4>
+                    </div>
+                    <div class="calendarDiv">
+                        <div id="menuDataDatePick"></div>
+                    </div>
+
+
+
+                    <!-- Show the traililng week -->
+                    <h3><i class="far fa-calendar-alt"></i> Trailing Week</h3>
+                    <div ng-repeat="x in cachedData">
+                        <h5><button ng-click="setNewSiteData(x)"> {{
+                                convertToNiceDateObject(x[x.length-1].Date).LONG }}
+                            </button>
+                        </h5>
+                    </div>
+
+                </div>
+            </div>
         </div>
+
+
 
         <!-- Active Day Shift -->
         <div class="navItem">
