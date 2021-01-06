@@ -49,10 +49,10 @@ else {
     //include_once('..\setDebugOff.php');    
     //Debug::Log(Monthly::GetActuals('2018', '11'));
 
-    Monthly::GetActualsArray('2018', '10');
+    //Monthly::GetActualsArray('2018', '10');
 
-    //$p = Monthly::MapActualsToPlan('2018', '10');
-    //Debug::Log($p);
+    $p = Monthly::MapActualsToPlan('2018', '10');
+    Debug::Log($p);
     //Monthly::MetaData($p);
     //echo 'poo';
 }

@@ -25,7 +25,7 @@ include_once('header.php');
 // Uncomment this to run directly from this file
 //Debug::Enable();
 if (Debug::enabled() == true) {
-    CreateSiteData::Run(new DateTime('20181002'));
+    CreateSiteData::Run(new DateTime('20181231'));
 }
 
 
@@ -33,7 +33,7 @@ if (Debug::enabled() == true) {
  * Generates data for a given date for all 
  * equipment at all locations
  * 
- * @author Matthew Bell 2020  
+ * @author Matthew Bell 2021  
  */
 final class CreateSiteData
 {
@@ -246,6 +246,7 @@ final class CreateSiteData
             if ($eSiteName != '')
                 $tempEquip[$eID]->sites[] = $eSiteName;
 
+            //if ($eID == 'TH057')
             $tempEquip[$eID]->AddEvent($sqlEquipEventList[$i]);
 
             // Needs to be fixed in SQL, MachineCheck is getting 
@@ -323,7 +324,7 @@ final class CreateSiteData
 
         Debug::StartProfile("PHP: All Equipment Data");
         foreach ($allEquipment as $key => $equip) {
-            //if ($key == 'BL085') {
+            //if ($key == 'TH097') {
             //Debug::Log("Generating " . $key);
             $equip->GenerateMPH();
             $equip->GenerateUofAFromEvents();
@@ -333,10 +334,6 @@ final class CreateSiteData
         }
 
         Debug::EndProfile();
-        //Debug::Log($allEquipment['BL085']->shiftData[0]->events);
-        //Debug::Log($allEquipment['BL085']);
-        //Debug::Log($allEquipment['BP019']);
-        //Debug::Log($allSites['Sub Level Caves']);    
     }
 
 

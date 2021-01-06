@@ -146,7 +146,7 @@ class Admin
         $period = new DatePeriod(
             new DateTime('2018-10-01'),
             new DateInterval('P1D'),
-            new DateTime('2018-12-31')
+            new DateTime('2019-01-01')
         );
 
 

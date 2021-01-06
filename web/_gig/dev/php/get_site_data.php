@@ -18,11 +18,19 @@ if (is_object($request)) {
             GetSiteData::GetDataForDate($request->date);
         }
     }
+
+    if ($request->func == 1) {
+        GetSiteData::GetAvailableDates();
+    }
+
+
     return;
 } else {
     // Debug path    
     include_once('create_site_data.php');
-    GetSiteData::GetDataForDate('20181001');
+    //GetSiteData::GetDataForDate('20181001');
+
+   GetSiteData::GetAvailableDates();
 }
 // ----------------------------------------------------------
 // ----------------------------------------------------------
@@ -74,6 +82,17 @@ class GetSiteData
         if (!is_dir(self::$_fileDir)) {
             mkdir(self::$_fileDir, 0777, true);
         }
+    }
+
+
+    public static function GetAvailableDates()
+    {
+        $sqlTxt = SQLUtils::FileToQuery(SQLUtils::QUERY_DIRECTORY . 'Core\ALL_AvailableDates.sql');
+        $result = SQLUtils::QueryToText($sqlTxt, "Available Dates");
+        array_shift($result);
+        //Debug::Log($result);
+        $dates = array_map(fn($x) => $x[0], $result);
+        echo json_encode($dates);
     }
 
 

@@ -19,8 +19,8 @@ class Site
     //var $key;
     var $name;
 
-    var $tph24;
-    var $uoaf24 = array();
+    //var $tph24;
+    //var $uoaf24 = array();
 
     var $shiftData = [];
 
@@ -60,9 +60,9 @@ class Site
             array_push($tempDown, 0);
         }
 
-        array_push($this->uoaf24, $tempOp);
-        array_push($this->uoaf24, $tempIdle);
-        array_push($this->uoaf24, $tempDown);
+        //array_push($this->uoaf24, $tempOp);
+        //array_push($this->uoaf24, $tempIdle);
+        //array_push($this->uoaf24, $tempDown);
 
 
         // Get's the equipment belonging to this site

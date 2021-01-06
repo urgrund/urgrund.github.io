@@ -73,9 +73,19 @@ class EquipmentShiftData
     var $timeTotal;
 
     // Exclusive states 
-    var $timeExOperating;
-    var $timeExIdle;
-    var $timeExDown;
+    //var $timeExOperating;
+    //var $timeExIdle;
+    //var $timeExDown;
+
+    var $tumTimings = array();
+
+    function __construct()
+    {
+        $this->tumTimings = Config::CreateDistinctTUMArray();
+        foreach ($this->tumTimings as $x => $x_value) {
+            $this->tumTimings[$x] = new EventBreakDown();
+        }
+    }
 }
 
 
@@ -101,7 +111,11 @@ class MetricData
 
 
 
-    /** Construct new Metric data with the Metric, Site and Activity
+    /**
+     * Construct new Metric data with the Metric, Site and Activity
+     * @param string $_metric
+     * @param string $_site
+     * @return void
      */
     function __construct($_metric, $_site, $_activity, $_shift)
     {
@@ -126,23 +140,28 @@ class MetricData
 
     // Add & increment the value array
     // whilst measure the cumulative value
-    function AddValue(float $_value)
+    function AddValue(float $_value) //, int $_index = -1)
     {
         if ($_value == null)
             $_value = 0;
 
-        //Debug::Log($_value);
-
         $count = count($this->mph);
+        // if ($_index > -1) {
+        //     $this->mph[$_index] = $_value;
+        // } else
         $this->mph[] = $_value;
 
-        if ($count > 0)
-            $this->cph[] = $this->cph[$count - 1] + $_value;
-        else
+        // Calculate cumulative
+        $this->cph = [];
+        if ($count > 0) {
+            //$this->cph[] = $this->cph[$count - 1] + $_value;
+            for ($i = 0; $i < count($this->mph); $i++) {
+                $this->cph[] = ($i > 0) ? $this->cph[$i - 1] + $this->mph[$i] : $this->mph[$i];
+            }
+        } else
             $this->cph[] = $_value;
 
-        // Just always sum totals so it's current
-        // and then don't need an extra function 
+        // Just always sum totals 
         $this->total = $this->cph[$count];
         $this->average = round($this->total / ($count + 1), 2);
     }
@@ -151,7 +170,7 @@ class MetricData
 
 
     /**
-     * Adds MetricData A values to B
+     * Adds MetricData A values to B by merging their array values
      *
      * @param MetricData $a
      * @param MetricData $b

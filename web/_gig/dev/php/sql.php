@@ -67,6 +67,10 @@ class SQLUtils
     }
 
 
+
+    /**
+     * Open and read a file and return its contents
+     **/
     public static function FileToQuery($path)
     {
         $sqltxt = array();

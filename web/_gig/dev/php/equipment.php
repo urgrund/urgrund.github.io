@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Equipment Class - deals with an equipment asset
  * storing its shift data & metrics 
@@ -22,9 +23,11 @@ class Equipment
         global $sqlMineEquipmentList;
 
         $this->id = $_id;
-        $this->shiftData[] = new EquipmentShiftData();
-        $this->shiftData[] = new EquipmentShiftData();
 
+        // The shifts         
+        $this->shiftData[] = new EquipmentShiftData();  // Day Shift
+        $this->shiftData[] = new EquipmentShiftData();  // Night Shift
+        $this->shiftData[] = new EquipmentShiftData();  // 24 Hour
 
         // Function key
         if (isset($sqlMineEquipmentList[$_id])) {
@@ -52,26 +55,29 @@ class Equipment
         $e->duration = $_eventDataRow[5];
         $e->status = $_eventDataRow[6];
         $e->majorGroup = $_eventDataRow[7];
-        $e->shift = $_eventDataRow[8];
+        $e->shift = $_eventDataRow[8]; // === "P1" ? 0 : 1;
         $e->tumCategory = Config::TUM($e->status);
 
+        // In case the status hasn't been 
+        // mapped to a TUM category yet
+        if ($e->tumCategory == null) {
+            //Debug::Log($this->id . " has no TUM for " . $e->status);
+            $e->tumCategory = "NO TUM CATEGORY";
+        }
 
         // Which shift does this event belong to?        
         // Store only the index of this event here
-        if ($e->shift == "P1") {
-            $this->shiftData[0]->events[] = count($this->events);
-        } else {
-            $this->shiftData[1]->events[] = count($this->events);
-        }
+        $shiftIndex = $e->shift == "P1" ? 0 : 1;
+        $this->shiftData[$shiftIndex]->events[] = count($this->events);
+
+        // Store the event in the 24hr list
+        $this->shiftData[2]->events[] = count($this->events);
+
 
 
         // Store the full event details 
         $this->events[] = $e;
-        //Debug::Log(count($this->events));
-        //Debug::Log($this->shiftData[0]->events);
-        //Debug::Log($this->shiftData[1]->events);
     }
-
 
 
     private function GetSecondsInHour($dateTime)
@@ -81,8 +87,6 @@ class Equipment
 
     function GenerateUofAFromEvents()
     {
-        //global $date;
-
         // For each shift... 
         for ($q = 0; $q < 2; $q++) {
 
@@ -111,7 +115,6 @@ class Equipment
                 if ($event->dayAhead == 1)
                     $startHour += 24;
 
-                //$startHour = $startHour < 6  ? $startHour + 12 + 6 : $startHour  - 6;
                 $endHour = intval($endDate->format('H'));
 
                 // Frustrating that the dateTime diff would not
@@ -185,24 +188,27 @@ class Equipment
             $this->shiftData[$q]->uofa =  $hourDateObjs;
         }
 
-        //Debug::Log($this->shiftData[1]->uofa);
         // Get all the shift totals
         for ($q = 0; $q < 2; $q++) {
 
-            $this->shiftData[$q]->timeExOperating = 0;
-            $this->shiftData[$q]->timeExIdle = 0;
-            $this->shiftData[$q]->timeExDown = 0;
+            // $this->shiftData[$q]->timeExOperating = 0;
+            // $this->shiftData[$q]->timeExIdle = 0;
+            // $this->shiftData[$q]->timeExDown = 0;
 
             for ($i = 0; $i < count($this->shiftData[$q]->uofa); $i++) {
                 $hour = $this->shiftData[$q]->uofa[$i];
-                $this->shiftData[$q]->timeTotal += $hour->totalTime;
-                $this->shiftData[$q]->timeExOperating += $hour->operating;
-                $this->shiftData[$q]->timeExIdle += $hour->idle;
-                $this->shiftData[$q]->timeExDown += $hour->down;
+
+                // TODO phase this out as its old MajorGroup stuff
+                // $this->shiftData[$q]->timeExOperating += $hour->operating;
+                // $this->shiftData[$q]->timeExIdle += $hour->idle;
+                // $this->shiftData[$q]->timeExDown += $hour->down;
 
                 // Ratio for UofA
                 if ($hour->availability > 0)
                     $hour->uofa =  $hour->utilisation /  $hour->availability;
+
+                // For the 24 view
+                $this->shiftData[2]->uofa[$i + ($q * 12)] = $hour;
             }
         }
     }
@@ -215,8 +221,10 @@ class Equipment
      * split out the categories, minor events and 
      * the total time spent in each of these to see
      * how many of each type of event may have occurred
+     * 
+     * @param array $_eventsArray
      **/
-    private function GetBreakDownOfEventsArray($_eventsArray)
+    /*private function GetBreakDownOfEventsArray($_eventsArray)
     {
         $breakDown = [];
         //Debug::Log($_eventsArray);
@@ -248,14 +256,60 @@ class Equipment
             }
         }
         return $breakDown;
+    }*/
+
+
+
+    /** 
+     * 
+     * @param int $_shiftIndex
+     **/
+    private function GetTUMBreakDownOfEvents()
+    {
+        for ($i = 0; $i < 2; $i++) {
+            $_shiftIndex = $i;
+            $_eventsArray = $this->shiftData[$_shiftIndex]->events;
+            $_tumTimings = $this->shiftData[$_shiftIndex]->tumTimings;
+            $_tumTimings24 = $this->shiftData[2]->tumTimings;
+
+            for ($j = 0; $j < count($_eventsArray); $j++) {
+                $event = $this->events[$_eventsArray[$j]];
+
+                // For events that aren't mapped properly 
+                // to a TUM category 
+                if (!isset($_tumTimings[$event->tumCategory]))
+                    continue;
+
+                $_tumTimings[$event->tumCategory]->eventCount++;
+                $_tumTimings[$event->tumCategory]->duration += $event->duration;
+                if (!isset($_tumTimings[$event->tumCategory]->categories[$event->status]))
+                    $_tumTimings[$event->tumCategory]->categories[$event->status] = $event->duration;
+                else
+                    $_tumTimings[$event->tumCategory]->categories[$event->status] += $event->duration;
+
+
+                // For the 24hr timings
+                $_tumTimings24[$event->tumCategory]->eventCount++;
+                $_tumTimings24[$event->tumCategory]->duration += $event->duration;
+                if (!isset($_tumTimings24[$event->tumCategory]->categories[$event->status]))
+                    $_tumTimings24[$event->tumCategory]->categories[$event->status] = $event->duration;
+                else
+                    $_tumTimings24[$event->tumCategory]->categories[$event->status] += $event->duration;
+
+                $this->shiftData[$_shiftIndex]->timeTotal += $event->duration;
+                $this->shiftData[2]->timeTotal += $event->duration;
+            }
+        }
     }
+
 
 
     // Generate the event breakdowns for both shifts
     function GenerateEventBreakDown()
     {
-        $this->shiftData[0]->eventBreakDown = $this->GetBreakDownOfEventsArray($this->shiftData[0]->events);
-        $this->shiftData[1]->eventBreakDown = $this->GetBreakDownOfEventsArray($this->shiftData[1]->events);
+        //$this->shiftData[0]->eventBreakDown = $this->GetBreakDownOfEventsArray($this->shiftData[0]->events);
+        //$this->shiftData[1]->eventBreakDown = $this->GetBreakDownOfEventsArray($this->shiftData[1]->events);
+        $this->GetTUMBreakDownOfEvents();
     }
 
 
@@ -273,8 +327,6 @@ class Equipment
             }
         }
     }
-
-
 
     // Metric per hour
     function GenerateMPH()
@@ -296,41 +348,88 @@ class Equipment
 
                 // The metric record
                 $e = $sqlMetricPerHour[$i];
+                //Debug::Log($sqlMetricPerHour[$i]);
 
                 // Metric Data for both shifts
-                $mdDay = new MetricData($e[2], $e[1], $e[3], 0); //$e[count($e) - 1]);
-                $mdNight = new MetricData($e[2], $e[1], $e[3], 1); //$e[count($e) - 1]);
+                $_metric = $e[2];
+                $_site = $e[1];
+                $_activity = $e[3];
 
-                // Data start index... for convenience 
+                $mdDay = new MetricData($_metric, $_site, $_activity, 0);
+                $mdNight = new MetricData($_metric, $_site, $_activity, 1);
+                $md24Hr = new MetricData($_metric, $_site, $_activity, 2);
+
+                // This is where the hourly data 
+                // starts from the SQL results
                 $dataIdx = 4;
-                // For each hour in the event
+
+                // For each hour in the event                
                 for ($j = $dataIdx; $j < count($e); $j++) {
-                    // To offset in the SQL data, after dataIdx is where hourly data starts
-                    //if ($j > $dataIdx && $j < count($e) - 1) {
+
                     // Which shift to assign?                         
                     if ($j > $dataIdx + 12 - 1)
-                        $mdNight->AddValue($e[$j]);
+                        $mdNight->AddValue($e[$j]); //, $j - $dataIdx);
                     else
-                        $mdDay->AddValue($e[$j]);
-                    //}
-                }
+                        $mdDay->AddValue($e[$j]); //, $j - $dataIdx);
 
-                //Debug::Log($e[count($e) - 1]);
+                    $md24Hr->AddValue($e[$j]);
+                }
 
                 // Assign to the shifts
                 $this->shiftData[0]->metricData[] = $mdDay;
                 $this->shiftData[1]->metricData[] = $mdNight;
+                $this->shiftData[2]->metricData[] = $md24Hr;
             }
         }
 
-        //Debug::Log($this->shiftData[1]);
+
+
+        // Attempt to merge and clean up empty Metrics
+        for ($i = 0; $i < count($this->shiftData); $i++) {
+            for ($j = 0; $j < count($this->shiftData[$i]->metricData); $j++) {
+                if ($this->shiftData[$i]->metricData[$j]->total == 0) {
+                    unset($this->shiftData[$i]->metricData[$j]);
+                }
+            }
+        }
+
+        // Fix up missing indexes
+        for ($i = 0; $i < count($this->shiftData); $i++)
+            $this->shiftData[$i]->metricData = array_values($this->shiftData[$i]->metricData);
+
 
         // Add this data to its site to tally totals
         for ($i = 0; $i < count($this->sites); $i++) {
             $allSites[$this->sites[$i]]->AddMetricDataFromEquipment($this);
         }
 
+        // Completed MPH generation for this asset
         $this->genComplete = true;
         return;
+    }
+
+
+    /** See if a Metric is already registered with this equipment 
+     * based on metric constructor parameters **/
+    private function FindOrCreateMetric($_metric, $_site, $_activity, $_shift)
+    {
+        // Check if all the Metric params (metric, site, activity)
+        // match up and return that Metric 
+        for ($i = 0; $i < count($this->shiftData[$_shift]->metricData); $i++) {
+
+            $m = $this->shiftData[$_shift]->metricData[$i];
+
+            //Debug::Log("Finding: " . $_metric . "  " . $_activity . "  " . $_site);
+            //Debug::Log("Exists:  " . $m->metric . "  " . $m->activity . "  " . $m->site);
+
+            if (
+                $m->metric == $_metric
+                && $m->site == Config::Sites($_site)
+                && $m->activity == $_activity
+            ) {
+                return $this->shiftData[$_shift]->metricData[$i];
+            }
+        }
+        return new MetricData($_metric, $_site, $_activity, $_shift);
     }
 }

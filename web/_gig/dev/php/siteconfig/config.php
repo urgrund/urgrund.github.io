@@ -3,7 +3,8 @@
 // For local debug
 //include_once('..\header.php');
 //new Config();
-//Debug::Log(Config::$instance->configSites);
+//Debug::Log(Config::CreateDistinctTUMArray());
+
 
 
 /**
@@ -55,17 +56,27 @@ class Config
     public static function Sites($_key)
     {
         return isset(Config::$instance->configSites[$_key]) ? Config::$instance->configSites[$_key] : NULL;
-        //return Config::$instance->configSites[$_key];
     }
 
     public static function TUM($_key)
     {
         return isset(Config::$instance->configTUM[$_key]) ? Config::$instance->configTUM[$_key] : NULL;
-
-        //if (!isset(Config::$instance->configTUM[$_key]))
-        //  var_dump(debug_backtrace());
-        //return Config::$instance->configTUM[$_key];
     }
+
+    /**
+     * Creates an associative array with the unique TUM categories as the
+     * keys with zeroed out values
+     */
+    public static function CreateDistinctTUMArray()
+    {
+        $result = array_unique(Config::$instance->configTUM);
+        $tumDistinct = array();
+        foreach ($result as $x => $x_value) {
+            $tumDistinct[$x_value] = 0;
+        }
+        return ($tumDistinct);
+    }
+
 
     public static function productionActivity()
     {
