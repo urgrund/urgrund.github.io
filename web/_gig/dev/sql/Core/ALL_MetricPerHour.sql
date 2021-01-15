@@ -16,7 +16,7 @@ FROM
 		JOIN dbo.[RD_EQUIPMENT] as RDE on RDE.[EquipmentCode] = ATS.[Equipment]
 		JOIN dbo.[RD_EQUIPMENT_MODEL] as RDM on RDM.[Equipment_ModelCode] = RDE.[Equipment_Model_Code]
 		JOIN dbo.[RD_EQUIPMENT_FUNCTION] as RDF on RDF.[Equipment_FunctionCode] = RDM.[Equipment_Model_Function_Code]
-		WHERE LEFT(ats.[shkey],8) = @Date and MTS.MeasCode in ('FACEMETRE','INSMESHSTROVRLAP','INSMESHGALVL', 'INSMESHGALV', 'TOTALBOLTS', 'TONNE', 'PRODMTRSDRILL', 'TOTGSMTR', 'TOTOTHERMTRS') and RDF.[Equipment_FunctionCode] in ('LOADING','HAULING','P','D') 
+		WHERE LEFT(ats.[shkey],8) LIKE @Date and MTS.MeasCode in ('FACEMETRE','INSMESHSTROVRLAP','INSMESHGALVL', 'INSMESHGALV', 'TOTALBOLTS', 'TONNE', 'PRODMTRSDRILL', 'TOTGSMTR', 'TOTOTHERMTRS') and RDF.[Equipment_FunctionCode] in ('LOADING','HAULING','P','D') 
  ) as SC  
   PIVOT  
   (sum(SC.[values])  

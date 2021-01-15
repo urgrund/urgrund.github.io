@@ -9,7 +9,7 @@ Join [dbo].[RD_EQUIPMENT_MODEL] as RDM on RDM.[Equipment_ModelCode] = RDE.[Equip
 Join [dbo].[RD_EQUIPMENT_FUNCTION] as RDF on RDF.[Equipment_FunctionCode] = RDM.[Equipment_Model_Function_Code]
 Join [dbo].[RD_PARENTLOCATIONS] as RDP on RDP.[SourceCode] = ATS.[Location]
 
-Where left(ATS.[Shkey],8) = @Date
+Where left(ATS.[Shkey],8) LIKE @Date
 	and RDF.[Equipment_FunctionCode] in ('LOADING','HAULING','P','D') 
 	--AND RDP.[Source_MineArea_Code] like '%'
 	and RDP.[Source_MineArea_Code] <> 'MISC'
