@@ -36,11 +36,12 @@ app.controller('myCtrl', function ($scope, $http) {
             data: _data
         })
         request.then(function (response) {
-
+            console.log("Dates");
             console.log(response.data);
             // Make associative
             $tmp = {};
             for (var key in response.data) {
+                //console.log(response.data[key]);
                 $tmp[response.data[key]['Date']] = response.data[key];
             }
             $scope.dataStatus = $tmp
@@ -92,7 +93,7 @@ app.controller('myCtrl', function ($scope, $http) {
                 data: _data
             })
             request.then(function (response) {
-                console.log("Returned...");
+                console.log(_date + " Returned...");
                 console.log(response.data);
                 //console.log($scope.dataStatus);
 
