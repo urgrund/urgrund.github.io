@@ -8,6 +8,23 @@ $conn;
 //print($isConnected);
 
 
+final class SQLDBCredentials
+{
+    public string $server = "";
+    public string $uid = "";
+    public string $pwd = "";
+    public string $db = "";
+    function __construct(string $_server, string $_uid, string $_pwd, string $_db)
+    {
+        $this->server = $_server;
+        $this->uid = $_uid;
+        $this->pwd = $_pwd;
+        $this->db = $_db;
+    }
+}
+
+
+
 /**   
  * Manages connections and queries and helps convert
  * text to a query or json format 
@@ -15,48 +32,51 @@ $conn;
 class SQLUtils
 {
     const DateVar = '@Date';
-
     public const QUERY_DIRECTORY = "..\\sql\\";
-
-    //private const serverName = "";
 
     public static function OpenConnection()
     {
         Debug::StartProfile("Open Server Connection");
-        //echo "Connecting...";
+
         global $isConnected;
         global $conn;
 
         //Debug::Log($isConnected);
 
         if ($isConnected == true)
-            return;
+            return true;
 
-        // $serverName = "tcp:giggsworthtest.database.windows.net,1433";
-        // $uid = 'test@giggsworthtest';
-        // $pwd = "GigWorth666";
-        // $dbase = "ug_trial";
 
-        //$serverName = "tcp:192.168.0.100\SQLEXPRESS, 1433";
-        $serverName = "tcp:LAPTOP\SQLEXPRESS, 1433"; // <- takes longer but can resolve by name if IP changes
-        $uid = 'test';
-        $pwd = "gigworth";
-        $dbase = "test";
 
         /* Establish a Connection to the SQL Server  */
-        $connectionInfo = array("Database" => $dbase, "UID" => $uid, "PWD" => $pwd, "CharacterSet" => "UTF-8", "ConnectionPooling" => "1", "MultipleActiveResultSets" => '0');
-        $conn = sqlsrv_connect($serverName, $connectionInfo);
+        $credentials = Client::instance()->SQLDBCredentials();
+        //$connectionInfo = array("Database" => $dbase, "UID" => $uid, "PWD" => $pwd, "CharacterSet" => "UTF-8", "ConnectionPooling" => "1", "MultipleActiveResultSets" => '0');
+        $connectionInfo = array(
+            "Database" => $credentials->db,
+            "UID" => $credentials->uid,
+            "PWD" => $credentials->pwd,
+            "CharacterSet" => "UTF-8",
+            "ConnectionPooling" => "1",
+            "MultipleActiveResultSets" => '0'
+        );
+
+        //$conn = sqlsrv_connect($serverName, $connectionInfo);
+        $conn = sqlsrv_connect($credentials->server, $connectionInfo);
+
+        Debug::EndProfile();
+
 
         if ($conn === false) {
             //echo "Unable to connect.</br>";
-            //Debug::Log(sqlsrv_errors());
-            die(print_r(sqlsrv_errors(), true));
+            Debug::Log(sqlsrv_errors());
+            //die(print_r(sqlsrv_errors(), true));
+            throw new Exception("Mine-Mage cannot connect to SQL Server"); //sqlsrv_errors());
+            //trigger_error("Cannot Connect to SQL Server",  sqlsrv_errors());
         } else {
             //Debug::Log("Success");
             $isConnected = true;
         }
-
-        Debug::EndProfile();
+        return $isConnected;
     }
 
 
@@ -156,32 +176,17 @@ class SQLUtils
                 }
             }
         }
-        // if (!$stmt) {
-        //     echo "Error executing query.</br>";
-        //     die(print_r(sqlsrv_errors(), true));
-        // }
-
 
         // Sum up the rows from the query result        
         $json = array();
         $sqlArrayResult = array();
         do {
             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                // while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_NUMERIC)) {
                 $sqlArrayResult[] = $row;
             }
         } while (sqlsrv_next_result($stmt));
 
-        Debug::EndProfile();
 
-
-
-
-        //return $sqlArrayResult;
-        //print_r("\n" . " Result : " . count($sqlArrayResult) . "\n");
-
-        // If there was a result
-        //Debug::StartProfile("JSON Array");
 
         if (count($sqlArrayResult) > 0) {
             // Fetch Keys (headers) 
@@ -208,9 +213,7 @@ class SQLUtils
             }
         }
 
-        // Debug::EndProfile();
-        /* Free statement and connection resources. */
-        //sqlsrv_free_stmt($stmt);
+        Debug::EndProfile();
 
         return ($json);
     }

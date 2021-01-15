@@ -1,5 +1,10 @@
 <?php
 
+/**
+ *  FOR DEMO USE ONLY
+ *  Scrambles data so that there is no identifying information
+ *  in the online public demo 
+ */
 
 class ScrambleData
 {
@@ -12,7 +17,6 @@ class ScrambleData
         ScrambleData::NamesInSites();
         ScrambleData::LocationsInMaterialMovements();
         ScrambleData::EventsInEquipment();
-
         ScrambleData::NamesInEquipment();
     }
 

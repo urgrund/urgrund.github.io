@@ -44,7 +44,9 @@ class Site
         $tempOp = [];
         $tempIdle = [];
         $tempDown = [];
-        $this->tph24 = new SiteShiftData();
+        //$this->tph24 = new SiteShiftData();
+
+        $this->shiftData[] = new SiteShiftData();
         $this->shiftData[] = new SiteShiftData();
         $this->shiftData[] = new SiteShiftData();
 
@@ -52,8 +54,8 @@ class Site
         // initialize with array length?
         for ($i = 0; $i < 24; $i++) {
 
-            $this->tph24->tph[$i] = 0;
-            $this->tph24->cumulative[$i] = 0;
+            //$this->tph24->tph[$i] = 0;
+            //$this->tph24->cumulative[$i] = 0;
 
             array_push($tempOp, 0);
             array_push($tempIdle, 0);
@@ -68,12 +70,17 @@ class Site
         // Get's the equipment belonging to this site
         $this->equipment = array();
         for ($i = 1; $i < count($sqlMetricPerHour); $i++) {
+
             $eID = $sqlMetricPerHour[$i][0];
             $eSiteKey = $sqlMetricPerHour[$i][1];
             $eSiteName = Config::Sites($eSiteKey); //$configSites[$eSiteKey];
-            $eFunction = $sqlMineEquipmentList[$eID][1];
 
-            // Name is valid 
+            $eFunction = "";
+            if (isset($sqlMineEquipmentList[$eID]))
+                $eFunction = $sqlMineEquipmentList[$eID][1];
+
+            //Debug::Log("[" . $eSiteKey . "]   [" . $eSiteName . "]   [" .  $this->name . "]");
+            // The equipment site name matches this site
             if ($eSiteName == $this->name) {
                 // Add equipment to the site list
                 $this->equipment[$eID] = $eFunction;
@@ -132,7 +139,7 @@ class Site
     {
         // For each shift, get each Metric Data and
         // see if it exists yet with the Site
-        for ($i = 0; $i < 2; $i++) {
+        for ($i = 0; $i < count($this->shiftData); $i++) {
 
             for ($j = 0; $j < count($e->shiftData[$i]->metricData); $j++) {
 
@@ -149,7 +156,7 @@ class Site
                 // If it can't be found, then create a new one 
                 if ($md == null) { //
                     $md = new MetricData($metric->metric, $metric->key, $metric->activity, $i);
-                    MetricData::Add($metric, $md);
+                    MetricData::Merge($metric, $md);
                     // Add a new array to keep track of 
                     // the Equip ID's that added to this metric
                     $md->equip = [];
@@ -158,7 +165,7 @@ class Site
                 } else {
                     // Otherwise add to existing... 
                     $md->equip[] = $e->id;
-                    MetricData::Add($metric, $md);
+                    MetricData::Merge($metric, $md);
                 }
 
 
@@ -176,7 +183,7 @@ class Site
 
                         // Add this equipments metric (which is production)
                         // to this sites production Metric
-                        MetricData::Add($metric, $this->shiftData[$i]->productionTonnes);
+                        MetricData::Merge($metric, $this->shiftData[$i]->productionTonnes);
                     }
                 }
 
@@ -195,7 +202,7 @@ class Site
 
                         // Add this equipments metric (which is production)
                         // to this sites production Metric
-                        MetricData::Add($metric, $this->shiftData[$i]->productionMetres);
+                        MetricData::Merge($metric, $this->shiftData[$i]->productionMetres);
                     }
                 }
             }

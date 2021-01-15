@@ -2,22 +2,6 @@
 
 include_once('header.php');
 
-/** Final object with all generated data
- * for the last time the day was created **/
-//static $allSites = array();
-//static $allEquipment = array();
-//static $date = '20181002';
-
-//static $generationStartTime;
-
-
-// Holds the resulting data 
-// from the core SQL queries
-//static $sqlMetricPerHour;
-//static $sqlEquipEventList;
-//static $sqlMineEquipmentList;
-//static $sqlMaterialMovements;
-
 
 // ------------------------------------------------------------------
 // ENTRY POINT
@@ -25,7 +9,15 @@ include_once('header.php');
 // Uncomment this to run directly from this file
 //Debug::Enable();
 if (Debug::enabled() == true) {
-    CreateSiteData::Run(new DateTime('20181231'));
+
+    //$c = new Config();
+    //Debug::Log($c->configMajorGroup);
+
+    //CreateSiteData::Run(new DateTime('20181231'));
+    CreateSiteData::Run(new DateTime('20201001'));
+
+    //Debug::Log(Client::Current()->SQLDBCredentials());
+    //CreateSiteData::RunSimpleDate('201810%%');
 }
 
 
@@ -42,24 +34,24 @@ final class CreateSiteData
     // Date used for generation 
     private static $date;
 
-    private static function ValidateDate(DateTime $_date)
-    {
-        if ($_date == null) {
-            Debug::Log("NULL Date passed");
-            return false;
-        } else {
-            Debug::Log("Using date - " . $_date->format('Ymd'));
-            self::$date = $_date->format('Ymd');
-            return true;
-        }
-    }
-
     public static function Run(DateTime $_date)
     {
-        if (!CreateSiteData::ValidateDate($_date))
-            return;
+        Debug::Log("Using date - " . $_date->format('Ymd'));
+        self::$date = $_date->format('Ymd');
+        CreateSiteData::Create();
+    }
 
-        Debug::StartProfile("TOTAL SITE GENERATION");
+    // public static function RunSimpleDate($_date)
+    // {
+    //     //self::$date = $_date;
+    //     self::$date = '201812%%';
+    //     CreateSiteData::Create();
+    // }
+
+
+    private static function Create()
+    {
+        Debug::StartProfile("TOTAL");
 
         global $generationStartTime;
         $generationStartTime = microtime(true);
@@ -73,18 +65,29 @@ final class CreateSiteData
 
         // Config instance 
         new Config();
+        //$d = new Config();
+        //Debug::Log($d);
 
         CreateSiteData::CreateSQLResults();
+
+        Debug::StartProfile("PHP Total");
+
         CreateSiteData::CreateSitesAndEquipment();
         CreateSiteData::CreateDataForAllSites();
         CreateSiteData::CreateDataForAllEquip();
 
+        Debug::EndProfile();
+
         // Make arrays numeric based for both 
         // the site lists inside a Mine Site 
-        // and the Mine Site array as well         
+        // and the Mine Site array as well        
+        $tempAllSites = [];
         foreach (array_keys($allSites) as $site) {
-            $allSites[$site]->MakeArraysNumeric();
-            $tempAllSites[] = $allSites[$site];
+            if ($allSites[$site]->equipment != null) {
+                //Debug::Log($allSites[$site]->equipment);
+                $allSites[$site]->MakeArraysNumeric();
+                $tempAllSites[] = $allSites[$site];
+            }
         }
         $allSites = $tempAllSites;
 
@@ -120,7 +123,7 @@ final class CreateSiteData
 
         // ------------------------------------------------------------------------------------------
         // All metrics per hour for this date
-        $sqlTxt = SQLUtils::FileToQuery(SQLUtils::QUERY_DIRECTORY . 'Core\ALL_MetricPerHour.sql');
+        $sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . 'ALL_MetricPerHour.sql');
         $sqlTxt = str_replace(SQLUtils::DateVar, "'" . self::$date . "'", $sqlTxt);
         $sqlMetricPerHour = SQLUtils::QueryToText($sqlTxt, "All Metric");
         // Sanitize null values 
@@ -129,21 +132,22 @@ final class CreateSiteData
                 if ($j > 3 && ($sqlMetricPerHour[$i][$j] == null))
                     $sqlMetricPerHour[$i][$j] = 0;
         }
-        //Debug::Log($sqlMetricPerHour[0]);
+        //Debug::Log($sqlMetricPerHour[4]);
         // ------------------------------------------------------------------------------------------
 
 
         // ------------------------------------------------------------------------------------------
         // All events that have been logged for this date
-        $sqlTxt = SQLUtils::FileToQuery(SQLUtils::QUERY_DIRECTORY . "Core\\ALL_EquipmentEventList.sql");
+        $sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . "ALL_EquipmentEventList.sql");
         $sqlTxt = str_replace(SQLUtils::DateVar, "'" . self::$date . "'", $sqlTxt);
         $sqlEquipEventList = SQLUtils::QueryToText($sqlTxt, "Event List");
+        //Debug::Log($sqlEquipEventList[0]);
         // ------------------------------------------------------------------------------------------
 
 
         // ------------------------------------------------------------------------------------------
         // All the equipment of the entire mine
-        $sqlTxt = SQLUtils::FileToQuery(SQLUtils::QUERY_DIRECTORY . 'Core\ALL_MineEquipmentList.sql');
+        $sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . 'ALL_MineEquipmentList.sql');
         $sqlTxt = str_replace(SQLUtils::DateVar, "'" . self::$date . "'", $sqlTxt);
         $sqlMineEquipmentList = SQLUtils::QueryToText($sqlTxt, "All Mine Equip", false);
 
@@ -159,7 +163,7 @@ final class CreateSiteData
 
         // ------------------------------------------------------------------------------------------
         // Material Movements
-        $sqlTxt = SQLUtils::FileToQuery(SQLUtils::QUERY_DIRECTORY . 'Core\ALL_MaterialMovements.sql');
+        $sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . 'ALL_MaterialMovements.sql');
         $sqlTxt = str_replace(SQLUtils::DateVar, "'" . self::$date . "'", $sqlTxt);
         $sqlMaterialMovements = SQLUtils::QueryToText($sqlTxt, "Mat Movements", false);
 
@@ -181,10 +185,13 @@ final class CreateSiteData
         global $generationStartTime;
 
         $d = DateTime::createFromFormat('Ymd', self::$date);
-        $day = Utils::dayNameMap[$d->format('D')];
+        $day = 'NULL';
+        if ($d != null)
+            $day = Utils::dayNameMap[$d->format('D')];
 
         $updateTime = new DateTime();
-        $timezone = new DateTimeZone('Asia/Singapore');
+        //$timezone = new DateTimeZone('Australia/Perth'); 
+        $timezone = Client::instance()->TimeZone();
         $updateTime->setTimezone($timezone);
 
         $timeToGenerate = (number_format((microtime(true) - $generationStartTime), 4) * 1000);
@@ -202,6 +209,9 @@ final class CreateSiteData
 
         $allSites[] = $metaData;
     }
+
+
+
 
 
 
@@ -288,16 +298,16 @@ final class CreateSiteData
             $siteName = Config::Sites($sqlMetricPerHour[$i][1]);
             if ($siteName != null || $siteName != '') {
                 // Only interested if the activity was Production 
-                if (preg_match("/production/i", $activity)) {
+                // if (preg_match("/production/i", $activity)) {
 
-                    // TODO - this is used a few times, so maybe a site wide static config?
-                    $metricIndexOffset = 4;
-                    foreach (array_keys($allSites) as $site) {
-                        for ($k = 0; $k < 24; $k++) {
-                            $allSites[$site]->tph24->tph[$k] += $sqlMetricPerHour[$i][$k + $metricIndexOffset];
-                        }
-                    }
-                }
+                //     // TODO - this is used a few times, so maybe a site wide static config?
+                //     $metricIndexOffset = 4;
+                //     foreach (array_keys($allSites) as $site) {
+                //         for ($k = 0; $k < 24; $k++) {
+                //             $allSites[$site]->tph24->tph[$k] += $sqlMetricPerHour[$i][$k + $metricIndexOffset];
+                //         }
+                //     }
+                // }
             }
         }
         Debug::EndProfile();

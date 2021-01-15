@@ -15,22 +15,29 @@ if (is_object($request)) {
 
     if ($request->func == 0) {
         if (isset($request->date)) {
-            GetSiteData::GetDataForDate($request->date);
+            echo (GetSiteData::GetDataForDate($request->date));
         }
     }
 
     if ($request->func == 1) {
-        GetSiteData::GetAvailableDates();
+        echo json_encode(GetSiteData::GetAvailableDates());
     }
+
+    // if ($request->func == 2) {
+    //     echo GetSiteData::GetDataForLongTerm(); //$request->date);
+    // }
 
 
     return;
 } else {
     // Debug path    
     include_once('create_site_data.php');
-    //GetSiteData::GetDataForDate('20181001');
+    //GetSiteData::GetDataForDate('20181010', true);
+    //GetSiteData::GetDataForLongTerm();
 
-   GetSiteData::GetAvailableDates();
+    //Debug::Log(Client::CachePath());
+
+    Debug::Log(GetSiteData::GetAvailableDates());
 }
 // ----------------------------------------------------------
 // ----------------------------------------------------------
@@ -44,10 +51,18 @@ if (is_object($request)) {
  */
 class GetSiteData
 {
-    private static $_fileDir = "../sitedata/";
-    private static $_fileExt = ".json";
+    //private static $_fileDir = "../sitedata/";
+    //private static $_fileDir2 = Client::CachePath();
 
-    //public static $forceRegenation = false;
+
+    //private static $_fileExt = ".json";
+    private static $_fileExt = ".mmd";  // Mine Mage Daydata    
+
+    private static function CacheDir(): string
+    {
+        return Client::CachePath();
+        //return "../sitedata/";
+    }
 
     public static function GetDataForDate($_date, $_forceRegen = false)
     {
@@ -60,7 +75,7 @@ class GetSiteData
         $preGenerated = GetSiteData::CheckGeneratedDataExists($date);
 
         $exists = ($preGenerated != null) ? True : False;
-        Debug::Log($exists);
+        //Debug::Log($exists);
 
         if ($preGenerated == null || $_forceRegen) {
 
@@ -70,29 +85,29 @@ class GetSiteData
             $resultAsJSON = json_encode($allSites);
             GetSiteData::WriteGeneratedDataToDisk($date, $resultAsJSON);
 
-            echo $resultAsJSON;
+            return $resultAsJSON;
         } else {
-            echo $preGenerated;
+            return $preGenerated;
         }
     }
 
 
     private static function CreateDataFolder()
     {
-        if (!is_dir(self::$_fileDir)) {
-            mkdir(self::$_fileDir, 0777, true);
+        if (!is_dir(self::CacheDir())) {
+            mkdir(self::CacheDir(), 0777, true);
         }
     }
 
 
     public static function GetAvailableDates()
     {
-        $sqlTxt = SQLUtils::FileToQuery(SQLUtils::QUERY_DIRECTORY . 'Core\ALL_AvailableDates.sql');
+        $sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . 'ALL_AvailableDates.sql');
         $result = SQLUtils::QueryToText($sqlTxt, "Available Dates");
         array_shift($result);
         //Debug::Log($result);
-        $dates = array_map(fn($x) => $x[0], $result);
-        echo json_encode($dates);
+        $dates = array_map(fn ($x) => $x[0], $result);
+        return ($dates);
     }
 
 
@@ -101,10 +116,11 @@ class GetSiteData
         GetSiteData::CreateDataFolder();
 
         // TODO - sanitise the date input?
-        $json = @file_get_contents(self::$_fileDir . $_date . self::$_fileExt);
+        $json = @file_get_contents(self::CacheDir() . $_date . self::$_fileExt);
 
         if ($json === false) {
-            Debug::Log("File not found for" . $_date);
+            Debug::Log("File not found for " . $_date);
+            return null;
             //echo json_encode(["Error" => "File not found for " . $_date]);
         } else {
             return $json;
@@ -118,7 +134,7 @@ class GetSiteData
     public static function WriteGeneratedDataToDisk($_date, $_data)
     {
         $myFile = $_date;
-        if (file_put_contents(self::$_fileDir . $myFile . self::$_fileExt, $_data)) {
+        if (file_put_contents(self::CacheDir() . $myFile . self::$_fileExt, $_data)) {
         }
 
 

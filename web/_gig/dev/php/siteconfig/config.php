@@ -2,8 +2,10 @@
 
 // For local debug
 //include_once('..\header.php');
-//new Config();
+//$c = new Config();
+
 //Debug::Log(Config::CreateDistinctTUMArray());
+//Debug::Log(Config::UniqueTUMCategories());
 
 
 
@@ -16,7 +18,7 @@ class Config
 {
     public static $instance = null;
 
-    private static $localDir = "siteconfig\\";
+    //private static $localDir = "siteconfig\\";
     private static $filePrefix = 'Config_';
 
     private static $fileTUM = 'TUM';
@@ -43,14 +45,27 @@ class Config
 
     public $configTUM;
     public $configSites;
-    public $uniqueTUMCategories;
+    public $configMajorGroup;
+
+    private static $uniqueTUMCategories = [];
+
 
     function __construct()
     {
+        if (Config::$instance !== null)
+            return;
+
+        Debug::StartProfile("Create Config");
+
         Config::$instance = $this;
         $this->configSites = Config::GetConfigSites();
         $this->configTUM = Config::GetConfigTUM();
-        $this->uniqueTUMCategories = Config::GetUniqueTUMCategories();
+        $this->configMajorGroup = Config::GetConfigMajorGroup();
+        Config::CreateUniqueTUMArray();
+
+        Debug::EndProfile();
+
+        //Debug::Log($this->configTUM);
     }
 
     public static function Sites($_key)
@@ -61,6 +76,11 @@ class Config
     public static function TUM($_key)
     {
         return isset(Config::$instance->configTUM[$_key]) ? Config::$instance->configTUM[$_key] : NULL;
+    }
+
+    public static function MajorGroup($_key)
+    {
+        return isset(Config::$instance->configMajorGroup[$_key]) ? strtoupper(Config::$instance->configMajorGroup[$_key]) : NULL;
     }
 
     /**
@@ -75,6 +95,11 @@ class Config
             $tumDistinct[$x_value] = 0;
         }
         return ($tumDistinct);
+    }
+
+    public static function UniqueTUMCategories(): array
+    {
+        return Config::$uniqueTUMCategories;
     }
 
 
@@ -101,6 +126,17 @@ class Config
 
     // -------------------------------------------------------------------------
 
+    private static function CreateUniqueTUMArray()
+    {
+        $result = array_unique(Config::$instance->configTUM);
+        Config::$uniqueTUMCategories = array();
+        foreach ($result as $x => $x_value) {
+            Config::$uniqueTUMCategories[] = $x_value;
+        }
+        // Debug::Log($this->uniqueTUMCategories);
+    }
+
+
     private static function GetConfigSites()
     {
         return Config::LoadCSVIntoAssociativeArray(Config::$filePrefix . Config::$fileSites);
@@ -111,15 +147,19 @@ class Config
         return Config::LoadCSVIntoAssociativeArray(Config::$filePrefix . Config::$fileTUM);
     }
 
-    private static function LoadCSVIntoAssociativeArray($_path)
+    private static function GetConfigMajorGroup()
     {
-        $_path = Utils::GetBackEndRoot() . Config::$localDir . $_path . ".csv";
-        //$_path = "D:\wamp64\www\dev\php\siteconfig\Config_Sites.csv";
+        return Config::LoadCSVIntoAssociativeArray(Config::$filePrefix . Config::$fileTUM, 1, 2);
+    }
 
 
-        if (file_exists($_path)) {
+    private static function LoadCSVIntoAssociativeArray($_file, $x = 0, $y = 1)
+    {
+        $_file = Utils::GetBackEndRoot() . Client::ConfigPath() . $_file . ".csv";
+
+        if (file_exists($_file)) {
             $newArray = array();
-            $file = fopen($_path, "r");
+            $file = fopen($_file, "r");
 
             // Skip first
             $line = fgetcsv($file);
@@ -127,22 +167,15 @@ class Config
             while (!feof($file)) {
                 $line = fgetcsv($file);
                 if ($line != NULL)
-                    $newArray[$line[0]] = $line[1];
-                //Debug::Log($line);
+                    $newArray[$line[$x]] = $line[$y];
             }
             fclose($file);
             return $newArray;
         } else {
-
             Debug::Log(Utils::GetBackEndRoot());
-            //Debug::Log("Failed to open file - " . $_path);
-            echo "<br/>";
             return null;
         }
     }
 
-    private static function GetUniqueTUMCategories()
-    {
-    }
     // -------------------------------------------------------------------------
 }

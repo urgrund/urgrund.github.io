@@ -1,6 +1,8 @@
 <?php
 include_once('header.php');
-include_once('get_site_data.php');
+//include_once('get_site_data.php');
+//include_once('create_site_data.php');
+//include_once('get_site_data.php');
 
 
 // ----------------------------------------------------------
@@ -13,6 +15,12 @@ $request = json_decode($postdata);
 
 if (is_object($request)) {
     include_once('setDebugOff.php');
+    if ($request->func == 0) {
+        echo LongTerm::Get(new DateTime(), new DateTime());
+    }
+} else {
+    $result = LongTerm::Get(new DateTime(), new DateTime());
+    //Debug::Log($result);
 }
 // ----------------------------------------------------------
 // ----------------------------------------------------------
@@ -31,7 +39,141 @@ abstract class LongTermGenerationType
 // Do the stuff
 // Will need a more flexible interface
 // What about combinations? ie) P & HAULING ?
-LongTerm::Generate('HAULING', null, null);
+//LongTerm::Generate('HAULING', null, null);
+//$start = new DateTime('20181001');
+//$end = new DateTime('20181231');
+//LongTerm::Get($start, $end);
+
+
+class AssetUtilisationPerDay
+{
+    // Available Time = Calendar Time – (Unplanned Breakdown + Planned Maintenance)
+    // Availability% = available time / CT
+    // U of A% = (Secondary Op + Primary Op) / Available Time
+    // Efficiency% = Primary op / (Secondary Op + Primary Op)
+    // Total AU% = Availability% X UofA% X Eff%
+    // Or Total AU% = Primary OP / CT (do it both ways to check you got the math right, that’s what I do) :D
+    public int $dateID;
+
+    public int $calendarTime;
+
+    public float $availableTime;
+    public float $availability;
+    public float $uOfa;
+    public float $efficiency;
+    public float $totalAU;
+
+    var $tumTimings = array();
+
+    function __construct(int $_dateID)
+    {
+        $this->dateID = $_dateID;
+        $this->calendarTime = 0;
+        $this->tumTimings = Config::CreateDistinctTUMArray();
+        foreach ($this->tumTimings as $x => $x_value) {
+            $this->tumTimings[$x] = new EventBreakDown();
+        }
+    }
+
+    public function GenerateUtilisationFromTUM()
+    {
+        if ($this->calendarTime == 0)
+            return;
+
+        $unplannedBreakdown = $this->tumTimings['Unplanned Breakdown']->duration;
+        $plannedMaintenance = $this->tumTimings['Planned Maintenance']->duration;
+        $primaryOperating = $this->tumTimings['Primary Operating']->duration;
+        $secondaryOperating = $this->tumTimings['Secondary Operating']->duration;
+
+        $this->availableTime = $this->calendarTime - ($unplannedBreakdown + $plannedMaintenance);
+        $this->availability = $this->availableTime / $this->calendarTime;
+
+        if ($this->availableTime == 0)
+            $this->uOfa = 0;
+        else
+            $this->uOfa = ($secondaryOperating + $primaryOperating) / $this->availableTime;
+
+        if ($secondaryOperating + $primaryOperating == 0)
+            $this->efficiency = 0;
+        else
+            $this->efficiency = $primaryOperating / ($secondaryOperating + $primaryOperating);
+
+        $this->totalAU = $primaryOperating / $this->calendarTime;
+    }
+}
+
+
+
+class LongTermAsset
+{
+    // For each asset
+    var $assetUtilisation = array();
+
+    // Totals of all assets
+    public AssetUtilisationPerDay $totalAssetUtilisation;
+
+    function __construct()
+    {
+        $this->totalAssetUtilisation = new AssetUtilisationPerDay(0);
+
+        //$this->tumTimings = Config::CreateDistinctTUMArray();
+        //foreach ($this->tumTimings as $x => $x_value) {
+        //  $this->tumTimings[$x] = new EventBreakDown();
+        //}
+    }
+
+    public function GenerateUtilisationFromTUM()
+    {
+        $this->totalAssetUtilisation->GenerateUtilisationFromTUM();
+        foreach ($this->assetUtilisation as $k => $v) {
+            $v->GenerateUtilisationFromTUM();
+        }
+    }
+
+    public function AssessEvent($event)
+    {
+        $tumCategory = Config::TUM($event[3]);
+        $date = $event[1];
+        $duration = $event[2];
+        $status = $event[3];
+
+        $f = $date->format('Ymd');
+        //Debug::Log($f);
+
+        if ($tumCategory != NULL) {
+
+            // This is per-day 
+            if (!isset($this->assetUtilisation[$f]))
+                $this->assetUtilisation[$f] = new AssetUtilisationPerDay($f);
+
+            $this->assetUtilisation[$f]->calendarTime += $duration;
+            $this->assetUtilisation[$f]->tumTimings[$tumCategory]->eventCount++;
+            $this->assetUtilisation[$f]->tumTimings[$tumCategory]->duration += $duration;
+            if (!isset($this->assetUtilisation[$f]->tumTimings[$tumCategory]->categories[$status]))
+                $this->assetUtilisation[$f]->tumTimings[$tumCategory]->categories[$status] = $duration;
+            else
+                $this->assetUtilisation[$f]->tumTimings[$tumCategory]->categories[$status] += $duration;
+
+
+            // --------------------------------------------------
+            // This is for the totals for this 
+            // long term asset
+            //$this->totalTime += $duration;
+
+            $this->totalAssetUtilisation->calendarTime += $duration;
+
+            $this->totalAssetUtilisation->tumTimings[$tumCategory]->eventCount++;
+            $this->totalAssetUtilisation->tumTimings[$tumCategory]->duration += $duration;
+            if (!isset($this->totalAssetUtilisation->tumTimings[$tumCategory]->categories[$status]))
+                $this->totalAssetUtilisation->tumTimings[$tumCategory]->categories[$status] = $duration;
+            else
+                $this->totalAssetUtilisation->tumTimings[$tumCategory]->categories[$status] += $duration;
+        } //else
+        //Debug::Log("Tum was null");
+    }
+}
+
+
 
 
 /**
@@ -42,6 +184,65 @@ class LongTerm
     private static $TUM_CAT = 'categories';
     private static $TUM_DURATION = 'duration';
     private static $TUM_DAILY = 'daily';
+
+
+
+    public static function Get(DateTime $_startDate, DateTime $_endDate)
+    {
+        new Config();
+
+        $period = new DatePeriod(
+            $_startDate,
+            new DateInterval('P1D'),
+            $_endDate
+        );
+
+        $numberOfDays = iterator_count($period);
+        //Debug::Log($numberOfDays);
+
+        $sqlTxt = SQLUtils::FileToQuery(SQLUtils::QUERY_DIRECTORY . "Core\\ALL_EquipmentEventListRange.sql");
+        //$sqlTxt = str_replace(SQLUtils::DateVar, "'" . '201811%%' . "'", $sqlTxt);  
+        //$sqlTxt      = "SDDS";
+        $sqlEquipEventList = SQLUtils::QueryToText($sqlTxt, "Event List Range");
+
+        if ($sqlEquipEventList == NULL)
+            return;
+        //Debug::Log($sqlEquipEventList);
+
+
+        $allEquip = [];
+        $totals = new LongTermAsset();
+
+        Debug::StartProfile("PHP Longterm");
+        for ($i = 1; $i < count($sqlEquipEventList); $i++) {
+            $id = $sqlEquipEventList[$i][0];
+            if (!isset($allEquip[$id])) {
+                $allEquip[$id] = new LongTermAsset();
+            }
+            $allEquip[$id]->AssessEvent($sqlEquipEventList[$i]);
+            $totals->AssessEvent($sqlEquipEventList[$i]);
+        }
+
+
+        foreach ($allEquip as $k => $v) {
+            $allEquip[$k]->GenerateUtilisationFromTUM();
+            $allEquip[$k]->assetUtilisation = array_values($allEquip[$k]->assetUtilisation);
+        }
+
+        $totals->GenerateUtilisationFromTUM();
+        $totals->assetUtilisation = array_values($totals->assetUtilisation);
+
+        Debug::EndProfile();
+
+        $result = [];
+        $result[] = $allEquip;
+        $result[] = $totals;
+
+        return json_encode($result);
+    }
+
+
+
 
 
     /**

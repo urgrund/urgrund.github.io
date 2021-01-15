@@ -54,9 +54,12 @@ class Equipment
         $e->mineArea = $_eventDataRow[4];
         $e->duration = $_eventDataRow[5];
         $e->status = $_eventDataRow[6];
-        $e->majorGroup = $_eventDataRow[7];
-        $e->shift = $_eventDataRow[8]; // === "P1" ? 0 : 1;
+        $e->shift = $_eventDataRow[8];
+        //$e->majorGroup = $_eventDataRow[7];
+
         $e->tumCategory = Config::TUM($e->status);
+        $e->majorGroup = Config::MajorGroup($e->tumCategory);
+        //Debug::Log(Config::MajorGroup($e->tumCategory));
 
         // In case the status hasn't been 
         // mapped to a TUM category yet
@@ -260,10 +263,7 @@ class Equipment
 
 
 
-    /** 
-     * 
-     * @param int $_shiftIndex
-     **/
+
     private function GetTUMBreakDownOfEvents()
     {
         for ($i = 0; $i < 2; $i++) {

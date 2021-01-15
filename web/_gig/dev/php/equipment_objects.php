@@ -1,13 +1,29 @@
 <?php
 // File to hold objects/classes related to Equipment
 
-
-class EventBreakDown
+interface IFromJSON
 {
-    var $majorGroup;
+    public static function FromJSON(Object $obj);
+}
+
+
+class EventBreakDown implements IFromJSON
+{
     var $duration;
+    var $eventCount = 0;
     var $categories = array();
-    var $eventCount;
+    var $majorGroup;
+
+    public static function FromJSON(Object $obj)
+    {
+        $e = new EventBreakDown();
+        $e->duration = $obj->duration;
+        $e->eventCount = $obj->eventCount;
+        foreach ($obj->categories as $key => $value) {
+            $e->categories[$key] = $value;
+        }
+        return $e;
+    }
 }
 
 
@@ -16,7 +32,7 @@ class EventBreakDown
 class EquipmentEvent
 {
     var $operator;
-    var $dayAhead;
+    var $dayAhead;          // Is this in the next day (ie. 1am)
     var $eventTime;         // DT object
     var $location;          // sub-location
     var $mineArea;
@@ -119,9 +135,6 @@ class MetricData
      */
     function __construct($_metric, $_site, $_activity, $_shift)
     {
-        // Maps the metric abbrv to a 'nice name' 
-        //global $metricMap;
-
         //Debug::Log("Creating Metric with " . $_site);
         $this->site = Config::Sites($_site);
         $this->key = $_site;
@@ -129,9 +142,6 @@ class MetricData
         $this->shift = $_shift;
         //$this->value = $_value;
         $this->activity = $_activity;
-
-        //if (array_key_exists($_metric, $metricMap))
-        //  $this->name = $metricMap[$_metric];
 
         if (Config::MetricMap($_metric) != null)
             $this->name = Config::MetricMap($_metric);
@@ -176,7 +186,7 @@ class MetricData
      * @param MetricData $b
      * @return void
      **/
-    public static function Add(MetricData $a, MetricData &$b)
+    public static function Merge(MetricData $a, MetricData &$b)
     {
         // Get a new array with the biggest size
         $newMph = [];

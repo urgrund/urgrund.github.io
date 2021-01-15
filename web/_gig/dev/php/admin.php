@@ -1,7 +1,7 @@
 <?php
 
 include_once('header.php');
-include_once('setDebugOff.php');
+//include_once('setDebugOff.php');
 include_once('get_site_data.php');
 
 // ----------------------------------------------------------
@@ -26,7 +26,7 @@ if (is_object($request)) {
     }
     // Force regenerate data
     else if ($request->func == 2) {
-        Admin::GenerateDataForDate($request->date);
+        echo Admin::GenerateDataForDate($request->date);
     }
     // Download data
     else if ($request->func == 3) {
@@ -39,9 +39,9 @@ if (is_object($request)) {
 
     return;
 } else {
-    include_once('setDebugOff.php');
-    echo "POOO";
+    //include_once('setDebugOff.php');
     //Admin::GetAllDateStatus();
+    Admin::GetCSVConfigs();
     //Admin::GenerateDataForDate('20181001');
 
     //$generateEverything = false;
@@ -65,23 +65,10 @@ class Admin
         echo json_encode(Config::$instance);
     }
 
-
-
-
     public static function GenerateDataForDate($_date)
     {
-        // This comes from create_site_data
-        //global $allSites;
-        //CreateSiteData::Run(new DateTime($_date));
-
-        // Encode and write to disk                
-        //GetSiteData::WriteGeneratedDataToDisk($_date, json_encode($allSites));
-
-        //echo json_encode(end($allSites));
-        GetSiteData::GetDataForDate($_date, true);
+        return GetSiteData::GetDataForDate($_date, true);
     }
-
-
 
     public static function DownloadDataForDate($_date)
     {
@@ -112,21 +99,12 @@ class Admin
             $metaData = end($data);
         } else {
             if ($_generateIfMissing == true) {
-                // Generate data for the missing date if possible
-                //CreateSiteData::SetDateForCreation($_date);
-                //CreateSiteData::Run();
-
-                // The last index of the generated data
-                //$metaTemp = end($allSites);
-                //$metaData->FillFromData($metaTemp);
                 $metaData = end($allSites);
-
                 // Encode and write to disk                
                 GetSiteData::WriteGeneratedDataToDisk($_date, json_encode($allSites));
             } else
                 $metaData->Date = $_date;
         }
-
 
         echo json_encode($metaData);
     }
@@ -137,21 +115,21 @@ class Admin
         //$pathInPieces = explode('/', $_SERVER['DOCUMENT_ROOT']);
         //Debug::Log($pathInPieces);
 
-        global $allSites;
+        //global $allSites;
 
         $returnList = [];
 
+        $dates = GetSiteData::GetAvailableDates();
 
-        // This will need to be dynamic
-        $period = new DatePeriod(
-            new DateTime('2018-10-01'),
-            new DateInterval('P1D'),
-            new DateTime('2019-01-01')
-        );
+        // $period = new DatePeriod(
+        //     new DateTime($dates[count($dates) - 1]),
+        //     new DateInterval('P1D'),
+        //     new DateTime($dates[0])
+        // );
 
 
-        foreach ($period as $key => $value) {
-            $date = $value->format('Ymd');
+        for ($i = 0; $i < count($dates); $i++) {
+            $date = $dates[$i];
             //Debug::Log($date);
 
             $data = GetSiteData::CheckGeneratedDataExists($date);
@@ -170,6 +148,28 @@ class Admin
             //$returnList[$date] = $metaData;
             $returnList[] = $metaData;
         }
+
+
+        // foreach ($period as $key => $value) {
+        //     $date = $value->format('Ymd');
+        //     //Debug::Log($date);
+
+        //     $data = GetSiteData::CheckGeneratedDataExists($date);
+        //     $metaData = new SiteMetaData();
+
+        //     if ($data != null) {
+        //         $data = json_decode($data);
+        //         $metaData = end($data);
+        //     } else {
+        //         $metaData->Date = $date;
+        //     }
+
+        //     if (array_key_exists($date, $returnList))
+        //         Debug::Log($date . " already exists!");
+
+        //     //$returnList[$date] = $metaData;
+        //     $returnList[] = $metaData;
+        // }
 
         //Debug::Log($returnList);
         echo json_encode($returnList);
