@@ -1,0 +1,107 @@
+﻿Fleet_Event_Code,TUM_Translator,Major Group
+Decommissioned,Excluded Calendar Time,EXCLUDE
+Equipment Commissioning,Excluded Calendar Time,EXCLUDE
+No Status,Excluded Calendar Time,EXCLUDE
+Bogging - Other,Non-Productive Time,Operating
+Bogging - Roadworks,Non-Productive Time,Operating
+Bolt/Mesh - Rehab,Non-Productive Time,Operating
+Drilling - Hole Cleanouts and Redrills,Non-Productive Time,Operating
+Drilling - Other,Non-Productive Time,Operating
+Setting Up/Packing Up,Non-Productive Time,Operating
+Tow/Lift/Carry,Non-Productive Time,Operating
+Training on Equipment,Non-Productive Time,Operating
+Tramming Between Jobs,Non-Productive Time,Operating
+Watering Down,Non-Productive Time,Operating
+Crib,Planned Delay,Idle
+No Planned Task,Planned Delay,Idle
+Planned Services Outage,Planned Delay,Idle
+Pre-Start,Planned Delay,Idle
+Production Ring Sampling,Planned Delay,Idle
+Re-Entry - Fumes,Planned Delay,Idle
+Refuelling/Greasing/Oil,Planned Delay,Idle
+Shift Change Over,Planned Delay,Idle
+Walking Level /Inspection/Audit,Planned Delay,Idle
+Washing Equipment,Planned Delay,Idle
+PM Daily,Planned Maintenance,Down
+PM Interval Service,Planned Maintenance,Down
+PM Major Components,Planned Maintenance,Down
+PM Tram to/from Workshop for Service,Planned Maintenance,Down
+PM Wait Fitter,Planned Maintenance,Down
+Attached,Productive Time,Operating
+Bogging - Cleanup,Productive Time,Operating
+Bogging - Primary,Productive Time,Operating
+Bogging - Remote,Productive Time,Operating
+Bogging - Secondary,Productive Time,Operating
+Bolt/Mesh,Productive Time,Operating
+Drilling - Auto,Productive Time,Operating
+Drilling - Cablebolt Holes,Productive Time,Operating
+Drilling - Development,Productive Time,Operating
+Drilling - Hole Collaring,Productive Time,Operating
+Drilling - One Boom Only,Productive Time,Operating
+Drilling - Production Downholes,Productive Time,Operating
+Drilling - Production Upholes,Productive Time,Operating
+Hauling,Productive Time,Operating
+Re-Entry,Productive Time,Operating
+Scaling/Rattling,Productive Time,Operating
+Service Work - Pump Activities,Productive Time,Operating
+Blocked Access/Decline,Unplanned Delay,Idle
+Bogged Rods/Tubes,Unplanned Delay,Idle
+Equipment Bogged,Unplanned Delay,Idle
+External - Heat,Unplanned Delay,Idle
+External - Other,Unplanned Delay,Idle
+External - Seismic,Unplanned Delay,Idle
+External - Weather,Unplanned Delay,Idle
+Incident Scene Preservation,Unplanned Delay,Idle
+Incident/Emergency,Unplanned Delay,Idle
+Load/Unload Rods,Unplanned Delay,Idle
+Operator Diagnostic Error,Unplanned Delay,Idle
+Setting up remotes,Unplanned Delay,Idle
+Wait - Empty Ore Pass,Unplanned Delay,Idle
+Wait - Fuel,Unplanned Delay,Idle
+Wait - Radon,Unplanned Delay,Idle
+Wait - Red Light,Unplanned Delay,Idle
+Wait Equip - Other,Unplanned Delay,Idle
+Wait In-cycle - Agi/Sprayer,Unplanned Delay,Idle
+Wait In-cycle - Bogger,Unplanned Delay,Idle
+Wait In-cycle - Drill,Unplanned Delay,Idle
+Wait In-cycle - Haul Truck,Unplanned Delay,Idle
+Wait Material - Consumables,Unplanned Delay,Idle
+Wait Person - Operator,Unplanned Delay,Idle
+Wait Person - Shiftboss/Foreman,Unplanned Delay,Idle
+Wait Person - Tech Support,Unplanned Delay,Idle
+Wait Process - Fibrecrete Cure,Unplanned Delay,Idle
+Wait Process - PM,Unplanned Delay,Idle
+Wait Services - Communications,Unplanned Delay,Idle
+Wait Services - Compress Air,Unplanned Delay,Idle
+Wait Services - Dewatering,Unplanned Delay,Idle
+Wait Services - Power,Unplanned Delay,Idle
+Wait Services - Sprays,Unplanned Delay,Idle
+Wait Services - Vent,Unplanned Delay,Idle
+Wait Services - Water,Unplanned Delay,Idle
+US Air Conditioner,Unplanned Maintenance,Down
+US Bearing/Pins/Bushes,Unplanned Maintenance,Down
+US Boom/Feedrail,Unplanned Maintenance,Down
+US Brakes,Unplanned Maintenance,Down
+US Carousel/Rod Handler,Unplanned Maintenance,Down
+US Compressor,Unplanned Maintenance,Down
+US Drifter,Unplanned Maintenance,Down
+US Electrical - High Volt,Unplanned Maintenance,Down
+US Electrical - Low Volt,Unplanned Maintenance,Down
+US Engine,Unplanned Maintenance,Down
+US Fire Suppression System,Unplanned Maintenance,Down
+US Fuel System,Unplanned Maintenance,Down
+US GETS - Bucket/Other,Unplanned Maintenance,Down
+US Hydraulic System,Unplanned Maintenance,Down
+US Jacks,Unplanned Maintenance,Down
+US Lubrication System,Unplanned Maintenance,Down
+US Power Train,Unplanned Maintenance,Down
+US Pumps/Delivery line,Unplanned Maintenance,Down
+US Remotes System,Unplanned Maintenance,Down
+US Shank,Unplanned Maintenance,Down
+US Steering,Unplanned Maintenance,Down
+US Structural/Damage,Unplanned Maintenance,Down
+US Tram to/from Workshop for Repair,Unplanned Maintenance,Down
+US Tyres/Rims,Unplanned Maintenance,Down
+US Wait Fitter,Unplanned Maintenance,Down
+US Wait Parts,Unplanned Maintenance,Down
+US Windows,Unplanned Maintenance,Down
