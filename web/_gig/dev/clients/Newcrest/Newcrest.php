@@ -26,4 +26,9 @@ class Newcrest extends Client
     {
         return new DateTimeZone('Australia/Perth');
     }
+
+    public function ShiftStart(): int
+    {
+        return 6;
+    }
 }

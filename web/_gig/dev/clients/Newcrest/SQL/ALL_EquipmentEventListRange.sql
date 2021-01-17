@@ -7,7 +7,7 @@ Select
 		,MTS.[MeasureValue] AS 'Value'
 		,RDS.[Status_Description] AS 'Status Description'
 		--,RTS.[Status_Type_Group_Code] AS 'Major Group'
-		,substring(ATS.[ShKey],9,2) as 'Shift'
+		,substring(ATS.[ShKey],10,1) as 'Shift'
 
 FROM [dbo].[ALLOCTNTIMESTAMP] as ATS 
 	Join [dbo].[MEASURETIMESTAMP] as MTS on MTS.[TSKey] = ATS.[TSKey]

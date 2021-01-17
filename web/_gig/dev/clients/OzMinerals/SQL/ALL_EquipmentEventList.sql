@@ -1,4 +1,4 @@
-Select
+Select 
 		 ATS.[Equipment] 'Equipment'
 		,RDO.[Operator_Description] AS 'Operator'
 		,ats.[Operator]
@@ -6,7 +6,7 @@ Select
 		,ATS.[Location] AS 'Location'
 		,RDP.[Source_MineArea_Code] AS 'Mine Area'
 		,MTS.[MeasureValue] AS 'Value'
-		,RDS.[Status_Description] AS 'Status Description'
+		,RDS.[Status_Description] AS 'Status Description' 
 		,RTS.[Status_Type_Description] AS 'TUM Category' --[Status_Type_Description]
 		,substring(ATS.[ShKey],10,1) as 'Shift'
 
@@ -20,4 +20,4 @@ FROM [dbo].[ALLOCTNTIMESTAMP] as ATS
     left Join [dbo].[RD_EQUIPMENT_MODEL] as RDM on RDM.[Equipment_ModelCode] = RDE.[Equipment_Model_Code]
     left Join [dbo].[RD_EQUIPMENT_FUNCTION] as RDF on RDF.[Equipment_FunctionCode] = RDM.[Equipment_Model_Function_Code]
     left Join [dbo].[RD_PARENTLOCATIONS] as RDP on RDP.[SourceCode] = ATS.[Location]
-WHERE MTS.MeasCode = 'SECONDS' and RDF.[Equipment_FunctionCode] in ('LOADING','HAULING','PRODDRILL','DEVDRILL') and left(ats.[shkey],8) = @Date
+WHERE MTS.MeasCode = 'SECONDS' and RDS.[Status_Category] <> 'Excluded Calendar Time'and RDF.[Equipment_FunctionCode] in ('LOADING','HAULING','PRODDRILL','DEVDRILL') and left(ats.[shkey],8) = @Date

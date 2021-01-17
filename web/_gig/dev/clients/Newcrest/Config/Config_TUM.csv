@@ -1,353 +1,353 @@
-Fleet_Event_Code,TUM_Translator,Major Group
-Auto Drilling,Primary Operating,Operating
-Blasthole Drilling,Primary Operating,Operating
-Bogging - 4475 Level/Truck Loading,Primary Operating,Operating
-Bogging - Transfer,Primary Operating,Operating
-Bogging - Development,Primary Operating,Operating
-Bogging - Production,Primary Operating,Operating
-Bogging - Truck Loading,Primary Operating,Operating
-Bogging Zone Locked Down,Primary Operating,Operating
-Charging,Primary Operating,Operating
-Drilling - Auto Drilling,Primary Operating,Operating
-Firing in Progress,Primary Operating,Operating
-Grading Roads,Primary Operating,Operating
-Ground Support Drilling,Primary Operating,Operating
-Hauling,Primary Operating,Operating
-Hoisting,Primary Operating,Operating
-Inspection,Primary Operating,Operating
-Loading Fibrecrete,Primary Operating,Operating
-Operating,Primary Operating,Operating
-Production Drilling,Primary Operating,Operating
-Service & Refuel Equipment,Primary Operating,Operating
-Service Work,Primary Operating,Operating
-Spraying Fibrecrete,Primary Operating,Operating
-Teleremote Bogging,Primary Operating,Operating
-Rehab Spraying,Primary Operating,Operating
-Bogging - AutoMine,Primary Operating,Operating
-BOGGING,Primary Operating,Operating
-Special Projects Work,Primary Operating,Operating
-Spraying Rill,Primary Operating,Operating
-Bogging - Cleanup,Secondary Operating,Operating
-Bogging - Other,Secondary Operating,Operating
-Bogging - Oversize,Secondary Operating,Operating
-Bogging - Roadworks,Secondary Operating,Operating
-Drill set-up,Secondary Operating,Operating
-Drilling - Non Production,Secondary Operating,Operating
-Drilling - Re-drill,Secondary Operating,Operating
-Re-drill,Secondary Operating,Operating
-Rehab Drilling,Secondary Operating,Operating
-Rig up/Rig down,Secondary Operating,Operating
-Road Work,Secondary Operating,Operating
-Setup Location,Secondary Operating,Operating
-TBA - Operating,Secondary Operating,Operating
-TO BE ALLOCATED - Operating,Secondary Operating,Operating
-Tow / Carry / Lift,Secondary Operating,Operating
-Tramming Between Jobs,Secondary Operating,Operating
-Dump Fibrecrete or Concrete,Secondary Operating,Operating
-Scaling,Secondary Operating,Operating
-Pumping Water,Secondary Operating,Operating
-Operator Training,Secondary Operating,Operating
-Special Projects Work,Secondary Operating,Operating
-.O=Hauling,Secondary Operating,Operating
-.Spraying Fibrecrete = O,Secondary Operating,Operating
-1 Boom Operating = O,Secondary Operating,Operating
-Auto Drilling = O,Secondary Operating,Operating
-Auto Idle = I,Secondary Operating,Operating
-Blasthole Drilling = O,Secondary Operating,Operating
-Bogging - Non Production,Secondary Operating,Operating
-Bogging - Other Works = O,Secondary Operating,Operating
-Bogging = O,Secondary Operating,Operating
-Unload Concrete,Secondary Operating,Operating
-Prepping Holes,Secondary Operating,Operating
-Re-Drill = O,Secondary Operating,Operating
-Refuel,Secondary Operating,Operating
-Refill Chemicals,Secondary Operating,Operating
-Refill Oil & Lubricants,Secondary Operating,Operating
-Refill Chemicals = O,Secondary Operating,Operating
-Blasting - Open Pit,Unplanned Standby,Idle
-Blasting - Underground,Unplanned Standby,Idle
-Bogging Zone Open,Unplanned Standby,Idle
-Chute Access Blocked,Unplanned Standby,Idle
-Chute O/S or Hung Up,Unplanned Standby,Idle
-Drill - Bogged/Broken Rods,Unplanned Standby,Idle
-Empty Ore Pass,Unplanned Standby,Idle
-Equipment Not Required,Unplanned Standby,Idle
-Fatigue Break,Unplanned Standby,Idle
-Incident,Unplanned Standby,Idle
-No Compressed Air,Unplanned Standby,Idle
-No Dirt,Unplanned Standby,Idle
-No Vent,Unplanned Standby,Idle
-No Water,Unplanned Standby,Idle
-Not Required,Unplanned Standby,Idle
-Offsite,Unplanned Standby,Idle
-Ore Pass Low Level,Unplanned Standby,Idle
-Setup sprays,Unplanned Standby,Idle
-Setup Vent,Unplanned Standby,Idle
-Status,Unplanned Standby,Idle
-TBA - Standby,Unplanned Standby,Idle
-TO BE ALLOCATED - Standby,Unplanned Standby,Idle
-Wait - Blasting Open Pit,Unplanned Standby,Idle
-Wait - Blocked Access,Unplanned Standby,Idle
-Wait - Cleanup,Unplanned Standby,Idle
-Wait - Consumables,Unplanned Standby,Idle
-Wait - Crusher,Unplanned Standby,Idle
-Wait - Development,Unplanned Standby,Idle
-Wait - Downstream Operational,Unplanned Standby,Idle
-Wait - Dusted Out,Unplanned Standby,Idle
-Wait - Empty Ore Pass,Unplanned Standby,Idle
-Wait - Ore Pass Full,Unplanned Standby,Idle
-Wait - Fitter,Unplanned Standby,Idle
-Wait - Loader,Unplanned Standby,Idle
-Wait - Mine Services,Unplanned Standby,Idle
-Wait - Power Interruption,Unplanned Standby,Idle
-Wait - Service Crew in Area,Unplanned Standby,Idle
-Wait - Servicing,Unplanned Standby,Idle
-Wait - Set up Vent,Unplanned Standby,Idle
-Wait - Setup sprays,Unplanned Standby,Idle
-Wait - Supervisor,Unplanned Standby,Idle
-Wait - Technical,Unplanned Standby,Idle
-Wait - Technical Services,Unplanned Standby,Idle
-Wait - Traffic Management,Unplanned Standby,Idle
-Wait - Truck,Unplanned Standby,Idle
-Wait LHD,Unplanned Standby,Idle
-No Power,Unplanned Standby,Idle
-Incident/Emergency = I,Unplanned Standby,Idle
-Wait - Weather,Unplanned Standby,Idle
-Wait - Fibrecrete dry time,Unplanned Standby,Idle
-Safety Stop,Unplanned Standby,Idle
-No Dump,Unplanned Standby,Idle
-Bathroom,Unplanned Standby,Idle
-Bog Shaft Bottom = I,Unplanned Standby,Idle
-Bog Sump = O,Unplanned Standby,Idle
-Bogged,Unplanned Standby,Idle
-Bogged / Broken Rods = I,Unplanned Standby,Idle
-No Comms,Unplanned Standby,Idle
-Equipment not required = I,Unplanned Standby,Idle
-Crib,Operating Standby,Idle
-Equipment Not Called In,Operating Standby,Idle
-No Operator,Operating Standby,Idle
-Re-Entry,Operating Standby,Idle
-Released by  Workshop,Operating Standby,Idle
-Shift Change,Operating Standby,Idle
-Shift Change/Re-Entry,Operating Standby,Idle
-Swap Operator,Operating Standby,Idle
-Wait - Operator,Operating Standby,Idle
-Re-Entry in Progress,Operating Standby,Idle
-Drilling - Auto Idle,Operating Standby,Idle
-Re-Entry = O,Operating Standby,Idle
-Re-Entry MReef Complete,Operating Standby,Idle
-Crusher Surge Bin Low,Operating Standby,Idle
-Wait - Recovery Gear,Operating Standby,Idle
-Wait - Re-Entry,Operating Standby,Idle
-Wait - No Heading,Operating Standby,Idle
-Wait - No Fuel,Operating Standby,Idle
-No Operator = I,Operating Standby,Idle
-No Dewater,Operating Standby,Idle
-No Report = I,Operating Standby,Idle
-No Comms,Operating Standby,Idle
-Operating = O,Operating Standby,Idle
-(NO REPORT),Operating Standby,Idle
-Blast Delay,Operating Standby,Idle
-Wait - Fibrecrete dry time,Operating Standby,Idle
-Wait - No Heading,Operating Standby,Idle
-(NO REPORT),Operating Standby,Idle
-Safety Stop,Operating Standby,Idle
-No LHD,Operating Standby,Idle
-Wait - Spraymec,Operating Standby,Idle
-Wait - Agi,Operating Standby,Idle
-Machine Check,Operating Standby,Idle
-Machine Cleaning,Operating Standby,Idle
-No Trucks,Operating Standby,Idle
-Automine Not Required,Operating Standby,Idle
-AIR - COMPRESSOR,Unplanned Breakdown,Down
-AIR - SOLENOID,Unplanned Breakdown,Down
-AIR CONDITIONING - BELT,Unplanned Breakdown,Down
-AIR CONDITIONING - COMPRESSOR,Unplanned Breakdown,Down
-AIR CONDITIONING - CONDENSER,Unplanned Breakdown,Down
-AIR CONDITIONING - EVAPORATOR,Unplanned Breakdown,Down
-AIR CONDITIONING - FAN,Unplanned Breakdown,Down
-AIR CONDITIONING - HOSE,Unplanned Breakdown,Down
-AIR CONDITIONING - TO BE ALLOCATED,Unplanned Breakdown,Down
-AIR CONDITIONING - WAIT PARTS,Unplanned Breakdown,Down
-AIR CONDITIONING - WIRING,Unplanned Breakdown,Down
-AIR/WATER - COMPRESSOR,Unplanned Breakdown,Down
-AIR/WATER - FLUSHING,Unplanned Breakdown,Down
-AIR/WATER - SOLENOID,Unplanned Breakdown,Down
-AIR/WATER - TO BE ALLOCATED,Unplanned Breakdown,Down
-AIR/WATER - WAIT PARTS,Unplanned Breakdown,Down
-AIR/WATER - WATER PUMP,Unplanned Breakdown,Down
-ATTACHMENT - BUCKET,Unplanned Breakdown,Down
-ATTACHMENT - LIFT ARMS,Unplanned Breakdown,Down
-ATTACHMENT - Z LINK,Unplanned Breakdown,Down
-AUTO LUBE SYSTEM - GREASE SYSTEM,Unplanned Breakdown,Down
-AUTO LUBE SYSTEM - INJECTOR,Unplanned Breakdown,Down
-AXLE - STRUT,Unplanned Breakdown,Down
-Axle - SUSPENSION - STRUT,Unplanned Breakdown,Down
-AXLE - TO BE ALLOCATED,Unplanned Breakdown,Down
-AXLE - WAIT PARTS,Unplanned Breakdown,Down
-BRAKING SYSTEM - HOSE/O-RING,Unplanned Breakdown,Down
-BRAKING SYSTEM - PUMP,Unplanned Breakdown,Down
-BRAKING SYSTEM - SENSOR/PRESSURE SWITCH,Unplanned Breakdown,Down
-BRAKING SYSTEM - TO BE ALLOCATED,Unplanned Breakdown,Down
-BRAKING SYSTEM - VALVE,Unplanned Breakdown,Down
-BRAKING SYSTEM - WAIT PARTS,Unplanned Breakdown,Down
-BRAKING SYSTEM - WHEEL END,Unplanned Breakdown,Down
-CHARGING/STARTING - ALTERNATOR,Unplanned Breakdown,Down
-CHARGING/STARTING - BATTERY,Unplanned Breakdown,Down
-CHARGING/STARTING - BELT/PULLEY/BEARING,Unplanned Breakdown,Down
-CHARGING/STARTING - STARTER MOTOR,Unplanned Breakdown,Down
-CHASIS - BOOM,Unplanned Breakdown,Down
-CHASIS - CAB,Unplanned Breakdown,Down
-CHASIS - CENTRE HITCH,Unplanned Breakdown,Down
-CHASIS - CHASSIS,Unplanned Breakdown,Down
-CHASIS - GLASS,Unplanned Breakdown,Down
-CHASIS - GUARD/COVER/PANEL,Unplanned Breakdown,Down
-CHASIS - LADDER/RAILING/WALK-WAY,Unplanned Breakdown,Down
-CHASIS - OTHER,Unplanned Breakdown,Down
-CHASIS - TO BE ALLOCATED,Unplanned Breakdown,Down
-CHASIS - TRAY,Unplanned Breakdown,Down
-CHASIS - WAIT PARTS,Unplanned Breakdown,Down
-CHASIS - Z LINK/DOG BONE,Unplanned Breakdown,Down
-COMMUNICATION - MINEGEM,Unplanned Breakdown,Down
-COMMUNICATION - TELEREMOTE,Unplanned Breakdown,Down
-COMMUNICATION - TWO-WAY,Unplanned Breakdown,Down
-DAMAGE - OPERATIONAL,Unplanned Breakdown,Down
-DAMAGE - OTHER,Unplanned Breakdown,Down
-DAMAGE - WAIT PARTS,Unplanned Breakdown,Down
-DRIFTERS - ACCUMULATOR,Unplanned Breakdown,Down
-DRIFTERS - FEED,Unplanned Breakdown,Down
-DRIFTERS - FLUSHING,Unplanned Breakdown,Down
-DRIFTERS - FLUSHING HEAD,Unplanned Breakdown,Down
-DRIFTERS - SHANK,Unplanned Breakdown,Down
-ELECTRICAL - ALTERNATOR,Unplanned Breakdown,Down
-ELECTRICAL - BATTERY,Unplanned Breakdown,Down
-ELECTRICAL - BELT/PULLEY/BEARING,Unplanned Breakdown,Down
-ELECTRICAL - CONTROLS/LEVERS,Unplanned Breakdown,Down
-ELECTRICAL - ECM/MODULE,Unplanned Breakdown,Down
-ELECTRICAL - FUSE,Unplanned Breakdown,Down
-ELECTRICAL - LIGHTS,Unplanned Breakdown,Down
-ELECTRICAL - SENSOR/PRESSURE SWITCH,Unplanned Breakdown,Down
-ELECTRICAL - STARTER MOTOR,Unplanned Breakdown,Down
-ELECTRICAL - SWITCH,Unplanned Breakdown,Down
-ELECTRICAL - TELEREMOTES,Unplanned Breakdown,Down
-ELECTRICAL - TO BE ALLOCATED,Unplanned Breakdown,Down
-ELECTRICAL - TWO-WAY,Unplanned Breakdown,Down
-ELECTRICAL - WAIT PARTS,Unplanned Breakdown,Down
-ELECTRICAL - WIRING,Unplanned Breakdown,Down
-ENGINE - BELT/PULLEY/BEARING,Unplanned Breakdown,Down
-ENGINE - COOLING SYSTEM,Unplanned Breakdown,Down
-ENGINE - ECM,Unplanned Breakdown,Down
-ENGINE - EXHAUST,Unplanned Breakdown,Down
-ENGINE - FAN,Unplanned Breakdown,Down
-ENGINE - FILTER,Unplanned Breakdown,Down
-ENGINE - FUEL SYSTEM,Unplanned Breakdown,Down
-ENGINE - OIL LEAK,Unplanned Breakdown,Down
-ENGINE - OVERHEATING,Unplanned Breakdown,Down
-ENGINE - OVERHEATING TBA,Unplanned Breakdown,Down
-ENGINE - RADIATOR,Unplanned Breakdown,Down
-ENGINE - SENSOR/PRESSURE SWITCH,Unplanned Breakdown,Down
-ENGINE - TO BE ALLOCATED,Unplanned Breakdown,Down
-ENGINE - TURBO,Unplanned Breakdown,Down
-ENGINE - UNIT INJECTOR,Unplanned Breakdown,Down
-ENGINE - WAIT PARTS,Unplanned Breakdown,Down
-ENGINE - WATER PUMP,Unplanned Breakdown,Down
-FIRE SUPPRESSION - HOSE/TUBE,Unplanned Breakdown,Down
-FIRE SUPPRESSION - RECHARGE,Unplanned Breakdown,Down
-FIRE SUPPRESSION - SENSOR/PRESSURE SWITCH,Unplanned Breakdown,Down
-FIRE SUPPRESSION - TO BE ALLOCATED,Unplanned Breakdown,Down
-G.E.T - BUCKET,Unplanned Breakdown,Down
-G.E.T - TO BE ALLOCATED,Unplanned Breakdown,Down
-G.E.T - TOOTH,Unplanned Breakdown,Down
-G.E.T - WAIT PARTS,Unplanned Breakdown,Down
-HYDRAULIC - ACCUMULATOR,Unplanned Breakdown,Down
-HYDRAULIC - AUTO LUBE SYSTEM - GREASE SYSTEM,Unplanned Breakdown,Down
-HYDRAULIC - AUTO LUBE SYSTEM - INJECTOR,Unplanned Breakdown,Down
-HYDRAULIC - COOLING PACK,Unplanned Breakdown,Down
-HYDRAULIC - CYLINDER,Unplanned Breakdown,Down
-HYDRAULIC - HOSE/O-RING,Unplanned Breakdown,Down
-HYDRAULIC - MOTOR,Unplanned Breakdown,Down
-HYDRAULIC - MOTOR/PUMP,Unplanned Breakdown,Down
-HYDRAULIC - PUMP,Unplanned Breakdown,Down
-HYDRAULIC - RIDE CONTROL,Unplanned Breakdown,Down
-HYDRAULIC - TO BE ALLOCATED,Unplanned Breakdown,Down
-HYDRAULIC - VALVE,Unplanned Breakdown,Down
-HYDRAULIC - WAIT PARTS,Unplanned Breakdown,Down
-MINEGEM - COMMUNICATION,Unplanned Breakdown,Down
-MINEGEM - INCORRECT SETUP,Unplanned Breakdown,Down
-MINEGEM - INFRASTRUCTURE,Unplanned Breakdown,Down
-MINEGEM - MACHINE,Unplanned Breakdown,Down
-MINEGEM - TO BE ALLOCATED,Unplanned Breakdown,Down
-MINEGEM - WAIT PARTS,Unplanned Breakdown,Down
-OTHER - BREAKDOWN TO BE ALLOCATED,Unplanned Breakdown,Down
-OTHER - RECOVERY VEHICLE,Unplanned Breakdown,Down
-POWER TRAIN - DIFFERENTIAL,Unplanned Breakdown,Down
-POWER TRAIN - DRIVE COUPLING,Unplanned Breakdown,Down
-POWER TRAIN - DRIVE SHAFT,Unplanned Breakdown,Down
-POWER TRAIN - DRIVE SHAFT/COUPLING,Unplanned Breakdown,Down
-POWER TRAIN - FINAL DRIVE/WHEEL END,Unplanned Breakdown,Down
-POWER TRAIN - LOCK UP CLUTCH,Unplanned Breakdown,Down
-POWER TRAIN - TORQUE CONVERTOR,Unplanned Breakdown,Down
-POWER TRAIN - TRANSMISSION,Unplanned Breakdown,Down
-POWERTRAIN - TO BE ALLOCATED,Unplanned Breakdown,Down
-RAIL/BOOM - ACCUMULATOR,Unplanned Breakdown,Down
-RAIL/BOOM - DRIFTER,Unplanned Breakdown,Down
-RAIL/BOOM - DRIFTER FAILURE/CHANGEOUT,Unplanned Breakdown,Down
-RAIL/BOOM - FLUSHING HEAD,Unplanned Breakdown,Down
-RAIL/BOOM - FRONT/REAR FEED ROPE,Unplanned Breakdown,Down
-RAIL/BOOM - ROD HANDLING,Unplanned Breakdown,Down
-RAIL/BOOM - SHANK,Unplanned Breakdown,Down
-RAIL/BOOM - TO BE ALLOCATED,Unplanned Breakdown,Down
-RAIL/BOOM - WAIT PARTS,Unplanned Breakdown,Down
-RAILS - DRIFTERS,Unplanned Breakdown,Down
-RAILS - FLUSHING HEAD,Unplanned Breakdown,Down
-RAILS - FRONT/REAR FEED ROPE,Unplanned Breakdown,Down
-RAILS - PITTO JAWS,Unplanned Breakdown,Down
-RAILS - ROD HANDLING,Unplanned Breakdown,Down
-RECOVERY VEHICLE - RECOVERY,Unplanned Breakdown,Down
-STEERING - CYLINDER,Unplanned Breakdown,Down
-STEERING - HOSE/O-RING,Unplanned Breakdown,Down
-STEERING - SENSOR/PRESSURE SWITCH,Unplanned Breakdown,Down
-STEERING - VALVE,Unplanned Breakdown,Down
-STEERING - WIRING,Unplanned Breakdown,Down
-STRUCTURAL - BOOM,Unplanned Breakdown,Down
-STRUCTURAL - CAB,Unplanned Breakdown,Down
-STRUCTURAL - CENTRE HITCH,Unplanned Breakdown,Down
-STRUCTURAL - CHASSIS,Unplanned Breakdown,Down
-STRUCTURAL - GLASS,Unplanned Breakdown,Down
-STRUCTURAL - GUARD/COVER/PANEL,Unplanned Breakdown,Down
-STRUCTURAL - OTHER,Unplanned Breakdown,Down
-SUSPENSION - FRONT STRUT,Unplanned Breakdown,Down
-TO BE ALLOCATED - Breakdown,Unplanned Breakdown,Down
-TO BE ALLOCATED - Operational Down,Unplanned Breakdown,Down
-TO BE ALLOCATED - Overheating,Unplanned Breakdown,Down
-TRAM TO WORKSHOP FOR REPAIR,Unplanned Breakdown,Down
-TYRES - PUNCTURE/DAMAGE,Unplanned Breakdown,Down
-TYRES - RE-TORQUE,Unplanned Breakdown,Down
-TYRES - RIMS,Unplanned Breakdown,Down
-TYRES - SIDEWALL CUT,Unplanned Breakdown,Down
-TYRES - TO BE ALLOCATED,Unplanned Breakdown,Down
-TYRES - TREAD IMPACT,Unplanned Breakdown,Down
-TYRES - TYRE FAILURE,Unplanned Breakdown,Down
-TYRES - WAIT PARTS,Unplanned Breakdown,Down
-TYRES - WORN OUT,Unplanned Breakdown,Down
-SERVICE OVERRUN,Unplanned Breakdown,Down
-HOIST BREAKDOWN,Unplanned Breakdown,Down
-POWERTRAIN - WAIT PARTS,Unplanned Breakdown,Down
-AUTOMATION - SCANNER,Unplanned Breakdown,Down
-AUTOMATION - BOOM SENSOR,Unplanned Breakdown,Down
-AUTOMATION - SPEED SENSOR,Unplanned Breakdown,Down
-AUTOMATION - STEER SENSOR,Unplanned Breakdown,Down
-AUTOMATION - CALIBRATION,Unplanned Breakdown,Down
-AUTOMATION - VIDEO,Unplanned Breakdown,Down
-AUTOMATION - E-STOP,Unplanned Breakdown,Down
-AUTOMATION - COMMUNICATION,Unplanned Breakdown,Down
-DAILY SERVICE,Planned Maintenance,Down
-FIRE SUPPRESSION,Planned Maintenance,Down
-INTERVAL SERVICE,Planned Maintenance,Down
-MAJOR REBUILD,Planned Maintenance,Down
-SCHEDULED MAINTENANCE,Planned Maintenance,Down
-TRAM FOR DAILY SERVICE,Planned Maintenance,Down
-TRAM TO WORKSHOP FOR SERVICE,Planned Maintenance,Down
-WINDER MAJOR SERVICE,Planned Maintenance,Down
-WINDER WEEKLY SERVICE,Planned Maintenance,Down
-WINDER DAILY SERVICE,Planned Maintenance,Down
+Fleet_Event_Code,TUM_Translator,Major_Group,TUM_Index
+Auto Drilling,Primary Operating,Operating,5
+Blasthole Drilling,Primary Operating,Operating,5
+Bogging - 4475 Level/Truck Loading,Primary Operating,Operating,5
+Bogging - Transfer,Primary Operating,Operating,5
+Bogging - Development,Primary Operating,Operating,5
+Bogging - Production,Primary Operating,Operating,5
+Bogging - Truck Loading,Primary Operating,Operating,5
+Bogging Zone Locked Down,Primary Operating,Operating,5
+Charging,Primary Operating,Operating,5
+Drilling - Auto Drilling,Primary Operating,Operating,5
+Firing in Progress,Primary Operating,Operating,5
+Grading Roads,Primary Operating,Operating,5
+Ground Support Drilling,Primary Operating,Operating,5
+Hauling,Primary Operating,Operating,5
+Hoisting,Primary Operating,Operating,5
+Inspection,Primary Operating,Operating,5
+Loading Fibrecrete,Primary Operating,Operating,5
+Operating,Primary Operating,Operating,5
+Production Drilling,Primary Operating,Operating,5
+Service & Refuel Equipment,Primary Operating,Operating,5
+Service Work,Primary Operating,Operating,5
+Spraying Fibrecrete,Primary Operating,Operating,5
+Teleremote Bogging,Primary Operating,Operating,5
+Rehab Spraying,Primary Operating,Operating,5
+Bogging - AutoMine,Primary Operating,Operating,5
+BOGGING,Primary Operating,Operating,5
+Special Projects Work,Primary Operating,Operating,5
+Spraying Rill,Primary Operating,Operating,5
+Bogging - Cleanup,Secondary Operating,Operating,4
+Bogging - Other,Secondary Operating,Operating,4
+Bogging - Oversize,Secondary Operating,Operating,4
+Bogging - Roadworks,Secondary Operating,Operating,4
+Drill set-up,Secondary Operating,Operating,4
+Drilling - Non Production,Secondary Operating,Operating,4
+Drilling - Re-drill,Secondary Operating,Operating,4
+Re-drill,Secondary Operating,Operating,4
+Rehab Drilling,Secondary Operating,Operating,4
+Rig up/Rig down,Secondary Operating,Operating,4
+Road Work,Secondary Operating,Operating,4
+Setup Location,Secondary Operating,Operating,4
+TBA - Operating,Secondary Operating,Operating,4
+TO BE ALLOCATED - Operating,Secondary Operating,Operating,4
+Tow / Carry / Lift,Secondary Operating,Operating,4
+Tramming Between Jobs,Secondary Operating,Operating,4
+Dump Fibrecrete or Concrete,Secondary Operating,Operating,4
+Scaling,Secondary Operating,Operating,4
+Pumping Water,Secondary Operating,Operating,4
+Operator Training,Secondary Operating,Operating,4
+Special Projects Work,Secondary Operating,Operating,4
+.O=Hauling,Secondary Operating,Operating,4
+.Spraying Fibrecrete = O,Secondary Operating,Operating,4
+1 Boom Operating = O,Secondary Operating,Operating,4
+Auto Drilling = O,Secondary Operating,Operating,4
+Auto Idle = I,Secondary Operating,Operating,4
+Blasthole Drilling = O,Secondary Operating,Operating,4
+Bogging - Non Production,Secondary Operating,Operating,4
+Bogging - Other Works = O,Secondary Operating,Operating,4
+Bogging = O,Secondary Operating,Operating,4
+Unload Concrete,Secondary Operating,Operating,4
+Prepping Holes,Secondary Operating,Operating,4
+Re-Drill = O,Secondary Operating,Operating,4
+Refuel,Secondary Operating,Operating,4
+Refill Chemicals,Secondary Operating,Operating,4
+Refill Oil & Lubricants,Secondary Operating,Operating,4
+Refill Chemicals = O,Secondary Operating,Operating,4
+Blasting - Open Pit,Unplanned Standby,Idle,2
+Blasting - Underground,Unplanned Standby,Idle,2
+Bogging Zone Open,Unplanned Standby,Idle,2
+Chute Access Blocked,Unplanned Standby,Idle,2
+Chute O/S or Hung Up,Unplanned Standby,Idle,2
+Drill - Bogged/Broken Rods,Unplanned Standby,Idle,2
+Empty Ore Pass,Unplanned Standby,Idle,2
+Equipment Not Required,Unplanned Standby,Idle,2
+Fatigue Break,Unplanned Standby,Idle,2
+Incident,Unplanned Standby,Idle,2
+No Compressed Air,Unplanned Standby,Idle,2
+No Dirt,Unplanned Standby,Idle,2
+No Vent,Unplanned Standby,Idle,2
+No Water,Unplanned Standby,Idle,2
+Not Required,Unplanned Standby,Idle,2
+Offsite,Unplanned Standby,Idle,2
+Ore Pass Low Level,Unplanned Standby,Idle,2
+Setup sprays,Unplanned Standby,Idle,2
+Setup Vent,Unplanned Standby,Idle,2
+Status,Unplanned Standby,Idle,2
+TBA - Standby,Unplanned Standby,Idle,2
+TO BE ALLOCATED - Standby,Unplanned Standby,Idle,2
+Wait - Blasting Open Pit,Unplanned Standby,Idle,2
+Wait - Blocked Access,Unplanned Standby,Idle,2
+Wait - Cleanup,Unplanned Standby,Idle,2
+Wait - Consumables,Unplanned Standby,Idle,2
+Wait - Crusher,Unplanned Standby,Idle,2
+Wait - Development,Unplanned Standby,Idle,2
+Wait - Downstream Operational,Unplanned Standby,Idle,2
+Wait - Dusted Out,Unplanned Standby,Idle,2
+Wait - Empty Ore Pass,Unplanned Standby,Idle,2
+Wait - Ore Pass Full,Unplanned Standby,Idle,2
+Wait - Fitter,Unplanned Standby,Idle,2
+Wait - Loader,Unplanned Standby,Idle,2
+Wait - Mine Services,Unplanned Standby,Idle,2
+Wait - Power Interruption,Unplanned Standby,Idle,2
+Wait - Service Crew in Area,Unplanned Standby,Idle,2
+Wait - Servicing,Unplanned Standby,Idle,2
+Wait - Set up Vent,Unplanned Standby,Idle,2
+Wait - Setup sprays,Unplanned Standby,Idle,2
+Wait - Supervisor,Unplanned Standby,Idle,2
+Wait - Technical,Unplanned Standby,Idle,2
+Wait - Technical Services,Unplanned Standby,Idle,2
+Wait - Traffic Management,Unplanned Standby,Idle,2
+Wait - Truck,Unplanned Standby,Idle,2
+Wait LHD,Unplanned Standby,Idle,2
+No Power,Unplanned Standby,Idle,2
+Incident/Emergency = I,Unplanned Standby,Idle,2
+Wait - Weather,Unplanned Standby,Idle,2
+Wait - Fibrecrete dry time,Unplanned Standby,Idle,2
+Safety Stop,Unplanned Standby,Idle,2
+No Dump,Unplanned Standby,Idle,2
+Bathroom,Unplanned Standby,Idle,2
+Bog Shaft Bottom = I,Unplanned Standby,Idle,2
+Bog Sump = O,Unplanned Standby,Idle,2
+Bogged,Unplanned Standby,Idle,2
+Bogged / Broken Rods = I,Unplanned Standby,Idle,2
+No Comms,Unplanned Standby,Idle,2
+Equipment not required = I,Unplanned Standby,Idle,2
+Crib,Operating Standby,Idle,3
+Equipment Not Called In,Operating Standby,Idle,3
+No Operator,Operating Standby,Idle,3
+Re-Entry,Operating Standby,Idle,3
+Released by  Workshop,Operating Standby,Idle,3
+Shift Change,Operating Standby,Idle,3
+Shift Change/Re-Entry,Operating Standby,Idle,3
+Swap Operator,Operating Standby,Idle,3
+Wait - Operator,Operating Standby,Idle,3
+Re-Entry in Progress,Operating Standby,Idle,3
+Drilling - Auto Idle,Operating Standby,Idle,3
+Re-Entry = O,Operating Standby,Idle,3
+Re-Entry MReef Complete,Operating Standby,Idle,3
+Crusher Surge Bin Low,Operating Standby,Idle,3
+Wait - Recovery Gear,Operating Standby,Idle,3
+Wait - Re-Entry,Operating Standby,Idle,3
+Wait - No Heading,Operating Standby,Idle,3
+Wait - No Fuel,Operating Standby,Idle,3
+No Operator = I,Operating Standby,Idle,3
+No Dewater,Operating Standby,Idle,3
+No Report = I,Operating Standby,Idle,3
+No Comms,Operating Standby,Idle,3
+Operating = O,Operating Standby,Idle,3
+(NO REPORT),Operating Standby,Idle,3
+Blast Delay,Operating Standby,Idle,3
+Wait - Fibrecrete dry time,Operating Standby,Idle,3
+Wait - No Heading,Operating Standby,Idle,3
+(NO REPORT),Operating Standby,Idle,3
+Safety Stop,Operating Standby,Idle,3
+No LHD,Operating Standby,Idle,3
+Wait - Spraymec,Operating Standby,Idle,3
+Wait - Agi,Operating Standby,Idle,3
+Machine Check,Operating Standby,Idle,3
+Machine Cleaning,Operating Standby,Idle,3
+No Trucks,Operating Standby,Idle,3
+Automine Not Required,Operating Standby,Idle,3
+AIR - COMPRESSOR,Unplanned Breakdown,Down,0
+AIR - SOLENOID,Unplanned Breakdown,Down,0
+AIR CONDITIONING - BELT,Unplanned Breakdown,Down,0
+AIR CONDITIONING - COMPRESSOR,Unplanned Breakdown,Down,0
+AIR CONDITIONING - CONDENSER,Unplanned Breakdown,Down,0
+AIR CONDITIONING - EVAPORATOR,Unplanned Breakdown,Down,0
+AIR CONDITIONING - FAN,Unplanned Breakdown,Down,0
+AIR CONDITIONING - HOSE,Unplanned Breakdown,Down,0
+AIR CONDITIONING - TO BE ALLOCATED,Unplanned Breakdown,Down,0
+AIR CONDITIONING - WAIT PARTS,Unplanned Breakdown,Down,0
+AIR CONDITIONING - WIRING,Unplanned Breakdown,Down,0
+AIR/WATER - COMPRESSOR,Unplanned Breakdown,Down,0
+AIR/WATER - FLUSHING,Unplanned Breakdown,Down,0
+AIR/WATER - SOLENOID,Unplanned Breakdown,Down,0
+AIR/WATER - TO BE ALLOCATED,Unplanned Breakdown,Down,0
+AIR/WATER - WAIT PARTS,Unplanned Breakdown,Down,0
+AIR/WATER - WATER PUMP,Unplanned Breakdown,Down,0
+ATTACHMENT - BUCKET,Unplanned Breakdown,Down,0
+ATTACHMENT - LIFT ARMS,Unplanned Breakdown,Down,0
+ATTACHMENT - Z LINK,Unplanned Breakdown,Down,0
+AUTO LUBE SYSTEM - GREASE SYSTEM,Unplanned Breakdown,Down,0
+AUTO LUBE SYSTEM - INJECTOR,Unplanned Breakdown,Down,0
+AXLE - STRUT,Unplanned Breakdown,Down,0
+Axle - SUSPENSION - STRUT,Unplanned Breakdown,Down,0
+AXLE - TO BE ALLOCATED,Unplanned Breakdown,Down,0
+AXLE - WAIT PARTS,Unplanned Breakdown,Down,0
+BRAKING SYSTEM - HOSE/O-RING,Unplanned Breakdown,Down,0
+BRAKING SYSTEM - PUMP,Unplanned Breakdown,Down,0
+BRAKING SYSTEM - SENSOR/PRESSURE SWITCH,Unplanned Breakdown,Down,0
+BRAKING SYSTEM - TO BE ALLOCATED,Unplanned Breakdown,Down,0
+BRAKING SYSTEM - VALVE,Unplanned Breakdown,Down,0
+BRAKING SYSTEM - WAIT PARTS,Unplanned Breakdown,Down,0
+BRAKING SYSTEM - WHEEL END,Unplanned Breakdown,Down,0
+CHARGING/STARTING - ALTERNATOR,Unplanned Breakdown,Down,0
+CHARGING/STARTING - BATTERY,Unplanned Breakdown,Down,0
+CHARGING/STARTING - BELT/PULLEY/BEARING,Unplanned Breakdown,Down,0
+CHARGING/STARTING - STARTER MOTOR,Unplanned Breakdown,Down,0
+CHASIS - BOOM,Unplanned Breakdown,Down,0
+CHASIS - CAB,Unplanned Breakdown,Down,0
+CHASIS - CENTRE HITCH,Unplanned Breakdown,Down,0
+CHASIS - CHASSIS,Unplanned Breakdown,Down,0
+CHASIS - GLASS,Unplanned Breakdown,Down,0
+CHASIS - GUARD/COVER/PANEL,Unplanned Breakdown,Down,0
+CHASIS - LADDER/RAILING/WALK-WAY,Unplanned Breakdown,Down,0
+CHASIS - OTHER,Unplanned Breakdown,Down,0
+CHASIS - TO BE ALLOCATED,Unplanned Breakdown,Down,0
+CHASIS - TRAY,Unplanned Breakdown,Down,0
+CHASIS - WAIT PARTS,Unplanned Breakdown,Down,0
+CHASIS - Z LINK/DOG BONE,Unplanned Breakdown,Down,0
+COMMUNICATION - MINEGEM,Unplanned Breakdown,Down,0
+COMMUNICATION - TELEREMOTE,Unplanned Breakdown,Down,0
+COMMUNICATION - TWO-WAY,Unplanned Breakdown,Down,0
+DAMAGE - OPERATIONAL,Unplanned Breakdown,Down,0
+DAMAGE - OTHER,Unplanned Breakdown,Down,0
+DAMAGE - WAIT PARTS,Unplanned Breakdown,Down,0
+DRIFTERS - ACCUMULATOR,Unplanned Breakdown,Down,0
+DRIFTERS - FEED,Unplanned Breakdown,Down,0
+DRIFTERS - FLUSHING,Unplanned Breakdown,Down,0
+DRIFTERS - FLUSHING HEAD,Unplanned Breakdown,Down,0
+DRIFTERS - SHANK,Unplanned Breakdown,Down,0
+ELECTRICAL - ALTERNATOR,Unplanned Breakdown,Down,0
+ELECTRICAL - BATTERY,Unplanned Breakdown,Down,0
+ELECTRICAL - BELT/PULLEY/BEARING,Unplanned Breakdown,Down,0
+ELECTRICAL - CONTROLS/LEVERS,Unplanned Breakdown,Down,0
+ELECTRICAL - ECM/MODULE,Unplanned Breakdown,Down,0
+ELECTRICAL - FUSE,Unplanned Breakdown,Down,0
+ELECTRICAL - LIGHTS,Unplanned Breakdown,Down,0
+ELECTRICAL - SENSOR/PRESSURE SWITCH,Unplanned Breakdown,Down,0
+ELECTRICAL - STARTER MOTOR,Unplanned Breakdown,Down,0
+ELECTRICAL - SWITCH,Unplanned Breakdown,Down,0
+ELECTRICAL - TELEREMOTES,Unplanned Breakdown,Down,0
+ELECTRICAL - TO BE ALLOCATED,Unplanned Breakdown,Down,0
+ELECTRICAL - TWO-WAY,Unplanned Breakdown,Down,0
+ELECTRICAL - WAIT PARTS,Unplanned Breakdown,Down,0
+ELECTRICAL - WIRING,Unplanned Breakdown,Down,0
+ENGINE - BELT/PULLEY/BEARING,Unplanned Breakdown,Down,0
+ENGINE - COOLING SYSTEM,Unplanned Breakdown,Down,0
+ENGINE - ECM,Unplanned Breakdown,Down,0
+ENGINE - EXHAUST,Unplanned Breakdown,Down,0
+ENGINE - FAN,Unplanned Breakdown,Down,0
+ENGINE - FILTER,Unplanned Breakdown,Down,0
+ENGINE - FUEL SYSTEM,Unplanned Breakdown,Down,0
+ENGINE - OIL LEAK,Unplanned Breakdown,Down,0
+ENGINE - OVERHEATING,Unplanned Breakdown,Down,0
+ENGINE - OVERHEATING TBA,Unplanned Breakdown,Down,0
+ENGINE - RADIATOR,Unplanned Breakdown,Down,0
+ENGINE - SENSOR/PRESSURE SWITCH,Unplanned Breakdown,Down,0
+ENGINE - TO BE ALLOCATED,Unplanned Breakdown,Down,0
+ENGINE - TURBO,Unplanned Breakdown,Down,0
+ENGINE - UNIT INJECTOR,Unplanned Breakdown,Down,0
+ENGINE - WAIT PARTS,Unplanned Breakdown,Down,0
+ENGINE - WATER PUMP,Unplanned Breakdown,Down,0
+FIRE SUPPRESSION - HOSE/TUBE,Unplanned Breakdown,Down,0
+FIRE SUPPRESSION - RECHARGE,Unplanned Breakdown,Down,0
+FIRE SUPPRESSION - SENSOR/PRESSURE SWITCH,Unplanned Breakdown,Down,0
+FIRE SUPPRESSION - TO BE ALLOCATED,Unplanned Breakdown,Down,0
+G.E.T - BUCKET,Unplanned Breakdown,Down,0
+G.E.T - TO BE ALLOCATED,Unplanned Breakdown,Down,0
+G.E.T - TOOTH,Unplanned Breakdown,Down,0
+G.E.T - WAIT PARTS,Unplanned Breakdown,Down,0
+HYDRAULIC - ACCUMULATOR,Unplanned Breakdown,Down,0
+HYDRAULIC - AUTO LUBE SYSTEM - GREASE SYSTEM,Unplanned Breakdown,Down,0
+HYDRAULIC - AUTO LUBE SYSTEM - INJECTOR,Unplanned Breakdown,Down,0
+HYDRAULIC - COOLING PACK,Unplanned Breakdown,Down,0
+HYDRAULIC - CYLINDER,Unplanned Breakdown,Down,0
+HYDRAULIC - HOSE/O-RING,Unplanned Breakdown,Down,0
+HYDRAULIC - MOTOR,Unplanned Breakdown,Down,0
+HYDRAULIC - MOTOR/PUMP,Unplanned Breakdown,Down,0
+HYDRAULIC - PUMP,Unplanned Breakdown,Down,0
+HYDRAULIC - RIDE CONTROL,Unplanned Breakdown,Down,0
+HYDRAULIC - TO BE ALLOCATED,Unplanned Breakdown,Down,0
+HYDRAULIC - VALVE,Unplanned Breakdown,Down,0
+HYDRAULIC - WAIT PARTS,Unplanned Breakdown,Down,0
+MINEGEM - COMMUNICATION,Unplanned Breakdown,Down,0
+MINEGEM - INCORRECT SETUP,Unplanned Breakdown,Down,0
+MINEGEM - INFRASTRUCTURE,Unplanned Breakdown,Down,0
+MINEGEM - MACHINE,Unplanned Breakdown,Down,0
+MINEGEM - TO BE ALLOCATED,Unplanned Breakdown,Down,0
+MINEGEM - WAIT PARTS,Unplanned Breakdown,Down,0
+OTHER - BREAKDOWN TO BE ALLOCATED,Unplanned Breakdown,Down,0
+OTHER - RECOVERY VEHICLE,Unplanned Breakdown,Down,0
+POWER TRAIN - DIFFERENTIAL,Unplanned Breakdown,Down,0
+POWER TRAIN - DRIVE COUPLING,Unplanned Breakdown,Down,0
+POWER TRAIN - DRIVE SHAFT,Unplanned Breakdown,Down,0
+POWER TRAIN - DRIVE SHAFT/COUPLING,Unplanned Breakdown,Down,0
+POWER TRAIN - FINAL DRIVE/WHEEL END,Unplanned Breakdown,Down,0
+POWER TRAIN - LOCK UP CLUTCH,Unplanned Breakdown,Down,0
+POWER TRAIN - TORQUE CONVERTOR,Unplanned Breakdown,Down,0
+POWER TRAIN - TRANSMISSION,Unplanned Breakdown,Down,0
+POWERTRAIN - TO BE ALLOCATED,Unplanned Breakdown,Down,0
+RAIL/BOOM - ACCUMULATOR,Unplanned Breakdown,Down,0
+RAIL/BOOM - DRIFTER,Unplanned Breakdown,Down,0
+RAIL/BOOM - DRIFTER FAILURE/CHANGEOUT,Unplanned Breakdown,Down,0
+RAIL/BOOM - FLUSHING HEAD,Unplanned Breakdown,Down,0
+RAIL/BOOM - FRONT/REAR FEED ROPE,Unplanned Breakdown,Down,0
+RAIL/BOOM - ROD HANDLING,Unplanned Breakdown,Down,0
+RAIL/BOOM - SHANK,Unplanned Breakdown,Down,0
+RAIL/BOOM - TO BE ALLOCATED,Unplanned Breakdown,Down,0
+RAIL/BOOM - WAIT PARTS,Unplanned Breakdown,Down,0
+RAILS - DRIFTERS,Unplanned Breakdown,Down,0
+RAILS - FLUSHING HEAD,Unplanned Breakdown,Down,0
+RAILS - FRONT/REAR FEED ROPE,Unplanned Breakdown,Down,0
+RAILS - PITTO JAWS,Unplanned Breakdown,Down,0
+RAILS - ROD HANDLING,Unplanned Breakdown,Down,0
+RECOVERY VEHICLE - RECOVERY,Unplanned Breakdown,Down,0
+STEERING - CYLINDER,Unplanned Breakdown,Down,0
+STEERING - HOSE/O-RING,Unplanned Breakdown,Down,0
+STEERING - SENSOR/PRESSURE SWITCH,Unplanned Breakdown,Down,0
+STEERING - VALVE,Unplanned Breakdown,Down,0
+STEERING - WIRING,Unplanned Breakdown,Down,0
+STRUCTURAL - BOOM,Unplanned Breakdown,Down,0
+STRUCTURAL - CAB,Unplanned Breakdown,Down,0
+STRUCTURAL - CENTRE HITCH,Unplanned Breakdown,Down,0
+STRUCTURAL - CHASSIS,Unplanned Breakdown,Down,0
+STRUCTURAL - GLASS,Unplanned Breakdown,Down,0
+STRUCTURAL - GUARD/COVER/PANEL,Unplanned Breakdown,Down,0
+STRUCTURAL - OTHER,Unplanned Breakdown,Down,0
+SUSPENSION - FRONT STRUT,Unplanned Breakdown,Down,0
+TO BE ALLOCATED - Breakdown,Unplanned Breakdown,Down,0
+TO BE ALLOCATED - Operational Down,Unplanned Breakdown,Down,0
+TO BE ALLOCATED - Overheating,Unplanned Breakdown,Down,0
+TRAM TO WORKSHOP FOR REPAIR,Unplanned Breakdown,Down,0
+TYRES - PUNCTURE/DAMAGE,Unplanned Breakdown,Down,0
+TYRES - RE-TORQUE,Unplanned Breakdown,Down,0
+TYRES - RIMS,Unplanned Breakdown,Down,0
+TYRES - SIDEWALL CUT,Unplanned Breakdown,Down,0
+TYRES - TO BE ALLOCATED,Unplanned Breakdown,Down,0
+TYRES - TREAD IMPACT,Unplanned Breakdown,Down,0
+TYRES - TYRE FAILURE,Unplanned Breakdown,Down,0
+TYRES - WAIT PARTS,Unplanned Breakdown,Down,0
+TYRES - WORN OUT,Unplanned Breakdown,Down,0
+SERVICE OVERRUN,Unplanned Breakdown,Down,0
+HOIST BREAKDOWN,Unplanned Breakdown,Down,0
+POWERTRAIN - WAIT PARTS,Unplanned Breakdown,Down,0
+AUTOMATION - SCANNER,Unplanned Breakdown,Down,0
+AUTOMATION - BOOM SENSOR,Unplanned Breakdown,Down,0
+AUTOMATION - SPEED SENSOR,Unplanned Breakdown,Down,0
+AUTOMATION - STEER SENSOR,Unplanned Breakdown,Down,0
+AUTOMATION - CALIBRATION,Unplanned Breakdown,Down,0
+AUTOMATION - VIDEO,Unplanned Breakdown,Down,0
+AUTOMATION - E-STOP,Unplanned Breakdown,Down,0
+AUTOMATION - COMMUNICATION,Unplanned Breakdown,Down,0
+DAILY SERVICE,Planned Maintenance,Down,1
+FIRE SUPPRESSION,Planned Maintenance,Down,1
+INTERVAL SERVICE,Planned Maintenance,Down,1
+MAJOR REBUILD,Planned Maintenance,Down,1
+SCHEDULED MAINTENANCE,Planned Maintenance,Down,1
+TRAM FOR DAILY SERVICE,Planned Maintenance,Down,1
+TRAM TO WORKSHOP FOR SERVICE,Planned Maintenance,Down,1
+WINDER MAJOR SERVICE,Planned Maintenance,Down,1
+WINDER WEEKLY SERVICE,Planned Maintenance,Down,1
+WINDER DAILY SERVICE,Planned Maintenance,Down,1
