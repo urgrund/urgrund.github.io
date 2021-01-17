@@ -77,7 +77,7 @@ app.controller('myCtrl', function ($scope, $http) {
     $scope.regenerateDataForDate = function (_date) {
         if ($scope.dataStatus[_date] != undefined) {
 
-            console.log("Here");
+            //console.log("Here");
             $scope.dataStatus[_date]['class'] = "fas fa-sync-alt spinner loading";
 
             //_tmpDate = $scope.dataStatus[_date]['Date'];
