@@ -4,9 +4,8 @@ include_once('sql.php');
 // This defines the root directory
 // of the client root as well as 
 // assuming the base Client implementation
-
-$clientRoot = "Newcrest";
-//$clientRoot = "OzMinerals";
+//$clientRoot = "Newcrest";
+$clientRoot = "OzMinerals";
 
 // Includes the client implementation 
 include_once("..\clients\\" . $clientRoot . "\\" . $clientRoot . ".php");
@@ -17,6 +16,7 @@ abstract class Client
     abstract public function Path(): string;
     abstract public function SQLDBCredentials(): SQLDBCredentials;
     abstract public function TimeZone(): DateTimeZone;
+    abstract public function ShiftStart(): int;
 
 
 

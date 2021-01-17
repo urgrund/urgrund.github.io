@@ -43,9 +43,17 @@ class Config
     private static $productionMetricMetre = 'PROD';
 
 
-    public $configTUM;
-    public $configSites;
-    public $configMajorGroup;
+
+    public array $Sites;
+
+    // For TUM related 
+    public array $TUM;
+    public array $TUMIndex;
+    public array $TUMKeys;
+    public array $MajorGroup;
+
+    public int $ShiftStart;
+
 
     private static $uniqueTUMCategories = [];
 
@@ -58,38 +66,45 @@ class Config
         Debug::StartProfile("Create Config");
 
         Config::$instance = $this;
-        $this->configSites = Config::GetConfigSites();
-        $this->configTUM = Config::GetConfigTUM();
-        $this->configMajorGroup = Config::GetConfigMajorGroup();
+        $this->CreateSites();
+        $this->CreateTUM();
         Config::CreateUniqueTUMArray();
+
+        $this->ShiftStart = Client::instance()->ShiftStart();
 
         Debug::EndProfile();
 
-        //Debug::Log($this->configTUM);
+        //Debug::Log($this->TUM);
     }
 
     public static function Sites($_key)
     {
-        return isset(Config::$instance->configSites[$_key]) ? Config::$instance->configSites[$_key] : NULL;
+        return isset(Config::$instance->Sites[$_key]) ? Config::$instance->Sites[$_key] : NULL;
     }
 
     public static function TUM($_key)
     {
-        return isset(Config::$instance->configTUM[$_key]) ? Config::$instance->configTUM[$_key] : NULL;
+        return isset(Config::$instance->TUM[$_key]) ? Config::$instance->TUM[$_key] : NULL;
     }
 
     public static function MajorGroup($_key)
     {
-        return isset(Config::$instance->configMajorGroup[$_key]) ? strtoupper(Config::$instance->configMajorGroup[$_key]) : NULL;
+        return isset(Config::$instance->MajorGroup[$_key]) ? Config::$instance->MajorGroup[$_key] : NULL;
     }
+
+    public static function TUMIndex($_key): int
+    {
+        return isset(Config::$instance->TUMKeys[$_key]) ? Config::$instance->TUMKeys[$_key] : -1;
+    }
+
 
     /**
      * Creates an associative array with the unique TUM categories as the
      * keys with zeroed out values
      */
-    public static function CreateDistinctTUMArray()
+    public static function CreateDistinctTUMArray(): array
     {
-        $result = array_unique(Config::$instance->configTUM);
+        $result = array_unique(Config::$instance->TUM);
         $tumDistinct = array();
         foreach ($result as $x => $x_value) {
             $tumDistinct[$x_value] = 0;
@@ -128,7 +143,7 @@ class Config
 
     private static function CreateUniqueTUMArray()
     {
-        $result = array_unique(Config::$instance->configTUM);
+        $result = array_unique(Config::$instance->TUM);
         Config::$uniqueTUMCategories = array();
         foreach ($result as $x => $x_value) {
             Config::$uniqueTUMCategories[] = $x_value;
@@ -137,17 +152,73 @@ class Config
     }
 
 
-    private static function GetConfigSites()
+    private function CreateSites()
     {
-        return Config::LoadCSVIntoAssociativeArray(Config::$filePrefix . Config::$fileSites);
+        //return Config::LoadCSVIntoAssociativeArray(Config::$filePrefix . Config::$fileSites);
+        $_file = Config::$filePrefix . Config::$fileSites;
+        $_file = Utils::GetBackEndRoot() . Client::ConfigPath() . $_file . ".csv";
+
+        if (file_exists($_file)) {
+            $newArray = array();
+            $file = fopen($_file, "r");
+
+            // Skip first
+            $line = fgetcsv($file);
+
+            while (!feof($file)) {
+                $line = fgetcsv($file);
+                if ($line != NULL)
+                    $newArray[$line[0]] = $line[1];
+            }
+            fclose($file);
+            $this->Sites = $newArray;
+        } else {
+            //Debug::Log(Utils::GetBackEndRoot());
+            $this->Sites = null;
+        }
     }
 
-    private static function GetConfigTUM()
+
+    private function CreateTUM()
     {
-        return Config::LoadCSVIntoAssociativeArray(Config::$filePrefix . Config::$fileTUM);
+        //return Config::LoadCSVIntoAssociativeArray(Config::$filePrefix . Config::$fileTUM);
+
+
+        $_file = Config::$filePrefix . Config::$fileTUM;
+        $_file = Utils::GetBackEndRoot() . Client::ConfigPath() . $_file . ".csv";
+
+        if (file_exists($_file)) {
+            $this->TUM = [];
+            $this->TUMIndex = [];
+            $this->MajorGroup = [];
+
+            $newArray = array();
+            $file = fopen($_file, "r");
+
+            // Skip first
+            $line = fgetcsv($file);
+
+            while (!feof($file)) {
+                $line = fgetcsv($file);
+                if ($line != NULL) {
+                    $newArray[$line[0]] = $line[1];
+                    $this->TUM[$line[0]] = $line[1];
+                    $this->MajorGroup[$line[1]] = $line[2];
+                    $this->TUMIndex[$line[3]] = $line[1];
+                    $this->TUMKeys[$line[1]] = $line[3];
+                }
+            }
+            fclose($file);
+
+            //sort($this->TUMIndex);
+            //return $newArray;
+        } else {
+            Debug::Log(Utils::GetBackEndRoot());
+            //return null;
+        }
     }
 
-    private static function GetConfigMajorGroup()
+    private static function GetMajorGroup()
     {
         return Config::LoadCSVIntoAssociativeArray(Config::$filePrefix . Config::$fileTUM, 1, 2);
     }

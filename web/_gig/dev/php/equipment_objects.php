@@ -41,6 +41,7 @@ class EquipmentEvent
     var $majorGroup;        // Such as Idle, Operating, Down
     var $shift;
     var $tumCategory;       // Time Usage Model category
+    var $tumIndex;          // 0-5 index of the Tum category
 }
 
 

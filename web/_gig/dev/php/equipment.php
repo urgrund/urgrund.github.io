@@ -54,23 +54,28 @@ class Equipment
         $e->mineArea = $_eventDataRow[4];
         $e->duration = $_eventDataRow[5];
         $e->status = $_eventDataRow[6];
-        $e->shift = $_eventDataRow[8];
-        //$e->majorGroup = $_eventDataRow[7];
+        $e->shift = $_eventDataRow[8] - 1;
 
         $e->tumCategory = Config::TUM($e->status);
         $e->majorGroup = Config::MajorGroup($e->tumCategory);
-        //Debug::Log(Config::MajorGroup($e->tumCategory));
+        $e->tumIndex = Config::TUMIndex($e->tumCategory);
+
+        //Debug::Log($e->tumCategory);
 
         // In case the status hasn't been 
         // mapped to a TUM category yet
         if ($e->tumCategory == null) {
             //Debug::Log($this->id . " has no TUM for " . $e->status);
+            //          $e->tumIndex = -1;
             $e->tumCategory = "NO TUM CATEGORY";
-        }
+        } //else
+        //            $e->tumIndex = Config::$instance->TUMKeys[$e->tumCategory];
 
         // Which shift does this event belong to?        
         // Store only the index of this event here
-        $shiftIndex = $e->shift == "P1" ? 0 : 1;
+        //$shiftIndex = $e->shift == "P1" ? 0 : 1;
+        $shiftIndex = $e->shift;
+        //Debug::Log($e->shift);
         $this->shiftData[$shiftIndex]->events[] = count($this->events);
 
         // Store the event in the 24hr list
