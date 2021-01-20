@@ -3,9 +3,9 @@ SELECT
 	,substring(ats.ShKey,10,1) as 'Shift'
 	,RDP.[Source_Category] as 'Category'
     ,RDP.[Source_Description_Code] as 'Source Area'
-	--,(RDP.[Source_Description]) as 'Source Labels'
+	,replace(RDP.[Source_Description],'_','') as 'Source Labels'
 	,RDD.[Destination_Description_Code] AS 'Finished Area'
---	,RDD.[Destination_Description] AS 'Finished Labels'
+	,replace(RDD.[Destination_Description],'_','') AS 'Finished Labels'
 	,RDD.[Destination_MineArea_Code] as 'Destination Mine'
 	,SUM(MTS.[MeasureValue]) AS 'Tonnes'
 	--,count(MTS.[MeasureValue]) AS 'Count'
@@ -19,7 +19,7 @@ SELECT
 	Join [dbo].[RD_EQUIPMENT_MODEL]		as RDM on RDM.[Equipment_ModelCode] = RDE.[Equipment_Model_Code]
 	Join [dbo].[RD_EQUIPMENT_FUNCTION]	as RDF on RDF.[Equipment_FunctionCode] = RDM.[Equipment_Model_Function_Code]
 	
-	WHERE LEFT(ats.[shkey],8) = @Date 
+	WHERE LEFT(ats.[shkey],8) = @Date
 		--and left(RDP.[Source_MineArea_Code],3) Like 'SLC'
 		and RDP.[Source_MineArea_Code] <> 'MISC' 
 		and MTS.[MeasCode] = 'TONNE' 

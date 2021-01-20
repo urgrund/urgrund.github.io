@@ -1,13 +1,13 @@
 Select 
 		 ATS.[Equipment] 'Equipment'
 		,RDO.[Operator_Description] AS 'Operator'
-		,ats.[Operator]
+	--	,ats.[Operator]
 		,MTS.[EventDateTime] as 'Event Time'
 		,ATS.[Location] AS 'Location'
 		,RDP.[Source_MineArea_Code] AS 'Mine Area'
 		,MTS.[MeasureValue] AS 'Value'
 		,RDS.[Status_Description] AS 'Status Description' 
-		,RTS.[Status_Type_Description] AS 'TUM Category' --[Status_Type_Description]
+	--	,RTS.[Status_Type_Description] AS 'TUM Category' --[Status_Type_Description]
 		,substring(ATS.[ShKey],10,1) as 'Shift'
 
 FROM [dbo].[ALLOCTNTIMESTAMP] as ATS 

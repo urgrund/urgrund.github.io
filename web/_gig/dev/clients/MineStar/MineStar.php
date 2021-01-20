@@ -1,24 +1,24 @@
 <?php
 
-class OzMinerals extends Client
+class MineStar extends Client
 {
     public function Name(): string
     {
-        return "OzMinerals";
+        return "MineStar";
     }
 
     public function Path(): string
     {
-        return "OzMinerals";
+        return "MineStar";
     }
 
     public function SQLDBCredentials(): SQLDBCredentials
     {
         return new SQLDBCredentials(
-            $_server = "tcp:LAPTOP\SQLDEV, 1433",
+            $_server = "tcp:LAPTOP\SQLDEV,1433",
             $_uid = "test",
             $_pwd = "gw",
-            $_db = "Pitram2"
+            $_db = "tempdb"
         );
     }
 
@@ -29,6 +29,6 @@ class OzMinerals extends Client
 
     public function ShiftStart(): int
     {
-        return 7;
+        return 6.5;
     }
 }

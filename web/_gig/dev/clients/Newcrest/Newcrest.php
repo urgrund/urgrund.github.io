@@ -15,10 +15,14 @@ class Newcrest extends Client
     public function SQLDBCredentials(): SQLDBCredentials
     {
         return new SQLDBCredentials(
-            $_server = "tcp:LAPTOP\SQLEXPRESS, 1433",
+            $_server = "tcp:LAPTOP\SQLDEV, 1433",
             $_uid = "test",
-            $_pwd = "gigworth",
-            $_db = "test"
+            $_pwd = "gw",
+            $_db = "ug_test"
+            // $_server = "tcp:LAPTOP\SQLEXPRESS, 1433",
+            // $_uid = "test",
+            // $_pwd = "gigworth",
+            // $_db = "test"
         );
     }
 

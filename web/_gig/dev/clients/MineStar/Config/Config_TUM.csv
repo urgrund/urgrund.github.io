@@ -1,0 +1,101 @@
+﻿Event Reason,TUM Category,Major_Group,TUM_Index
+Accident Damage,Unplanned Breakdown,Down,0
+Cabin,Unplanned Breakdown,Down,0
+Cable Reeler,Unplanned Breakdown,Down,0
+Communications,Unplanned Breakdown,Down,0
+Compressor,Unplanned Breakdown,Down,0
+Down,Unplanned Breakdown,Down,0
+Dust Suppression,Unplanned Breakdown,Down,0
+Engine,Unplanned Breakdown,Down,0
+Fire Suppression,Unplanned Breakdown,Down,0
+Frame/Body,Unplanned Breakdown,Down,0
+G.E.T.,Unplanned Breakdown,Down,0
+Grease,Unplanned Breakdown,Down,0
+HV Electrical,Unplanned Breakdown,Down,0
+Hydraulics,Unplanned Breakdown,Down,0
+Major Shut,Unplanned Breakdown,Down,0
+Mast,Unplanned Breakdown,Down,0
+Powertrain,Unplanned Breakdown,Down,0
+Ropes,Unplanned Breakdown,Down,0
+Tyres,Unplanned Breakdown,Down,0
+Undercarriage,Unplanned Breakdown,Down,0
+Wait for Labour,Unplanned Breakdown,Down,0
+Wait for Parts,Unplanned Breakdown,Down,0
+Tank,Unplanned Breakdown,Down,0
+Travel To/from Workshop,Unplanned Breakdown,Down,0
+Wash Equipment,Unplanned Breakdown,Down,0
+Service (PM),Planned Maintenance,Down,1
+Shovel Support,Planned Maintenance,Down,1
+PoweredOff,Unplanned Standby,Idle,2
+Health Event,Unplanned Standby,Idle,2
+Obstacle Detection,Unplanned Standby,Idle,2
+Office Machine Lock,Unplanned Standby,Idle,2
+Office Site Lock,Unplanned Standby,Idle,2
+Dump Plan Is Closed,Unplanned Standby,Idle,2
+Dump Plan Is Complete,Unplanned Standby,Idle,2
+Deadlock,Unplanned Standby,Idle,2
+A-Stop,Unplanned Standby,Idle,2
+Behind Delayed Machine,Unplanned Standby,Idle,2
+Waiting For Permissions,Unplanned Standby,Idle,2
+Wait for Wash,Unplanned Standby,Idle,2
+Bathroom,Operating Standby,Idle,3
+Blasting,Operating Standby,Idle,3
+Cable/Power Work,Operating Standby,Idle,3
+Environment/Weather,Operating Standby,Idle,3
+Opportune Maintenance,Operating Standby,Idle,3
+Panel Crew Change,Operating Standby,Idle,3
+No Operator Available,Operating Standby,Idle,3
+No Work/Not Required,Operating Standby,Idle,3
+NOT_DETERMINED,Operating Standby,Idle,3
+Meetings,Operating Standby,Idle,3
+Idle,Operating Standby,Idle,3
+Lunch,Operating Standby,Idle,3
+Refuelling,Operating Standby,Idle,3
+Released By Maintenance,Operating Standby,Idle,3
+Remove.Steel,Operating Standby,Idle,3
+Shift Change,Operating Standby,Idle,3
+Short Stoppage,Operating Standby,Idle,3
+Repositioning in Face,Non Productive Time,Operating,4
+Relocation (Long Move),Non Productive Time,Operating,4
+Pull Batters,Non Productive Time,Operating,4
+Queuing.At.Sink,Non Productive Time,Operating,4
+Queuing.At.Source,Non Productive Time,Operating,4
+Pre-Inspection,Non Productive Time,Operating,4
+Held Up,Non Productive Time,Operating,4
+Face Prep,Non Productive Time,Operating,4
+Fill Water,Non Productive Time,Operating,4
+Drill Prep,Non Productive Time,Operating,4
+Drill Relocation,Non Productive Time,Operating,4
+Fluids/ Lube,Non Productive Time,Operating,4
+Hang.Time,Non Productive Time,Operating,4
+Clean Up,Non Productive Time,Operating,4
+Bit & Rod Change,Non Productive Time,Operating,4
+AUX,Non Productive Time,Operating,4
+Add.Steel,Non Productive Time,Operating,4
+WaitForBarrier,Non Productive Time,Operating,4
+WaitForDump,Non Productive Time,Operating,4
+WaitForLoad,Non Productive Time,Operating,4
+WaitForSpot,Non Productive Time,Operating,4
+Walking,Non Productive Time,Operating,4
+Stemming,Non Productive Time,Operating,4
+Support Work,Non Productive Time,Operating,4
+Travel.Empty.At.Source,Productive Time,Operating,5
+Travel.Full.At.Source,Productive Time,Operating,5
+Travelling.Empty,Productive Time,Operating,5
+Travelling.Full,Productive Time,Operating,5
+Water Drill,Productive Time,Operating,5
+Water Road,Productive Time,Operating,5
+Working,Productive Time,Operating,5
+Digging,Productive Time,Operating,5
+Grading,Productive Time,Operating,5
+Dumping,Productive Time,Operating,5
+Drill,Productive Time,Operating,5
+Level,Productive Time,Operating,5
+LHD,Productive Time,Operating,5
+Live Pile,Productive Time,Operating,5
+Loading,Productive Time,Operating,5
+MillToGround,Productive Time,Operating,5
+Propel,Productive Time,Operating,5
+Road and Dump,Productive Time,Operating,5
+Spotting.At.Sink,Productive Time,Operating,5
+Spotting.At.Source,Productive Time,Operating,5
