@@ -38,7 +38,7 @@
 
             <div>
                 <h2 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
-                <div ng-repeat="(key, value) in y.shiftData[shift].metricData" class="center flex underline"
+                <div ng-repeat="(key, value) in y.shiftData[ShiftIndex()].metricData" class="center flex underline"
                     ng-if="value.total != 0"
                     ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
                     <div class="left">

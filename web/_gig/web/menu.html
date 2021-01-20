@@ -20,39 +20,6 @@
                         <h3>{{x.name}}</h3>
                     </a>
 
-                    <!-- <div class="siteCardGrid">
-                        <div>
-                            <h4 class="left">Boggers</h4>
-                            <div ng-repeat="y in x.equipmentByFunction.LOADING"
-                                ng-init="e = getEquipmentLastEvent(equipment[y])">
-                                <a ng-href="#!equip/{{y}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
-                                        ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y].id}}</a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h4 class="left">Trucks</h4>
-                            <div ng-repeat="y in x.equipmentByFunction.HAULING"
-                                ng-init="e = getEquipmentLastEvent(equipment[y])">
-                                <a ng-href="#!equip/{{y}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
-                                        ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y].id}}</a>
-                            </div>
-                        </div>
-
-
-                        <h4 class="left">Drills</h4>
-                        <div ng-repeat="y in x.equipmentByFunction.P" ng-init="e = getEquipmentLastEvent(equipment[y])">
-                            <a ng-href="#!equip/{{y}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
-                                    ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y].id}}</a>
-                        </div>
-                        <h4 class="left">Drills</h4>
-                        <div ng-repeat="y in x.equipmentByFunction.D" ng-init="e = getEquipmentLastEvent(equipment[y])">
-                            <a ng-href="#!equip/{{y}}" class="left"><i ng-class='equipStyleIcon[e.majorGroup]'
-                                    ng-style='equipStyleColor[e.majorGroup]'></i> {{ equipment[y].id}}</a>
-
-                        </div>
-                    </div> -->
-
                     <div ng-repeat="(key, value) in x.equipmentByFunction">
                         <div class="left light">
                             <h4>{{ functionMapping[key] }}</h4>
@@ -69,20 +36,7 @@
             </div>
         </div>
 
-        <div class="dropdown">
-            <div class="dropbtn">Monthly Compliance</div>
-            <div class="dropdown-content">
-                <div>
-                    <div ng-repeat="x in siteData" ng-init="siteIndex = $index">
-                        <div class="droplist">
-                            <h3>{{x.name}}</h3>
-                            <a ng-href="#!monthly/{{siteIndex}}/0">Plan vs Compliance</a>
-                            <a ng-href="#!monthly/{{siteIndex}}/1">Adjust Target Inputs</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
 
         <div class="dropdown">
             <div class="dropbtn">Reports & Analysis</div>
@@ -109,9 +63,28 @@
                     <a ng-href="#!productivity/HAULING">Truck Productivity</a>
                     <a ng-href="#!productivity/LOADING">Bogger Productivity</a>
                     <a ng-href="#!productivity/ALL">All Equipment Productivity</a>
+
+
+                    <!-- <a ng-repeat="x in cachedData" ng-href="#!productivity/ALL">ASDASDS</a> -->
+
                 </div>
             </div>
         </div>
+
+        <div class="dropdown">
+            <div class="dropbtn">Monthly Compliance</div>
+            <div class="dropdown-content">
+                <div class="droplist">
+                    <div ng-repeat="x in siteData" ng-init="siteIndex = $index">
+                        <h3>{{x.name}}</h3>
+                        <a ng-href="#!monthly/{{siteIndex}}/0">Plan vs Compliance</a> <br />
+                        <a ng-href="#!monthly/{{siteIndex}}/1">Adjust Target Inputs</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </div>
 
 
@@ -126,39 +99,25 @@
             </div>
             <div class="dropdown-content">
                 <div class="droplist">
-                    <h3><i class="far fa-user"></i> User</h3>
+                    <!-- <h3><i class="far fa-user"></i> User</h3>
                     <a ng-href="#">Log-out</a>
-                    <a ng-href="#">Report Issue</a>
+                    <a ng-href="#">Report Issue</a> -->
                     <h3><i class="fas fa-info-circle"></i> Mine Mage</h3>
                     <a ng-href="#">About</a>
                     <a ng-href="#">User Manual</a>
                     <a ng-href="http://www.mine-mage.com">Web</a>
+                    <a ng-href="#">Report Issue</a>
                 </div>
             </div>
         </div>
 
-        <!-- Alerts -->
-        <div class="util">
-            <div class="utilbtn"><i class="far fa-bell"></i><span class="alert-badge" ng-bind="alerts.length"
-                    ng-hide="alerts.length < 1"></span>
-            </div>
-            <div class="dropdown-content">
 
-                <!-- Alert System -->
-                <h3><i class="far fa-bell"></i> Alerts</h3>
-                <!-- <div class="flex">
-                        <h3><i class="far fa-bell"></i> Alerts</h3>
-                        <h3><i class="fas fa-sync-alt"></i></h3>
-                    </div> -->
-                <div ng-repeat="alert in alerts">
-                    <alert-box alert="alert"></alert-box>
-                </div>
 
-            </div>
-        </div>
+
+
 
         <!-- DB Connection -->
-        <div class="util">
+        <!-- <div class="util">
             <div class="utilbtn"><i class="fas fa-database"></i></div>
             <div class="dropdown-content">
                 <h3> <i class="fas fa-database"></i> DB Connection</h3>
@@ -174,12 +133,9 @@
 
                     <div>Next Data Pull</div>
                     <div>5m 24s</div>
-                    <!-- 
-                    <div>Local Data Size</div>
-                    <div>...todo</div> -->
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Preferences -->
         <div class="util">
@@ -222,7 +178,26 @@
 
                 </div>
 
-                <h3><i class="far fa-calendar-alt"></i> Data</h3>
+
+
+                <h3> <i class="fas fa-database"></i> DB Connection</h3>
+                <div class="utilgrid">
+                    <div>IP</div>
+                    <div>{{meta.IP}}</div>
+
+                    <div>Connection Status</div>
+                    <div>OK!</div>
+
+                    <div>Last Data Pull</div>
+                    <div>{{lastUpdateFormat}}</div>
+
+                    <div>Next Update</div>
+                    <div>{{nextUpdateIn}}</div>
+                </div>
+
+
+
+                <!-- <h3><i class="far fa-calendar-alt"></i> Data</h3>
                 <div class="utilgrid">
                     <div>Active Date</div>
                     <div>
@@ -235,12 +210,56 @@
                             </button>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
-                <h3><i class="fas fa-search"></i> Search</h3>
+                <!-- <h3><i class="fas fa-search"></i> Search</h3>
 
                 <input type="text" ng-model="searchText" ng-init="searchText='Enter equipment ID...'"
                     placeholder="Search by ID...">
+                <div>
+                    <div class="droplist" ng-repeat="x in equipList | filter:searchText"
+                        ng-init="e = getEquipmentLastEvent(equipment[x])">
+                        <div class="searchResult underline left">
+                            <a ng-href="#!equip/{{x}}">
+                                <h5><i ng-class='equipStyleIcon[e.majorGroup]'
+                                        ng-style='equipStyleColor[e.majorGroup]'></i>
+                                    {{ x }}</h5>
+                            </a>
+                            <p>{{ e.status }}</p>
+                            <p><i>{{ e.operator }}</i></p>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+        <!-- Alerts -->
+        <div class="util">
+            <div class="utilbtn"><i class="far fa-bell"></i><span class="alert-badge" ng-bind="alerts.length"
+                    ng-hide="alerts.length < 1"></span>
+            </div>
+            <div class="dropdown-content">
+                <h3><i class="far fa-bell"></i> Alerts</h3>
+                <div ng-repeat="alert in alerts">
+                    <alert-box alert="alert"></alert-box>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="navItem">
+            <div>|</div>
+        </div>
+
+
+        <!-- Search Bar -->
+        <div class="util">
+            <div class="utilbtn flex">
+                <i class="fas fa-search"></i>
+                <input type="text" ng-model="searchText" ng-init="searchText=''" placeholder="Search by ID...">
+            </div>
+            <div class="dropdown-content">
                 <div>
                     <div class="droplist" ng-repeat="x in equipList | filter:searchText"
                         ng-init="e = getEquipmentLastEvent(equipment[x])">
@@ -260,16 +279,6 @@
 
 
 
-        <div class="navItem">
-            <div>|</div>
-        </div>
-
-
-        <!-- <div class="navItem">
-            <div>
-                <h5><i class="far fa-calendar-alt"></i> {{siteDataDate.SHORT}}</h5>
-            </div>
-        </div> -->
 
         <!-- Active Date for Site Data -->
         <div class="dropdown">
@@ -278,8 +287,6 @@
             </div>
             <div class="dropdown-content">
                 <div class="droplist">
-
-
 
                     <!-- Select any date to load.. -->
                     <h3><i class="far fa-calendar-alt"></i> Active Date</h3>
@@ -290,36 +297,37 @@
                         <div id="menuDataDatePick"></div>
                     </div>
 
-
-
                     <!-- Show the traililng week -->
-                    <h3><i class="far fa-calendar-alt"></i> Trailing Week</h3>
+                    <h3><i class="far fa-calendar-alt"></i> This Week</h3>
                     <div ng-repeat="x in cachedData">
                         <h5><button ng-click="setNewSiteData(x)"> {{
                                 convertToNiceDateObject(x[x.length-1].Date).LONG }}
                             </button>
                         </h5>
                     </div>
-
                 </div>
             </div>
         </div>
 
 
 
+
+
         <!-- Active Day Shift -->
+        <!-- Show small icons to communicate the current data view  -->
         <div class="navItem">
             <div>
-                <h5 ng-if="shift==0"><i class='shiftIconDay fas fa-sun'></i> {{shiftTitle}}</h5>
-                <h5 ng-if="shift==1"><i class='shiftIconNight fas fa-moon'></i> {{shiftTitle}}</h5>
+                <h5 ng-if="ShiftIndex()===0"><i class='shiftIconDay fas fa-sun'></i> {{shiftTitle}}</h5>
+                <h5 ng-if="ShiftIndex()===1"><i class='shiftIconNight fas fa-moon'></i> {{shiftTitle}}</h5>
+
+                <div ng-if="ShiftIndex()===2" class="flex">
+                    <h5><i class='shiftIconDay fas fa-sun'></i></h5>
+                    <h5>/</h5>
+                    <h5><i class='shiftIconNight fas fa-moon'></i> Full Day</h5>
+                </div>
             </div>
-            <!-- <div>
-                <shift-text></shift-text>
-            </div> -->
         </div>
 
+
     </div>
-
-
-    <!-- <div>10/10/2018</i></div> -->
 </div>

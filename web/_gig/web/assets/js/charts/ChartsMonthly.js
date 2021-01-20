@@ -122,47 +122,46 @@ class ChartsMonthly {
 
 
 
-    static CreateLongTerm(_elementID, _data, _name, _style, _zoom) {
-        var myChart = echarts.init(document.getElementById(_elementID), 'chartTone');
+    static CreateLongTerm(_elementID, _data, _colorIndex, _startDate) {
+        // Create an eCharts instance 
+        var myChart = InitChartFromElementID(_elementID);
+        if (myChart == undefined) return;
+
+        //console.log(_data);
 
         var smoothVal = 0;
-        var ma30 = CalculateMA(30, _data);
-        var ma60 = CalculateMA(60, _data);
+        //var ma30 = CalculateMA(30, _data);
+        //var ma60 = CalculateMA(60, _data);
 
-        var _series = [{
-            name: _name,
-            data: _data,//[1],
-            type: 'line',
-            symbol: 'none',
-            itemStyle: _style,
-            lineStyle: { width: 1.5 },
-            large: true,
-            smooth: smoothVal
-        },
-        {
-            name: 'MA30',
-            data: ma30,
-            type: 'line',
-            symbol: 'none',
-            itemStyle: { color: 'white' },
-            lineStyle: { width: 1 },
-            large: true,
-            smooth: true
-        }];
-
+        var _series = [
+            {
+                name: "Data",
+                data: _data,
+                type: 'line',
+                symbol: 'none',
+                itemStyle: { color: ChartStyles.TUMColors[_colorIndex] },
+                //areaStyle: ChartStyles.lineAreaFromStyle(ChartStyles.TUMColors[_colorIndex]), //{ color: ChartStyles.cumulativeArea },
+                areaStyle: { color: ChartStyles.cumulativeArea },
+                lineStyle: { width: 1.5 },
+                large: true,
+                smooth: smoothVal
+            },
+            // {
+            //     name: 'MA30',
+            //     data: ma30,
+            //     type: 'line',
+            //     symbol: 'none',
+            //     itemStyle: { color: 'white' },
+            //     lineStyle: { width: 1 },
+            //     large: true,
+            //     smooth: true
+            // }
+        ];
 
         //console.log(_zoom == true);
         var _dataZoom = null;
-        if (_zoom == true) {
-            var _dataZoom = [{
-                type: 'inside'
-            }, {
-                type: 'slider',
-                dataBackground: {
-                    lineStyle: { color: 'white' },
-                    areaStyle: _style
-                }
-            }];
+        if (true) {
+            var _dataZoom = [{ type: 'inside' }];
         }
 
 
@@ -170,20 +169,14 @@ class ChartsMonthly {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
 
-            title: ChartStyles.createTitle(_name),
-            toolbox: {
-                left: 'center',
-                feature: {
-                    restore: { title: 'restore' }
-                }
-            },
-            grid: {
-                top: '15%',
-                bottom: '0%',
-                left: '1%',
-                right: '1%',
-                containLabel: true
-            },
+            //title: ChartStyles.createTitle(_name),
+            // toolbox: {
+            //     left: 'center',
+            //     feature: {
+            //         restore: { title: 'restore' }
+            //     }
+            // },
+            grid: ChartStyles.gridSpacing(),
             tooltip: {
                 //show: false,
                 trigger: 'axis',
@@ -197,7 +190,7 @@ class ChartsMonthly {
                 }
             },
             dataZoom: _dataZoom,
-            xAxis: ChartStyles.xAxis(GenerateDateLabels('20181001', _data.length)),
+            xAxis: ChartStyles.xAxis(GenerateDateLabels(_startDate, _data.length)),
 
             yAxis: {
                 type: 'value',
@@ -213,6 +206,92 @@ class ChartsMonthly {
 
         SetOptionOnChart(option, myChart);
         return myChart;
+    }
+
+
+
+
+    static CreateLongTermZoomTime(_elementID, _data, _startDate) {
+
+        // Create an eCharts instance 
+        var myChart = InitChartFromElementID(_elementID);
+        if (myChart == undefined) return;
+
+        var dateLabels = GenerateDateLabels(_startDate, _data.length);
+
+        var option = {
+            backgroundColor: ChartStyles.backGroundColor,
+            textStyle: ChartStyles.textStyle,
+            grid: {
+                top: '0%',
+                bottom: '0%',
+                left: '3%',
+                right: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: dateLabels,
+                axisLabel: {
+                    inside: true,
+                    //rotate: 45,
+                    formatter: '{value}',
+                    fontFamily: 'Poppins',
+                    fontWeight: 'lighter',
+                    fontSize: ChartStyles.fontSizeSmall,
+                    margin: 10
+                },
+                z: 50,
+                axisTick: {
+                    inside: true, length: 30, lineStyle: {
+                        color: 'white',
+                        opacity: 0.2
+                    }
+                },
+                axisLine: ChartStyles.axisLineGrey
+            },
+            yAxis: {
+                show: false,
+                type: 'value',
+                boundaryGap: [0, '100%']
+            },
+            dataZoom: [
+                {
+                    type: 'inside',
+                    start: 0,
+                    end: 50
+                },
+                {
+                    start: 0,
+                    end: 50,
+                    type: 'slider',
+                    //backgroundColor: 'red',
+
+                    fillerColor: ChartStyles.cumulativeArea,
+
+                    handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+                    handleSize: '80%',
+                    handleStyle: {
+                        color: 'white',
+                        shadowBlur: 3,
+                        shadowColor: 'rgba(0, 0, 0, 1)',
+                        shadowOffsetX: 2,
+                        shadowOffsetY: 2
+                    }
+                }
+            ],
+            series: [
+                {
+                    type: 'line',
+                    data: dateLabels//data
+                }
+            ]
+        };
+
+        SetOptionOnChart(option, myChart);
+        return myChart;
+
     }
 
 

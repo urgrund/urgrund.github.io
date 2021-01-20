@@ -1,0 +1,12 @@
+<div class="errorpage">
+    <div>
+        <h2><i ng-class='equipStyleIcon.DOWN' ng-style='equipStyleColor.DOWN'></i>
+            An error has occured...</h2>
+        <!-- <h4>Often, just refreshing the page should fix this. Please contact IT if the problem persists.</h4> -->
+
+        </br>
+
+        <div ng-bind-html="trustAsHtml(lastResponseError)">
+        </div>
+    </div>
+</div>

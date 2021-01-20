@@ -2,19 +2,20 @@
 ***************************************
 M I N E   M A G E 
 Front-end web application main entry point
-(c) 2020 Gigworth Pty Ltd
+(c) 2019-2021 Gigworth Pty Ltd
 Written by Matt Bell 
 *************************************** 
 */
 
 //console.log = function () { }
 
+
+
 // Variables used outside of particular NG scopes  (ie. charts)
 var shift = 0;
 var fullDayView = 0;
 
-const shiftTitle = ['Day Shift', 'Night Shift'];
-
+const shiftTitle = ['Day Shift', 'Night Shift', '24hr'];
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const month = new Array();
@@ -47,13 +48,6 @@ monthShort[11] = "Dec";
 
 
 
-// const MajorGroup = {
-//     IDLE: 'Idle',
-//     OPERATING: 'Operating',
-//     DOWN: 'Down'
-// }
-
-
 
 
 // =====================================================================================
@@ -65,7 +59,7 @@ var app = angular.module("myApp", ['ngRoute', 'ui.grid', 'ui.grid.resizeColumns'
 
 
 // First run and rootscope
-app.run(function ($rootScope, $http, $route) {
+app.run(function ($rootScope, $http, $route, $location, $sce) {
 
     $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
@@ -86,8 +80,26 @@ app.run(function ($rootScope, $http, $route) {
     $rootScope.siteData = null;
     $rootScope.cachedData = [];
 
+    $rootScope.config;
+
     //$rootScope.configs = [];
 
+    $rootScope.lastResponseError = null;
+    $rootScope.checkResponseError = function (response) {
+        if (response.data.includes('xdebug-error')) {
+            console.log("[Error]");
+            console.log(response);
+
+            $rootScope.lastResponseError = response.data;
+            $location.path('/error');
+            return true;
+        }
+        return false;
+    };
+
+    $rootScope.trustAsHtml = function (html) {
+        return $sce.trustAsHtml(html);
+    }
 
     // ------------------------------------------------------
 
@@ -160,13 +172,17 @@ app.run(function ($rootScope, $http, $route) {
     };
 
 
+    // So that it can be used in html
+    $rootScope.ShiftIndex = function () { return ShiftIndex(); };
+
+
+    $rootScope.siteDataRefreshIntervalSeconds = 60;
+    $rootScope.siteDataLastRefresh = moment();
+    $rootScope.siteDataNextRefresh = moment().add($rootScope.siteDataRefreshIntervalSeconds, 's');
 
     $rootScope.fetchSiteData = function (_dates, _setAfterFetch = false, _replace = false) {
 
-        //var urlGetData = ServerInfo.URL_CreateSiteData;
         for (var i = 0; i < _dates.length; i++) {
-
-
             var date = _dates[i];
             //console.log(date);
 
@@ -177,16 +193,17 @@ app.run(function ($rootScope, $http, $route) {
                 data: _data
             })
             request.then(function (response) {
-                //const { length } = $rootScope.cachedData;
+
+                //console.log($rootScope.cachedData);
 
                 // Does this exist?
-                var found = $rootScope.cachedData.some(el => el[el.length - 1].Date === response.data[el.length - 1].Date);
-
-
+                var found = false;
+                if ($rootScope.cachedData.length > 0)
+                    found = $rootScope.cachedData.some(el => el[el.length - 1].Date === response.data[response.data.length - 1].Date);
 
                 // It's new so add it 
                 if (!found) {
-                    console.log("Wasn't found...");
+                    //console.log("Wasn't found...");
                     $rootScope.cachedData.push(response.data);
                 }
 
@@ -257,7 +274,6 @@ app.run(function ($rootScope, $http, $route) {
     };
 
 
-
     // With real data this should be set to current data
     //var dates = ['20181010', '20181009', '20181008', '20181007', '20181006', '20181005', '20181004', '20181003'];
     //$rootScope.fetchSiteData(dates, false);
@@ -274,10 +290,16 @@ app.run(function ($rootScope, $http, $route) {
             data: _data,
         })
         request.then(function (response) {
-            console.log("[Configs]");
-            console.log(response.data);
-            //$rootScope.config = response.data;
             ServerInfo.config = response.data;
+            ServerInfo.config.TUMIndex = Object.values(ServerInfo.config.TUMIndex);
+            $rootScope.config = response.data;
+
+            //PrepareAllTimeLabels(ServerInfo.config.ShiftStart);
+
+            console.log("[Configs]");
+            console.log(ServerInfo.config);
+
+            $rootScope.$broadcast('configSet');
         }, function (error) {
         });
     }
@@ -313,7 +335,7 @@ app.run(function ($rootScope, $http, $route) {
 
     /**
      * Pass date as dd-mm-yyy. Creates a nicely formatted date object from a numerical date
-     */
+     **/
     $rootScope.convertToNiceDateObject = function (_date) {
 
         var newDateObject = {
@@ -331,10 +353,13 @@ app.run(function ($rootScope, $http, $route) {
      * Get the last event registered with equipment based on the current shift     
      */
     $rootScope.getEquipmentLastEvent = function (_equip) {
-        var len = _equip.shiftData[$rootScope.shift].events.length;
-        var index = _equip.shiftData[$rootScope.shift].events[len - 1];
+        var len = _equip.shiftData[ShiftIndex()].events.length;
+        var index = _equip.shiftData[ShiftIndex()].events[len - 1];
+        //console.log(_equip.id + " | " + _equip.events[index].majorGroup);
         return _equip.events[index];
     };
+
+
 
 
 
@@ -344,15 +369,15 @@ app.run(function ($rootScope, $http, $route) {
     // MAYBE ALL THIS CAN BE IT'S OWN CLASS?
 
     $rootScope.equipStyleIcon = {
-        OPERATING: 'far fa-arrow-alt-circle-up',
-        IDLE: 'fas fa-exclamation-circle',
-        DOWN: 'fas fa-times-circle'
+        Operating: 'far fa-arrow-alt-circle-up',
+        Idle: 'fas fa-exclamation-circle',
+        Down: 'fas fa-times-circle'
     };
 
     $rootScope.equipStyleColor = {
-        OPERATING: { 'color': ChartStyles.statusColorsFlat[0] },
-        IDLE: { 'color': ChartStyles.statusColorsFlat[1] },
-        DOWN: { 'color': ChartStyles.statusColorsFlat[2] }
+        Operating: { 'color': ChartStyles.statusColorsFlat[0] },
+        Idle: { 'color': ChartStyles.statusColorsFlat[1] },
+        Down: { 'color': ChartStyles.statusColorsFlat[2] }
     };
 
     $rootScope.backGroundState = true;
@@ -372,7 +397,7 @@ app.run(function ($rootScope, $http, $route) {
     $rootScope.backGroundClassBlur = $rootScope.backGroundDefault + "Blur";
 
 
-    /** Colour for metrics that are production **/
+    /** Colour for metrics that are production*/
     $rootScope.metricProductionColour = "#007260";
 
     // ------------------------------------------------------
@@ -382,25 +407,26 @@ app.run(function ($rootScope, $http, $route) {
 
 
 
+// ===============================================================================================
 // Main controller
+// ===============================================================================================
 app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $location, $interval) {
 
     console.log("Starting Mine-Mage...");
 
-
-    // ------------------------------------------------------
-    // Fetch todays data and set it as soon as done
-    //$rootScope.fetchSiteData(['20181010'], true);
     $rootScope.fetchSiteConfigs();
     $rootScope.fetchAvailableDates();
 
+    // ------------------------------------------------------
     // Interval function to update the current days data
     $scope.updateIntervalForTodaysData = function () {
-        $rootScope.fetchSiteData(['20181003'], true, true);
-        //console.log("FOOOOOO");
+        //$rootScope.fetchSiteData(['20181003'], true, true);
+        console.log("Refreshing todays data...");
+        $rootScope.siteDataLastRefresh = moment();
+        $rootScope.siteDataNextRefresh = moment().add($rootScope.siteDataRefreshIntervalSeconds, 's');
     }
 
-    //$interval(function () { $scope.updateIntervalForTodaysData(); }, 5000);
+    //$interval(function () { $scope.updateIntervalForTodaysData(); }, $rootScope.siteDataRefreshIntervalSeconds * 1000);
     // ------------------------------------------------------
 
 
@@ -413,6 +439,9 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
         $rootScope.alerts = null;
         for (var i = 0; i < Math.round(Math.random() * 10); i++) {
             var randSite = Math.floor(Math.random() * ($rootScope.siteData.length - 1));
+            if ($rootScope.siteData[randSite] == undefined)
+                continue;
+
             var randEquip = Math.floor(Math.random() * $rootScope.siteData[randSite].equipment.length);
             if (Math.random() > 0.5) {
                 alerts[i] = {
@@ -464,7 +493,7 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
 
                 var equipFunction = $rootScope.equipment[$location.$$url.slice(7)].function;
 
-                console.log(equipFunction);
+                //console.log(equipFunction);
                 $rootScope.backGroundClass = $rootScope.backGroundEquip[equipFunction];
                 $rootScope.backGroundClassBlur = $rootScope.backGroundClass + "Blur";
             }
@@ -472,7 +501,6 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
                 $rootScope.backGroundClass = $rootScope.backGroundDefault;
                 $rootScope.backGroundClassBlur = $rootScope.backGroundClass + "Blur";
             }
-
         }
         else {
             $rootScope.backGroundClass = "bg_navy";
@@ -493,8 +521,8 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
         else
             $rootScope.shift = 1;
 
-        $rootScope.shiftTitle = shiftTitle[$rootScope.shift];
         shift = $rootScope.shift;
+        $rootScope.shiftTitle = shiftTitle[ShiftIndex()];
 
         // Only broadcast if not in day view
         if ($rootScope.fullDayView === 1)
@@ -506,6 +534,9 @@ app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $locati
     $scope.switchDayView = function (_state) {
         $rootScope.fullDayView = (_state == true) ? 0 : 1;
         fullDayView = $rootScope.fullDayView;
+
+        //if (fullDayView == 1)
+        $rootScope.shiftTitle = shiftTitle[ShiftIndex()];
         $scope.$broadcast('updateShift');
     };
 
@@ -600,7 +631,13 @@ app.config(
             .when("/site/:site", {
                 templateUrl: 'site.html',
                 controller: 'Site'
+            })
+            .when("/error/", {
+                templateUrl: 'error.html',
+                //controller: 'Site'
             });
+
+        //error
     }
 );
 

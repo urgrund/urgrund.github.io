@@ -14,7 +14,8 @@ app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $ti
      **/
     $scope.getCallUpEvent = function (_equip) {
 
-        var shiftData = _equip.shiftData[$scope.callUpIsDay ? 1 : 0];
+        //var shiftData = _equip.shiftData[$scope.callUpIsDay ? 1 : 0];
+        var shiftData = _equip.shiftData[ShiftIndex()];
 
         // So that we don't overwrite the original 
         var eventIndex = ($scope.callUpIsFirst == true) ? shiftData.eventFirstOp : shiftData.events[shiftData.events.length - 1];

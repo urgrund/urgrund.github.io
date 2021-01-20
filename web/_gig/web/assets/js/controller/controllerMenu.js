@@ -37,8 +37,8 @@ app.controller('Menu', function ($scope, $routeParams, $rootScope, $timeout) {
             ],
             defaultDate: maxDate,
             inline: true,
+            // On Click of a new date
             onChange: function (selectedDates, dateStr, instance) {
-                //...
                 var date = dateStr.replace("-", "");
                 date = date.replace("-", "");
                 console.log(date);
@@ -47,7 +47,28 @@ app.controller('Menu', function ($scope, $routeParams, $rootScope, $timeout) {
         });
     }
 
-    //$scope.calendarHover
+    $scope.nextUpdate = moment(); // initialise the time variable
+    $scope.tickInterval = 500; //ms
+
+
+    // This is the count down timer per refresh
+    var tick = function () {
+        var last = moment($rootScope.siteDataLastRefresh);
+        var next = moment($rootScope.siteDataNextRefresh);
+        var diff = next.diff(moment());
+        diff = (diff / 1000).toFixed();
+
+        //console.log((diff) + "   " + SecondsToHoursAndMinutes(diff, true));
+
+        $scope.lastUpdateFormat = last.format('LTS');
+        $scope.nextUpdateIn = SecondsToHoursAndMinutes(diff, true);
+        $timeout(tick, $scope.tickInterval); // reset the timer
+    }
+
+    // Start the timer
+    $timeout(tick, $scope.tickInterval);
+
+
 
 
     $scope.$watch('$viewContentLoaded', function () {

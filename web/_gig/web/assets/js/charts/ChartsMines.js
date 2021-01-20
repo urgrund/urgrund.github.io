@@ -3,28 +3,47 @@ class ChartsMines {
 
 
 
-    static CreateBar2(_elementID, _data, _title) {
+    static CreateBar(_elementID, _data, _title) {
 
         // Create an eCharts instance 
         var myChart = InitChartFromElementID(_elementID);
         if (myChart == undefined) return;
 
+        //console.log(_data);
+
+        var timeLength = timeLabelsShift[ShiftIndex()].length;
 
         // The monthly target for this day
-        var tempTarget = 120000;
-        var daysInMonth = 31;
-        var dailyTarget = tempTarget / daysInMonth;
-        var target = [];
-        for (var i = 0; i < 12; i++) {
-            var frac = (i / (12 - 1)) * dailyTarget;
-            target.push(frac);
+        var monthTarget = 150000;
+        var daysInMonth = 30;
+        var dailyTarget = (monthTarget / daysInMonth) * (ShiftIndex() < 2 ? 0.5 : 1.0);
+        //var agressiveTarget = dailyTarget / ServerInfo.shiftTargetAgressiveScalar;
+
+        //console.log(dailyTarget);
+
+        var plan = [];
+        var profiledTarget = [];
+        for (var i = 0; i < timeLength; i++) {
+            var frac = (i / (timeLength - 1)) * dailyTarget;// * (ShiftIndex() < 2 ? 2 : 1);
+
+            plan.push(frac);
+            var profileIndex = i + (ShiftIndex() == 1 ? 12 : 0);
+            var profileScalar = ServerInfo.shiftTargetProductionProfile[profileIndex];
+            profileScalar -= ShiftIndex() == 1 ? ServerInfo.shiftTargetProductionProfile[11] : 0;
+
+            profiledTarget.push(
+                dailyTarget
+                * ServerInfo.shiftTargetAgressiveScalar
+                * profileScalar
+                * (ShiftIndex() < 2 ? 2 : 1)
+            );
+
         }
 
-
         // Get all the tonnes data
-        var tph = ArrayOfNumbers(0, 12, 0);     // Tonnes
-        var pph = ArrayOfNumbers(0, 12, 0);     // Production
-        var cph = ArrayOfNumbers(0, 12, 0);     // Cumulative
+        var tph = ArrayOfNumbers(0, timeLength, 0);     // Tonnes
+        var pph = ArrayOfNumbers(0, timeLength, 0);     // Production
+        var cph = ArrayOfNumbers(0, timeLength, 0);     // Cumulative
 
         for (var i = 0; i < _data.length; i++) {
             if (_data[i].metric == "TONNE") {
@@ -33,20 +52,14 @@ class ChartsMines {
                     tph[j] += _data[i].mph[j];
                 }
             }
-            if (_data[i].activity.includes("Production")) {
-                for (var j = 0; j < _data[i].mph.length; j++) {
-                    cph[j] += _data[i].cph[j];
-                    pph[j] += _data[i].mph[j];
-                }
-            }
         }
 
         // Conditional colour coding for the TPH bars
-        for (var i = 0; i < tph.length; i++) {
-            tph[i] = {
-                value: tph[i],
+        for (var i = 0; i < cph.length; i++) {
+            cph[i] = {
+                value: cph[i],
                 itemStyle: {
-                    color: (cph[i] > target[i]) ? ChartStyles.TUMColors[2] : ChartStyles.TUMColors[0]
+                    color: (cph[i] > profiledTarget[i]) ? ChartStyles.TUMColors[2] : ChartStyles.TUMColors[0]
                 }
             };
         }
@@ -68,80 +81,85 @@ class ChartsMines {
                 backgroundColor: ChartStyles.toolTipBackgroundColor(),
                 formatter: function (params, index) {
                     var string = ChartStyles.toolTipTextTitle(params[0].name);
-                    string += ChartStyles.toolTipTextEntry(params[0].seriesName + ": " + params[0].value);
-                    string += ChartStyles.toolTipTextEntry(params[1].seriesName + ": " + params[1].value, "bold");
+                    string += ChartStyles.toolTipTextEntry(params[0].seriesName + ": " + params[0].value.toFixed());
+                    string += ChartStyles.toolTipTextEntry(params[1].seriesName + ": " + params[1].value.toFixed());
+                    string += ChartStyles.toolTipTextEntry(params[2].seriesName + ": " + params[2].value.toFixed(), "bold");
                     return string;
                 }
             },
             legend: {
                 textStyle: { color: "#fff" },
-                y: 'top',
-                data: ['Tonnes', 'Production', 'Cumulative', 'Target']
+                top: '20%',
+                left: 10,
+                align: 'left',
+                orient: 'vertical',
+                data: ['Tonnes', 'Target', 'Plan']
             },
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "SiteTPH"),
             grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
+                left: '14%',
+                right: '0%',
+                bottom: '2%',
+                top: '2%',
                 containLabel: true
             },
-            xAxis: ChartStyles.xAxis(timeLabelsShift[shift]),
-            yAxis: [{
-                type: 'value',
-                splitLine: { show: false },
-                axisLine: ChartStyles.axisLineGrey,
-                axisLabel: {
-                    color: 'white',
-                    fontSize: ChartStyles.fontSizeSmall,
-                    formatter: function (value, index) { return ChartStyles.axisFormatThousands(value); }
-                }
-            },
-            {
-                type: 'value',
-                splitLine: { show: false },
-                axisLine: ChartStyles.axisLineGrey,
-                axisLabel: {
-                    color: 'white',
-                    fontSize: ChartStyles.fontSizeSmall,
-                    formatter: function (value, index) { return ChartStyles.axisFormatThousands(value); }
-                }
-            }],
+            xAxis: ChartStyles.xAxis(timeLabelsShift[ShiftIndex()]),
+            yAxis: [
+                {
+                    type: 'value',
+                    splitLine: { show: false },
+                    axisLine: ChartStyles.axisLineGrey,
+                    axisLabel: {
+                        color: 'white',
+                        fontSize: ChartStyles.fontSizeSmall,
+                        formatter: function (value, index) { return ChartStyles.axisFormatThousands(value); }
+                    }
+                },
+                // {
+                //     type: 'value',
+                //     splitLine: { show: false },
+                //     axisLine: ChartStyles.axisLineGrey,
+                //     axisLabel: {
+                //         color: 'white',
+                //         fontSize: ChartStyles.fontSizeSmall,
+                //         formatter: function (value, index) { return ChartStyles.axisFormatThousands(value); }
+                //     }
+                // }
+            ],
             series: [
                 {
                     name: "Tonnes",
                     type: 'bar',
                     barMaxWidth: ChartStyles.barMaxWidth,
                     stack: "TPH",
-                    data: tph,
+                    data: cph,
                     itemStyle: { color: ChartStyles.siteColors[0] }
                 },
+                // {
+                //     name: "Production",
+                //     type: 'bar',
+                //     barMaxWidth: ChartStyles.barMaxWidth,
+                //     stack: "TPH",
+                //     data: pph,
+                //     itemStyle: { color: ChartStyles.TUMColors[1] }
+                // },
                 {
-                    name: "Production",
-                    type: 'bar',
-                    barMaxWidth: ChartStyles.barMaxWidth,
-                    stack: "TPH",
-                    data: pph,
-                    itemStyle: { color: ChartStyles.TUMColors[1] }
-                },
-                {
-                    name: "Cumulative",
+                    name: "Plan",
                     type: 'line',
-                    yAxisIndex: 1,
                     itemStyle: { color: ChartStyles.cumulativeColor },
                     areaStyle: { color: ChartStyles.cumulativeArea },
                     symbol: 'none',
                     lineStyle: ChartStyles.lineShadow(),
-                    data: cph,
+                    data: plan,
                 },
                 {
                     name: "Target",
                     type: 'line',
-                    yAxisIndex: 1,
                     itemStyle: { color: ChartStyles.TUMColors[0] },
                     //areaStyle: { color: ChartStyles.cumulativeArea },
                     symbol: 'none',
                     lineStyle: ChartStyles.lineShadow(),
-                    data: target,
+                    data: profiledTarget//target,
                 }
             ]
         };
@@ -241,11 +259,10 @@ class ChartsMines {
 
 
     static CreateTinyPie(_elementID, _data, _title) {
-        // -------------------------------------------------------------
-        //if (myPie == null)
-        var myChart = echarts.init(document.getElementById(_elementID));//, chartTone);
-        //console.log(myChart);
-        //var _d = _data.shiftData[shift];
+        // Create an eCharts instance 
+        var myChart = InitChartFromElementID(_elementID);
+        if (myChart == undefined) return;
+
 
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
@@ -300,184 +317,187 @@ class ChartsMines {
 
 
 
-
-    // Sankey 
-    // Takes all site data so that it can build a 
-    // sankey with greyed out areas from other sites
-    // using index to colour the site in focus
-
-    static CreateSankey(_elementID, _data, _index) {
-
-
-        var myChart = echarts.init(document.getElementById(_elementID));
-
-
-        // The nodes
-        var graphData = [];
-
-        // The lines between the nodes
-        var linesData = [];
-
-
-        // Build the graph Nodes
-
-        // Height to width ratio for the graph
-        var ratio = 1;
-        var asLocations = _data[_index].asLocations;
-        var xCount = 0;
-        for (var x in asLocations) {
-            for (var y = 0; y < asLocations[x].length; y++) {
-                // Category is whether a 1 or 0 was written
-                // which determines if this is the data set
-                // we want to emphasise 
-                var cat = asLocations[x][y][1];
-                console.log(cat);
-                var xPos = xCount;//(xCount / 1) * ratio;
-                var yPos = (y + 1) / (asLocations[x].length + 1) * (1 / ratio * 2);
-                graphData.push({
-                    name: asLocations[x][y][0],
-                    x: xPos,
-                    y: yPos,
-                    category: (cat != _index) ? 0 : 1,
-                    symbol: 'circle',
-                    symbolSize: (cat == _index) ? 13 : 7,
-                });
-
+    /*
+        static _CreateSankey(_elementID, _data, _index) {
+    
+    
+            var myChart = echarts.init(document.getElementById(_elementID));
+    
+    
+            // The nodes
+            var graphData = [];
+    
+            // The lines between the nodes
+            var linesData = [];
+    
+    
+            // Build the graph Nodes
+    
+            // Height to width ratio for the graph
+            var ratio = 1;
+            var asLocations = _data[_index].asLocations;
+            var xCount = 0;
+            for (var x in asLocations) {
+                for (var y = 0; y < asLocations[x].length; y++) {
+                    // Category is whether a 1 or 0 was written
+                    // which determines if this is the data set
+                    // we want to emphasise 
+                    var cat = asLocations[x][y][1];
+                    console.log(cat);
+                    var xPos = xCount;//(xCount / 1) * ratio;
+                    var yPos = (y + 1) / (asLocations[x].length + 1) * (1 / ratio * 2);
+                    graphData.push({
+                        name: asLocations[x][y][0],
+                        x: xPos,
+                        y: yPos,
+                        category: (cat != _index) ? 0 : 1,
+                        symbol: 'circle',
+                        symbolSize: (cat == _index) ? 13 : 7,
+                    });
+    
+                }
+                xCount++;
             }
-            xCount++;
-        }
-        //}
-
-
-        // Build the links only for this stie        
-        var links = [];
-        var materialMovement = _data[_index].materialMovement;
-        for (var i = 0; i < materialMovement.length; i++) {
-            links.push(
-                {
-                    source: materialMovement[i][2],
-                    target: materialMovement[i][4],
-                    symbolSize: [13, 13],
-                    label: { normal: { show: false } },
-                    lineStyle: {
-                        normal: {
-                            //width: materialMovement[i][7] / 50,
-                            width: 5,
-                            curveness: 0.2,
-                            opacity: 1,
-                            color: ChartStyles.siteColors[0]
-                        },
-                        emphasis: {
-                            opacity: 1,
-                            color: ChartStyles.siteColors[1]//'white'
+            //}
+    
+    
+            // Build the links only for this stie        
+            var links = [];
+            var materialMovement = _data[_index].materialMovement;
+            for (var i = 0; i < materialMovement.length; i++) {
+                links.push(
+                    {
+                        source: materialMovement[i][2],
+                        target: materialMovement[i][4],
+                        symbolSize: [13, 13],
+                        label: { normal: { show: false } },
+                        lineStyle: {
+                            normal: {
+                                //width: materialMovement[i][7] / 50,
+                                width: 5,
+                                curveness: 0.2,
+                                opacity: 1,
+                                color: ChartStyles.siteColors[0]
+                            },
+                            emphasis: {
+                                opacity: 1,
+                                color: ChartStyles.siteColors[1]//'white'
+                            }
                         }
                     }
-                }
-            );
+                );
+            }
+    
+    
+    
+            const categories = [{
+                itemStyle: {
+                    normal: ChartStyles.disabledColor
+                },
+                label: {
+                    normal: {
+                        fontSize: '8',
+                        position: 'left',
+                        color: 'grey'
+                    }
+                },
+            }, {
+                itemStyle: ChartStyles.statusItemStyle(0),
+                //itemStyle: ChartStyles.siteColors[0],
+                label: {
+                    normal: {
+                        fontSize: ChartStyles.fontSizeSmall,
+                        position: 'bottom'
+                    }
+                },
+            }]
+    
+            var option = {
+                backgroundColor: ChartStyles.backGroundColor,
+                textStyle: ChartStyles.textStyle,
+                title: ChartStyles.createTitle(''),
+                toolbox: ChartStyles.toolBox(myChart.getHeight(), "Material Movement"),
+                grid: {
+                    top: '1%',
+                    bottom: '1%',
+                    left: '0%',
+                    right: '0%'
+                },
+                tooltip: {
+                    confine: true,
+                    //trigger: 'axis',
+                    textStyle: ChartStyles.toolTipTextStyle(),
+                    axisPointer: ChartStyles.toolTipShadow(),
+                    backgroundColor: ChartStyles.toolTipBackgroundColor(),
+                    formatter: function (params) {
+                        var string = ChartStyles.toolTipTextTitle("BLAA...");
+                        string += ChartStyles.toolTipTextEntry("...kkkkkkk");
+                        return string;
+                    }
+                },
+                xAxis: { show: false, type: 'value' },
+                yAxis: { show: false, type: 'value' },
+                series:
+                    [
+                        {
+                            type: 'graph',
+                            layout: 'none',
+                            symbolSize: 10,
+                            roam: false,
+                            label: {
+                                normal: {
+                                    show: true,
+                                    textStyle: { fontSize: 2 }
+                                }
+                            },
+                            edgeSymbol: ['', 'arrow'],
+                            edgeSymbolSize: [100, 80],
+                            edgeLabel: {
+                                normal: { textStyle: { fontSize: 10 } }
+                            },
+                            data: graphData,
+                            links: links,
+                            categories: categories
+                        },
+                        // {
+                        //     type: 'lines',
+                        //     coordinateSystem: 'cartesian2d',
+                        //     zlevel: 2,
+                        //     effect: {
+                        //         show: true,
+                        //         period: 4,
+                        //         trailLength: 0.02,
+                        //         symbol: 'arrow',
+                        //         symbolSize: 9,
+                        //     },
+                        //     lineStyle: {
+                        //         normal: {
+                        //             color: 'white',
+                        //             width: 1,
+                        //             opacity: 1,
+                        //             curveness: .3
+                        //         }
+                        //     },
+                        //     data: linesData                      
+                        //}
+                    ]
+            };
+    
+            SetOptionOnChart(option, myChart);
+            return myChart;
         }
+    */
 
 
 
-        const categories = [{
-            itemStyle: {
-                normal: ChartStyles.disabledColor
-            },
-            label: {
-                normal: {
-                    fontSize: '8',
-                    position: 'left',
-                    color: 'grey'
-                }
-            },
-        }, {
-            itemStyle: ChartStyles.statusItemStyle(0),
-            //itemStyle: ChartStyles.siteColors[0],
-            label: {
-                normal: {
-                    fontSize: ChartStyles.fontSizeSmall,
-                    position: 'bottom'
-                }
-            },
-        }]
 
-        var option = {
-            backgroundColor: ChartStyles.backGroundColor,
-            textStyle: ChartStyles.textStyle,
-            title: ChartStyles.createTitle(''),
-            toolbox: ChartStyles.toolBox(myChart.getHeight(), "Material Movement"),
-            grid: {
-                top: '1%',
-                bottom: '1%',
-                left: '0%',
-                right: '0%'
-            },
-            tooltip: {
-                confine: true,
-                //trigger: 'axis',
-                textStyle: ChartStyles.toolTipTextStyle(),
-                axisPointer: ChartStyles.toolTipShadow(),
-                backgroundColor: ChartStyles.toolTipBackgroundColor(),
-                formatter: function (params) {
-                    var string = ChartStyles.toolTipTextTitle("BLAA...");
-                    string += ChartStyles.toolTipTextEntry("...kkkkkkk");
-                    return string;
-                }
-            },
-            xAxis: { show: false, type: 'value' },
-            yAxis: { show: false, type: 'value' },
-            series:
-                [
-                    {
-                        type: 'graph',
-                        layout: 'none',
-                        symbolSize: 10,
-                        roam: false,
-                        label: {
-                            normal: {
-                                show: true,
-                                textStyle: { fontSize: 2 }
-                            }
-                        },
-                        edgeSymbol: ['', 'arrow'],
-                        edgeSymbolSize: [100, 80],
-                        edgeLabel: {
-                            normal: { textStyle: { fontSize: 10 } }
-                        },
-                        data: graphData,
-                        links: links,
-                        categories: categories
-                    },
-                    // {
-                    //     type: 'lines',
-                    //     coordinateSystem: 'cartesian2d',
-                    //     zlevel: 2,
-                    //     effect: {
-                    //         show: true,
-                    //         period: 4,
-                    //         trailLength: 0.02,
-                    //         symbol: 'arrow',
-                    //         symbolSize: 9,
-                    //     },
-                    //     lineStyle: {
-                    //         normal: {
-                    //             color: 'white',
-                    //             width: 1,
-                    //             opacity: 1,
-                    //             curveness: .3
-                    //         }
-                    //     },
-                    //     data: linesData                      
-                    //}
-                ]
-        };
+    static CreateSankey(_elementID, _data, _siteID) {
+        var dom = document.getElementById(_elementID);
+        if (dom == null || dom == undefined)
+            return;
+        var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
-        SetOptionOnChart(option, myChart);
-        return myChart;
-    }
-
-    static CreateSankey2(_elementID, _data, _siteID) {
-        var myChart = echarts.init(document.getElementById(_elementID));
-        var mm = _data[_siteID].shiftData[shift].materialMovements;
+        var mm = _data[_siteID].shiftData[ShiftIndex()].materialMovements;
         // console.log(mm);
 
         // 0: "M30"
@@ -551,7 +571,7 @@ class ChartsMines {
                     string += ChartStyles.toolTipTextEntry(Math.round(params.value));
                     //string += ChartStyles.toolTipTextEntry(params.seriesName);
 
-                    console.log(params);
+                    //console.log(params);
                     return string;
                 }
             },

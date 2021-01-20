@@ -3,32 +3,52 @@
         <img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg">
     </div> -->
 
-    <div class="underline">
+    <div class="underline flex">
         <!-- <div class="flex flex-center">
             <img class="sitePic" ng-src="assets/img/site_{{siteIndex}}.jpg">
         </div> -->
-        <div class="flex flex-center">
-            <!-- <div class="sitePicMargin">
+        <!-- <div class="flex flex-center"> -->
+        <!-- <div class="sitePicMargin">
                 <img class="sitePicSmall" ng-src="assets/img/site_{{siteIndex}}.jpg">
             </div> -->
-
-            <h1 class="center">{{site.name}}</h1>
-
+        <div>
+            <div class="flex">
+                <div class="sitePicMargin">
+                    <img class="sitePicSmall" ng-src="assets/img/site_{{siteIndex%3}}.jpg">
+                </div>
+                <div>
+                    <h1 class="center">{{site.name}}</h1>
+                </div>
+            </div>
         </div>
+        <div class="right">
+            <div class="flex flex-even">
+                <div class="">
+                    <p class="light"> Spatial Compliance</p>
+                    <h2> <i style="color: rgb(0, 255, 21);">&#9650;</i>50%</h2>
+                </div>
+                <div class="">
+                    <p class="light"> Volumetric Compliance</p>
+                    <h2> <i style="color: red;">&#9660;</i>50%</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- </div> -->
     </div>
 
     <!-- ------------------------------------------------------------------------------------- -->
 
-    <div class="flex">
+    <div class="siteContentGrid">
         <div class="siteColumn">
-            <h2 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
-            </br>
+            <!-- <h2 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
+            </br> -->
 
             <div class="">
                 <div class="">
                     <div class="flex">
                         <div>
-                            <h3 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Tonnes</h3>
+                            <h4 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Tonnes</h4>
                             <div class="flex flex-start">
                                 <!-- <h5 class="light right"><i class="fas fa-chart-line"></i> Average</h5> -->
                                 <h3 class="left">{{shiftData.productionTonnes.average | number : 0}}/hr</h3>
@@ -40,7 +60,7 @@
                 <div class="">
                     <div class="flex">
                         <div>
-                            <h3 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Metres</h3>
+                            <h4 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Metres</h4>
                             <div class="flex flex-start">
                                 <!-- <h5 class="light right"><i class="fas fa-chart-line"></i> Average</h5> -->
                                 <h3 class="right">{{shiftData.productionMetres.average | number : 0}}/hr</h3>
@@ -52,6 +72,7 @@
                 </div>
             </div>
             </br>
+            <h2 class="underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
             </br>
             <div ng-repeat="(key, value) in shiftData.metricData" class="center flex overline " ng-if="value.total != 0"
                 ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
@@ -70,52 +91,56 @@
 
 
 
-        <!-- <div class="siteColumn">
-            <h2 class="center underline"><i class="fas fa-truck-loading"></i> Materials</h2>
-            </br>
-        </div>
-    -->
-
 
         <!-- ------------------------------------------------------------------------------------- -->
 
         <div class="siteColumn">
 
-            <h2 class="center underline"><i class="fas fa-chart-line"></i> Progress</h2>
-            </br>
+            <!-- <h2 class="center underline"><i class="fas fa-chart-line"></i> Progress</h2>
+            </br> -->
 
-            <!-- <h4 class="left">Production Tonnes</h4> -->
-            <!-- <div id="siteTPH" style="height: 250px"> </div> -->
-            <div class="flex flex-even">
-                <div class="">
-                    <p class="light"> Spatial Compliance</p>
-                    <h2> <i style="color: rgb(0, 255, 21);">&#9650;</i>50%</h2>
-                </div>
-                <div class="">
-                    <p class="light"> Volumetric Compliance</p>
-                    <h2> <i style="color: red;">&#9660;</i>50%</h2>
-                </div>
-            </div>
+
+
             <div class="siteTPH">
-                <drill-down-chart name="Production Tonnes" chart="siteTPH"></drill-down-chart>
+                <drill-down-chart name="{{site.name}} Tonnes" chart="siteTPH"></drill-down-chart>
             </div>
-            </br>
-            <div class="siteSankey">
-                <drill-down-chart name="Material Movements" chart="sankey"></drill-down-chart>
+
+
+
+
+            <div ng-repeat="(key, value) in site.equipmentByFunction" class="siteCardShd">
+                <div class="underline">
+                    <h4>{{ functionMapping[key] }}</h4>
+                </div>
+                <div ng-repeat="y in value" ng-init="e = getEquipmentLastEvent(equipment[y])" id="">
+                    <div class="equipFlatUsageSite">
+                        <h5 class="left"><a ng-href="#!equip/{{y}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                    ng-style='equipStyleColor[e.majorGroup]'></i> {{equipment[y].id}}</a></h5>
+                        <!-- This class just helps the JS find all of class for the charts -->
+                        <div class="equip-flat-usage" id="{{equipment[y].id}}">
+                            <p>Loading, please wait...</p>
+                        </div>
+                    </div>
+                </div>
+                </br>
             </div>
+
 
 
         </div>
 
 
+
+
+
         <!-- ------------------------------------------------------------------------------------- -->
         <div class="siteColumn">
 
-            <h2 class="center underline"><i class="fas fa-truck"></i> Assets</h2>
-            </br>
+            <!-- <h2 class="center underline"><i class="fas fa-truck"></i> Assets</h2>
+            </br> -->
 
             <!-- Mini Pies -->
-            <div class="flex flex-even">
+            <!-- <div class="flex flex-even">
                 <div class="siteTinyChartGroup">
                     <h4 class="center">Trucks</h4>
                     <div id="{{assetHaulID}}" class="siteTinyChart">
@@ -134,26 +159,22 @@
                         <p>Loading, please wait...</p>
                     </div>
                 </div>
-            </div>
-
-
-            <div ng-repeat="(key, value) in site.equipmentByFunction">
-                <div class="underline">
-                    <h4>{{ functionMapping[key] }}</h4>
+            </div> -->
+            <!-- <div class="flex flex-even">
+                <div class="">
+                    <p class="light"> Spatial Compliance</p>
+                    <h2> <i style="color: rgb(0, 255, 21);">&#9650;</i>50%</h2>
                 </div>
-                <div ng-repeat="y in value" ng-init="e = getEquipmentLastEvent(equipment[y])" id="">
-                    <div class="equipFlatUsageSite">
-                        <h5 class="left"><a ng-href="#!equip/{{y}}"><i ng-class='equipStyleIcon[e.majorGroup]'
-                                    ng-style='equipStyleColor[e.majorGroup]'></i> {{equipment[y].id}}</a></h5>
-                        <!-- This class just helps the JS find all of class for the charts -->
-                        <div class="equip-flat-usage" id="{{equipment[y].id}}">
-                            <p>Loading, please wait...</p>
-                        </div>
-                    </div>
+                <div class="">
+                    <p class="light"> Volumetric Compliance</p>
+                    <h2> <i style="color: red;">&#9660;</i>50%</h2>
                 </div>
-                </br>
-            </div>
+            </div> -->
 
+
+            <div class="siteSankey">
+                <drill-down-chart name="Material Movements" chart="sankey"></drill-down-chart>
+            </div>
 
         </div>
 

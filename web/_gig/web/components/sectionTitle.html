@@ -1,40 +1,53 @@
 <!-- Section Title -->
-<div class="flex underline" ng-cloak>
-    <div class="left">
-        <h2 class="left"><i class="{{$ctrl.icon}}"></i> {{$ctrl.title}}</h2>
-    </div>
-    <div class="right">
-        <h3>{{$ctrl.right}}</h3>
-
-        <!-- This works, to access rootscope -->
-        <!-- {{$parent.$parent.foo}} -->
-
-        <!-- This works, to access parent scope -->
-        <!-- {{$parent.foo}} -->
-
-
-        <!-- See JS for switch options -->
-
-        <!-- PRODUCTIVITY -->
-        <div ng-if="$ctrl.page=='PRODUCTIVITY'" class="left">
-            <div class="light"><i class="fas fa-binoculars"></i> Change View</div>
-            <label class="switch"><input ng-init="state= $parent.$parent.productivityViewAsCompact" ng-model="state"
-                    ng-change="$parent.$parent.switchView(state)" type="checkbox" id="togBtn" checked>
-                <div class="slider round" switch-on="Compact" switch-off="Expanded"></div>
-            </label>
+<div class="sectionTitle">
+    <div class="flex underline" ng-cloak>
+        <div class="left">
+            <h2 class="left"><i class="{{$ctrl.icon}}"></i> {{$ctrl.title}}</h2>
         </div>
+        <div class="right">
+            <h3>{{$ctrl.right}}</h3>
+
+            <!-- This works, to access rootscope -->
+            <!-- {{$parent.$parent.foo}} -->
+
+            <!-- This works, to access parent scope -->
+            <!-- {{$parent.foo}} -->
 
 
-        <!-- MONTHLY -->
-        <div ng-if="$ctrl.page=='MONTHLY'" class="left">
-            <div class="light"><i class="fas fa-binoculars"></i> Change View</div>
-            <label class="switch"><input ng-init="state= $parent.$parent.monthlyViewAsBars" ng-model="state"
-                    ng-change="$parent.$parent.switchView(state)" type="checkbox" id="togBtn" checked>
-                <div class="slider round" switch-on="Buckets" switch-off="Dials"></div>
-            </label>
+            <!-- See JS for switch options -->
+
+            <!-- PRODUCTIVITY -->
+            <div ng-if="$ctrl.page=='PRODUCTIVITY'" class="left">
+                <div class="light"><i class="fas fa-binoculars"></i> Change View</div>
+                <label class="switch"><input ng-init="state= $parent.$parent.productivityViewAsCompact" ng-model="state"
+                        ng-change="$parent.$parent.switchView(state)" type="checkbox" id="togBtn" checked>
+                    <div class="slider round" switch-on="Compact" switch-off="Expanded"></div>
+                </label>
+            </div>
+
+
+            <!-- MONTHLY -->
+            <div ng-if="$ctrl.page=='MONTHLY'" class="left">
+                <div class="light"><i class="fas fa-binoculars"></i> Change View</div>
+                <label class="switch"><input ng-init="state= $parent.$parent.monthlyViewAsBars" ng-model="state"
+                        ng-change="$parent.$parent.switchView(state)" type="checkbox" id="togBtn" checked>
+                    <div class="slider round" switch-on="Buckets" switch-off="Dials"></div>
+                </label>
+            </div>
+
+
+
+            <!-- LONGTERM -->
+            <div ng-if="$ctrl.page=='LONGTERM'" class="left">
+                <div class="light"><i class="fas fa-binoculars"></i> Asset</div>
+
+                <select ng-model="$parent.$parent.selectedName" ng-options="x for x in $parent.$parent.names"
+                    ng-change="$parent.$parent.updateAssetSelection()">
+                </select>
+            </div>
+
+
         </div>
-
-
     </div>
 </div>
-</br>
+<!-- </br> -->

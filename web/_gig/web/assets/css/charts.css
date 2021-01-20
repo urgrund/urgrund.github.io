@@ -36,6 +36,7 @@ body {
   /* Defaults to P */
   font-family: 'Poppins', sans-serif;
   font-size: 9pt; 
+  /* font-size: 4pt; */
   font-weight: 300;
   
   height: 100%;
@@ -58,7 +59,7 @@ h1,h2,h3,h4,h5,h6,p
 }
 
 h1{  font-size: 38pt; text-shadow: 4px 4px 3px #00000094;}
-h2{  font-size: 24pt; text-shadow: 3px 2px 3px #00000094;}
+h2{  font-size: 24pt; text-shadow: 3px 2px 3px #00000094; line-height: 2.0rem;}
 h3{  font-size: 18pt;}
 h4{  font-size: 12pt;}
 h5{  font-size: 10pt;}
@@ -169,6 +170,13 @@ input:invalid:required {
 
 
 
+.sectionTitle
+{
+  /* margin-bottom: 0.5rem; */
+   height: 40px; 
+}
+
+
 
 
 
@@ -225,26 +233,28 @@ input:invalid:required {
 
 
 
-.lt_ParetoGrid {
+
+
+.lt_ParetoPair, .lt_LongTermGrid {
   display: grid;
-  grid-column-gap: 1%;
-  grid-row-gap: 0.25%;
-  grid-template-columns: 2fr 1fr 1fr;
-  height: 250px;
-  margin-top: 1%;
-  margin-bottom: 1%;
+  grid-column-gap: 0.4rem;    
+  height: 200px;  
+  margin-bottom: 0.3rem;
 }
 
-.lt_TempGrid{
-  display: grid;
-
-  grid-column-gap: 2%;
-  grid-row-gap: 1%; 
-
-  grid-template-columns: 2fr 1fr 1fr;  
-
-  height: 300px;
+.lt_LongTermGrid
+{
+  grid-template-columns: 4fr 2fr;
 }
+
+.lt_ParetoPair
+{
+  grid-row-gap: 0%;
+  grid-template-columns: 1fr 1fr;  
+  margin-bottom: 0%;
+}
+
+
 
 
 
@@ -291,8 +301,8 @@ input:invalid:required {
 
   display: grid;
 
-  grid-column-gap: 3%;
-  grid-row-gap: 1%;   
+  grid-column-gap: 1%;
+  grid-row-gap: 0%;   
   grid-template-columns: 31% 31% 31%;
   grid-template-rows: 5% 34% 34% 20%;  
 
@@ -313,7 +323,7 @@ input:invalid:required {
   display: grid;
 
   grid-column-gap: 1%;
-  grid-row-gap: 1%; 
+  grid-row-gap: 0.5%; 
   grid-template-columns: 31% 31% 31%;
   grid-template-rows: 5% 31% 24% 24% 10%;  
 
@@ -323,10 +333,18 @@ input:invalid:required {
   width: 100%;
   height: 100%;
 
-  /* Consider fading in between shifts?*/
+  
   background: linear-gradient(rgba(0, 0, 0, 0.644), rgba(0, 0, 0, 0.322), black);
-  opacity: 1;
+  /* opacity: 1; */
+  animation: fadein 1s;
 }
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+
 
 .last2 {
   grid-column-start: 1;

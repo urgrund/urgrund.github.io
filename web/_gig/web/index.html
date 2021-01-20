@@ -15,14 +15,19 @@
     <title>Mine Mage</title>
 
     <meta charset="utf-8">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:200,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <!-- <link href="https://fonts.googleapis.com/css?family=Poppins:200,400&display=swap" rel="stylesheet"> -->
+    <!-- <link href="https://fonts.googleapis.com/css?family=Poppins:200&display=swap" rel="stylesheet"> -->
+    <link rel="stylesheet" href="assets/fonts/poppins.css">
 
-    <link rel="stylesheet"
-        href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.css">
+
 
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
+    <!-- Font Awesome -->
+    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"> -->
+    <link rel="stylesheet" href="vendors/fontawesome/css/all.min.css">
+
+    <!-- MineMage CSS -->
     <link rel="stylesheet" href="assets/css/alerts.css">
     <link rel="stylesheet" href="assets/css/callup.css">
 
@@ -40,13 +45,17 @@
     <link rel="stylesheet" href="assets/css/monthly.css">
 
     <link rel="stylesheet" href="assets/css/modal.css">
+
+    <link rel="stylesheet" href="assets/css/error.css">
 </head>
 
 
 
-<body ng-app="myApp" ng-controller="myCtrl as main" class="{{backGroundClass}}">
+<!-- <body ng-app="myApp" ng-controller="myCtrl as main" class="{{backGroundClass}}"> -->
+
+<body ng-app="myApp" ng-controller="myCtrl as main">
     <div id="site_menu" ng-controller="Menu" ng-include src="'menu.html'"></div>
-    <div id="site_body" ng-view></div>
+    <div id="site_body" class="{{backGroundClass}}" ng-view></div>
 </body>
 
 </html>
@@ -59,21 +68,13 @@
 <!-- ALL THESE SCRIPTS CAN GO BACK IN A FILE WHEN USING PHP -->
 
 <!-- Charting includes  -->
-<script type="text/javascript" src="vendors/echarts/echarts.min.js"></script>
+<script type=" text/javascript" src="vendors/echarts/echarts.min.js">
+        </script>
 
 
 <!-- Angular -->
 <script type="text/javascript" src="vendors/ng/angular.min.js"></script>
 <script type="text/javascript" src="vendors/ng/angular-route.min.js"></script>
-
-<!-- Do we need all this? -->
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script> -->
-
-<!-- Angular Material Library -->
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.js"></script> -->
-
 
 <!-- UI-Grid (NG) -->
 <script type="text/javascript" src="vendors/ui-grid/ui-grid.min.js"></script>
@@ -107,8 +108,6 @@
 <script src="vendors/moment/moment.min.js"></script>
 
 <!-- flatpickr -->
-<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> -->
 <script src="vendors/flatpickr/flatpickr.min.js"></script>
 <link rel="stylesheet" href="vendors/flatpickr/flatpickr.min.css">
 

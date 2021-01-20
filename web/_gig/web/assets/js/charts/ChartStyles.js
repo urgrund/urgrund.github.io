@@ -153,7 +153,7 @@ class ChartStyleContainer {
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
-                colorStops: [{ offset: 0, color: 'rgba(255,140,0,1)' }, { offset: 1, color: 'rgba(255,0,0,1)' }]
+                colorStops: [{ offset: 0, color: 'rgb(255,140,0)' }, { offset: 1, color: 'rgb(255,0,0)' }]
             },
 
             // Planned Maintenance
@@ -175,8 +175,13 @@ class ChartStyleContainer {
                 x: 0, y: 0, x2: 0, y2: 1,
                 colorStops: [{ offset: 0, color: '#71d4ff' }, { offset: 1, color: '#1a85fe' }]
             },
+
             // Operating Delay
-            this.statusColors[0],
+            {
+                type: 'linear',
+                x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [{ offset: 0, color: '#00ff6a' }, { offset: 1, color: '#00b297' }]
+            },
 
             // Primary Operating
             {
@@ -186,16 +191,16 @@ class ChartStyleContainer {
             }
         ]
 
-        this.TUMColorsByCategory = {
-            'Unplanned Breakdown': this.TUMColors[0],
-            'Planned Maintenance': this.TUMColors[1],
+        // this.TUMColorsByCategory = {
+        //     'Unplanned Breakdown': this.TUMColors[0],
+        //     'Planned Maintenance': this.TUMColors[1],
 
-            'Unplanned Standby': this.TUMColors[2],
-            'Operating Standby': this.TUMColors[3],
+        //     'Unplanned Standby': this.TUMColors[2],
+        //     'Operating Standby': this.TUMColors[3],
 
-            'Secondary Operating': this.TUMColors[4],
-            'Primary Operating': this.TUMColors[5],
-        }
+        //     'Secondary Operating': this.TUMColors[4],
+        //     'Primary Operating': this.TUMColors[5],
+        // }
         // ----------------------------------------------------------
 
         this.barMaxWidth = '15';
@@ -211,7 +216,7 @@ class ChartStyleContainer {
 
     toolTipTextStyle() {
         return {
-            color: '#ff012b',
+            //color: '#ff012b',
             fontSize: 12
         };
     }
@@ -261,6 +266,7 @@ class ChartStyleContainer {
 
             showTitle: false,
             feature: {
+                //dataView: {},
                 saveAsImage: {
                     show: true,
                     pixelRatio: 2,
@@ -339,6 +345,20 @@ class ChartStyleContainer {
         };
     }
 
+    lineAreaFromStyle(_style) {
+        var c1 = this.hexToRgb(_style.colorStops[0].color);
+        var c2 = this.hexToRgb(_style.colorStops[1].color);
+        c1 = _style.colorStops[0].color;
+        c2 = _style.colorStops[1].color;
+        console.log(c1);
+
+        return {
+            type: 'linear',
+            x: 0, y: 0, x2: 0, y2: 1,
+            colorStops: [{ offset: 0, color: c1 }, { offset: 1, color: c2 }]
+        };
+    }
+
     timeLineAxisLabel(_rotate) {
         return {
             show: true,
@@ -349,6 +369,13 @@ class ChartStyleContainer {
         }
     }
 
+    hexToRgb(hex) {
+        hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
+            , (m, r, g, b) => '#' + r + r + g + g + b + b)
+            .substring(1).match(/.{2}/g)
+            .map(x => parseInt(x, 16));
+        return hex;
+    }
 }
 
 // The instance

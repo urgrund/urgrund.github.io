@@ -6,8 +6,9 @@
 
 .cup > .mines-center
 {
-  padding:1%;
+  padding:0.5%;
   height: 93%;
+  /* height: 905px; */
   margin: 0%;
 }
 
@@ -29,8 +30,7 @@
   /* grid-template-columns: 2fr 2fr 6fr 4fr 4fr 4fr 2fr; */
   grid-template-columns: 2fr 6fr 4fr 4fr 4fr 2fr;
   grid-column-gap: 3px;  
-  background: none;
-  
+  background: none;  
 }
 
 .cup-grid:hover
