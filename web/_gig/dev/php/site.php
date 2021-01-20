@@ -98,8 +98,11 @@ class Site
 
     public function AddMaterialMovements($_mm)
     {
+        //$c = count($this->shiftData[$_mm[1] - 1]->materialMovements);
+        //Debug::Log($_mm);
         // TODO - get this prepared here rather than front-end
         $this->shiftData[$_mm[1] - 1]->materialMovements[] = $_mm;
+        $this->shiftData[2]->materialMovements[] = $_mm;
     }
 
 

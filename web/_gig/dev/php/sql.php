@@ -51,13 +51,22 @@ class SQLUtils
         /* Establish a Connection to the SQL Server  */
         $credentials = Client::instance()->SQLDBCredentials();
         //$connectionInfo = array("Database" => $dbase, "UID" => $uid, "PWD" => $pwd, "CharacterSet" => "UTF-8", "ConnectionPooling" => "1", "MultipleActiveResultSets" => '0');
+
+        // $credentials = new SQLDBCredentials(
+        //     $_server = "tcp:LAPTOP\SQLDEV,1433",
+        //     $_uid = "test",
+        //     $_pwd = "gw",
+        //     $_db = "tempdb"
+        // );
+
+
         $connectionInfo = array(
             "Database" => $credentials->db,
             "UID" => $credentials->uid,
             "PWD" => $credentials->pwd,
             "CharacterSet" => "UTF-8",
-            "ConnectionPooling" => "1",
-            "MultipleActiveResultSets" => '0'
+            //"ConnectionPooling" => "1",
+            //"MultipleActiveResultSets" => '0'
         );
 
         //$conn = sqlsrv_connect($serverName, $connectionInfo);
@@ -182,6 +191,7 @@ class SQLUtils
         $sqlArrayResult = array();
         do {
             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                //Debug::Log($row);
                 $sqlArrayResult[] = $row;
             }
         } while (sqlsrv_next_result($stmt));

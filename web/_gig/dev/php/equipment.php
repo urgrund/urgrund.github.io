@@ -8,7 +8,7 @@
  */
 class Equipment
 {
-    // Asset ID
+    /** Asset ID */
     var $id;
 
     var $sites = [];
@@ -54,7 +54,7 @@ class Equipment
         $e->mineArea = $_eventDataRow[4];
         $e->duration = $_eventDataRow[5];
         $e->status = $_eventDataRow[6];
-        $e->shift = $_eventDataRow[8] - 1;
+        $e->shift = $_eventDataRow[7] - 1;
 
         $e->tumCategory = Config::TUM($e->status);
         $e->majorGroup = Config::MajorGroup($e->tumCategory);
@@ -325,9 +325,13 @@ class Equipment
         for ($i = 0; $i < count($this->shiftData); $i++) {
             for ($j = 0; $j < count($this->shiftData[$i]->events); $j++) {
                 $event = $this->events[$this->shiftData[$i]->events[$j]];
+                // if ($this->id == 'LH020') {
+                //     Debug::Log($event);
+                // }
                 if ($this->shiftData[$i]->eventFirstOp == null) {
-                    if ($event->majorGroup == "OPERATING")
+                    if ($event->majorGroup == "OPERATING") {
                         $this->shiftData[$i]->eventFirstOp = $j;
+                    }
                 }
             }
         }

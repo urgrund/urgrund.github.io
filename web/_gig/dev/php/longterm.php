@@ -198,11 +198,7 @@ class LongTerm
         );
 
         $numberOfDays = iterator_count($period);
-        //Debug::Log($numberOfDays);
-
-        $sqlTxt = SQLUtils::FileToQuery(SQLUtils::QUERY_DIRECTORY . "Core\\ALL_EquipmentEventListRange.sql");
-        //$sqlTxt = str_replace(SQLUtils::DateVar, "'" . '201811%%' . "'", $sqlTxt);  
-        //$sqlTxt      = "SDDS";
+        $sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . "ALL_EquipmentEventListRange.sql");
         $sqlEquipEventList = SQLUtils::QueryToText($sqlTxt, "Event List Range");
 
         if ($sqlEquipEventList == NULL)

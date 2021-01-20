@@ -14,12 +14,13 @@ if (Debug::enabled() == true) {
     //Debug::Log($c->TUMKeys);
     //Debug::Log(Config::CreateDistinctTUMArray());
 
+    //CreateSiteData::Run(new DateTime('20181010'));
+    CreateSiteData::Run(new DateTime('20201201'));
 
-    CreateSiteData::Run(new DateTime('20181231'));
-    //CreateSiteData::Run(new DateTime('20201001'));
-
-    //Debug::Log(Client::Current()->SQLDBCredentials());
-
+    //$sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . 'ALL_MetricPerHour.sql');
+    //$sqlTxt = str_replace(SQLUtils::DateVar, "'" . '20201201' . "'", $sqlTxt);
+    //$sqlMetricPerHour = SQLUtils::QueryToText($sqlTxt, "All Metric");
+    return;
 }
 
 
@@ -155,10 +156,12 @@ final class CreateSiteData
 
         // Set the asset ID as the index
         $new_array = [];
-        foreach ($sqlMineEquipmentList as $value)
+        foreach ($sqlMineEquipmentList as $value) {
+            //Debug::Log($value);
             $new_array[$value[0]] = $value;
+        }
         $sqlMineEquipmentList = $new_array;
-        //Debug::Log($new_array);
+        //Debug::Log($sqlMineEquipmentList);
         // ------------------------------------------------------------------------------------------
 
 
@@ -260,11 +263,6 @@ final class CreateSiteData
 
             //if ($eID == 'TH057')
             $tempEquip[$eID]->AddEvent($sqlEquipEventList[$i]);
-
-            // Needs to be fixed in SQL, MachineCheck is getting 
-            // assigned as Operating Major when it should be idle
-            //if ($sqlEquipEventList[$i][6] == "Machine Check")
-            //  Debug::Log($sqlEquipEventList[$i][6] . "   " . $sqlEquipEventList[$i][7]);
         }
 
         // Turns the sites this equip belongs to from assoc->numeric
@@ -316,18 +314,20 @@ final class CreateSiteData
 
 
         Debug::StartProfile("PHP: Material Movements");
-        for ($i = 1; $i < count($sqlMaterialMovements); $i++) {
-            $siteName = Config::Sites($sqlMaterialMovements[$i][0]);
-            if ($siteName != null || $siteName != '') {
-                $allSites[$siteName]->AddMaterialMovements($sqlMaterialMovements[$i]);
-            }
-        }
+        // for ($i = 1; $i < count($sqlMaterialMovements); $i++) {
+        //     $siteName = Config::Sites($sqlMaterialMovements[$i][0]);
+        //     if ($siteName != null || $siteName != '') {
+        //         $allSites[$siteName]->AddMaterialMovements($sqlMaterialMovements[$i]);
+        //     }
+        // }
         Debug::EndProfile();
     }
     // ------------------------------------------------------------------
 
 
 
+    // Annoying, just to get intellisense
+    private static Equipment $e;
 
     // ------------------------------------------------------------------
     private static function CreateDataForAllEquip()
@@ -336,12 +336,19 @@ final class CreateSiteData
 
         Debug::StartProfile("PHP: All Equipment Data");
         foreach ($allEquipment as $key => $equip) {
-            //if ($key == 'TH097') {
-            //Debug::Log("Generating " . $key);
-            $equip->GenerateMPH();
-            $equip->GenerateUofAFromEvents();
-            $equip->GenerateEventBreakDown();
-            $equip->GenerateShiftCallUps();
+            self::$e = $equip;
+            self::$e->GenerateMPH();
+            self::$e->GenerateUofAFromEvents();
+            self::$e->GenerateEventBreakDown();
+            self::$e->GenerateShiftCallUps();
+
+            //if ($key == 'TH097')
+            //  Debug::Log("Generating " . $key);
+
+            //$equip->GenerateMPH();
+            //$equip->GenerateUofAFromEvents();
+            //$equip->GenerateEventBreakDown();
+            //$equip->GenerateShiftCallUps();
             //}
         }
 
@@ -356,9 +363,10 @@ final class CreateSiteData
         $tmp = array();
         global $sqlMineEquipmentList;
         foreach (array_keys($sqlMineEquipmentList) as $id) {
+            //Debug::Log($id);
             $tmp[$sqlMineEquipmentList[$id][1]] = $sqlMineEquipmentList[$id][2];
         }
-        return $tmp;
         //Debug::Log($sqlMineEquipmentList);
+        return $tmp;
     }
 }
