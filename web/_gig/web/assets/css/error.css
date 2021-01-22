@@ -5,3 +5,12 @@
     justify-content: center;
     align-items: center;
 }
+
+table
+{
+    color:black;
+    font-weight: 800;
+}
+th{
+    font-weight: 800;
+}
