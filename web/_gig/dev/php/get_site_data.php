@@ -32,7 +32,7 @@ if (is_object($request)) {
 } else {
     // Debug path    
     include_once('create_site_data.php');
-    GetSiteData::GetDataForDate('20201010', true);
+    GetSiteData::GetDataForDate('20181010', true);
     //GetSiteData::GetDataForLongTerm();
 
     //Debug::Log(Client::CachePath());

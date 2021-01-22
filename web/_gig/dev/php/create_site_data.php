@@ -14,8 +14,8 @@ if (Debug::enabled() == true) {
     //Debug::Log($c->TUMKeys);
     //Debug::Log(Config::CreateDistinctTUMArray());
 
-    //CreateSiteData::Run(new DateTime('20181010'));
-    CreateSiteData::Run(new DateTime('20201201'));
+    CreateSiteData::Run(new DateTime('20181231'));
+    //CreateSiteData::Run(new DateTime('20201201'));
 
     //$sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . 'ALL_MetricPerHour.sql');
     //$sqlTxt = str_replace(SQLUtils::DateVar, "'" . '20201201' . "'", $sqlTxt);
@@ -34,22 +34,21 @@ final class CreateSiteData
 {
     const INDEX_EQUIP = 2;
 
-    // Date used for generation 
     private static $date;
+    private static DateTime $dateTimeForData;
+    /** The Date being used for this run of data generation */
+    public static function DateForData(): DateTime
+    {
+        return self::$dateTimeForData;
+    }
 
     public static function Run(DateTime $_date)
     {
         Debug::Log("Using date - " . $_date->format('Ymd'));
+        self::$dateTimeForData = $_date;
         self::$date = $_date->format('Ymd');
         CreateSiteData::Create();
     }
-
-    // public static function RunSimpleDate($_date)
-    // {
-    //     //self::$date = $_date;
-    //     self::$date = '201812%%';
-    //     CreateSiteData::Create();
-    // }
 
 
     private static function Create()
@@ -144,7 +143,7 @@ final class CreateSiteData
         $sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . "ALL_EquipmentEventList.sql");
         $sqlTxt = str_replace(SQLUtils::DateVar, "'" . self::$date . "'", $sqlTxt);
         $sqlEquipEventList = SQLUtils::QueryToText($sqlTxt, "Event List");
-        //Debug::Log($sqlEquipEventList[0]);
+        //Debug::Log($sqlEquipEventList);
         // ------------------------------------------------------------------------------------------
 
 
@@ -292,11 +291,16 @@ final class CreateSiteData
         // Production Tonnes for site
         Debug::StartProfile("PHP: Per-mine Data");
 
+        Debug::Log("Need Metric filter here to know Production");
+
         // Production tonnes for each site
         for ($i = 1; $i < count($sqlMetricPerHour); $i++) {
             $activity = $sqlMetricPerHour[$i][3];
             $siteName = Config::Sites($sqlMetricPerHour[$i][1]);
             if ($siteName != null || $siteName != '') {
+
+                // NEED CONFIG FILTER HERE TO DETERMINE WHAT IS 
+
                 // Only interested if the activity was Production 
                 // if (preg_match("/production/i", $activity)) {
 
@@ -314,19 +318,28 @@ final class CreateSiteData
 
 
         Debug::StartProfile("PHP: Material Movements");
-        // for ($i = 1; $i < count($sqlMaterialMovements); $i++) {
-        //     $siteName = Config::Sites($sqlMaterialMovements[$i][0]);
-        //     if ($siteName != null || $siteName != '') {
-        //         $allSites[$siteName]->AddMaterialMovements($sqlMaterialMovements[$i]);
-        //     }
-        // }
+        for ($i = 1; $i < count($sqlMaterialMovements); $i++) {
+            $siteName = Config::Sites($sqlMaterialMovements[$i][0]);
+            // if ($siteName == null) {
+            //     Debug::Log($siteName . " |  ");
+            //     Debug::LogI($sqlMaterialMovements[$i]);
+            // }
+            if ($siteName !== null || $siteName != '') {
+                $_mm = $sqlMaterialMovements[$i];
+                if ($_mm[1] == NULL)
+                    Debug::Log($_mm);
+                //$allSites[$siteName]->AddMaterialMovements($sqlMaterialMovements[$i]);
+                $allSites[$siteName]->shiftData[$_mm[1] - 1]->materialMovements[] = $_mm;
+                $allSites[$siteName]->shiftData[2]->materialMovements[] = $_mm;
+            }
+        }
         Debug::EndProfile();
     }
     // ------------------------------------------------------------------
 
 
 
-    // Annoying, just to get intellisense
+    // Annoying, just to get intellisense to work
     private static Equipment $e;
 
     // ------------------------------------------------------------------
@@ -337,10 +350,16 @@ final class CreateSiteData
         Debug::StartProfile("PHP: All Equipment Data");
         foreach ($allEquipment as $key => $equip) {
             self::$e = $equip;
+
+            // DEBUG
+            //if ($key != 'BP019')
+            //  continue;
+
             self::$e->GenerateMPH();
             self::$e->GenerateUofAFromEvents();
             self::$e->GenerateEventBreakDown();
             self::$e->GenerateShiftCallUps();
+
 
             //if ($key == 'TH097')
             //  Debug::Log("Generating " . $key);

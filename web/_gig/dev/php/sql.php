@@ -52,21 +52,13 @@ class SQLUtils
         $credentials = Client::instance()->SQLDBCredentials();
         //$connectionInfo = array("Database" => $dbase, "UID" => $uid, "PWD" => $pwd, "CharacterSet" => "UTF-8", "ConnectionPooling" => "1", "MultipleActiveResultSets" => '0');
 
-        // $credentials = new SQLDBCredentials(
-        //     $_server = "tcp:LAPTOP\SQLDEV,1433",
-        //     $_uid = "test",
-        //     $_pwd = "gw",
-        //     $_db = "tempdb"
-        // );
-
-
         $connectionInfo = array(
             "Database" => $credentials->db,
             "UID" => $credentials->uid,
             "PWD" => $credentials->pwd,
             "CharacterSet" => "UTF-8",
-            //"ConnectionPooling" => "1",
-            //"MultipleActiveResultSets" => '0'
+            "ConnectionPooling" => "1",
+            "MultipleActiveResultSets" => '0'
         );
 
         //$conn = sqlsrv_connect($serverName, $connectionInfo);

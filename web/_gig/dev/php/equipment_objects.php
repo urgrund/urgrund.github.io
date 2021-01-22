@@ -49,27 +49,27 @@ class EquipmentEvent
 
 class EquipmentUofAHour
 {
-    var $dateTime;
+    //var $dateTime;
     var $availability = 0;
     var $utilisation = 0;
     var $totalTime = 0;
     var $uofa = 0;
 
-    var $down = 0;
-    var $idle = 0;
-    var $operating = 0;
+    //var $down = 0;
+    //var $idle = 0;
+    //var $operating = 0;
 
     // Set the DateTime to the current
     // data date and offset by 6 (the data phase is 6am -> 6am)
-    function __construct($_timeIndex, $_shiftIndex)
-    {
-        global $date;
-        $this->dateTime = new DateTime($date);
-        if ($_shiftIndex == 0)
-            $this->dateTime->setTime($_timeIndex + 6, 00, 00, 0);
-        else
-            $this->dateTime->setTime($_timeIndex + 12, 00, 00, 0);
-    }
+    //function __construct($_timeIndex, $_shiftIndex)
+    //{
+    //  global $date;
+    // $this->dateTime = new DateTime($date);
+    // if ($_shiftIndex == 0)
+    //     $this->dateTime->setTime($_timeIndex + 6, 00, 00, 0);
+    // else
+    //     $this->dateTime->setTime($_timeIndex + 12, 00, 00, 0);
+    //}
 }
 
 

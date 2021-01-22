@@ -39,14 +39,20 @@ class Equipment
 
     function AddEvent($_eventDataRow)
     {
-        global $date;
+        //global $date;
 
         $e = new EquipmentEvent();
 
-        // Set int based if the day is 1 ahead
-        $dataDate = new DateTime($date);
-        $diff = date_diff($dataDate, $_eventDataRow[2]);
+        // See if this event takes place a day ahead (after midnight)
+        $dataDate = CreateSiteData::DateForData();
+        $eventDate = new DateTime($_eventDataRow[2]->format('Ymd'));
+        $diff = date_diff($dataDate, $eventDate);
         $e->dayAhead = $diff->d;
+
+        //Debug::Log($e->dayAhead . " | ");        
+        //Debug::LogI($dataDate->format('Ymd') . "   ");
+        //Debug::LogI($eventDate->format('Ymd'));
+
 
         $e->operator = $_eventDataRow[1];
         $e->eventTime = $_eventDataRow[2];
@@ -101,7 +107,8 @@ class Equipment
             // Prepare 12 UofA hours for the shift
             $hourDateObjs = [];
             for ($i = 0; $i < 12; $i++) {
-                $hourDateObjs[$i] = new EquipmentUofAHour($i, $q);
+                //$hourDateObjs[$i] = new EquipmentUofAHour($i, $q);
+                $hourDateObjs[$i] = new EquipmentUofAHour();
             }
 
             // Easier ref
@@ -175,20 +182,20 @@ class Equipment
 
                     // Time for use in UofA
                     // TODO - I don't think this is used anymore?!
-                    if ($event->majorGroup != "DOWN") {
+                    if ($event->majorGroup != Config::MajorGroupDown) {
                         $hourDateObj->availability += $secondsSpentInHour;
-                        if ($event->majorGroup != "IDLE")
+                        if ($event->majorGroup != Config::MajorGroupIdle)
                             $hourDateObj->utilisation +=  $secondsSpentInHour;
                     }
 
 
                     // Exclusive time of Down/Idle/Operating
-                    if ($event->majorGroup == "DOWN") {
-                        $hourDateObj->down += $secondsSpentInHour;
-                    } else if ($event->majorGroup == "IDLE") {
-                        $hourDateObj->idle += $secondsSpentInHour;
-                    } else
-                        $hourDateObj->operating += $secondsSpentInHour;
+                    // if ($event->majorGroup == Config::MajorGroupDown) {
+                    //     $hourDateObj->down += $secondsSpentInHour;
+                    // } else if ($event->majorGroup == Config::MajorGroupIdle) {
+                    //     $hourDateObj->idle += $secondsSpentInHour;
+                    // } else
+                    //     $hourDateObj->operating += $secondsSpentInHour;
                 }
             }
 

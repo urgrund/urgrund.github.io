@@ -18,6 +18,11 @@ class Config
 {
     public static $instance = null;
 
+    // Var representation of the major group
+    const MajorGroupDown = "Down";
+    const MajorGroupIdle = "Idle";
+    const MajorGroupOperating = "Operating";
+
     //private static $localDir = "siteconfig\\";
     private static $filePrefix = 'Config_';
 

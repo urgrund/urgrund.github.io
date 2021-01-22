@@ -1,6 +1,6 @@
 <?php
 
-include_once('..\header.php');
+include_once('..\\header.php');
 
 
 
@@ -49,10 +49,10 @@ else {
     //include_once('..\setDebugOff.php');    
     //Debug::Log(Monthly::GetActuals('2018', '11'));
 
-    //Monthly::GetActualsArray('2018', '10');
+    Monthly::GetActualsArray('2018', '10');
 
     $p = Monthly::MapActualsToPlan('2018', '10');
-    Debug::Log($p);
+    //Debug::Log($p);
     //Monthly::MetaData($p);
     //echo 'poo';
 }
@@ -82,6 +82,11 @@ class Monthly
     private static $_fileExt = ".csv";
 
 
+    private const INDEX_LOC = 3;
+    private const INDEX_SEGMENT = 2;
+    private const INDEX_VALUE = 5;
+
+
     public static function GetActualsArray($_year, $_month)
     {
         // THIS IS GOING TO SPLIT OUT THE MONTLY
@@ -98,10 +103,6 @@ class Monthly
                 $arr[$siteName][$actuals[$i][0]] = 0;
 
             $arr[$siteName][$actuals[$i][0]] += $actuals[$i][4];
-            //$arr[$siteName][0][] = $actuals[$i][0];
-            //$arr[$siteName][1][] = $actuals[$i][4];
-            //$arr[$siteName][2][] = 1; //($i > 1)?
-
         }
         //Debug::Log($actuals[0]);
         Debug::Log($arr);
@@ -154,7 +155,9 @@ class Monthly
 
     public static function GetActuals($_year, $_month)
     {
-        $sqlTxt = SQLUtils::FileToQuery('..\\' . SQLUtils::QUERY_DIRECTORY . 'Core\ALL_MonthlyProductionData.sql');
+        //$file = 'ALL_MonthlyProductionData.sql';
+        $file = 'ALL_MonthlyProductionDataPlanName.sql';
+        $sqlTxt = SQLUtils::FileToQuery(Utils::GetBackEndRoot() . Client::SQLPath() . $file);
         $sqlTxt = str_replace('@YEAR', "'" . $_year . "'", $sqlTxt);
         $sqlTxt = str_replace('@MONTH', "'" . $_month . "'", $sqlTxt);
 
@@ -330,6 +333,9 @@ class Monthly
 
 
 
+
+// This is an interesting way to find nearest word 
+// match,  could be used to hint at incorrect plan locations
 class Temp
 {
     function Foo()
