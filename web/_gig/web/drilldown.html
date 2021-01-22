@@ -1,6 +1,9 @@
+<div style="height: 400px;">
+    <drill-down-chart name="Poo" chart="g"></drill-down-chart>
+</div>
+
 <div class="equipGrid2" ng-cloak ng-if="equip != undefined">
     <div class="equipHeader first underline">
-        <!-- <div class="img_{{equip.function}}"> -->
         <div>
             <h2 class="shadow">
                 <i ng-class='equipStyleIcon[lastEvent.majorGroup]' ng-style='equipStyleColor[lastEvent.majorGroup]'>
@@ -14,6 +17,10 @@
             </drill-down-header>
         </div>
     </div>
+
+
+
+    <drill-down-chart name="Event Timeline" chart="timeline" class="firstTL"></drill-down-chart>
 
     <drill-down-chart name="Metrics Per Hour" chart="mph"></drill-down-chart>
     <!-- <drill-down-chart name="Time Usage Split" chart="tus"></drill-down-chart> -->
@@ -29,9 +36,9 @@
     <drill-down-chart name="{{config.TUMIndex[3]}}" chart="p3"></drill-down-chart>
     <drill-down-chart name="{{config.TUMIndex[5]}}" chart="p5"></drill-down-chart>
 
-    <drill-down-chart name="Event Timeline" chart="timeline" class="last2"></drill-down-chart>
 
 </div>
+
 
 
 <!-- The NG Route wasn't able to resolve the equipment so show something for the user-->
@@ -49,8 +56,8 @@
                 <b>{{siteDataDate.SHORT}}</b>
                 The equipment may not have been active during this time and not have logged any entries to the
                 database. Causes of this error could include trying to access a link to this equipment whilst the site
-                is set to a date or shift that doesn't contain it. </br></br>
-                If it was expected that data should be available, please Report an Issue.
+                is set to a date or shift that doesn't contain it. </br>
+
             </h4>
         </div>
     </div>

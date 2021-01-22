@@ -10,7 +10,7 @@
             <!-- Header with hours timeline -->
             <div class="equipFlatUsage h40px">
                 <div class="flex flex-column-rev underline">
-                    <h4 class="light">{{ functionMapping[func] }}</h4>
+                    <h5 class="light">{{ functionMapping[func] }}</h5>
                 </div>
                 <div id="equip-timeline-time-{{func}}"></div>
             </div>
@@ -23,8 +23,9 @@
                                 ng-style='equipStyleColor[e.majorGroup]'></i> {{key}}</a></h5>
                 </div>
 
+
                 <div class="equip-flat-usage" id="{{key}}">
-                    <p>Loading, please wait...</p>
+                    <chart-loading></chart-loading>
                 </div>
             </div>
             <!-- </br> -->

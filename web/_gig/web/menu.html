@@ -58,14 +58,17 @@
 
 
                     <h3>Productivity</h3>
-                    <a ng-href="#!productivity/D">Jumbo Productivity</a>
+                    <!-- <a ng-href="#!productivity/D">Jumbo Productivity</a>
                     <a ng-href="#!productivity/P">Drill Productivity</a>
                     <a ng-href="#!productivity/HAULING">Truck Productivity</a>
-                    <a ng-href="#!productivity/LOADING">Bogger Productivity</a>
-                    <a ng-href="#!productivity/ALL">All Equipment Productivity</a>
+                    <a ng-href="#!productivity/LOADING">Bogger Productivity</a> -->
 
-
-                    <!-- <a ng-repeat="x in cachedData" ng-href="#!productivity/ALL">ASDASDS</a> -->
+                    <div ng-repeat="(key, value) in meta.EquipmentFunctionMap">
+                        <a ng-href="#!productivity/{{key}}">
+                            {{value}}
+                        </a>
+                    </div>
+                    <a ng-href="#!productivity/ALL">All Equipment</a>
 
                 </div>
             </div>

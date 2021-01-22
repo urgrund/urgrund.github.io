@@ -2,7 +2,6 @@
     <!-- <div class="flex flex-center">
         <img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg">
     </div> -->
-
     <div class="underline flex">
         <!-- <div class="flex flex-center">
             <img class="sitePic" ng-src="assets/img/site_{{siteIndex}}.jpg">
@@ -110,7 +109,7 @@
 
             <div ng-repeat="(key, value) in site.equipmentByFunction" class="siteCardShd">
                 <div class="underline">
-                    <h4>{{ functionMapping[key] }}</h4>
+                    <h5>{{ functionMapping[key] }}</h5>
                 </div>
                 <div ng-repeat="y in value" ng-init="e = getEquipmentLastEvent(equipment[y])" id="">
                     <div class="equipFlatUsageSite">
@@ -118,7 +117,7 @@
                                     ng-style='equipStyleColor[e.majorGroup]'></i> {{equipment[y].id}}</a></h5>
                         <!-- This class just helps the JS find all of class for the charts -->
                         <div class="equip-flat-usage" id="{{equipment[y].id}}">
-                            <p>Loading, please wait...</p>
+                            <chart-loading></chart-loading>
                         </div>
                     </div>
                 </div>
@@ -139,27 +138,6 @@
             <!-- <h2 class="center underline"><i class="fas fa-truck"></i> Assets</h2>
             </br> -->
 
-            <!-- Mini Pies -->
-            <!-- <div class="flex flex-even">
-                <div class="siteTinyChartGroup">
-                    <h4 class="center">Trucks</h4>
-                    <div id="{{assetHaulID}}" class="siteTinyChart">
-                        <p>Loading, please wait...</p>
-                    </div>
-                </div>
-                <div class="siteTinyChartGroup">
-                    <h4 class="center">Boggers</h4>
-                    <div id="{{assetLoadID}}" class="siteTinyChart">
-                        <p>Loading, please wait...</p>
-                    </div>
-                </div>
-                <div class="siteTinyChartGroup">
-                    <h4 class="center">Drills</h4>
-                    <div id="{{assetDrillID}}" class="siteTinyChart">
-                        <p>Loading, please wait...</p>
-                    </div>
-                </div>
-            </div> -->
             <!-- <div class="flex flex-even">
                 <div class="">
                     <p class="light"> Spatial Compliance</p>
