@@ -60,12 +60,11 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
             Charts.CreateWaterfall("tumwf", $scope.equip.shiftData[ShiftIndex()].tumTimings)
             uofa = Charts.CreateUofA("uofa", $scope.equip);
 
+            // Create Paretos for each TUM category
             for (var i = 0; i < ServerInfo.config.TUMIndex.length; i++) {
-                //console.log(ServerInfo.config.TUMIndex[i]);
                 Charts.CreatePareto("p" + i, $scope.equip.shiftData[ShiftIndex()].tumTimings[ServerInfo.config.TUMIndex[i]]);
             }
 
-            //console.log(ServerInfo.config.TUMIndex[0]);
 
             // Charts.CreatePareto("p0", $scope.equip.shiftData[ShiftIndex()].tumTimings['Unplanned Breakdown']);
             // Charts.CreatePareto("p1", $scope.equip.shiftData[ShiftIndex()].tumTimings['Unplanned Standby']);

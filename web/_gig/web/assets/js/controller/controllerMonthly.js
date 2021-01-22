@@ -15,7 +15,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
     $scope.currentPlanYear = '2018';
     $scope.currentPlanMonth = '10';
 
-    $scope.configFiles;
+    //$scope.configFiles;
     $scope.fileContent = [];
 
     $scope.mappedPlan = [];
@@ -35,11 +35,6 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
             $scope.createMonthlyComplianceBars();
         else
             $scope.createMonthlyComplianceGauges();
-    }
-
-
-    $scope.checkSiteValidForLoop = function (siteName, mapName) {
-        return $scope.configFiles.configSites[siteName] == mapName;
     }
 
 
@@ -84,7 +79,8 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
     $scope.createUniqueSiteNames = function () {
         // Get unique site names based on config mapping
-        $scope.distinctNames = [...new Set($scope.fileContent.map(x => $scope.configFiles.configSites[x[0]]))];
+        //$scope.distinctNames = [...new Set($scope.fileContent.map(x => $scope.configFiles.configSites[x[0]]))];
+        $scope.distinctNames = [...new Set($scope.fileContent.map(x => ServerInfo.config.Sites[x[0]]))];
         $scope.distinctNames.shift();
     }
 
@@ -186,20 +182,20 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
 
 
-    $scope.getConfigs = function () {
-        var _url = '../dev/php/admin.php';
-        var _data = { 'func': 4 };
-        var request = $http({
-            method: 'POST',
-            url: _url,
-            data: _data,
-        })
-        request.then(function (response) {
-            $scope.configFiles = response.data;
-            console.log($scope.configFiles);
-        }, function (error) {
-        });
-    }
+    // $scope.getConfigs = function () {
+    //     var _url = '../dev/php/admin.php';
+    //     var _data = { 'func': 4 };
+    //     var request = $http({
+    //         method: 'POST',
+    //         url: _url,
+    //         data: _data,
+    //     })
+    //     request.then(function (response) {
+    //         $scope.configFiles = response.data;
+    //         console.log($scope.configFiles);
+    //     }, function (error) {
+    //     });
+    // }
 
 
 
@@ -217,8 +213,14 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
             data: _data,
         })
         request.then(function (response) {
-            console.log(response);
+
+            if ($rootScope.checkResponseError(response))
+                return;
+
             $scope.mappedPlan = response.data;
+
+            console.log("[Mapped Actuals to Plan]");
+            console.log($scope.mappedPlan);
 
             // Create the data needed for charts
             // and force a switch view to create charts
@@ -274,7 +276,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
     // the plan or to view the chart
     // ----------------------------------------------------
 
-    $scope.getConfigs();
+    //$scope.getConfigs();
 
 
     $scope.$watch('$viewContentLoaded', function () {
@@ -283,9 +285,6 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
             // Entry point for the chart view
             if ($routeParams.func == 0) {
                 $scope.site = $rootScope.siteData[$scope.siteIndex];
-                // $interval(function () {
-                //     $scope.getMappedActualsToPlan();
-                // }, 3000);
                 $scope.getMappedActualsToPlan();
             }
 
@@ -293,7 +292,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
             if ($routeParams.func == 1) {
 
             }
-        }, 1);
+        }, 10);
     });
     // ----------------------------------------------------
     // ----------------------------------------------------

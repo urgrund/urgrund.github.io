@@ -1142,7 +1142,7 @@ class Charts {
                 var tumName = ServerInfo.config.TUM[key];
                 var tumIndex = ServerInfo.config.TUMKeys[tumName];
 
-                axisNames.push(niceName);
+                //axisNames.push(niceName);
                 barData.push(
                     {
                         name: niceName,
@@ -1165,6 +1165,8 @@ class Charts {
         // Sort it
         barData.sort((a, b) => b.value - a.value);
 
+
+
         // Sub text under the chart title
         // This will show the real totals even if limited
         var durationAsHours = (_data.duration / 3600).toFixed(2);
@@ -1184,17 +1186,19 @@ class Charts {
         // This is good for long-term stuff
         if (barData.length > _limit) {
             barData = barData.slice(0, _limit);
-            axisNames = axisNames.slice(0, _limit);
+            //axisNames = axisNames.slice(0, _limit);
         }
 
-
-        // Build Pareto line
+        // Now with the potentially shortened data
+        // Build Pareto line and add Axis names
         var paretoLine = [];
         for (var i = 0; i < barData.length; i++) {
             if (i != 0)
                 paretoLine[i] = (paretoLine[i - 1] + barData[i].value);
             else
                 paretoLine[i] = (barData[i].value);
+
+            axisNames.push(barData[i].name);
         }
 
         //console.log(paretoLine);
@@ -1301,6 +1305,7 @@ class Charts {
             sortedEvents.push(_data.events[_d.events[i]]);
         }
 
+        // And then sort them...  
         sortedEvents = sortedEvents.sort(function (a, b) {
             var c = new Date(a.eventTime.date);
             var d = new Date(b.eventTime.date);
@@ -1308,14 +1313,13 @@ class Charts {
         });
 
 
+        var markerData = [];
+
+
+
 
         for (var i = 0; i < sortedEvents.length; i++) {
-            //var event = _data.events[_d.events[i]];
             var event = sortedEvents[i];
-
-            //console.log(event.eventTime.date);
-            //console.log(event.eventTime.date + " | " + event.duration);
-
             totalDuration += event.duration;
             series.push(
                 {
@@ -1326,6 +1330,18 @@ class Charts {
                         color: ChartStyles.TUMColors[ServerInfo.config.TUMKeys[event.tumCategory]],
                         opacity: 0.85
                     },
+                    z: -1,
+                    zlevel: -1
+                }
+            );
+
+            markerData.push(
+                {
+                    name: '',
+                    value: '',//d.percentOfTargetToDate,
+                    xAxis: totalDuration,
+                    yAxis: i,
+                    itemStyle: { color: 'white' }
                 }
             );
         }
@@ -1344,7 +1360,7 @@ class Charts {
                 formatter: function (params) {
                     var event = sortedEvents[params.componentIndex];
                     var text = "";
-                    var startTime = new Date(event.eventTime.date);
+                    var startTime = moment(event.eventTime.date).format('h:mm:ss a');//new Date(event.eventTime.date);
                     text += ChartStyles.toolTipTextTitle(startTime);
                     text += ChartStyles.toolTipTextEntry(SecondsToHoursAndMinutes(event.duration));
                     text += ChartStyles.toolTipTextEntry(event.tumCategory);
@@ -1359,16 +1375,47 @@ class Charts {
                 confine: true
             },
             grid: {
-                top: _includeTimeLine ? '1%' : '0%',
+                top: _includeTimeLine ? '2%' : '0%',
                 bottom: _includeTimeLine ? '2%' : '0%',
                 left: _includeTimeLine ? '2%' : '1%',
                 right: _includeTimeLine ? '2%' : '1%'
             },
-            xAxis: {
+            xAxis: [
+                {
+                    show: false,
                 type: 'value',
-                max: totalDuration
+                    max: totalDuration,
             },
+                {
+                    show: _includeTimeLine,
+                    min: 0,
+                    max: timeLabelsShiftExtra[ShiftIndex()].length - 1,
+                    position: 'bottom',
+                    //offset: -5,
+                    data: timeLabelsShiftExtra[ShiftIndex()],
+                    boundaryGap: false,
+                    minInterval: 0,
+                    maxInterval: 0,
+                    axisLabel: {
+                        padding: [-15, 0, -20, 0],
+                        inside: true,
+                        rotate: 35,
+                        formatter: '{value}',
+                        fontFamily: 'Poppins',
+                        fontWeight: '400',
+                        fontSize: 11,
+                        textBorderColor: 'black',
+                        textBorderWidth: 1,
+                        textShadowColor: 'rgba(0,0,0,0.5)',
+                        textShadowBlur: 10,
+                        textShadowOffsetX: 4,
+                        textShadowOffsetY: 4,
+                    },
+                    axisTick: { inside: true }
+                }
+            ],
             yAxis: {
+                xAxisIndex: 0,
                 type: 'category',
             },
             series: series
@@ -1386,7 +1433,7 @@ class Charts {
 
 
 
-
+    /*
     static CreateTimeLineFlat_OLD(_elementID, _data, _includeTimeLine = false) {
 
         // Create an eCharts instance 
@@ -1582,7 +1629,7 @@ class Charts {
         SetOptionOnChart(option, myChart);
         return myChart;
     }
-
+    */
 
 
 
@@ -1595,6 +1642,8 @@ class Charts {
         var myChart = InitChartFromElementID(_elementID);
         if (myChart == undefined) return;
 
+
+
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
@@ -1602,7 +1651,7 @@ class Charts {
                 top: '0%',
                 bottom: '0%',
                 left: '1%',
-                right: '1%'
+                right: '5%'
             },
             xAxis:
             {
@@ -1615,7 +1664,7 @@ class Charts {
                 minInterval: 0,
                 maxInterval: 0,
                 axisLabel: {
-                    padding: [30, 40, 50, 6],
+                    padding: [-15, 0, -20, 0],
                     inside: true,
                     rotate: 45,
                     formatter: '{value}',

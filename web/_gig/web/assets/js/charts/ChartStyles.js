@@ -262,7 +262,7 @@ class ChartStyleContainer {
     toolBox(_height, _name) {
         return {
             y: 'bottom',
-            show: true,
+            show: false,
 
             showTitle: false,
             feature: {

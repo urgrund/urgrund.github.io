@@ -316,6 +316,8 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             data: _data,
         })
         request.then(function (response) {
+            if ($rootScope.checkResponseError(response))
+                return;
             //console.log("[Available Dates]");
             //console.log(response.data);
             ServerInfo.availableDates = response.data;
@@ -673,22 +675,6 @@ app.component("drillDownChart", {
 
 
 
-/// ----------------------------------------
-/// Alert Box
-/// ----------------------------------------
-app.component("alertBox", {
-    templateUrl: 'components/alertBox.html',
-    bindings: {
-        alert: '<'
-    },
-    controller: function ($rootScope) {
-        this.$onInit = function () {
-            this.equipment = $rootScope.siteData[this.alert.siteIndex].equipment[this.alert.equipIndex];
-            //console.log(this.equipment);
-        };
-    }
-});
-/// ----------------------------------------
 
 
 
@@ -714,19 +700,6 @@ app.component("reportItem", {
 
 
 
-
-/// ----------------------------------------
-/// Shift Text
-/// ----------------------------------------
-app.component("shiftText", {
-    templateUrl: 'components/shiftText.html',
-    controller: function ($rootScope) {
-        console.log("SALKDJALSKDJASKJDKASJDJLKASDLJK222222");
-        this.shift = $rootScope.shift;
-        this.shiftTitle = $rootScope.shiftTitle;
-    }
-});
-/// ----------------------------------------
 
 
 

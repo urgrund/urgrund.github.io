@@ -45,13 +45,14 @@ class ChartsMines {
         var pph = ArrayOfNumbers(0, timeLength, 0);     // Production
         var cph = ArrayOfNumbers(0, timeLength, 0);     // Cumulative
 
+        // TODO - NEED A CONFIG TO EXPLAIN WHAT PRODUCTION TONNES ARE
         for (var i = 0; i < _data.length; i++) {
-            if (_data[i].metric == "TONNE") {
-                for (var j = 0; j < _data[i].mph.length; j++) {
-                    cph[j] += _data[i].cph[j];
-                    tph[j] += _data[i].mph[j];
-                }
+            //if (_data[i].metric == "TONNE") {
+            for (var j = 0; j < _data[i].mph.length; j++) {
+                cph[j] += _data[i].cph[j];
+                tph[j] += _data[i].mph[j];
             }
+            //}
         }
 
         // Conditional colour coding for the TPH bars
@@ -89,20 +90,21 @@ class ChartsMines {
             },
             legend: {
                 textStyle: { color: "#fff" },
-                top: '20%',
-                left: 10,
-                align: 'left',
-                orient: 'vertical',
+                //top: '20%',
+                //left: 10,
+                //align: 'left',
+                //orient: 'vertical',
                 data: ['Tonnes', 'Target', 'Plan']
             },
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "SiteTPH"),
-            grid: {
-                left: '14%',
-                right: '0%',
-                bottom: '2%',
-                top: '2%',
-                containLabel: true
-            },
+            grid: ChartStyles.gridSpacing(),
+            // grid: {
+            //     left: '14%',
+            //     right: '0%',
+            //     bottom: '2%',
+            //     top: '2%',
+            //     containLabel: true
+            // },
             xAxis: ChartStyles.xAxis(timeLabelsShift[ShiftIndex()]),
             yAxis: [
                 {
@@ -276,13 +278,14 @@ class ChartsMines {
                 top: '30%'
             },
             tooltip: { show: false },
-            grid: {
-                left: '0%',
-                right: '0%',
-                bottom: '0%',
-                top: '0%',
-                containLabel: true
-            },
+            grid: ChartStyles.gridSpacing(),
+            // grid: {
+            //     left: '0%',
+            //     right: '0%',
+            //     bottom: '0%',
+            //     top: '0%',
+            //     containLabel: true
+            // },
             series: [
                 {
                     type: 'pie',
@@ -567,11 +570,15 @@ class ChartsMines {
                 backgroundColor: ChartStyles.toolTipBackgroundColor(),
                 formatter: function (params, index) {
                     var string = "";
-                    string += ChartStyles.toolTipTextTitle(params.name);
-                    string += ChartStyles.toolTipTextEntry(Math.round(params.value));
-                    //string += ChartStyles.toolTipTextEntry(params.seriesName);
-
-                    //console.log(params);
+                    string += ChartStyles.toolTipTextTitle(Math.round(params.value) + " Tonnes");
+                    var locs = params.name.split(" > ");
+                    if (locs.length > 1) {
+                        string += ChartStyles.toolTipTextEntry("Source : " + locs[0]);
+                        string += ChartStyles.toolTipTextEntry("Dest   : " + locs[1]);
+                    }
+                    else {
+                        string += ChartStyles.toolTipTextEntry("At " + params.name);
+                    }
                     return string;
                 }
             },

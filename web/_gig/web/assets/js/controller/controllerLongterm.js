@@ -41,8 +41,8 @@ app.controller('LongTerm', function ($scope, $rootScope, $timeout, $http) {
 
 
 
-    $scope.dateIndexStart = 0;
-    $scope.dateIndexEnd = longTerm2[1]['Availability'].length;
+    //$scope.dateIndexStart = 0;
+    //$scope.dateIndexEnd = longTerm2[1]['Availability'].length;
     //console.log($scope.dateIndexEnd);
 
     $scope.asset = null;
