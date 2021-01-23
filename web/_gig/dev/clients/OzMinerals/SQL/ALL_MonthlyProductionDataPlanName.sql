@@ -1,6 +1,9 @@
 Select
 		 LEFT(ATS.[SHkey],8) as 'Date'
 		,RDP.[Source_MineArea_Code] as 'Mine Names'
+		,ATS.[Location] AS 'Location'
+		,RDP.[Source_DevPrd] AS 'Secondy Activity Type'
+		,sum(MTS.[MeasureValue]) as 'Values'
 		,case when RDP.[Source_MineArea_Code] = 'SLC' and left(ATS.[Location],4) = '4500' then 'South 4500'
 		      when RDP.[Source_MineArea_Code] = 'SLC' and left(ATS.[Location],4) = '4475' and (substring(ATS.[Location],7,3) >=301 or substring(ATS.[Location],7,3) = 5) then 'North 4475'
 			  when RDP.[Source_MineArea_Code] = 'SLC' and left(ATS.[Location],4) = '4475' and substring(ATS.[Location],7,3) < 300 then 'South 4475'
@@ -9,9 +12,6 @@ Select
 			  when RDP.[Source_MineArea_Code] = 'WF' then left(ATS.[Location],4) + ' ' + substring(ats.[location],5,3)
 			  when left(RDP.[Source_MineArea_Code],1) = 'M' then rtrim(RDP.[Source_MineArea_Code]) + ' ' + left(ATS.[Location],4) + ' ' + substring(ATS.[Location], CHARINDEX('_', ATS.[Location])-1,1) 
 			  else RDP.[Source_MineArea_Code] End as  'Plan Segment'
-		,ATS.[Location] AS 'Location'
-		,RDP.[Source_DevPrd] AS 'Secondy Activity Type'
-		,sum(MTS.[MeasureValue]) as 'Values'
 	FROM dbo.ALLOCTNTIMESTAMP AS ATS JOIN
          dbo.MEASURETIMESTAMP AS MTS ON MTS.TSKey = ATS.TSKey
     left JOIN dbo.[RD_PARENTLOCATIONS] as RDP on RDP.[SourceCode] = ATS.[Location]

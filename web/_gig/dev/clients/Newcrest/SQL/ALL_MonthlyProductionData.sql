@@ -10,7 +10,7 @@ Select
     JOIN dbo.[RD_EQUIPMENT] as RDE on RDE.[EquipmentCode] = ATS.[Equipment]
     JOIN dbo.[RD_EQUIPMENT_MODEL] as RDM on RDM.[Equipment_ModelCode] = RDE.[Equipment_Model_Code]
 	JOIN dbo.[RD_EQUIPMENT_FUNCTION] as RDF on RDF.[Equipment_FunctionCode] = RDM.[Equipment_Model_Function_Code]
-	WHERE substring(ats.[shkey],1,4) = @YEAR and substring(ats.[shkey],5,2) = @MONTH and MTS.MeasCode ='TONNE' and RDF.[Equipment_FunctionCode] = 'LOADING' and RDP.[Source_Category] like '%Production%'
+	WHERE substring(ats.[shkey],1,4) = @Year and substring(ats.[shkey],5,2) = @Month and MTS.MeasCode ='TONNE' and RDF.[Equipment_FunctionCode] = 'LOADING' and RDP.[Source_Category] like '%Production%'
 	GROUP BY RDP.[Source_MineArea_Code] 
 			,ATS.[Location] 
 			,left(ats. [SHkey],8) 

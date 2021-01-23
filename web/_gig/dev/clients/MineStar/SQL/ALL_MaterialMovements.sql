@@ -1,12 +1,15 @@
+--Declare @Date as varchar(8)
+--Set @Date = '20201204'
 
 SELECT 
 	CDB.[PHASE] as 'Source Mine'
-	,B.SHIFTTYPE as 'Shift'
+	,case when B.SHIFTTYPE = 0 then 1
+	        else 2 end as 'Shift'
 	,'Ex-Pit Hauling' as 'Category'
     ,CDB.[Name] as 'Location'
 	,CDB.[Name] as 'Source Labels'
 	,A.[endProcessorName] AS 'Finished Area'
-	,A.[endProcessorName] AS 'Destinatio Labels'
+	,A.[endProcessorName] AS 'Destination Labels'
 	,A.[endProcessorClassName] as 'Destination Mine'
 	,A.PAYLOAD / 1000 as 'Tonnes'
 	   

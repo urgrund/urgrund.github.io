@@ -1,5 +1,10 @@
+--Declare @Year as varchar(4)
+--Set @Year = '2020'
+--Declare @Month as varchar(2)
+--Set @Month = '11'
+
 SELECT 
-	b.REPORTING_DATE as 'Date'
+	 b.REPORTING_DATE as 'Date'
 	,CDB.[PHASE] as 'Mine Names'
 	 ,CDB.[Name] as 'Location'
 	 ,('Phase ' + CDB.[PHASE] + ' ' + CDB.[MATERIAL]) as 'Category'
