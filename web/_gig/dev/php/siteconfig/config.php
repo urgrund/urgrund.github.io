@@ -16,7 +16,13 @@
  */
 class Config
 {
-    public static $instance = null;
+    private static $instance;
+    public static function Instance(): Config
+    {
+        if (Config::$instance == null)
+            return new Config();
+        return Config::$instance;
+    }
 
     // Var representation of the major group
     const MajorGroupDown = "Down";
@@ -65,8 +71,8 @@ class Config
 
     function __construct()
     {
-        if (Config::$instance !== null)
-            return;
+        //if (Config::$instance !== null)
+        //  return;
 
         Debug::StartProfile("Create Config");
 
@@ -84,22 +90,22 @@ class Config
 
     public static function Sites($_key)
     {
-        return isset(Config::$instance->Sites[$_key]) ? Config::$instance->Sites[$_key] : NULL;
+        return isset(Config::Instance()->Sites[$_key]) ? Config::Instance()->Sites[$_key] : NULL;
     }
 
     public static function TUM($_key)
     {
-        return isset(Config::$instance->TUM[$_key]) ? Config::$instance->TUM[$_key] : NULL;
+        return isset(Config::Instance()->TUM[$_key]) ? Config::Instance()->TUM[$_key] : NULL;
     }
 
     public static function MajorGroup($_key)
     {
-        return isset(Config::$instance->MajorGroup[$_key]) ? Config::$instance->MajorGroup[$_key] : NULL;
+        return isset(Config::Instance()->MajorGroup[$_key]) ? Config::Instance()->MajorGroup[$_key] : NULL;
     }
 
     public static function TUMIndex($_key): int
     {
-        return isset(Config::$instance->TUMKeys[$_key]) ? Config::$instance->TUMKeys[$_key] : -1;
+        return isset(Config::Instance()->TUMKeys[$_key]) ? Config::Instance()->TUMKeys[$_key] : -1;
     }
 
 
@@ -109,7 +115,7 @@ class Config
      */
     public static function CreateDistinctTUMArray(): array
     {
-        $result = array_unique(Config::$instance->TUM);
+        $result = array_unique(Config::Instance()->TUM);
         $tumDistinct = array();
         foreach ($result as $x => $x_value) {
             $tumDistinct[$x_value] = 0;

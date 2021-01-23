@@ -31,7 +31,9 @@ final class SQLDBCredentials
  */
 class SQLUtils
 {
-    const DateVar = '@Date';
+    public const DateVar = '@Date';
+    public const MonthVar = '@Month';
+    public const YearVar = '@Year';
     public const QUERY_DIRECTORY = "..\\sql\\";
 
     public static function OpenConnection()

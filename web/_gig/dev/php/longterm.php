@@ -36,71 +36,7 @@ abstract class LongTermGenerationType
 }
 
 
-// Do the stuff
-// Will need a more flexible interface
-// What about combinations? ie) P & HAULING ?
-//LongTerm::Generate('HAULING', null, null);
-//$start = new DateTime('20181001');
-//$end = new DateTime('20181231');
-//LongTerm::Get($start, $end);
 
-
-class AssetUtilisationPerDay
-{
-    // Available Time = Calendar Time – (Unplanned Breakdown + Planned Maintenance)
-    // Availability% = available time / CT
-    // U of A% = (Secondary Op + Primary Op) / Available Time
-    // Efficiency% = Primary op / (Secondary Op + Primary Op)
-    // Total AU% = Availability% X UofA% X Eff%
-    // Or Total AU% = Primary OP / CT (do it both ways to check you got the math right, that’s what I do) :D
-    public int $dateID;
-
-    public int $calendarTime;
-
-    public float $availableTime;
-    public float $availability;
-    public float $uOfa;
-    public float $efficiency;
-    public float $totalAU;
-
-    var $tumTimings = array();
-
-    function __construct(int $_dateID)
-    {
-        $this->dateID = $_dateID;
-        $this->calendarTime = 0;
-        $this->tumTimings = Config::CreateDistinctTUMArray();
-        foreach ($this->tumTimings as $x => $x_value) {
-            $this->tumTimings[$x] = new EventBreakDown();
-        }
-    }
-
-    public function GenerateUtilisationFromTUM()
-    {
-        if ($this->calendarTime == 0)
-            return;
-
-        $unplannedBreakdown = $this->tumTimings['Unplanned Breakdown']->duration;
-        $plannedMaintenance = $this->tumTimings['Planned Maintenance']->duration;
-        $primaryOperating = $this->tumTimings['Primary Operating']->duration;
-        $secondaryOperating = $this->tumTimings['Secondary Operating']->duration;
-
-        $this->availableTime = $this->calendarTime - ($unplannedBreakdown + $plannedMaintenance);
-        $this->availability = $this->availableTime / $this->calendarTime;
-
-        if ($this->availableTime == 0)
-            $this->uOfa = 0;
-        else
-            $this->uOfa = ($secondaryOperating + $primaryOperating) / $this->availableTime;
-
-        if ($secondaryOperating + $primaryOperating == 0)
-            $this->efficiency = 0;
-        else
-            $this->efficiency = $primaryOperating / ($secondaryOperating + $primaryOperating);
-
-        $this->totalAU = $primaryOperating / $this->calendarTime;
-    }
-}
 
 
 
@@ -146,13 +82,15 @@ class LongTermAsset
             if (!isset($this->assetUtilisation[$f]))
                 $this->assetUtilisation[$f] = new AssetUtilisationPerDay($f);
 
+
+
             $this->assetUtilisation[$f]->calendarTime += $duration;
-            $this->assetUtilisation[$f]->tumTimings[$tumCategory]->eventCount++;
-            $this->assetUtilisation[$f]->tumTimings[$tumCategory]->duration += $duration;
-            if (!isset($this->assetUtilisation[$f]->tumTimings[$tumCategory]->categories[$status]))
-                $this->assetUtilisation[$f]->tumTimings[$tumCategory]->categories[$status] = $duration;
+            $this->assetUtilisation[$f]->tumTimings->$tumCategory->eventCount++;
+            $this->assetUtilisation[$f]->tumTimings->$tumCategory->duration += $duration;
+            if (!isset($this->assetUtilisation[$f]->tumTimings->$tumCategory->categories[$status]))
+                $this->assetUtilisation[$f]->tumTimings->$tumCategory->categories[$status] = $duration;
             else
-                $this->assetUtilisation[$f]->tumTimings[$tumCategory]->categories[$status] += $duration;
+                $this->assetUtilisation[$f]->tumTimings->$tumCategory->categories[$status] += $duration;
 
 
             // --------------------------------------------------
@@ -162,12 +100,12 @@ class LongTermAsset
 
             $this->totalAssetUtilisation->calendarTime += $duration;
 
-            $this->totalAssetUtilisation->tumTimings[$tumCategory]->eventCount++;
-            $this->totalAssetUtilisation->tumTimings[$tumCategory]->duration += $duration;
-            if (!isset($this->totalAssetUtilisation->tumTimings[$tumCategory]->categories[$status]))
-                $this->totalAssetUtilisation->tumTimings[$tumCategory]->categories[$status] = $duration;
+            $this->totalAssetUtilisation->tumTimings->$tumCategory->eventCount++;
+            $this->totalAssetUtilisation->tumTimings->$tumCategory->duration += $duration;
+            if (!isset($this->totalAssetUtilisation->tumTimings->$tumCategory->categories[$status]))
+                $this->totalAssetUtilisation->tumTimings->$tumCategory->categories[$status] = $duration;
             else
-                $this->totalAssetUtilisation->tumTimings[$tumCategory]->categories[$status] += $duration;
+                $this->totalAssetUtilisation->tumTimings->$tumCategory->categories[$status] += $duration;
         } //else
         //Debug::Log("Tum was null");
     }
@@ -189,7 +127,7 @@ class LongTerm
 
     public static function Get(DateTime $_startDate, DateTime $_endDate)
     {
-        new Config();
+        //new Config();
 
         $period = new DatePeriod(
             $_startDate,

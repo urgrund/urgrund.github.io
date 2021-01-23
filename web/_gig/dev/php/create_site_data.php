@@ -3,6 +3,7 @@
 include_once('header.php');
 
 
+
 // ------------------------------------------------------------------
 // ENTRY POINT
 
@@ -11,10 +12,19 @@ include_once('header.php');
 if (Debug::enabled() == true) {
 
     //$c = new Config();
+    //Debug::Log($c);
+    //$d = new TUMTimings();    
+
+    //$prop = "Operating Standby";
+    //Debug::Log($d->$prop);
+    //Debug::Log(property_exists($d, "Operating Standby"));
+
+
+    //$c = new Config();
     //Debug::Log($c->TUMKeys);
     //Debug::Log(Config::CreateDistinctTUMArray());
 
-    CreateSiteData::Run(new DateTime('20181231'));
+    //CreateSiteData::Run(new DateTime('20181231'));
     //CreateSiteData::Run(new DateTime('20201201'));
 
     //$sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . 'ALL_MetricPerHour.sql');
@@ -236,7 +246,7 @@ final class CreateSiteData
         // Generate the Mine Sites for this day
         // This is filtered based on the client config
         $allSites = array();
-        foreach (array_keys(Config::$instance->Sites) as $id) {
+        foreach (array_keys(Config::Instance()->Sites) as $id) {
             if (Config::Sites($id) != "")
                 $allSites[Config::Sites($id)] = "";
         }

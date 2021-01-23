@@ -41,7 +41,7 @@ if (is_object($request)) {
 } else {
     //include_once('setDebugOff.php');
     //Admin::GetAllDateStatus();
-    Admin::GetCSVConfigs();
+    //Admin::GetCSVConfigs();
     //Admin::GenerateDataForDate('20181001');
 
     //$generateEverything = false;
@@ -62,7 +62,7 @@ class Admin
     public static function GetCSVConfigs()
     {
         new Config();
-        echo json_encode(Config::$instance);
+        echo json_encode(Config::Instance());
     }
 
     public static function GenerateDataForDate($_date)

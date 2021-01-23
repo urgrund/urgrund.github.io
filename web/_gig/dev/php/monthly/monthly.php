@@ -49,10 +49,10 @@ else {
     //include_once('..\setDebugOff.php');    
     //Debug::Log(Monthly::GetActuals('2018', '11'));
 
-    Monthly::GetActualsArray('2018', '10');
+
 
     $p = Monthly::MapActualsToPlan('2018', '10');
-    //Debug::Log($p);
+    Debug::Log($p[2]);
     //Monthly::MetaData($p);
     //echo 'poo';
 }
@@ -158,8 +158,8 @@ class Monthly
         //$file = 'ALL_MonthlyProductionData.sql';
         $file = 'ALL_MonthlyProductionDataPlanName.sql';
         $sqlTxt = SQLUtils::FileToQuery(Utils::GetBackEndRoot() . Client::SQLPath() . $file);
-        $sqlTxt = str_replace('@YEAR', "'" . $_year . "'", $sqlTxt);
-        $sqlTxt = str_replace('@MONTH', "'" . $_month . "'", $sqlTxt);
+        $sqlTxt = str_replace(SQLUtils::YearVar, "'" . $_year . "'", $sqlTxt);
+        $sqlTxt = str_replace(SQLUtils::MonthVar, "'" . $_month . "'", $sqlTxt);
 
         $sqlResult = SQLUtils::QueryToText($sqlTxt, "Get Monthly Actuals");
         //Debug::Log($sqlResult);
@@ -292,7 +292,8 @@ class Monthly
 
         Debug::EndProfile();
 
-        return [$plan, $meta];
+        // Pack it up and send it back
+        return [$plan, $meta, $actuals];
         //Debug::Log($plan);
     }
 

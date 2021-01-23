@@ -275,7 +275,6 @@ class Equipment
 
 
 
-
     private function GetTUMBreakDownOfEvents()
     {
         for ($i = 0; $i < 2; $i++) {
@@ -289,24 +288,28 @@ class Equipment
 
                 // For events that aren't mapped properly 
                 // to a TUM category 
-                if (!isset($_tumTimings[$event->tumCategory]))
+                //if (!isset($_tumTimings[$event->tumCategory]))
+                //  continue;
+                if (!property_exists($_tumTimings, $event->tumCategory))
                     continue;
 
-                $_tumTimings[$event->tumCategory]->eventCount++;
-                $_tumTimings[$event->tumCategory]->duration += $event->duration;
-                if (!isset($_tumTimings[$event->tumCategory]->categories[$event->status]))
-                    $_tumTimings[$event->tumCategory]->categories[$event->status] = $event->duration;
+                $tumProp = $event->tumCategory;
+
+                $_tumTimings->$tumProp->eventCount++;
+                $_tumTimings->$tumProp->duration += $event->duration;
+                if (!isset($_tumTimings->$tumProp->categories[$event->status]))
+                    $_tumTimings->$tumProp->categories[$event->status] = $event->duration;
                 else
-                    $_tumTimings[$event->tumCategory]->categories[$event->status] += $event->duration;
+                    $_tumTimings->$tumProp->categories[$event->status] += $event->duration;
 
 
                 // For the 24hr timings
-                $_tumTimings24[$event->tumCategory]->eventCount++;
-                $_tumTimings24[$event->tumCategory]->duration += $event->duration;
-                if (!isset($_tumTimings24[$event->tumCategory]->categories[$event->status]))
-                    $_tumTimings24[$event->tumCategory]->categories[$event->status] = $event->duration;
+                $_tumTimings24->$tumProp->eventCount++;
+                $_tumTimings24->$tumProp->duration += $event->duration;
+                if (!isset($_tumTimings24->$tumProp->categories[$event->status]))
+                    $_tumTimings24->$tumProp->categories[$event->status] = $event->duration;
                 else
-                    $_tumTimings24[$event->tumCategory]->categories[$event->status] += $event->duration;
+                    $_tumTimings24->$tumProp->categories[$event->status] += $event->duration;
 
                 $this->shiftData[$_shiftIndex]->timeTotal += $event->duration;
                 $this->shiftData[2]->timeTotal += $event->duration;

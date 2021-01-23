@@ -94,13 +94,36 @@ class EquipmentShiftData
     //var $timeExIdle;
     //var $timeExDown;
 
-    var $tumTimings = array();
+    public AssetUtilisationPerDay $assetUtilisation;
+
+    //var $tumTimings = array();
+    public TUMTimings $tumTimings;
 
     function __construct()
     {
-        $this->tumTimings = Config::CreateDistinctTUMArray();
-        foreach ($this->tumTimings as $x => $x_value) {
-            $this->tumTimings[$x] = new EventBreakDown();
+        //$this->tumTimings = Config::CreateDistinctTUMArray();
+        $this->tumTimings = new TUMTimings();
+
+        $this->assetUtilisation = new AssetUtilisationPerDay('00000000');
+
+        //foreach ($this->tumTimings as $x => $x_value) {
+        //  $this->tumTimings[$x] = new EventBreakDown();
+        //}
+    }
+}
+
+
+/**   
+ * Class to hold timings in a TUM category
+ * based on the particular config of TUMs
+ */
+class TUMTimings
+{
+    function __construct()
+    {
+        $tmp = Config::CreateDistinctTUMArray();
+        foreach ($tmp as $x => $x_value) {
+            $this->$x = new EventBreakDown();
         }
     }
 }
@@ -207,5 +230,86 @@ class MetricData
 
         for ($i = 0; $i < count($newMph); $i++)
             $b->AddValue($newMph[$i]);
+    }
+}
+
+
+
+class AssetUtilisationPerDay
+{
+    // DAVES RATIOS
+    // Available Time = Calendar Time – (Unplanned Breakdown + Planned Maintenance)
+    // Availability% = available time / CT
+    // U of A% = (Secondary Op + Primary Op) / Available Time
+    // Efficiency% = Primary op / (Secondary Op + Primary Op)
+    // Total AU% = Availability% X UofA% X Eff%
+    // Or Total AU% = Primary OP / CT (do it both ways to check you got the math right, that’s what I do) :D
+
+    public int $dateID;
+
+    public int $calendarTime = 0;
+
+    public float $availableTime = 0;
+    public float $availability = 0;
+    public float $uOfa = 0;
+    public float $efficiency = 0;
+    public float $totalAU = 0;
+
+    //var $tumTimings = array();
+    public TUMTimings $tumTimings;
+
+    function __construct(int $_dateID)
+    {
+        $this->dateID = $_dateID;
+        $this->calendarTime = 0;
+        $this->tumTimings = new TUMTimings();
+        //$this->tumTimings = Config::CreateDistinctTUMArray();
+        //foreach ($this->tumTimings as $x => $x_value) {
+        //  $this->tumTimings[$x] = new EventBreakDown();
+        //}
+    }
+
+    public function GenerateUtilisationFromTUM()
+    {
+        if ($this->calendarTime == 0)
+            return;
+
+        // This maps the TUM index to a property so 
+        // that it will work across different configs
+        // and avoid any ambiguities with names/strings
+        $propUPBRD = Config::Instance()->TUMIndex[0];
+        $propPLMN = Config::Instance()->TUMIndex[1];
+        $propSECOP = Config::Instance()->TUMIndex[4];
+        $propPRIOP = Config::Instance()->TUMIndex[5];
+        //Debug::Log($propUPBRD);
+
+
+        // These are the common names for TUM categories, though 
+        // may differ due to the config, but this keeps it consistent just here
+
+        $unplannedBreakdown = $this->tumTimings->$propUPBRD->duration;
+        $plannedMaintenance = $this->tumTimings->$propPLMN->duration;
+        $primaryOperating = $this->tumTimings->$propPRIOP->duration;
+        $secondaryOperating = $this->tumTimings->$propSECOP->duration;
+
+        // $unplannedBreakdown = $this->tumTimings['Unplanned Breakdown']->duration;
+        // $plannedMaintenance = $this->tumTimings['Planned Maintenance']->duration;
+        // $primaryOperating = $this->tumTimings['Primary Operating']->duration;
+        // $secondaryOperating = $this->tumTimings['Secondary Operating']->duration;
+
+        $this->availableTime = $this->calendarTime - ($unplannedBreakdown + $plannedMaintenance);
+        $this->availability = $this->availableTime / $this->calendarTime;
+
+        if ($this->availableTime == 0)
+            $this->uOfa = 0;
+        else
+            $this->uOfa = ($secondaryOperating + $primaryOperating) / $this->availableTime;
+
+        if ($secondaryOperating + $primaryOperating == 0)
+            $this->efficiency = 0;
+        else
+            $this->efficiency = $primaryOperating / ($secondaryOperating + $primaryOperating);
+
+        $this->totalAU = $primaryOperating / $this->calendarTime;
     }
 }
