@@ -1,6 +1,12 @@
-<div style="height: 400px;">
-    <drill-down-chart name="Poo" chart="g"></drill-down-chart>
-</div>
+<!-- <div class="flex">
+    <div style="height: 200px; width: 300px;">
+        <drill-down-chart name="Poo" chart="g"></drill-down-chart>
+    </div>
+    <div style="height: 200px; width: 300px;">
+        <drill-down-chart name="Poo" chart="g2"></drill-down-chart>
+    </div>
+</div> -->
+
 
 <div class="equipGrid2" ng-cloak ng-if="equip != undefined">
     <div class="equipHeader first underline">
@@ -27,15 +33,21 @@
     <drill-down-chart name="Availability & Utilisation" chart="uofa"></drill-down-chart>
     <drill-down-chart name="Time Usage Model Waterfall" chart="tumwf"></drill-down-chart>
 
+    <div class="equipParetoGrid">
+        <drill-down-chart name="{{config.TUMIndex[0]}}" chart="p0"></drill-down-chart>
+        <drill-down-chart name="{{config.TUMIndex[2]}}" chart="p2"></drill-down-chart>
+        <drill-down-chart name="{{config.TUMIndex[4]}}" chart="p4"></drill-down-chart>
+        <drill-down-chart name="{{config.TUMIndex[1]}}" chart="p1"></drill-down-chart>
+        <drill-down-chart name="{{config.TUMIndex[3]}}" chart="p3"></drill-down-chart>
+        <drill-down-chart name="{{config.TUMIndex[5]}}" chart="p5"></drill-down-chart>
+    </div>
 
-    <drill-down-chart name="{{config.TUMIndex[0]}}" chart="p0"></drill-down-chart>
-    <drill-down-chart name="{{config.TUMIndex[2]}}" chart="p2"></drill-down-chart>
-    <drill-down-chart name="{{config.TUMIndex[4]}}" chart="p4"></drill-down-chart>
-
-    <drill-down-chart name="{{config.TUMIndex[1]}}" chart="p1"></drill-down-chart>
-    <drill-down-chart name="{{config.TUMIndex[3]}}" chart="p3"></drill-down-chart>
-    <drill-down-chart name="{{config.TUMIndex[5]}}" chart="p5"></drill-down-chart>
-
+    <div class="equipGaugeGrid">
+        <drill-down-chart name="Total Asset Utilisation" chart="gAU"></drill-down-chart>
+        <drill-down-chart name="Efficency" chart="gE"></drill-down-chart>
+        <drill-down-chart name="Availability" chart="gA"></drill-down-chart>
+        <drill-down-chart name="Utilisation of Availability" chart="gU"></drill-down-chart>
+    </div>
 
 </div>
 

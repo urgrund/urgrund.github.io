@@ -290,6 +290,10 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             data: _data,
         })
         request.then(function (response) {
+            console.log(response.data);
+            //if ($rootScope.checkResponseError(response))
+            //  return;
+
             ServerInfo.config = response.data;
             ServerInfo.config.TUMIndex = Object.values(ServerInfo.config.TUMIndex);
             $rootScope.config = response.data;

@@ -1383,9 +1383,9 @@ class Charts {
             xAxis: [
                 {
                     show: false,
-                type: 'value',
+                    type: 'value',
                     max: totalDuration,
-            },
+                },
                 {
                     show: _includeTimeLine,
                     min: 0,
@@ -1430,6 +1430,179 @@ class Charts {
 
 
 
+    /**
+    * This is just the hour axis labels to use with the other Timeline charts    
+    */
+    static CreateTimeLineFlatTime(_elementID) {
+
+        // Create an eCharts instance 
+        var myChart = InitChartFromElementID(_elementID);
+        if (myChart == undefined) return;
+
+
+
+        var option = {
+            backgroundColor: ChartStyles.backGroundColor,
+            textStyle: ChartStyles.textStyle,
+            grid: {
+                top: '0%',
+                bottom: '0%',
+                left: '1%',
+                right: '5%'
+            },
+            xAxis:
+            {
+                show: true,
+                min: 0,
+                max: timeLabelsShiftExtra[ShiftIndex()].length - 1,
+                position: 'bottom',
+                data: timeLabelsShiftExtra[ShiftIndex()],
+                boundaryGap: false,
+                minInterval: 0,
+                maxInterval: 0,
+                axisLabel: {
+                    padding: [-15, 0, -20, 0],
+                    inside: true,
+                    rotate: 45,
+                    formatter: '{value}',
+                    fontFamily: 'Poppins',
+                    fontWeight: 'lighter',
+                    fontSize: 10
+                },
+                axisTick: { inside: true }
+            },
+            yAxis: { show: false, data: [1, 2, 3] },
+            series: {
+                type: 'line',
+                itemStyle: { normal: { opacity: 0.5 } }
+            }
+        };
+        SetOptionOnChart(option, myChart);
+    }
+
+
+    /**
+     * @param {any} _elementID  
+     * @param {SimpleGaugeData} _data 
+     */
+    static CreateGauge(_elementID, _data) {
+        var myChart = InitChartFromElementID(_elementID);
+        if (myChart == undefined) return;
+
+        //var data = new MonthlyChartDataForLocation(_data);
+
+        var value = _data.value;
+
+        //console.log(_data);
+        var strPct = (x) => x.toString().concat("%");
+        var center = ['50%', '80%'];
+        var maxRadius = 120;
+        var radiusThickness = 30;
+        var radiusPadding = 4;
+
+
+        var option = {
+            backgroundColor: ChartStyles.backGroundColor,
+            textStyle: ChartStyles.textStyle,
+            toolbox: ChartStyles.toolBox(myChart.getHeight(), _elementID + "_MonthlyCompliance"),
+
+
+            title: {
+                text: strPct(value),
+                //subtext: "foo",
+                left: 'center',
+                bottom: '13%',
+                textStyle: {
+                    fontWeight: 60,
+                    fontSize: _data.fontSize,
+                }
+            },
+            grid: {
+                top: '0%',
+                bottom: '0%',
+                left: '0%',
+                right: '0%'
+            },
+            // tooltip: {
+            //     trigger: 'item',
+            //     formatter: function (params, index) {
+            //         var string = ChartStyles.toolTipTextTitle(params.name);
+            //         string += ChartStyles.toolTipTextEntry((Math.round(params.percent * 2 * 10) / 10) + "%");
+            //         return string;
+            //     },
+            //     textStyle: ChartStyles.toolTipTextStyle(),
+            //     axisPointer: ChartStyles.toolTipShadow(),
+            //     backgroundColor: ChartStyles.toolTipBackgroundColor()
+            // },
+            series: [
+                {
+                    name: 'Monthly Compliance',
+                    type: 'pie',
+                    center: center,
+                    radius: [strPct(maxRadius - radiusThickness), strPct(maxRadius)],
+                    avoidLabelOverlap: true,
+                    startAngle: 180,
+                    animationDuration: 5000,
+                    z: 0,
+                    // label: {
+                    //     formatter: '{d}%' ,
+                    //     fontSize: ChartStyles.fontSizeAxis
+                    // },
+                    label: { show: false },
+                    data: [
+                        {
+                            value: value,
+                            name: 'Progress',
+                            itemStyle: { color: _data.color }
+                        },
+                        {
+                            value: (100 - value),
+                            name: 'Under',
+                            itemStyle: { color: 'rgba(0,0,0,0)' },
+                        },
+                        {
+                            value: 100,
+                            name: 'Invisible',
+                            itemStyle: { color: 'rgba(0,0,0,0)' },
+                            z: 10
+                        }
+                    ]
+                },
+                {
+                    name: 'Target Bucket',
+                    type: 'pie',
+                    center: center,
+                    hoverAnimation: false,
+                    animationDuration: 0,
+                    radius: [strPct(maxRadius - radiusThickness - radiusPadding), strPct(maxRadius + radiusPadding)],
+                    startAngle: 180,
+                    z: 0,
+                    toolTip: { show: false, trigger: 'none', showContent: false },
+                    label: { show: false },
+                    data: [
+                        {
+                            value: 100,
+                            itemStyle: {
+                                borderRadius: 30,
+                                borderColor: '#02b3ff',
+                                borderWidth: 1.5,
+                                color: 'rgba(0,0,0,0.125)'
+                            }
+                        },
+                        {
+                            value: 100,
+                            name: 'Invisible',
+                            itemStyle: { color: 'rgba(0,0,0,0)' }
+                        }
+                    ]
+                }
+            ]
+
+        };
+
+        SetOptionOnChart(option, myChart);
+        return myChart;
+    }
 
 
 
@@ -1632,256 +1805,4 @@ class Charts {
     */
 
 
-
-    /**
-    * This is just the hour axis labels to use with the other Timeline charts    
-    */
-    static CreateTimeLineFlatTime(_elementID) {
-
-        // Create an eCharts instance 
-        var myChart = InitChartFromElementID(_elementID);
-        if (myChart == undefined) return;
-
-
-
-        var option = {
-            backgroundColor: ChartStyles.backGroundColor,
-            textStyle: ChartStyles.textStyle,
-            grid: {
-                top: '0%',
-                bottom: '0%',
-                left: '1%',
-                right: '5%'
-            },
-            xAxis:
-            {
-                show: true,
-                min: 0,
-                max: timeLabelsShiftExtra[ShiftIndex()].length - 1,
-                position: 'bottom',
-                data: timeLabelsShiftExtra[ShiftIndex()],
-                boundaryGap: false,
-                minInterval: 0,
-                maxInterval: 0,
-                axisLabel: {
-                    padding: [-15, 0, -20, 0],
-                    inside: true,
-                    rotate: 45,
-                    formatter: '{value}',
-                    fontFamily: 'Poppins',
-                    fontWeight: 'lighter',
-                    fontSize: 10
-                },
-                axisTick: { inside: true }
-            },
-            yAxis: { show: false, data: [1, 2, 3] },
-            series: {
-                type: 'line',
-                itemStyle: { normal: { opacity: 0.5 } }
-            }
-        };
-        SetOptionOnChart(option, myChart);
-    }
-
 }
-
-
-
-
-
-
-
-
-
-
-// static CreateTPH(_elementID, _data, _display) {
-//     var myChart = echarts.init(document.getElementById(_elementID), ChartStyles.baseStyle);
-
-//     // Adjust for shift        
-//     //console.log("Make TPH");
-//     var _d = _data.shiftData[shift].tph;  //_data["tph"];// TrimDataForShift(_data["tph"]);// [];
-
-//     //var title = _data["metric"];// "Tonnes Per Hour";//data[1][1];
-
-
-
-//     var tonnesPerHour = [];
-//     for (var i = 0; i < _d.length - 1; i++)
-//         tonnesPerHour[i] = _d[i];
-
-//     //console.log(tonnesPerHour);
-
-//     var dataLength = tonnesPerHour[0].length;
-//     var colouredCumulativeData = [];
-//     var dailyTargetData = [];
-//     var eightyFiveTargetData = [];
-
-
-//     // These numbers should come from targets
-//     // and from PHP / SQL,  not here in charts
-//     var dailyTarget = 1200;
-//     if (_data["metric"].indexOf("M") !== -1)
-//         dailyTarget = 180;
-
-//     // Hourly tonne and % targets
-//     for (var i = 0; i < dataLength; i++) {
-//         var perHourDailyTarget = (parseFloat(dailyTarget / 12) * (i + 1));
-//         dailyTargetData.push({ value: perHourDailyTarget, symbolSize: (i == dataLength - 1) ? '10' : '0' });// (i = dataLength - 1) ? 'false' : 'true' });
-//         eightyFiveTargetData.push(parseFloat(perHourDailyTarget * parseFloat(dailyTargetPercent / 100)));
-//     }
-
-//     // Color based on reaching % target            
-//     var cumulativeVal = 0;
-//     for (var i = 0; i < dataLength; i++) {
-//         for (var j = 0; j < tonnesPerHour.length; j++) {
-//             cumulativeVal += Math.round(tonnesPerHour[j][i]);
-//             var val = Math.round(tonnesPerHour[j][i]);
-//             tonnesPerHour[j][i] = {
-//                 value: val == 0 ? "" : val,
-//                 itemStyle: { color: ChartStyles.siteColors[i] }
-//             };
-//         }
-
-//         var overUnder = (parseFloat(cumulativeVal) < parseFloat(eightyFiveTargetData[i])) ? 2 : 0;
-//         colouredCumulativeData.push(
-//             {
-//                 value: cumulativeVal == 0 ? "" : cumulativeVal,
-//                 itemStyle: { color: ChartStyles.statusColors[overUnder] }
-//             });
-//     }
-
-//     //console.log(_d);
-
-//     var seriesArray = [];
-//     seriesArray.push(
-//         {
-//             name: 'Targets',
-//             type: 'line',
-//             yAxisIndex: 1,
-//             lineStyle: { type: 'solid', color: ChartStyles.cumulativeColor, width: '1' },
-//             itemStyle: { color: ChartStyles.cumulativeColor },
-//             // symbol: 'none',
-//             //animation: false,
-//             data: dailyTargetData,
-//             z: '-1',
-//             areaStyle: {
-//                 normal: {
-//                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-//                         offset: 0,
-//                         color: ChartStyles.cumulativeColor.colorStops[0].color
-//                     },
-//                     {
-//                         offset: 1,
-//                         color: 'rgba(0,0,0,0.0)'
-//                     }
-//                     ], false),
-//                     shadowColor: 'rgba(53,142,215, 0)',
-//                     shadowBlur: 20
-//                 }
-//             }
-//         }//,
-//         // {
-//         //     name: 'Targets',//dailyTargetPercent.toString(),
-//         //     type: 'line',
-//         //     yAxisIndex: 1,
-//         //     lineStyle: { type: 'dotted', color: 'orange' },
-//         //     animation: false,
-//         //     data: eightyFiveTargetData
-//         // }
-//     );
-
-
-//     switch (_display.toString()) {
-//         case ChartTPHDisplay.TPH.toString():
-//             seriesArray.push({
-//                 name: 'Hourly',//_data["metric"],
-//                 type: 'bar',
-//                 yAxisIndex: 1,
-//                 data: tonnesPerHour,
-//                 label: { normal: { show: true, position: 'top' } }
-//             });
-//             break;
-//         case ChartTPHDisplay.CUMULATIVE.toString():
-//             seriesArray.push(
-//                 {
-//                     name: 'Cumulative',
-//                     type: 'bar',
-//                     yAxisIndex: 1,
-//                     data: colouredCumulativeData,
-//                     itemStyle: { color: ChartStyles.cumulativeColor },
-//                     label: { normal: { show: true, position: 'top' } }
-//                 });
-//             break;
-//         case ChartTPHDisplay.BOTH.toString():
-//             for (var i = 0; i < tonnesPerHour.length; i++) {
-//                 seriesArray.push(
-//                     {
-//                         name: _data.sites[i], //'Hourly',//_data["metric"],
-//                         type: 'bar',
-//                         stack: 'tph',
-//                         data: tonnesPerHour[i],
-//                         yAxisIndex: 1,
-//                         itemStyle: { color: ChartStyles.siteColors[i] },
-//                         label: { normal: { show: true, position: 'top' } }
-//                     });
-//             }
-//             seriesArray.push(
-//                 {
-//                     name: 'Cumulative',
-//                     type: 'bar',
-//                     data: colouredCumulativeData,
-//                     yAxisIndex: 1,
-//                     itemStyle: { color: ChartStyles.cumulativeColor },
-//                     label: { normal: { show: true, position: 'top' } }
-//                 });
-//             break;
-//     }
-
-
-//     // Create legend
-//     var legend = [];
-//     for (var i = 0; i < tonnesPerHour.length; i++)
-//         legend.push({ name: _data.sites[i]/*, textStyle: { color: siteColors[i] }, icon: 'pin'*/ });
-//     //legend.push('Cumulative');
-//     legend.push('Targets');
-
-
-//     var option = {
-//         backgroundColor: ChartStyles.backGroundColor,
-//         textStyle: ChartStyles.textStyle,
-//         tooltip: ChartStyles.toolTip(),
-//         legend: { y: 'top', data: legend },
-//         grid: {
-//             top: '20%',
-//             bottom: '5%',
-//             left: '3%',
-//             right: '3%',
-//             containLabel: true
-//         },
-//         toolbox: ChartStyles.toolBox(myChart.getHeight(), "TPH"),
-//         xAxis: {
-//             type: 'category',
-//             data: timeLabelsShift[shift],
-//             axisLabel: ChartStyles.timeLineAxisLabel()
-//         },
-//         yAxis: [
-//             {
-//                 //name: 'Tonnes',
-//                 //nameLocation: 'middle',
-//                 splitLine: { show: false },
-//                 axisLine: ChartStyles.axisLineGrey
-//             }, {
-//                 //name: 'Cumulative',
-//                 //nameLocation: 'middle',
-//                 splitLine: { show: false },
-//                 axisLine: ChartStyles.axisLineGrey
-//             }
-//         ],
-//         series: seriesArray
-//     };
-
-//     SetOptionOnChart(option, myChart);
-//     return myChart;
-// }
-
-

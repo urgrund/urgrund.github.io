@@ -274,7 +274,6 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
     // ----------------------------------------------------
     // Branch based on whether this is to adjust 
     // the plan or to view the chart
-    // ----------------------------------------------------
 
     //$scope.getConfigs();
 
@@ -282,12 +281,14 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
     $scope.$watch('$viewContentLoaded', function () {
         $timeout(function () {
 
+            // -------------------------------------
             // Entry point for the chart view
             if ($routeParams.func == 0) {
                 $scope.site = $rootScope.siteData[$scope.siteIndex];
                 $scope.getMappedActualsToPlan();
             }
 
+            // -------------------------------------
             // Entry point for the plan view
             if ($routeParams.func == 1) {
 

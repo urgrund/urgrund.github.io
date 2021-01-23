@@ -54,6 +54,21 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
             if ($scope.equip == undefined)
                 return;
 
+            // TEST
+            var g = new SimpleGaugeData();
+            g.fontSize = 40;
+            g.value = 70;
+            g.color = 'white';
+            Charts.CreateGauge("gAU", g);
+            g.value = 10;
+            g.color = ChartStyles.TUMColors[1];
+            Charts.CreateGauge("gE", g);
+            g.value = 50;
+            g.color = ChartStyles.TUMColors[5];
+            Charts.CreateGauge("gA", g);
+            g.color = ChartStyles.TUMColors[0];
+            Charts.CreateGauge("gU", g);
+
             //$timeout(function () { mph = Charts.CreateMPH2("mph", $scope.equip, 2); }, d); d += t;
             mph = Charts.CreateMPH("mph", $scope.equip, 2);
 
@@ -65,13 +80,6 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
                 Charts.CreatePareto("p" + i, $scope.equip.shiftData[ShiftIndex()].tumTimings[ServerInfo.config.TUMIndex[i]]);
             }
 
-
-            // Charts.CreatePareto("p0", $scope.equip.shiftData[ShiftIndex()].tumTimings['Unplanned Breakdown']);
-            // Charts.CreatePareto("p1", $scope.equip.shiftData[ShiftIndex()].tumTimings['Unplanned Standby']);
-            // Charts.CreatePareto("p2", $scope.equip.shiftData[ShiftIndex()].tumTimings['Secondary Operating']);
-            // Charts.CreatePareto("p3", $scope.equip.shiftData[ShiftIndex()].tumTimings['Planned Maintenance']);
-            // Charts.CreatePareto("p4", $scope.equip.shiftData[ShiftIndex()].tumTimings['Operating Standby']);
-            // Charts.CreatePareto("p5", $scope.equip.shiftData[ShiftIndex()].tumTimings['Primary Operating']);
 
             timeline = Charts.CreateTimeLineFlat("timeline", $scope.equip, _includeTimeLine = true);
 
@@ -86,15 +94,6 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
                 }
             }, 500);
 
-            // $timeout(function () {
-            //     if (mph != undefined) {
-            //         var img = new Image();
-            //         img.src = mph.getDataURL({
-            //             pixelRatio: 2,
-            //             backgroundColor: '#fff'
-            //         });
-            //     }
-            // }, 1500);
         }, 100);
     }
 

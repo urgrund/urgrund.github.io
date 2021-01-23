@@ -661,3 +661,12 @@ class MonthlyChartDataForLocation {
         this.targetForChart = this.target - Math.min(this.target, this.progress + this.under + this.overForChart);
     }
 }
+
+
+class SimpleGaugeData {
+    constructor() {
+        this.value = 0;
+        this.fontSize = 60;
+        this.color = ChartStyles.TUMColors[2];
+    }
+}

@@ -297,7 +297,9 @@ input:invalid:required {
 
 
 
-.equipGrid {
+
+/* --------------------------------------------------------------------- */
+/* .equipGrid {
 
   display: grid;
 
@@ -311,21 +313,21 @@ input:invalid:required {
 
   width: 100%;
   height: 100%;
-
-  /* Consider fading in between shifts?*/
+  
   background: linear-gradient(rgba(0, 0, 0, 0.644), rgba(0, 0, 0, 0.322), black);
   opacity: 1;
-}
+} */
 
 
 .equipGrid2 {
-
+  padding: 0.5% 2% 0.5% 2%;
   display: grid;
 
   grid-column-gap: 1%;
   grid-row-gap: 0.2%; 
-  grid-template-columns: 31% 31% 31%;
-  grid-template-rows: 5% 5% 28% 28% 28%;  
+  /* grid-template-columns: 31% 31% 31%; */
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 4% 5% 38% 48%;  
 
   justify-content: center;    
   align-content: space-evenly;
@@ -338,6 +340,7 @@ input:invalid:required {
   /* opacity: 1; */
   animation: fadein 1s;
 }
+
 
 @keyframes fadein {
     from { opacity: 0; }
@@ -353,15 +356,50 @@ input:invalid:required {
   grid-row-end: 2;
 }
 
-
-.last2 {
+.equipParetoGrid
+{
   grid-column-start: 1;
-  grid-column-end: 4;
-  grid-row-start: 5;
+  grid-column-end: 3;
+  grid-row-start: 4;
   grid-row-end: 5;
+
+  display: grid;
+
+  grid-column-gap: 1%;
+  grid-row-gap: 1%; 
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;  
+
+  justify-content: center;    
+  align-content: space-evenly;
+
+  width: 100%;
+  height: 100%;
+}
+
+.equipGaugeGrid
+{
+  grid-column-start: 3;
+  grid-column-end: 4;
+  grid-row-start: 4;
+  grid-row-end: 5;
+
+  display: grid;
+
+  grid-column-gap: 1%;
+  grid-row-gap: 1%; 
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;  
+
+  justify-content: center;    
+  align-content: space-evenly;
+
+  width: 100%;
+  height: 100%;
 }
 
 
+/* --------------------------------------------------------------------- */
 
 
 
