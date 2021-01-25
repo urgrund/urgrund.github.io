@@ -1,4 +1,8 @@
 
+--Declare @Date as varchar(8)
+--Set @Date = '20181010'
+
+
 SELECT [Asset ID], [Mine Names], [Metric], [Secondy Activity Type], 
 [6], [7] , [8] , [9] , [10] , [11] , [12] , [13] , [14] , [15] , [16] , [17] , [18] , [19] , [20] , [21] , [22] , [23] , [0] , [1] , [2] , [3]  , [4] , [5]  
 FROM  
