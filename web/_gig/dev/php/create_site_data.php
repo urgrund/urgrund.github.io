@@ -25,7 +25,7 @@ if (Debug::enabled() == true) {
     //Debug::Log(Config::CreateDistinctTUMArray());
 
     //CreateSiteData::Run(new DateTime('20181231'));
-    //CreateSiteData::Run(new DateTime('20201201'));
+    CreateSiteData::Run(new DateTime('20201205'));
 
     //$sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . 'ALL_MetricPerHour.sql');
     //$sqlTxt = str_replace(SQLUtils::DateVar, "'" . '20201201' . "'", $sqlTxt);
@@ -135,7 +135,7 @@ final class CreateSiteData
 
         // ------------------------------------------------------------------------------------------
         // All metrics per hour for this date
-        $sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . 'ALL_MetricPerHour.sql');
+        $sqlTxt = SQLUtils::FileToQuery(Client::SQLCorePath() . 'ALL_MetricPerHour.sql');
         $sqlTxt = str_replace(SQLUtils::DateVar, "'" . self::$date . "'", $sqlTxt);
         $sqlMetricPerHour = SQLUtils::QueryToText($sqlTxt, "All Metric");
         // Sanitize null values 
@@ -150,7 +150,7 @@ final class CreateSiteData
 
         // ------------------------------------------------------------------------------------------
         // All events that have been logged for this date
-        $sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . "ALL_EquipmentEventList.sql");
+        $sqlTxt = SQLUtils::FileToQuery(Client::SQLCorePath() . "ALL_EquipmentEventList.sql");
         $sqlTxt = str_replace(SQLUtils::DateVar, "'" . self::$date . "'", $sqlTxt);
         $sqlEquipEventList = SQLUtils::QueryToText($sqlTxt, "Event List");
         //Debug::Log($sqlEquipEventList);
@@ -159,7 +159,7 @@ final class CreateSiteData
 
         // ------------------------------------------------------------------------------------------
         // All the equipment of the entire mine
-        $sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . 'ALL_MineEquipmentList.sql');
+        $sqlTxt = SQLUtils::FileToQuery(Client::SQLCorePath() . 'ALL_MineEquipmentList.sql');
         $sqlTxt = str_replace(SQLUtils::DateVar, "'" . self::$date . "'", $sqlTxt);
         $sqlMineEquipmentList = SQLUtils::QueryToText($sqlTxt, "All Mine Equip", false);
 
@@ -177,7 +177,7 @@ final class CreateSiteData
 
         // ------------------------------------------------------------------------------------------
         // Material Movements
-        $sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . 'ALL_MaterialMovements.sql');
+        $sqlTxt = SQLUtils::FileToQuery(Client::SQLCorePath() . 'ALL_MaterialMovements.sql');
         $sqlTxt = str_replace(SQLUtils::DateVar, "'" . self::$date . "'", $sqlTxt);
         $sqlMaterialMovements = SQLUtils::QueryToText($sqlTxt, "Mat Movements", false);
 
@@ -342,6 +342,15 @@ final class CreateSiteData
                 $allSites[$siteName]->shiftData[$_mm[1] - 1]->materialMovements[] = $_mm;
                 $allSites[$siteName]->shiftData[2]->materialMovements[] = $_mm;
             }
+        }
+        Debug::EndProfile();
+
+
+        // Summary tests
+        Debug::StartProfile("PHP: Summarys");
+        foreach ($allSites as $site) {
+            //Debug::Log($site);
+            $site->GenerateSummary();
         }
         Debug::EndProfile();
     }

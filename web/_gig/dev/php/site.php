@@ -14,6 +14,113 @@ class SiteShiftData
 
 
 
+class SiteSummary
+{
+    // Phase 5 TMM Ex pit Tonnes = 
+    // Asset ID = (Equipment ID’s that are Truck Classes), 
+    // Mine Area = (5)
+    // Metric = (Tonnes) 
+    // Secondary Activity Type <> NULL
+
+    // Phase 5 Ex-PIT Ore  =
+    // Asset ID = (Equipment ID’s that are Truck Classes), 
+    // Mine Area = (5)
+    // Metric = (Tonnes)
+    // Secondary Activity Type = Ore
+
+
+    public float $TMMExPitTonnes = 0;
+    public float $TotalExpPitOre = 0;
+    public float $TotalExpPitWaste = 0;
+    public float $DrillMeters = 0;
+
+    //public array $summary = [];
+    public array $materials = [];
+
+    public function __construct(Site $site)
+    {
+        global $sqlMetricPerHour;
+        global  $sqlMineEquipmentList;
+
+        for ($i = 0; $i < count($sqlMetricPerHour); $i++) {
+            $eventSite = Config::Sites($sqlMetricPerHour[$i][1]);
+            $eventAssetID = $sqlMetricPerHour[$i][0];
+
+            // Equipment belongs to this site
+            $equipCount = 0;
+            if ($eventSite == $site->name) {
+                $equipCount++;
+                $func = $sqlMineEquipmentList[$eventAssetID][1];
+                $metric = $sqlMetricPerHour[$i][2];
+                $second = $sqlMetricPerHour[$i][3];
+                $matType = $sqlMetricPerHour[$i][28];
+
+                // For Trucks & Tonnes
+                if (
+                    $func == "Truck Classes"
+                    && $metric == "Tonnes"
+                ) {
+                    $rowTotal = 0;
+                    for ($j = 4; $j < 28; $j++) {
+                        if ($sqlMetricPerHour[$i][$j] != NULL) {
+                            // The value for this hour in this row                            
+                            $val =  $sqlMetricPerHour[$i][$j];
+                            $rowTotal += $val;
+                            // Where to add it to?
+                            if ($second != null) {
+                                $this->TMMExPitTonnes += $val;
+                                if ($second == "Ore") {
+                                    $this->TotalExpPitOre += $val;
+                                }
+                                if ($second == "Waste") {
+                                    $this->TotalExpPitWaste += $val;
+                                }
+                            }
+                        }
+                    }
+
+                    // For Truck Tonnes material types
+                    // adding the sum of each row
+                    if (!isset($this->materials[$matType]))
+                        $this->materials[$matType] = $rowTotal;
+                    else
+                        $this->materials[$matType] += $rowTotal;
+                }
+
+                // For Track Drills
+                if (
+                    $func == "Track Drill"
+                    && $metric == "Metres"
+                ) {
+                    for ($j = 4; $j < 28; $j++) {
+                        if ($sqlMetricPerHour[$i][$j] != NULL) {
+                            $this->DrillMeters +=  $sqlMetricPerHour[$i][$j];
+                        }
+                    }
+                }
+            }
+        }
+
+        // Add them to the final array 
+        // to package for frontend
+        $this->TMMExPitTonnes = round($this->TMMExPitTonnes, 2);
+        $this->TotalExpPitOre = round($this->TotalExpPitOre, 2);
+        $this->TotalExpPitWaste = round($this->TotalExpPitWaste, 2);
+        $this->DrillMeters = round($this->DrillMeters, 2);
+
+        // Debug::Log($site->name);
+        // Debug::Log("TMMExPitTonnes : " . $this->TMMExPitTonnes);
+        // Debug::Log("TotalExpPitOre : " . $this->TotalExpPitOre);
+        // Debug::Log("TotalExpPitWaste : " . $this->TotalExpPitWaste);
+        // Debug::Log("DrillMeters : " . $this->DrillMeters);
+
+        // Debug::Log($this->materials);
+        // Debug::Log("___");
+        //Debug::Log($site->name);
+    }
+}
+
+
 class Site
 {
     //var $key;
@@ -29,6 +136,8 @@ class Site
 
     // List of possible functions an equipment can have at this site
     private $_equipFunction = array();
+
+    public SiteSummary $summary;
 
     function __construct($_name)
     {
@@ -95,6 +204,13 @@ class Site
         }
     }
 
+    public function GenerateSummary()
+    {
+        // This whole thing is temporary for now
+        if (Client::instance()->Name() == "MineStar") {
+            $this->summary = new SiteSummary($this);
+        }
+    }
 
 
     /** See if a Metric exists with this Site for a particular shift **/

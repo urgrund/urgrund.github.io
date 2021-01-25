@@ -9,11 +9,9 @@ interface IFromJSON
 
 class EventBreakDown implements IFromJSON
 {
-    var $duration;
+    var $duration = 0;
     var $eventCount = 0;
     var $categories = array();
-    var $majorGroup;
-
     public static function FromJSON(Object $obj)
     {
         $e = new EventBreakDown();
@@ -87,22 +85,17 @@ class EquipmentShiftData
 
     var $metricData = array();
 
-    var $timeTotal;
-
-    // Exclusive states 
-    //var $timeExOperating;
-    //var $timeExIdle;
-    //var $timeExDown;
+    //var $timeTotal;
 
     public AssetUtilisationPerDay $assetUtilisation;
 
     //var $tumTimings = array();
-    public TUMTimings $tumTimings;
+    //public TUMTimings $tumTimings;
 
     function __construct()
     {
         //$this->tumTimings = Config::CreateDistinctTUMArray();
-        $this->tumTimings = new TUMTimings();
+        //$this->tumTimings = new TUMTimings();
 
         $this->assetUtilisation = new AssetUtilisationPerDay('00000000');
 
@@ -115,7 +108,8 @@ class EquipmentShiftData
 
 /**   
  * Class to hold timings in a TUM category
- * based on the particular config of TUMs
+ * based on the particular config.  This will
+ * store the categories for eac TUM activity 
  */
 class TUMTimings
 {

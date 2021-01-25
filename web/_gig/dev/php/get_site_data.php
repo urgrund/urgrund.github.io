@@ -102,7 +102,7 @@ class GetSiteData
 
     public static function GetAvailableDates()
     {
-        $sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . 'ALL_AvailableDates.sql');
+        $sqlTxt = SQLUtils::FileToQuery(Client::SQLCorePath() . 'ALL_AvailableDates.sql');
         $result = SQLUtils::QueryToText($sqlTxt, "Available Dates");
         array_shift($result);
         //Debug::Log($result);

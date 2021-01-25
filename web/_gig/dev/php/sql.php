@@ -34,6 +34,12 @@ class SQLUtils
     public const DateVar = '@Date';
     public const MonthVar = '@Month';
     public const YearVar = '@Year';
+
+    public const ReportStartDate = '@StartDate';
+    public const ReportEndDate = '@EndDate';
+    public const ReportStartShift = '@StartShift';
+    public const ReportEndShift = '@EndShift';
+
     public const QUERY_DIRECTORY = "..\\sql\\";
 
     public static function OpenConnection()
@@ -173,9 +179,12 @@ class SQLUtils
         if ($stmt === false) {
             if (($errors = sqlsrv_errors()) != null) {
                 foreach ($errors as $error) {
-                    echo "SQLSTATE: " . $error['SQLSTATE'] . "<br />";
-                    echo "code: " . $error['code'] . "<br />";
-                    echo "message: " . $error['message'] . "<br />";
+                    //echo "SQLSTATE: " . $error['SQLSTATE'] . "<br />";
+                    //echo "code: " . $error['code'] . "<br />";
+                    //echo "message: " . $error['message'] . "<br />";
+                    Debug::Log("SQLSTATE: " . $error['SQLSTATE']);
+                    Debug::Log("code: " . $error['code']);
+                    Debug::Log("message: " . $error['message']);
                 }
             }
         }

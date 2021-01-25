@@ -80,9 +80,10 @@ class Equipment
         // Which shift does this event belong to?        
         // Store only the index of this event here
         //$shiftIndex = $e->shift == "P1" ? 0 : 1;
-        $shiftIndex = $e->shift;
+        //$shiftIndex = $e->shift;
         //Debug::Log($e->shift);
-        $this->shiftData[$shiftIndex]->events[] = count($this->events);
+        //$this->shiftData[$shiftIndex]->events[] = count($this->events);
+        $this->shiftData[$e->shift]->events[] = count($this->events);
 
         // Store the event in the 24hr list
         $this->shiftData[2]->events[] = count($this->events);
@@ -280,8 +281,11 @@ class Equipment
         for ($i = 0; $i < 2; $i++) {
             $_shiftIndex = $i;
             $_eventsArray = $this->shiftData[$_shiftIndex]->events;
-            $_tumTimings = $this->shiftData[$_shiftIndex]->tumTimings;
-            $_tumTimings24 = $this->shiftData[2]->tumTimings;
+
+            //$_tumTimings = $this->shiftData[$_shiftIndex]->tumTimings;
+            //$_tumTimings24 = $this->shiftData[2]->tumTimings;
+            $_tumTimings = $this->shiftData[$_shiftIndex]->assetUtilisation->tumTimings;
+            $_tumTimings24 = $this->shiftData[2]->assetUtilisation->tumTimings;
 
             for ($j = 0; $j < count($_eventsArray); $j++) {
                 $event = $this->events[$_eventsArray[$j]];
@@ -295,6 +299,7 @@ class Equipment
 
                 $tumProp = $event->tumCategory;
 
+                // For the Shift timings
                 $_tumTimings->$tumProp->eventCount++;
                 $_tumTimings->$tumProp->duration += $event->duration;
                 if (!isset($_tumTimings->$tumProp->categories[$event->status]))
@@ -311,8 +316,14 @@ class Equipment
                 else
                     $_tumTimings24->$tumProp->categories[$event->status] += $event->duration;
 
-                $this->shiftData[$_shiftIndex]->timeTotal += $event->duration;
-                $this->shiftData[2]->timeTotal += $event->duration;
+
+                // Add the event details to the shift & 24hr shift
+                //$this->shiftData[$_shiftIndex]->timeTotal += $event->duration;
+                //$this->shiftData[2]->timeTotal += $event->duration;
+
+                // Add to the calendar time of the shift & the 24hr
+                $this->shiftData[$_shiftIndex]->assetUtilisation->calendarTime += $event->duration;
+                $this->shiftData[2]->assetUtilisation->calendarTime += $event->duration;
             }
         }
     }
@@ -320,14 +331,20 @@ class Equipment
 
 
     // Generate the event breakdowns for both shifts
+    private EquipmentShiftData $_equipTempShiftData;
     function GenerateEventBreakDown()
     {
         //$this->shiftData[0]->eventBreakDown = $this->GetBreakDownOfEventsArray($this->shiftData[0]->events);
         //$this->shiftData[1]->eventBreakDown = $this->GetBreakDownOfEventsArray($this->shiftData[1]->events);
         $this->GetTUMBreakDownOfEvents();
+        for ($i = 0; $i < count($this->shiftData); $i++) {
+            $this->_equipTempShiftData = $this->shiftData[$i];
+            $this->_equipTempShiftData->assetUtilisation->GenerateUtilisationFromTUM();
+        }
     }
 
 
+    // TODO - THIS STILL SEEMS BUGGY ON FRONTEND
     /** For each shift, get the indices for
      * first call ups and last call up events */
     function GenerateShiftCallUps()
@@ -339,13 +356,14 @@ class Equipment
                 //     Debug::Log($event);
                 // }
                 if ($this->shiftData[$i]->eventFirstOp == null) {
-                    if ($event->majorGroup == "OPERATING") {
+                    if ($event->majorGroup == Config::MajorGroupOperating) {
                         $this->shiftData[$i]->eventFirstOp = $j;
                     }
                 }
             }
         }
     }
+
 
     // Metric per hour
     function GenerateMPH()
@@ -383,7 +401,8 @@ class Equipment
                 $dataIdx = 4;
 
                 // For each hour in the event                
-                for ($j = $dataIdx; $j < count($e); $j++) {
+                //for ($j = $dataIdx; $j < count($e); $j++) {
+                for ($j = $dataIdx; $j < ($dataIdx + 24); $j++) {
 
                     // Which shift to assign?                         
                     if ($j > $dataIdx + 12 - 1)
