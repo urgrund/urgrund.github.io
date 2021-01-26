@@ -24,8 +24,8 @@ if (Debug::enabled() == true) {
     //Debug::Log($c->TUMKeys);
     //Debug::Log(Config::CreateDistinctTUMArray());
 
-    //CreateSiteData::Run(new DateTime('20181231'));
-    CreateSiteData::Run(new DateTime('20201205'));
+    CreateSiteData::Run(new DateTime('20181231'));
+    //CreateSiteData::Run(new DateTime('20201205'));
 
     //$sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . 'ALL_MetricPerHour.sql');
     //$sqlTxt = str_replace(SQLUtils::DateVar, "'" . '20201201' . "'", $sqlTxt);
@@ -46,6 +46,7 @@ final class CreateSiteData
 
     private static $date;
     private static DateTime $dateTimeForData;
+
     /** The Date being used for this run of data generation */
     public static function DateForData(): DateTime
     {
@@ -88,6 +89,18 @@ final class CreateSiteData
         CreateSiteData::CreateDataForAllSites();
         CreateSiteData::CreateDataForAllEquip();
 
+
+        // Summary tests
+        Debug::StartProfile("PHP: Summarys");
+        foreach ($allSites as $site) {
+            //Debug::Log($site);
+            $site->GenerateSummary();
+        }
+        Debug::EndProfile();
+
+
+
+
         Debug::EndProfile();
 
         // Make arrays numeric based for both 
@@ -96,11 +109,11 @@ final class CreateSiteData
         $tempAllSites = [];
         foreach (array_keys($allSites) as $site) {
             if ($allSites[$site]->equipment != null) {
-                //Debug::Log($allSites[$site]->equipment);
                 $allSites[$site]->MakeArraysNumeric();
                 $tempAllSites[] = $allSites[$site];
             }
         }
+
         $allSites = $tempAllSites;
 
         // Add a list of all equipment        
@@ -110,7 +123,7 @@ final class CreateSiteData
         CreateSiteData::AddMetaData();
 
         // Demo mode
-        //ScrambleData::Scramble();
+        ScrambleData::Scramble();
 
         Debug::EndProfile();
         Debug::Log("Finished...");
@@ -344,15 +357,6 @@ final class CreateSiteData
             }
         }
         Debug::EndProfile();
-
-
-        // Summary tests
-        Debug::StartProfile("PHP: Summarys");
-        foreach ($allSites as $site) {
-            //Debug::Log($site);
-            $site->GenerateSummary();
-        }
-        Debug::EndProfile();
     }
     // ------------------------------------------------------------------
 
@@ -378,16 +382,6 @@ final class CreateSiteData
             self::$e->GenerateUofAFromEvents();
             self::$e->GenerateEventBreakDown();
             self::$e->GenerateShiftCallUps();
-
-
-            //if ($key == 'TH097')
-            //  Debug::Log("Generating " . $key);
-
-            //$equip->GenerateMPH();
-            //$equip->GenerateUofAFromEvents();
-            //$equip->GenerateEventBreakDown();
-            //$equip->GenerateShiftCallUps();
-            //}
         }
 
         Debug::EndProfile();

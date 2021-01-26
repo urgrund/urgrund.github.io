@@ -10,6 +10,34 @@ class SiteShiftData
     var $productionMetres = null;
 
     var $materialMovements = array();
+
+    var $assetUtilisationByFunction = array();
+
+    public AssetUtilisationPerDay $assetUtilisationTotal;
+
+
+    private EquipmentShiftData $_equipShiftData;
+    function GenerateAssetUtilisation(Site $site, int $shift)
+    {
+        //global $sqlMineEquipmentList;
+        global $allEquipment;
+        $this->assetUtilisationTotal = new AssetUtilisationPerDay(0);
+
+        foreach ($site->equipmentByFunction as  $key => $value) {
+            $this->assetUtilisationByFunction[$key] = new AssetUtilisationPerDay(0);
+            //Debug::Log($key);
+            for ($i = 0; $i < count($value); $i++) {
+                $this->_equipShiftData = $allEquipment[$value[$i]]->shiftData[$shift];
+                $this->assetUtilisationByFunction[$key]->AddTUMValues($this->_equipShiftData->assetUtilisation->tumTimings);
+                $this->assetUtilisationTotal->AddTUMValues($this->_equipShiftData->assetUtilisation->tumTimings);
+            }
+
+            $this->assetUtilisationByFunction[$key]->GenerateUtilisationFromTUM();
+            $this->assetUtilisationTotal->GenerateUtilisationFromTUM();
+        }
+
+        //Debug::Log($this->assetUtilisationTotal);
+    }
 }
 
 
@@ -204,12 +232,21 @@ class Site
         }
     }
 
+
+
+
     public function GenerateSummary()
     {
         // This whole thing is temporary for now
         if (Client::instance()->Name() == "MineStar") {
             $this->summary = new SiteSummary($this);
         }
+
+        //if ($this->name == "Western Flanks") {
+        for ($i = 0; $i < count($this->shiftData); $i++) {
+            $this->shiftData[$i]->GenerateAssetUtilisation($this, $i);
+        }
+        //}
     }
 
 

@@ -74,18 +74,12 @@ class EquipmentUofAHour
 
 class EquipmentShiftData
 {
-    //var $tph;
-    //var $tphAvg;
-    //var $tphTotal;
-
     var $eventFirstOp = null;
     var $events = array();
     var $eventBreakDown = array();
     var $uofa = array();
 
     var $metricData = array();
-
-    //var $timeTotal;
 
     public AssetUtilisationPerDay $assetUtilisation;
 
@@ -249,7 +243,6 @@ class AssetUtilisationPerDay
     public float $efficiency = 0;
     public float $totalAU = 0;
 
-    //var $tumTimings = array();
     public TUMTimings $tumTimings;
 
     function __construct(int $_dateID)
@@ -257,10 +250,6 @@ class AssetUtilisationPerDay
         $this->dateID = $_dateID;
         $this->calendarTime = 0;
         $this->tumTimings = new TUMTimings();
-        //$this->tumTimings = Config::CreateDistinctTUMArray();
-        //foreach ($this->tumTimings as $x => $x_value) {
-        //  $this->tumTimings[$x] = new EventBreakDown();
-        //}
     }
 
     public function GenerateUtilisationFromTUM()
@@ -280,16 +269,10 @@ class AssetUtilisationPerDay
 
         // These are the common names for TUM categories, though 
         // may differ due to the config, but this keeps it consistent just here
-
         $unplannedBreakdown = $this->tumTimings->$propUPBRD->duration;
         $plannedMaintenance = $this->tumTimings->$propPLMN->duration;
         $primaryOperating = $this->tumTimings->$propPRIOP->duration;
         $secondaryOperating = $this->tumTimings->$propSECOP->duration;
-
-        // $unplannedBreakdown = $this->tumTimings['Unplanned Breakdown']->duration;
-        // $plannedMaintenance = $this->tumTimings['Planned Maintenance']->duration;
-        // $primaryOperating = $this->tumTimings['Primary Operating']->duration;
-        // $secondaryOperating = $this->tumTimings['Secondary Operating']->duration;
 
         $this->availableTime = $this->calendarTime - ($unplannedBreakdown + $plannedMaintenance);
         $this->availability = $this->availableTime / $this->calendarTime;
@@ -305,5 +288,32 @@ class AssetUtilisationPerDay
             $this->efficiency = $primaryOperating / ($secondaryOperating + $primaryOperating);
 
         $this->totalAU = $primaryOperating / $this->calendarTime;
+    }
+
+
+    private EventBreakDown $_tempEventBD;
+
+
+    public function AddTUMValues(TUMTimings $_tumTimings)
+    {
+        foreach ($_tumTimings as  $key => $value) {
+            if (isset($this->tumTimings->$key)) {
+
+                // Add to the calendar time 
+                // and the TUM category
+                $this->calendarTime += $value->duration;
+                $this->tumTimings->$key->duration += $value->duration;
+                $this->tumTimings->$key->eventCount += $value->eventCount;
+
+                // Then for each secondary event categories, add the timings 
+                foreach ($_tumTimings->$key->categories as  $c => $cVal) {
+                    if (isset($this->tumTimings->$key->categories[$c])) {
+                        $this->tumTimings->$key->categories[$c] += $cVal;
+                    } else {
+                        $this->tumTimings->$key->categories[$c] = $cVal;
+                    }
+                }
+            }
+        }
     }
 }

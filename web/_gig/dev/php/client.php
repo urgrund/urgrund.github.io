@@ -5,9 +5,9 @@ include_once('sql.php');
 // of the client root as well as 
 // assuming the base Client implementation
 
-//$clientRoot = "Newcrest";
-$clientRoot = "MineStar";
-//$clientRoot = "OzMinerals";
+$clientRoot = "Newcrest";
+//$clientRoot = "MineStar";
+
 
 // Includes the client implementation 
 //include_once("..\clients\\" . $clientRoot . "\\" . $clientRoot . ".php");
