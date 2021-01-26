@@ -50,34 +50,47 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
         var uofa;
         var timeline;
 
+        var shiftData = $scope.equip.shiftData[ShiftIndex()];
+
         $timeout(function () {
             if ($scope.equip == undefined)
                 return;
 
             // TEST
             var g = new SimpleGaugeData();
+            var ct = shiftData.assetUtilisation.calendarTime;
             g.fontSize = 40;
-            g.value = 70;
+
+            // Total Asset Availability
+            g.value = shiftData.assetUtilisation.totalAU;
             g.color = 'white';
             Charts.CreateGauge("gAU", g);
-            g.value = 10;
+
+            // Efficiency
+            g.value = shiftData.assetUtilisation.efficiency;
             g.color = ChartStyles.TUMColors[1];
             Charts.CreateGauge("gE", g);
-            g.value = 50;
+
+            // Availablity
+            g.value = shiftData.assetUtilisation.availability;
             g.color = ChartStyles.TUMColors[5];
             Charts.CreateGauge("gA", g);
-            g.color = ChartStyles.TUMColors[0];
-            Charts.CreateGauge("gU", g);
+
+            g.value = shiftData.assetUtilisation.uOfa;
+            g.color = ChartStyles.TUMColors[2];
+            Charts.CreateGauge("gUofA", g);
+
+
 
             //$timeout(function () { mph = Charts.CreateMPH2("mph", $scope.equip, 2); }, d); d += t;
             mph = Charts.CreateMPH("mph", $scope.equip, 2);
 
-            Charts.CreateWaterfall("tumwf", $scope.equip.shiftData[ShiftIndex()].tumTimings)
+            Charts.CreateWaterfall("tumwf", shiftData.assetUtilisation.tumTimings, shiftData.assetUtilisation.calendarTime)
             uofa = Charts.CreateUofA("uofa", $scope.equip);
 
             // Create Paretos for each TUM category
             for (var i = 0; i < ServerInfo.config.TUMIndex.length; i++) {
-                Charts.CreatePareto("p" + i, $scope.equip.shiftData[ShiftIndex()].tumTimings[ServerInfo.config.TUMIndex[i]]);
+                Charts.CreatePareto("p" + i, shiftData.assetUtilisation.tumTimings[ServerInfo.config.TUMIndex[i]]);
             }
 
 

@@ -1,6 +1,27 @@
 app.controller('Reports', function ($scope, $http, $httpParamSerializerJQLike, $timeout, uiGridExporterService, uiGridExporterConstants) {
 
 
+
+
+
+
+    // ======================================================================================================
+    // ======================================================================================================
+    //
+    // THIS ENTIRE CONTROLLER IS OLD,  REMOVE WHEN YOU CAN 
+    // WILL BE REPORTING INSTEAD
+    //
+    // ======================================================================================================
+    // ======================================================================================================
+
+
+
+
+
+
+
+
+
     // The list of available reports
     // this will need to come from server 
     var tempReports = { "Bogger Tonnes": ["All Tonnes By Mine By Time ", "Development Total By Mine By Time ", "Production Total By Mine By Time ", "Stockpile Total By Mine By Time ", "Total By Time By Activity ", "Total By Time "], "Equipment TUM": ["By Event Reason ", "By Major Category "] };
@@ -168,24 +189,3 @@ app.controller('Reports', function ($scope, $http, $httpParamSerializerJQLike, $
     });
 });
 
-
-/* <script>
-    var acc = document.getElementsByClassName("accordion");
-    var i;
-
-    for (i = 0; i < acc.length; i++)
-    {
-        acc[i].addEventListener("click", function ()
-        {
-            this.classList.toggle("active");
-            var panel = this.nextElementSibling;
-            if (panel.style.maxHeight)
-            {
-                panel.style.maxHeight = null;
-            } else
-            {
-                panel.style.maxHeight = panel.scrollHeight + "px";
-            }
-        });
-}
-</script> */

@@ -3,7 +3,7 @@
         <div class="chartheadtxt left">
             <h5 class="bold">{{$ctrl.name}}</h5>
         </div>
-        <div class="chartheadtxt right">
+        <!-- <div class="chartheadtxt right">
             <div class="tooltip">
                 <i class="fas fa-info-circle tooltip"></i>
                 <span class="tooltiptext">
@@ -12,10 +12,14 @@
                         be reflected <a href=""><i class="fas fa-book"></i> Read More</a></p>
                 </span>
             </div>
-        </div>
+        </div> -->
     </div>
+
+    <ng-content></ng-content>
+
     <div id="{{$ctrl.chart}}" class="chartdivcontent  {{$root.backGroundClassBlur}}">
         <div style="display:block">
+            <!-- ng-if="$ctrl.blank!=='true'"> -->
             <chart-loading></chart-loading>
         </div>
     </div>

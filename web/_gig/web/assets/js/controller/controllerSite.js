@@ -5,24 +5,29 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
     $scope.shiftData = null;
     $scope.siteID = $routeParams.site;
 
-    //$scope.FunctionMapping = FunctionMapping;
-
-    // For the chart IDs
-    //$scope.assetHaulID = "assetHaul";
-    //$scope.assetLoadID = "assetLoad";
-    //$scope.assetDrillID = "assetDrill";
-
-    //$scope.assetTotals = [];
-    //$scope.assetTotals[0] = [0, 0, 0];
-    //$scope.assetTotals[1] = [0, 0, 0];
-    //$scope.assetTotals[2] = [0, 0, 0];
-    //console.log($scope.assetTotals);
-    //$scope.metricProductionColour = "#007260";
-    //$scope.equipByFunc = [];
 
 
+    $scope.summary = undefined;
+    $scope.summaryMaterials = undefined;
 
     $scope.createSiteCharts = function () {
+
+        if ($scope.site.summary != undefined) {
+            $scope.summary = [];
+            for (const property in $scope.site.summary) {
+                if (typeof $scope.site.summary[property] !== 'object')
+                    $scope.summary.push([property, $scope.site.summary[property]]);
+            }
+
+            $scope.summaryMaterials = [];
+            for (const property in $scope.site.summary.materials) {
+                $scope.summaryMaterials.push([property, $scope.site.summary.materials[property]]);
+            }
+
+            console.log($scope.summaryMaterials);
+            console.log($scope.summary);
+        }
+
 
         // Create flat timelines
         var x = document.getElementsByClassName("equip-flat-usage");
@@ -33,10 +38,6 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
             }
         }
 
-        // Asset totals
-        //ChartsMines.CreateTinyPie($scope.assetHaulID, $scope.assetTotals[0]);
-        //ChartsMines.CreateTinyPie($scope.assetLoadID, $scope.assetTotals[1]);
-        //ChartsMines.CreateTinyPie($scope.assetDrillID, $scope.assetTotals[2]);
 
         // Sankey        
         if ($rootScope.siteData != null)
@@ -45,6 +46,15 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
         // Bar
         if ($scope.shiftData != null)
             ChartsMines.CreateBar("siteTPH", $scope.shiftData.metricData, "");
+
+
+        var x = document.getElementsByClassName("gauge");
+        for (var i = 0; i < x.length; i++) {
+            //console.log(x[i]);
+            //console.log($scope.shiftData.assetUtilisationByFunction)
+        }
+
+
     };
 
 
@@ -63,13 +73,13 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
             }
 
             //$scope.prepareAssetTotals();
-        }, 50);
+        }, 5);
 
 
         // Setup charts 
         $timeout(function () {
             $scope.createSiteCharts();
-        }, 100);
+        }, 10);
     });
 
 
@@ -80,6 +90,7 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
             $scope.siteIndex = $routeParams.site;
             $scope.site = $rootScope.siteData[$scope.siteIndex];
             $scope.shiftData = $scope.site.shiftData[ShiftIndex()];
+
         }, 50);
 
         // Setup charts 

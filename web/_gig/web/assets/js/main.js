@@ -630,6 +630,10 @@ app.config(
                 templateUrl: 'reports.html',
                 controller: 'Reports'
             })
+            .when("/reporting/", {
+                templateUrl: 'reporting.html',
+                controller: 'Reporting'
+            })
             .when("/longterm/", {
                 templateUrl: 'longterm.html',
                 controller: 'LongTerm'
@@ -660,22 +664,6 @@ app.config(
 // =====================================================================================
 // Components
 // TODO: Move this into component files
-
-/// ----------------------------------------
-/// Drill Down Chart Container
-/// ----------------------------------------
-app.component("drillDownChart", {
-    templateUrl: 'components/drillDownChart.html',
-    bindings: {
-        name: '@',
-        chart: '@'
-    },
-    controller: function ($rootScope) {
-        //console.log($rootScope);
-        //this.root = $rootScope;
-    }
-});
-/// ----------------------------------------
 
 
 

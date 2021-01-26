@@ -32,7 +32,9 @@ app.controller('Productivity', function ($routeParams, $rootScope, $route, $scop
     $scope.createCharts = function () {
         var elements = document.getElementsByClassName("chartdivcontent");
         for (var i = 0; i < elements.length; i++) {
-            Charts.CreateUofA(elements[i].id, $rootScope.equipment[elements[i].id]);
+            //Charts.CreateUofA(elements[i].id, $rootScope.equipment[elements[i].id]);
+            Charts.CreateMPH(elements[i].id, $rootScope.equipment[elements[i].id], 2);
+            ///Charts.CreateUofA(elements[i].id, $rootScope.equipment[elements[i].id]);
         }
         // var i = 0;
         // $interval(function () {

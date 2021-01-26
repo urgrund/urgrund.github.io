@@ -36,6 +36,10 @@
         <!-- </div> -->
     </div>
 
+
+
+
+
     <!-- ------------------------------------------------------------------------------------- -->
 
     <div class="siteContentGrid">
@@ -43,7 +47,27 @@
             <!-- <h2 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
             </br> -->
 
-            <div class="">
+
+            <!-- {{ summary }} -->
+            <div ng-if="summary != undefined">
+                <h2 class="underline"><i class="fas fa-chart-bar"></i> Summary</h2>
+                <div ng-repeat="x in summary" class="flex overline">
+                    <h3 class="light">{{x[0]}}</h3>
+                    <h1 class="right">{{x[1] | number : 1}}</h1>
+                </div>
+                <br />
+                <h2 class="underline"><i class="fas fa-weight-hanging"></i> Materials</h2>
+                <div ng-repeat="x in summaryMaterials">
+                    <br />
+                    <div class="flex underline">
+                        <h4 class="light">{{x[0]}}</h4>
+                        <h2 class="right">{{x[1] | number : 2}}</h2>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="" ng-if="summary == undefined">
                 <div class="">
                     <div class="flex">
                         <div>
@@ -69,24 +93,31 @@
 
                     </div>
                 </div>
-            </div>
-            </br>
-            <h2 class="underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
-            </br>
-            <div ng-repeat="(key, value) in shiftData.metricData" class="center flex overline " ng-if="value.total != 0"
-                ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
-                <div class="left">
-                    <h4> {{value.name}}</h4>
-                    <p class="light">{{value.activity}}</p>
+
+                </br>
+                <h2 class="underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
+                </br>
+                <div ng-repeat="(key, value) in shiftData.metricData" class="center flex overline "
+                    ng-if="value.total != 0"
+                    ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
+                    <div class="left">
+                        <h4> {{value.name}}</h4>
+                        <p class="light">{{value.activity}}</p>
+                    </div>
+                    <h2>{{value.total | number:0}}</h2>
                 </div>
-                <h2>{{value.total | number:0}}</h2>
             </div>
+
 
 
 
         </div>
 
         <!-- ------------------------------------------------------------------------------------- -->
+
+
+
+
 
 
 
@@ -104,7 +135,7 @@
                 <drill-down-chart name="{{site.name}} Tonnes" chart="siteTPH"></drill-down-chart>
             </div>
 
-
+            <br />
 
 
             <div ng-repeat="(key, value) in site.equipmentByFunction" class="siteCardShd">
@@ -135,24 +166,33 @@
         <!-- ------------------------------------------------------------------------------------- -->
         <div class="siteColumn">
 
-            <!-- <h2 class="center underline"><i class="fas fa-truck"></i> Assets</h2>
-            </br> -->
-
-            <!-- <div class="flex flex-even">
-                <div class="">
-                    <p class="light"> Spatial Compliance</p>
-                    <h2> <i style="color: rgb(0, 255, 21);">&#9650;</i>50%</h2>
-                </div>
-                <div class="">
-                    <p class="light"> Volumetric Compliance</p>
-                    <h2> <i style="color: red;">&#9660;</i>50%</h2>
-                </div>
-            </div> -->
-
 
             <div class="siteSankey">
                 <drill-down-chart name="Material Movements" chart="sankey"></drill-down-chart>
             </div>
+            <br />
+
+            <!-- <div ng-repeat="(key, value) in site.equipmentByFunction" class="">
+
+                <div style="height: 100px; width: 100%;" ;>
+
+                    <div class="chartCard">
+                        <div class="charthead">
+                            <div class="chartheadtxt left">
+                                <h5 class="bold">{{functionMapping[key]}}</h5>
+                            </div>
+                        </div>
+                        <div class="chartdivcontent {{$root.backGroundClassBlur}} flex">
+                            <div class="gauge" id="{{key}}_gAU">AAA</div>
+                            <div class="gauge" id="{{key}}_gE">AAA</div>
+                            <div class="gauge" id="{{key}}_gA">AAA</div>
+                            <div class="gauge" id="{{key}}_gUofA">AAA</div>
+                        </div>
+                    </div>
+
+                </div>
+                <br />
+            </div> -->
 
         </div>
 

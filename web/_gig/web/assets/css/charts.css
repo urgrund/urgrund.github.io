@@ -53,6 +53,7 @@ h1,h2,h3,h4,h5,h6,p
     color:white;
     margin: 0;
     padding: 0;
+    /* margin-block-start: -0.2em; */
     margin-block-start: 0em;
     margin-block-end: 0em;
     font-weight: 300;
@@ -327,7 +328,7 @@ input:invalid:required {
   grid-row-gap: 0.2%; 
   /* grid-template-columns: 31% 31% 31%; */
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 4% 5% 38% 48%;  
+  grid-template-rows: 4% 3% 38% 48%;  
 
   justify-content: center;    
   align-content: space-evenly;

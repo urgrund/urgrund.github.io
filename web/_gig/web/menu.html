@@ -46,6 +46,7 @@
                     <h3>Reports</h3>
                     <a ng-href="#!reports">Report Generator</a>
                     <a ng-href="#!longterm">Long Term Data</a>
+                    <a ng-href="#!reporting">Reporting</a>
 
                     <h3>Call Ups</h3>
 
@@ -58,11 +59,6 @@
 
 
                     <h3>Productivity</h3>
-                    <!-- <a ng-href="#!productivity/D">Jumbo Productivity</a>
-                    <a ng-href="#!productivity/P">Drill Productivity</a>
-                    <a ng-href="#!productivity/HAULING">Truck Productivity</a>
-                    <a ng-href="#!productivity/LOADING">Bogger Productivity</a> -->
-
                     <div ng-repeat="(key, value) in meta.EquipmentFunctionMap">
                         <a ng-href="#!productivity/{{key}}">
                             {{value}}
@@ -95,6 +91,8 @@
     <!-- Utilities and Data stuff -->
     <div class="navright">
 
+
+
         <!-- User Menu -->
         <div class="util userbtn">
             <div class="utilbtn">
@@ -110,6 +108,19 @@
                     <a ng-href="#">User Manual</a>
                     <a ng-href="http://www.mine-mage.com">Web</a>
                     <a ng-href="#">Report Issue</a>
+
+                    <br>
+                    <br>
+                    <p class="light">Mine Mage is developed by</p>
+                    <div>
+                        <img ng-src="assets/img/gigworth_logo_light.png" style="
+            width: 130px;
+            height: 30px;
+            margin-top: 6px;" ;>
+                    </div>
+                    <p>GIGWORTH PTY LTD</p>
+                    <p>ACN : 635 583 765</p>
+
                 </div>
             </div>
         </div>
@@ -117,28 +128,6 @@
 
 
 
-
-
-        <!-- DB Connection -->
-        <!-- <div class="util">
-            <div class="utilbtn"><i class="fas fa-database"></i></div>
-            <div class="dropdown-content">
-                <h3> <i class="fas fa-database"></i> DB Connection</h3>
-                <div class="utilgrid">
-                    <div>IP</div>
-                    <div>{{meta.IP}}</div>
-
-                    <div>Connection Status</div>
-                    <div>OK!</div>
-
-                    <div>Last Data Pull</div>
-                    <div>{{meta.LastUpdate['date']}}</div>
-
-                    <div>Next Data Pull</div>
-                    <div>5m 24s</div>
-                </div>
-            </div>
-        </div> -->
 
         <!-- Preferences -->
         <div class="util">
@@ -197,44 +186,11 @@
                     <div>Next Update</div>
                     <div>{{nextUpdateIn}}</div>
                 </div>
-
-
-
-                <!-- <h3><i class="far fa-calendar-alt"></i> Data</h3>
-                <div class="utilgrid">
-                    <div>Active Date</div>
-                    <div>
-                        <h4>{{siteDataDate.SHORT}}</h4>
-                    </div>
-                    <div>Trailing Week</div>
-                    <div>
-                        <div class="flex" ng-repeat="x in cachedData">
-                            <button ng-click="setNewSiteData(x)"> {{ convertToNiceDateObject(x[x.length-1].Date).LONG }}
-                            </button>
-                        </div>
-                    </div>
-                </div> -->
-
-                <!-- <h3><i class="fas fa-search"></i> Search</h3>
-
-                <input type="text" ng-model="searchText" ng-init="searchText='Enter equipment ID...'"
-                    placeholder="Search by ID...">
-                <div>
-                    <div class="droplist" ng-repeat="x in equipList | filter:searchText"
-                        ng-init="e = getEquipmentLastEvent(equipment[x])">
-                        <div class="searchResult underline left">
-                            <a ng-href="#!equip/{{x}}">
-                                <h5><i ng-class='equipStyleIcon[e.majorGroup]'
-                                        ng-style='equipStyleColor[e.majorGroup]'></i>
-                                    {{ x }}</h5>
-                            </a>
-                            <p>{{ e.status }}</p>
-                            <p><i>{{ e.operator }}</i></p>
-                        </div>
-                    </div>
-                </div> -->
             </div>
         </div>
+
+
+
 
         <!-- Alerts -->
         <div class="util">
@@ -248,6 +204,9 @@
                 </div>
             </div>
         </div>
+
+
+
 
 
 

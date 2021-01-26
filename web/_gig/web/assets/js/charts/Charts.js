@@ -182,7 +182,8 @@ function InitChartFromElementID(_elementID) {
     var dom = document.getElementById(_elementID);
     if (dom == null || dom == undefined)
         return undefined;
-    var myChart = echarts.init(dom, ChartStyles.baseStyle);
+    //var myChart = echarts.init(dom, ChartStyles.baseStyle);
+    var myChart = echarts.init(dom, ChartStyles.baseStyle, { renderer: 'canvas' });
     return myChart;
 }
 
@@ -1289,6 +1290,9 @@ class Charts {
 
 
 
+
+
+
         // Get the shift data into a smaller variable name
         var _d = _data.shiftData[ShiftIndex()];
 
@@ -1377,7 +1381,7 @@ class Charts {
             grid: {
                 top: _includeTimeLine ? '2%' : '0%',
                 bottom: _includeTimeLine ? '2%' : '0%',
-                left: _includeTimeLine ? '2%' : '1%',
+                left: _includeTimeLine ? '1%' : '1%',
                 right: _includeTimeLine ? '2%' : '1%'
             },
             xAxis: [
@@ -1491,7 +1495,7 @@ class Charts {
 
         //var data = new MonthlyChartDataForLocation(_data);
 
-        var value = _data.value;
+        var value = _data.value * 100;
 
         //console.log(_data);
         var strPct = (x) => x.toString().concat("%");
@@ -1508,7 +1512,7 @@ class Charts {
 
 
             title: {
-                text: strPct(value),
+                text: strPct(value.toFixed()),
                 //subtext: "foo",
                 left: 'center',
                 bottom: '13%',
