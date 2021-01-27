@@ -1,12 +1,55 @@
 <div class="cup">
-    <div ng-repeat="(key, value) in availableReports">
-        <h3 class="underline">{{key}}</h3>
-        <div ng-repeat="x in value">
-            <button ng-click="generateReportFromClick(key, x[0])">
-                {{x[1]}}
-            </button>
+
+    <div class="flex h100pc">
+        <div class="siteCardShd reportCard">
+            <h3 class="underline">Settings</h3>
+            <br />
+            <div class="flex flex-even">
+                <div>
+                    <h4>Start Shift </h4>
+                    <div>
+                        <label class="switch"><input ng-init="reportGenStartShift=true" ng-model="reportGenStartShift"
+                                ng-change="" type="checkbox" id="togBtn">
+                            <div class="slider round" switch-on="Day" switch-off="Night"></div>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <h4>End Shift</h4>
+                    <div>
+                        <label class="switch"><input ng-init="reportGenEndShift=false" ng-model="reportGenEndShift"
+                                ng-change="" type="checkbox" id="togBtn" checked>
+                            <div class="slider round" switch-on="Day" switch-off="Night"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-even">
+                <div>
+                    <h4>Date Range</h4>
+                    <input class=calendar placeholder="calendar 1" readonly="readonly">
+                </div>
+            </div>
+
+            <br />
+            <h3 class="underline">Reports</h3>
+            <div ng-repeat="(key, value) in availableReports">
+                <h4 class="underline light">{{key}}</h4>
+                <div ng-repeat="x in value">
+                    <button ng-click="generateReportFromClick(key, x[0])">
+                        {{x[1]}}
+                    </button>
+                </div>
+                <br />
+            </div>
         </div>
-        <br />
+
+        <!-- Report Display -->
+
+        <div ui-grid="{ data: myData }" class="siteCardShd reportDisplay grid">
+        </div>
+
     </div>
 
 </div>

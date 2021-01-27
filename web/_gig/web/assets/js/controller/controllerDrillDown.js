@@ -58,7 +58,7 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
 
             // TEST
             var g = new SimpleGaugeData();
-            var ct = shiftData.assetUtilisation.calendarTime;
+            //var ct = shiftData.assetUtilisation.calendarTime;
             g.fontSize = 40;
 
             // Total Asset Availability
@@ -73,7 +73,7 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
 
             // Availablity
             g.value = shiftData.assetUtilisation.availability;
-            g.color = ChartStyles.TUMColors[5];
+            g.color = ChartStyles.TUMColors[4];
             Charts.CreateGauge("gA", g);
 
             g.value = shiftData.assetUtilisation.uOfa;

@@ -1,7 +1,9 @@
 .cup
 {
-  margin: 0.5% 2% 0.5% 2%;
-  height: 95%;
+  /* margin: 0.5% 2% 0.5% 2%;
+  height: 95%; */
+  margin: 0.5% 2% 0% 2%;
+  height: 98%;
 }
 
 .cup > .mines-center

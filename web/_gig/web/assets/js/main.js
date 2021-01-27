@@ -112,15 +112,14 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             return;
         }
 
-        var jsonString = JSON.stringify(_data);
-        var newData = JSON.parse(jsonString);
+        //console.log(_data);
 
-        // if (_test) {
-        //     console.log("returned...");
-        //     return;
-        // }
+        //var jsonString = JSON.stringify(_data);
+        //var newData = JSON.parse(jsonString);
+        var newData = Array.from(_data);
 
         //console.log(newData);
+
 
         // All sites
         $rootScope.siteData = newData;
@@ -150,7 +149,7 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         //console.log($rootScope.equipmentByFunction);
 
         // Debug output
-        if (true) {
+        if (false) {
             console.log("[" + $rootScope.meta.Date + "]");
             console.log("Sites :");
             console.log($rootScope.siteData);

@@ -24,8 +24,8 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
                 $scope.summaryMaterials.push([property, $scope.site.summary.materials[property]]);
             }
 
-            console.log($scope.summaryMaterials);
-            console.log($scope.summary);
+            //console.log($scope.summaryMaterials);
+            //console.log($scope.summary);
         }
 
 
@@ -34,7 +34,7 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
         for (var i = 0; i < x.length; i++) {
             var equip = $rootScope.equipment[x[i].id];
             if (equip != 'undefined') {
-                Charts.CreateTimeLineFlat(x[i].id, equip);
+                //Charts.CreateTimeLineFlat(x[i].id, equip);
             }
         }
 
@@ -48,10 +48,64 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
             ChartsMines.CreateBar("siteTPH", $scope.shiftData.metricData, "");
 
 
-        var x = document.getElementsByClassName("gauge");
-        for (var i = 0; i < x.length; i++) {
-            //console.log(x[i]);
-            //console.log($scope.shiftData.assetUtilisationByFunction)
+        // var g = new SimpleGaugeData();
+        // var ct = shiftData.assetUtilisation.calendarTime;
+        // g.fontSize = 40;
+
+        // // Total Asset Availability
+        // g.value = shiftData.assetUtilisation.totalAU;
+        // g.color = 'white';
+        // Charts.CreateGauge("gAU", g);
+
+        // // Efficiency
+        // g.value = shiftData.assetUtilisation.efficiency;
+        // g.color = ChartStyles.TUMColors[1];
+        // Charts.CreateGauge("gE", g);
+
+        // // Availablity
+        // g.value = shiftData.assetUtilisation.availability;
+        // g.color = ChartStyles.TUMColors[5];
+        // Charts.CreateGauge("gA", g);
+
+        // g.value = shiftData.assetUtilisation.uOfa;
+        // g.color = ChartStyles.TUMColors[2];
+        // Charts.CreateGauge("gUofA", g);
+
+        //var x = document.getElementsByClassName("gauge");
+        //for (var i = 0; i < x.length; i++) {
+        //console.log(x[i]);
+        //console.log($scope.shiftData.assetUtilisationByFunction)
+        //}
+
+        var g = new SimpleGaugeData();
+        g.fontSize = 15;
+        //var ct = shiftData.assetUtilisation.calendarTime;
+        //return;
+        for (var x in $scope.site.equipmentByFunction) {
+            var assetUtilisation = $scope.shiftData.assetUtilisationByFunction[x];
+
+            //console.log("________________________________");
+            //console.log(x);
+            //console.log(assetUtilisation);
+
+            // Total Asset Availability
+            g.value = assetUtilisation.totalAU;
+            g.color = 'white';
+            Charts.CreateGauge(x + "_gAU", g);
+
+            // Efficiency
+            g.value = assetUtilisation.efficiency;
+            g.color = ChartStyles.TUMColors[1];
+            Charts.CreateGauge(x + "_gE", g);
+
+            // Availablity
+            g.value = assetUtilisation.availability;
+            g.color = ChartStyles.TUMColors[4];
+            Charts.CreateGauge(x + "_gA", g);
+
+            g.value = assetUtilisation.uOfa;
+            g.color = ChartStyles.TUMColors[2];
+            Charts.CreateGauge(x + "_gUofA", g);
         }
 
 
@@ -90,19 +144,21 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
             $scope.siteIndex = $routeParams.site;
             $scope.site = $rootScope.siteData[$scope.siteIndex];
             $scope.shiftData = $scope.site.shiftData[ShiftIndex()];
-
-        }, 50);
-
-        // Setup charts 
-        $timeout(function () {
             $scope.createSiteCharts();
-        }, 100);
+        }, 50);
     });
 
 
     $scope.$on('updateShift', function (event, data) {
         $timeout(function () {
+            $scope.siteIndex = $routeParams.site;
+
+            //console.log($scope.siteIndex);
+            //console.log($rootScope.siteData);
+
+            $scope.site = $rootScope.siteData[$scope.siteIndex];
             $scope.shiftData = $scope.site.shiftData[ShiftIndex()];
+            //console.log($scope.shiftData);
             $scope.createSiteCharts();
         }, 10);
     });

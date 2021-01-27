@@ -13,10 +13,10 @@
         <div>
             <div class="flex">
                 <div class="sitePicMargin">
-                    <img class="sitePicSmall" ng-src="assets/img/site_{{siteIndex%3}}.jpg">
+                    <img class="sitePicTiny" ng-src="assets/img/site_{{siteIndex%3}}.jpg">
                 </div>
                 <div>
-                    <h1 class="center">{{site.name}}</h1>
+                    <h2 class="center">{{site.name}}</h2>
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@
                 <h2 class="underline"><i class="fas fa-chart-bar"></i> Summary</h2>
                 <div ng-repeat="x in summary" class="flex overline">
                     <h3 class="light">{{x[0]}}</h3>
-                    <h1 class="right">{{x[1] | number : 1}}</h1>
+                    <h1 class="right">{{x[1] | number : 0}}</h1>
                 </div>
                 <br />
                 <h2 class="underline"><i class="fas fa-weight-hanging"></i> Materials</h2>
@@ -61,7 +61,7 @@
                     <br />
                     <div class="flex underline">
                         <h4 class="light">{{x[0]}}</h4>
-                        <h2 class="right">{{x[1] | number : 2}}</h2>
+                        <h2 class="right">{{x[1] | number : 0}}</h2>
                     </div>
                 </div>
             </div>
@@ -172,9 +172,11 @@
             </div>
             <br />
 
-            <!-- <div ng-repeat="(key, value) in site.equipmentByFunction" class="">
 
-                <div style="height: 100px; width: 100%;" ;>
+
+            <div ng-repeat="(key, value) in site.equipmentByFunction" style="height: 100px;">
+
+                <div style="height: 100%; width: 100%; background-color: blueviolet;" ;>
 
                     <div class="chartCard">
                         <div class="charthead">
@@ -183,16 +185,16 @@
                             </div>
                         </div>
                         <div class="chartdivcontent {{$root.backGroundClassBlur}} flex">
-                            <div class="gauge" id="{{key}}_gAU">AAA</div>
-                            <div class="gauge" id="{{key}}_gE">AAA</div>
-                            <div class="gauge" id="{{key}}_gA">AAA</div>
-                            <div class="gauge" id="{{key}}_gUofA">AAA</div>
+                            <div class="gauge h60 w100pc" id="{{key}}_gAU">AAA</div>
+                            <div class="gauge h60 w100pc" id="{{key}}_gE">AAA</div>
+                            <div class="gauge h60 w100pc" id="{{key}}_gA">AAA</div>
+                            <div class="gauge h60 w100pc" id="{{key}}_gUofA">AAA</div>
                         </div>
                     </div>
 
                 </div>
                 <br />
-            </div> -->
+            </div>
 
         </div>
 
