@@ -3,12 +3,7 @@
 include_once('header.php');
 
 
-
-// ------------------------------------------------------------------
-// ENTRY POINT
-
 // Uncomment this to run directly from this file
-//Debug::Enable();
 if (Debug::enabled() == true) {
 
     //$c = new Config();
@@ -36,9 +31,7 @@ if (Debug::enabled() == true) {
 
 /**   
  * Generates data for a given date for all 
- * equipment at all locations
- * 
- * @author Matthew Bell 2021  
+ * equipment at all locations   
  */
 final class CreateSiteData
 {
@@ -123,7 +116,7 @@ final class CreateSiteData
         CreateSiteData::AddMetaData();
 
         // Demo mode
-        ScrambleData::Scramble();
+        //ScrambleData::Scramble();
 
         Debug::EndProfile();
         Debug::Log("Finished...");

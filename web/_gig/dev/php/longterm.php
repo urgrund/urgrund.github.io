@@ -1,8 +1,5 @@
 <?php
 include_once('header.php');
-//include_once('get_site_data.php');
-//include_once('create_site_data.php');
-//include_once('get_site_data.php');
 
 
 // ----------------------------------------------------------
@@ -27,19 +24,6 @@ if (is_object($request)) {
 
 
 
-
-abstract class LongTermGenerationType
-{
-    const EquipID = 0;
-    const EquipFunction = 1;
-    const Site = 2;
-}
-
-
-
-
-
-
 class LongTermAsset
 {
     // For each asset
@@ -51,11 +35,6 @@ class LongTermAsset
     function __construct()
     {
         $this->totalAssetUtilisation = new AssetUtilisationPerDay(0);
-
-        //$this->tumTimings = Config::CreateDistinctTUMArray();
-        //foreach ($this->tumTimings as $x => $x_value) {
-        //  $this->tumTimings[$x] = new EventBreakDown();
-        //}
     }
 
     public function GenerateUtilisationFromTUM()
@@ -82,8 +61,6 @@ class LongTermAsset
             if (!isset($this->assetUtilisation[$f]))
                 $this->assetUtilisation[$f] = new AssetUtilisationPerDay($f);
 
-
-
             $this->assetUtilisation[$f]->calendarTime += $duration;
             $this->assetUtilisation[$f]->tumTimings->$tumCategory->eventCount++;
             $this->assetUtilisation[$f]->tumTimings->$tumCategory->duration += $duration;
@@ -94,10 +71,7 @@ class LongTermAsset
 
 
             // --------------------------------------------------
-            // This is for the totals for this 
-            // long term asset
-            //$this->totalTime += $duration;
-
+            // This is for the totals for this long term asset
             $this->totalAssetUtilisation->calendarTime += $duration;
 
             $this->totalAssetUtilisation->tumTimings->$tumCategory->eventCount++;
@@ -136,7 +110,7 @@ class LongTerm
         );
 
         $numberOfDays = iterator_count($period);
-        $sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . "ALL_EquipmentEventListRange.sql");
+        $sqlTxt = SQLUtils::FileToQuery(Client::SQLCorePath() . "ALL_EquipmentEventListRange.sql");
         $sqlEquipEventList = SQLUtils::QueryToText($sqlTxt, "Event List Range");
 
         if ($sqlEquipEventList == NULL)

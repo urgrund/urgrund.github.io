@@ -23,9 +23,6 @@ if (is_object($request)) {
         echo json_encode(GetSiteData::GetAvailableDates());
     }
 
-    // if ($request->func == 2) {
-    //     echo GetSiteData::GetDataForLongTerm(); //$request->date);
-    // }
 
 
     return;
@@ -56,7 +53,7 @@ class GetSiteData
 
 
     //private static $_fileExt = ".json";
-    private static $_fileExt = ".mmd";  // Mine Mage Daydata    
+    private static $_fileExt = ".mmd";  // Mine Mage Data    
 
     private static function CacheDir(): string
     {
@@ -138,8 +135,7 @@ class GetSiteData
         }
 
 
-        // THIS MAY NEED TO GO INTO DATABASE IN REAL SCENARIO
-
+        // THIS COULD GO INTO A LOCAL DATABASE SIDE BY SIDE WITH THE PHP
 
         //$sqlTxt = "INSERT INTO dbo.Test (DateKey, DateData) VALUES ('20181010', 'poooooo')";
         // $sqlTxt = "

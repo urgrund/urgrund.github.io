@@ -43,7 +43,7 @@ abstract class Client
         return self::$client;
     }
 
-    public static function SQLPath(): string
+    private static function SQLPath(): string
     {
         return self::$path . Client::instance()->Path() . self::$sql;
     }

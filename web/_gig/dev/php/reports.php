@@ -32,15 +32,17 @@ if (is_object($request)) {
 } else {
 
     Reports::SetReportParams(
-        $_startDate = '20181010',
+        $_startDate = '20181001',
         $_endDate = '20181015',
         $_startShift = 1,
         $_endShift = 2
     );
 
     //Debug::Log(Reports::$_endDate);
-    $result = Reports::RunReport('Bogger_Tonnes\\RP_BoggerTonnes_DevelopmentTotalByMineByTime.sql');
-    //Debug::Log($result);
+
+    $result = Reports::RunReport('Hauled_Tonnes\\RP_DevelopmentTotalByMineByTime.sql');
+    //$result = Reports::RunReport('Bogger_Tonnes\\RP_DevelopmentTotalByMineByTime.sql');
+    Debug::Log($result);
 
     $result = Reports::GetAvailableReports();
     //Debug::Log($result);
@@ -57,7 +59,11 @@ final class Reports
     private static $_startShift;
     private static $_endShift;
 
-    static function GetAvailableReports(): array
+
+    /**
+     *  Return an array of available reports
+     */
+    public static function GetAvailableReports(): array
     {
         $files = [];
         Reports::OutputFilesAtPath(Client::SQLReportPath(), $files);
@@ -65,15 +71,10 @@ final class Reports
     }
 
 
-    static function SetReportParams($_startDate, $_endDate, $_startShift, $_endShift)
-    {
-        Reports::$_startDate = $_startDate;
-        Reports::$_endDate = $_endDate;
-        Reports::$_startShift = $_startShift;
-        Reports::$_endShift = $_endShift;
-    }
-
-    static function RunReport(string $reportFile): array
+    /** 
+     * Execute SQL report and return the resulting table 
+     */
+    public static function RunReport(string $reportFile): array
     {
         $sqlTxt = SQLUtils::FileToQuery(Client::SQLReportPath() . $reportFile);
         //Debug::Log($sqlTxt);
@@ -85,11 +86,32 @@ final class Reports
         //Debug::Log($sqlTxt);
 
         $result = SQLUtils::QueryToText($sqlTxt, "Report");
+
+        if ($result == null) {
+            $result[] = "No Result";
+            $result[] = Reports::FileNameArray($reportFile)[1];
+            $result[] = "No data was found for selected date range or shifts...";
+        }
         //Debug::Log($result);
         return $result;
     }
 
-    static function PrepareAvailableReports(array $filesArray): array
+
+    /**
+     * Set the parameters used to generate reports
+     */
+    public static function SetReportParams($_startDate, $_endDate, $_startShift, $_endShift)
+    {
+        Reports::$_startDate = $_startDate;
+        Reports::$_endDate = $_endDate;
+        Reports::$_startShift = $_startShift;
+        Reports::$_endShift = $_endShift;
+    }
+
+
+
+
+    private static function PrepareAvailableReports(array $filesArray): array
     {
         $reports = [];
 
@@ -97,6 +119,10 @@ final class Reports
             $dir = $filesArray[$i][0];
             $folderIndex = strrpos($dir, "/") + 1;
             $folder = substr($dir, $folderIndex);
+
+            // Make nice name of folder
+            $folder = str_replace("_", " ", $folder);
+
             if (!isset($reports[$folder]))
                 $reports[$folder] = [];
             $reports[$folder][]  = Reports::FileNameArray($filesArray[$i][1]);
@@ -110,11 +136,15 @@ final class Reports
         $names = [];
         $names[] = $fileName;
 
-        $word = explode("_", $fileName);
-        $word = $word[count($word) - 1];
+        //$word = explode("_", $fileName);
+        //$word = $word[count($word) - 1];
+
+        $word = str_replace("RP_", "", $fileName);
+        $word = str_replace("_", "", $word);
+
         $word = substr($word, 0, strlen($word) - 4);
         $names[] = Reports::NewStringByUpperCaseSplit($word);
-        Debug::Log($names[1]);
+        //Debug::Log($names[1]);
         return $names;
     }
 
