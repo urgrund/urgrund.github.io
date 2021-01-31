@@ -34,7 +34,7 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
         for (var i = 0; i < x.length; i++) {
             var equip = $rootScope.equipment[x[i].id];
             if (equip != 'undefined') {
-                //Charts.CreateTimeLineFlat(x[i].id, equip);
+                Charts.CreateTimeLineFlat(x[i].id, equip);
             }
         }
 
@@ -95,12 +95,12 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
 
             // Efficiency
             g.value = assetUtilisation.efficiency;
-            g.color = ChartStyles.TUMColors[1];
+            g.color = ChartStyles.TUMColors[5];
             Charts.CreateGauge(x + "_gE", g);
 
             // Availablity
             g.value = assetUtilisation.availability;
-            g.color = ChartStyles.TUMColors[4];
+            g.color = ChartStyles.TUMColors[0];
             Charts.CreateGauge(x + "_gA", g);
 
             g.value = assetUtilisation.uOfa;

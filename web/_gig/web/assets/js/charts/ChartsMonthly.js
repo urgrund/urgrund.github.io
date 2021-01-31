@@ -127,11 +127,13 @@ class ChartsMonthly {
         var myChart = InitChartFromElementID(_elementID);
         if (myChart == undefined) return;
 
-        //console.log(_data);
 
         var smoothVal = 0;
-        //var ma30 = CalculateMA(30, _data);
+        //var ma30 = CalculateMA(7, _data);
         //var ma60 = CalculateMA(60, _data);
+
+        // Nicely formatted dates for the tooltip
+        var niceDates = GenerateDateLabels(_startDate, _data.length, true);
 
         var _series = [
             {
@@ -145,17 +147,7 @@ class ChartsMonthly {
                 lineStyle: { width: 1.5 },
                 large: true,
                 smooth: smoothVal
-            },
-            // {
-            //     name: 'MA30',
-            //     data: ma30,
-            //     type: 'line',
-            //     symbol: 'none',
-            //     itemStyle: { color: 'white' },
-            //     lineStyle: { width: 1 },
-            //     large: true,
-            //     smooth: true
-            // }
+            }
         ];
 
         //console.log(_zoom == true);
@@ -175,19 +167,21 @@ class ChartsMonthly {
             //     feature: {
             //         restore: { title: 'restore' }
             //     }
-            // },
+            // },           
             grid: ChartStyles.gridSpacing(),
             tooltip: {
-                //show: false,
                 trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
-                },
-                textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),
+                backgroundColor: ChartStyles.toolTipBackgroundColor(),
                 formatter: function (params) {
-                    return "";
-                }
+                    var index = params[0].dataIndex;
+                    return ChartStyles.toolTipTextTitle(RatioToPercent(params[0].value)) + ChartStyles.toolTipTextEntry(niceDates[index]);
+                    //return ChartStyles.toolTipTextTitle(niceDates[index]) + ChartStyles.toolTipTextEntry(RatioToPercent(params[0].value));
+                },
+                hideDelay: 0,
+                showDelay: 0,
+                transitionDuration: 0,
+                confine: true
             },
             dataZoom: _dataZoom,
             xAxis: ChartStyles.xAxis(GenerateDateLabels(_startDate, _data.length)),

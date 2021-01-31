@@ -68,12 +68,12 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
 
             // Efficiency
             g.value = shiftData.assetUtilisation.efficiency;
-            g.color = ChartStyles.TUMColors[1];
+            g.color = ChartStyles.TUMColors[4];
             Charts.CreateGauge("gE", g);
 
             // Availablity
             g.value = shiftData.assetUtilisation.availability;
-            g.color = ChartStyles.TUMColors[4];
+            g.color = ChartStyles.TUMColors[0];
             Charts.CreateGauge("gA", g);
 
             g.value = shiftData.assetUtilisation.uOfa;

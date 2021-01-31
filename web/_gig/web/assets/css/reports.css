@@ -6,11 +6,24 @@
   width: 200px;
 }
 
+.reportBtn
+{
+  font-size: 8;
+  font-weight: 50;
+  cursor: pointer;
+}
+
+.reportDateInput
+{
+  width: 15rem;
+  font:inherit;
+  color:black;  
+}
 
 .reportCard, .reportDisplay
 {
-  width: 17rem;
-  height: 100%;
+  width: 19rem;
+  height: 99%;
   padding:0.3rem;
 }
 
@@ -22,6 +35,13 @@
 
 
 
+.rCell { color: rgb(201, 201, 201);  background-color: rgba(0, 0, 0, 0) !important; }
+.rHead {
+    font-size: 12px;
+    font-weight: 100;
+    color: rgb(255, 254, 254);
+    background-color: rgb(23 44 71) !important;   
+ }
 
 
 

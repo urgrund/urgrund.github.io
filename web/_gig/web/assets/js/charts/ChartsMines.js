@@ -501,7 +501,7 @@ class ChartsMines {
         var myChart = echarts.init(dom, ChartStyles.baseStyle);
 
         var mm = _data[_siteID].shiftData[ShiftIndex()].materialMovements;
-        // console.log(mm);
+
 
         // 0: "M30"
         // 1: "2"
@@ -512,27 +512,32 @@ class ChartsMines {
         // 6: "5013 SP DEV __"
         // 7: "M30"
         // 8: 36
-        // 9: 1
-        // 10: 0
-        // 11: 1
+
+        //console.log(mm);
 
         var _temp = [];
         var _locations = [];
         var _links = [];
         for (var x = 0; x < mm.length; x++) {
+
+            //            console.log(mm[x][6]);
+
             // Add unique locations
             if (!(mm[x][3] in _temp))
                 _temp[mm[x][3]] = 0;
-            if (!(mm[x][5] in _temp))
-                _temp[mm[x][5]] = 0;
+            if (!(mm[x][4] in _temp))
+                _temp[mm[x][4]] = 0;
 
             // Add links
             _links.push({
                 source: mm[x][3],
-                target: mm[x][5],
-                value: mm[x][8],
+                target: mm[x][4],
+                value: mm[x][5],
             });
         }
+
+        //console.log(mm);
+        //console.log(_links);
 
         for (var key in _temp) {
 
@@ -569,9 +574,23 @@ class ChartsMines {
                 axisPointer: ChartStyles.toolTipShadow(),
                 backgroundColor: ChartStyles.toolTipBackgroundColor(),
                 formatter: function (params, index) {
-                    var string = "";
-                    string += ChartStyles.toolTipTextTitle(Math.round(params.value) + " Tonnes");
+
+                    //var index = params.dataIndex;
+                    //var t = mm[index][5];
+                    var i = index.substr(index.length - 1, 1);
+                    //console.log(i + " - " + mm[i][5] + " - " + mm[i][6]);
+
+                    // The sankey params for a Link
                     var locs = params.name.split(" > ");
+
+                    var matType = "";
+                    if (mm[i] != undefined && locs.length > 1)
+                        matType = mm[i][6];
+
+                    var string = "";
+                    string += ChartStyles.toolTipTextTitle(Math.round(params.value) + " " + matType + " Tonnes");
+
+
                     if (locs.length > 1) {
                         string += ChartStyles.toolTipTextEntry("Source : " + locs[0]);
                         string += ChartStyles.toolTipTextEntry("Dest   : " + locs[1]);

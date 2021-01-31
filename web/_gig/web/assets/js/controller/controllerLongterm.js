@@ -189,6 +189,7 @@ app.controller('LongTerm', function ($scope, $rootScope, $timeout, $http) {
         var zoom = ChartsMonthly.CreateLongTermZoomTime("lt_zoom", sumTotalAU, startDate);
 
         // Link all charts so the zoom together
+        //zoom.group = 'group1';
         l1.group = 'group1';
         l2.group = 'group1';
         l3.group = 'group1';

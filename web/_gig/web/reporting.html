@@ -2,9 +2,11 @@
 
     <div class="flex h100pc">
         <div class="siteCardShd reportCard">
-            <h3 class="underline">Settings</h3>
-            <br />
-            <div class="flex flex-even">
+
+            <!-- Settings for the Report -->
+            <h3 class=""><i class="fas fa-cogs"></i> Settings</h3>
+
+            <div class="flex ">
                 <div>
                     <h4>Start Shift </h4>
                     <div>
@@ -25,29 +27,36 @@
                 </div>
             </div>
 
-            <div class="flex flex-even">
+            <div class="flex">
                 <div>
                     <h4>Date Range</h4>
-                    <input class=calendar placeholder="calendar 1" readonly="readonly">
+                    <input class="calendar reportDateInput" placeholder="calendar 1" readonly="readonly">
                 </div>
             </div>
 
+
+            <!-- List all the reports -->
             <br />
-            <h3 class="underline">Reports</h3>
+            <h3 class=""><i class="far fa-file-alt"></i> Reports</h3>
             <div ng-repeat="(key, value) in availableReports">
-                <h4 class="underline light">{{key}}</h4>
-                <div ng-repeat="x in value">
-                    <button ng-click="generateReportFromClick(key, x[0])">
-                        {{x[1]}}
+                <br />
+                <h4 class="underline light"><i class="far fa-folder-open"></i> {{key}}</h4>
+                <div ng-repeat="x in value" class="flex">
+                    <button ng-click="generateReportFromClick(key, x[0])" class="reportBtn">
+                        <i class="far fa-file-alt"></i> {{x[1]}}
                     </button>
                 </div>
-                <br />
+
             </div>
         </div>
 
         <!-- Report Display -->
-
-        <div ui-grid="{ data: myData }" class="siteCardShd reportDisplay grid">
+        <!-- ui-grid-resize-columns ui-grid-auto-fit-columns -->
+        <!-- <div ui-grid="gridOptions" ui-grid-auto-fit-columns class="siteCardShd reportDisplay grid"> -->
+        <div ng-if="noResult == true" ng-bind-html="trustAsHtml(noResultMsg)" class="siteCardShd reportDisplay grid">
+        </div>
+        <div ui-grid="gridOptions" ui-grid-auto-fit-columns ui-grid-selection ui-grid-exporter
+            class="siteCardShd reportDisplay grid" ng-if="noResult == false">
         </div>
 
     </div>

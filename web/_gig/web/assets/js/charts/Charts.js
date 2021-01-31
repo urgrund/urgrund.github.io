@@ -11,6 +11,10 @@ var allCharts = [];
 
 // -----------------------------------------------------------------------
 // Convenience arrays for time labels 
+
+const secondsInShift = 43200;
+const secondsInDay = 86400;
+
 timeLabelsShift = [];
 timeLabelsShift[0] = GenerateTimeLabels(12, 6);
 timeLabelsShift[1] = GenerateTimeLabels(12, 18);
@@ -18,7 +22,7 @@ timeLabelsShift[2] = GenerateTimeLabels(24, 6);
 
 timeLabels24hr = GenerateTimeLabels(24, 6);
 
-// extra means it's from, say 6am to 6pm instead of 5pm
+// 'Extra' means it's from, say 6am to 6pm instead of 6am to 5pm
 timeLabelsShiftExtra = [];
 timeLabelsShiftExtra[0] = GenerateTimeLabels(13, 6);
 timeLabelsShiftExtra[1] = GenerateTimeLabels(13, 18);
@@ -50,22 +54,32 @@ function GenerateTimeLabels(_count, _offset) {
     return _array;
 }
 
-const secondsInShift = 43200;
-const secondsInDay = 86400;
 
-function GenerateDateLabels(_startDate, _numberOfDays) {
-
+function GenerateDateLabels(_startDate, _numberOfDays, _nice = false) {
     var d = moment(_startDate);
-    //console.log(_startDate + "  " + d);
     var dateLabels = [];
     for (var i = 0; i < _numberOfDays; i++) {
-        dateLabels.push(d.format("D-M-YY"));
+        var label = _nice ? d.format('dddd, DD-MM-YY') : d.format("D-M-YY");
+        dateLabels.push(label);
         d.add(1, 'd');
-        //console.log(d.format("D/M/YYYY"));
     }
-    //console.log(_startDate + "  " + d);
     return dateLabels;
 }
+
+
+/**
+ * @param {string} _string 
+ */
+function NiceLabel(_string) {
+    //var len = _string.length;
+    var str = _string.replace("-", "");
+    str = str.replace(" ", "\n");
+    return str;
+    //return _string.replace("-", "").replace(/ /g, "\n");
+}
+
+
+
 
 
 // Subscribe to resize event to deal with chart resizing
@@ -218,12 +232,11 @@ class Charts {
         var xAxisLabels = [];
         var tumBars = [];
         var invisibleBars = [];
-        //var timeBars = [];
+
         var blackBarNames = [];
         blackBarNames[0] = "Calendar Time";
         blackBarNames[2] = "Total Availability";
         blackBarNames[4] = "Total Utilisation";
-        //console.log(blackBarNames);
 
         var calendarTime;
         if (_calendarTime > -1)
@@ -237,7 +250,7 @@ class Charts {
             var tumCategory = ServerInfo.config.TUMIndex[i];
             //console.log(key);
             if (i == 0 || i == 2 || i == 4) {
-                xAxisLabels.push(blackBarNames[i]);
+                xAxisLabels.push(NiceLabel(blackBarNames[i]));
                 tumBars.push(
                     {
                         name: blackBarNames[i],
@@ -249,7 +262,7 @@ class Charts {
 
             var duration = _data[tumCategory].duration;
             timeSpent += duration;
-            xAxisLabels.push(tumCategory);
+            xAxisLabels.push(NiceLabel(tumCategory));
             tumBars.push(
                 {
                     name: tumCategory,
@@ -263,7 +276,6 @@ class Charts {
         function Label(params, index) {
             var string = "";
             string += ChartStyles.toolTipTextTitle(params[0].name);
-            //string += ChartStyles.toolTipTextEntry(params[1].value + " seconds");
             string += ChartStyles.toolTipTextEntry(SecondsToHoursAndMinutes(parseFloat(params[1].value)));
             var pc = RatioToPercent(params[1].value / calendarTime);
             string += ChartStyles.toolTipTextEntry(pc + " of Calendar Time");
@@ -274,7 +286,14 @@ class Charts {
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
-            grid: ChartStyles.gridSpacing(),
+            //grid: ChartStyles.gridSpacing(),
+            grid: {
+                containLabel: true,
+                top: '1%',
+                left: '1%',
+                right: '1%',
+                bottom: '4%'
+            },
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "Waterfall"),
             tooltip: {
                 confine: true,
@@ -294,10 +313,13 @@ class Charts {
                 splitLine: { show: false },
                 axisLine: ChartStyles.axisLineGrey,
                 axisLabel: {
-                    show: false,
+                    //show: false,
+                    //rotate: 90,
+                    //margin: -120,
                     fontSize: ChartStyles.fontSizeSmall,
                     interval: 0
-                }
+                },
+                z: 100
             },
             yAxis: {
                 type: 'value',
@@ -1138,7 +1160,9 @@ class Charts {
             for (var key in _data.categories) {
                 //console.log(key);
 
-                var niceName = key.replace("-", "").replace(/ /g, "\n");
+                //var niceName = key.replace("-", "").replace(/ /g, "\n");
+                var niceName = NiceLabel(key);
+                console.log(niceName);
 
                 var tumName = ServerInfo.config.TUM[key];
                 var tumIndex = ServerInfo.config.TUMKeys[tumName];
@@ -1289,10 +1313,6 @@ class Charts {
         if (myChart == undefined) return;
 
 
-
-
-
-
         // Get the shift data into a smaller variable name
         var _d = _data.shiftData[ShiftIndex()];
 
@@ -1318,9 +1338,6 @@ class Charts {
 
 
         var markerData = [];
-
-
-
 
         for (var i = 0; i < sortedEvents.length; i++) {
             var event = sortedEvents[i];

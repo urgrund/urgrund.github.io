@@ -54,6 +54,7 @@ monthShort[11] = "Dec";
 //  MAIN APPLICATION 
 // =====================================================================================
 
+//angular.module('app', ['ui.grid', 'ui.grid.autoFitColumns'])
 // Init the Angular application
 var app = angular.module("myApp", ['ngRoute', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.exporter']);
 
