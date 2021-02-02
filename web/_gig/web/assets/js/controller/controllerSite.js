@@ -48,63 +48,38 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
             ChartsMines.CreateBar("siteTPH", $scope.shiftData.metricData, "");
 
 
-        // var g = new SimpleGaugeData();
-        // var ct = shiftData.assetUtilisation.calendarTime;
-        // g.fontSize = 40;
-
-        // // Total Asset Availability
-        // g.value = shiftData.assetUtilisation.totalAU;
-        // g.color = 'white';
-        // Charts.CreateGauge("gAU", g);
-
-        // // Efficiency
-        // g.value = shiftData.assetUtilisation.efficiency;
-        // g.color = ChartStyles.TUMColors[1];
-        // Charts.CreateGauge("gE", g);
-
-        // // Availablity
-        // g.value = shiftData.assetUtilisation.availability;
-        // g.color = ChartStyles.TUMColors[5];
-        // Charts.CreateGauge("gA", g);
-
-        // g.value = shiftData.assetUtilisation.uOfa;
-        // g.color = ChartStyles.TUMColors[2];
-        // Charts.CreateGauge("gUofA", g);
-
-        //var x = document.getElementsByClassName("gauge");
-        //for (var i = 0; i < x.length; i++) {
-        //console.log(x[i]);
-        //console.log($scope.shiftData.assetUtilisationByFunction)
-        //}
 
         var g = new SimpleGaugeData();
-        g.fontSize = 15;
-        //var ct = shiftData.assetUtilisation.calendarTime;
-        //return;
+        g.fontSize = 20;
+        g.maxRadius = 160;
+        g.radiusThickness = 30;
+        g.center[1] = 88;
+        g.titleBottom = 15;
+        g.subTextLineHeight = -10;
         for (var x in $scope.site.equipmentByFunction) {
             var assetUtilisation = $scope.shiftData.assetUtilisationByFunction[x];
-
-            //console.log("________________________________");
-            //console.log(x);
-            //console.log(assetUtilisation);
 
             // Total Asset Availability
             g.value = assetUtilisation.totalAU;
             g.color = 'white';
+            g.subText = "Utilisation";
             Charts.CreateGauge(x + "_gAU", g);
 
             // Efficiency
             g.value = assetUtilisation.efficiency;
             g.color = ChartStyles.TUMColors[5];
+            g.subText = "Efficiency";
             Charts.CreateGauge(x + "_gE", g);
 
             // Availablity
             g.value = assetUtilisation.availability;
             g.color = ChartStyles.TUMColors[0];
+            g.subText = "Availabilty";
             Charts.CreateGauge(x + "_gA", g);
 
             g.value = assetUtilisation.uOfa;
             g.color = ChartStyles.TUMColors[2];
+            g.subText = "U of A";
             Charts.CreateGauge(x + "_gUofA", g);
         }
 

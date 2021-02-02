@@ -260,42 +260,6 @@ input:invalid:required {
 
 
 
-.jumbogrid {  
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    /* height: 100%; */
-}
-
-/* .jumbogrid::after {
-  content: "";
-  flex: auto;
-} */
-
-.jumbogriditem, .jumbogriditemCompact {
-  box-shadow: 4px 6px 8px 0px #000000ba;
-  background-color: rgba(0, 67, 109, 1);   
-  border: 1px solid #4e5e7e;  
-  margin: 0.5%;
-  margin-bottom: 50px;
-  padding: 0px;
-
-  min-height: 650px;  
-  /* width: 410px;   */
-  width: 25rem;
-
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 3fr 4fr 5fr;
-}
-
-.jumbogriditemCompact
-{
-  min-height: 0px;
-  height: 10.6rem;
-  margin-bottom: 0.2rem;
-}
-
 
 
 
@@ -464,6 +428,39 @@ input:invalid:required {
 /* -------------------------------------------------- */
 /* Small little boxes to hold snippets of information */
 
+
+
+.jumbogrid {  
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+
+.jumbogriditem, .jumbogriditemCompact {
+box-shadow: 4px 6px 8px 0px #000000ba;
+background-color: rgba(0, 67, 109, 1);   
+border: 1px solid #4e5e7e;  
+margin: 0.5%;
+margin-bottom: 50px;
+padding: 0px;
+
+min-height: 250px;  
+width: 19rem;
+
+display: grid;
+grid-template-columns: 1fr;
+grid-template-rows: 3fr 4fr 5fr;
+}
+
+.jumbogriditemCompact
+{
+  min-height: 0px;
+  height: 7.8rem;
+  margin-bottom: 0.2rem;
+}
+
+
 .smallInfo,
 .equipSmallInfo
 {  
@@ -475,6 +472,13 @@ input:invalid:required {
   /* min-width: 188px; */    
 }
 
+.equipInfoAssetHeader
+{
+  padding: 2px;
+  height: 19px;
+  line-height: 0px;
+}
+
 .smallInfo:hover,
 .equipSmallInfo:hover
 {
@@ -484,8 +488,19 @@ input:invalid:required {
 
 .equipSmallInfo
 {
-  height: 4rem;
-  width: 8rem;
+  /* height: 4rem;
+  width: 8rem; */
+  height: 3rem;
+  width: 6rem;
+} 
+
+.equipSmallInfo p 
+{
+  font-size: 6.5pt;
+}
+.equipSmallInfo h5 
+{
+  font-size: 7pt;
 }
 
 /* -------------------------------------------------- */
@@ -499,7 +514,9 @@ input:invalid:required {
 
 .bg_img, .bg_bog, .bg_truck, .bg_drill
 {
-  background: url(../img/login_dark.jpg) no-repeat center center fixed;
+  /* background: url(../img/login_dark.jpg) no-repeat center center fixed; */
+   background-image: url("/web/assets/img/login_dark.jpg"); 
+  /* background-image: url("../img/login_dark.jpg"); */
   object-fit: cover;    
   background-size: cover;     
 }

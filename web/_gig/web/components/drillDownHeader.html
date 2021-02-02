@@ -15,11 +15,12 @@
             <h5 class="bold">{{$ctrl.lastEvent.mineArea}}</h5>
         </div>
 
-        <div class="{{$ctrl.styleItem}}">
+        <div class="{{$ctrl.styleItem}}" ng-style="$root.equipStyleTUMColorBG($ctrl.lastEvent.status)">
             <p class="light"><span>
                     <i ng-class='$root.equipStyleIcon[$ctrl.lastEvent.majorGroup]'
                         ng-style='$root.equipStyleColor[$ctrl.lastEvent.majorGroup]'></i></span> Status</p>
             <h5 class="bold">{{$ctrl.lastEvent.status}}</h5>
+            <!-- {{$root.equipStyleTUMColor($ctrl.lastEvent.status)}} -->
         </div>
 
         <div class="{{$ctrl.styleItem}}">

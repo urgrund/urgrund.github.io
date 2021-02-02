@@ -8,10 +8,10 @@
         <div ng-repeat="y in equipToShow" class="jumbogriditemCompact">
             <div class="" ng-init="e = getEquipmentLastEvent(y)">
 
-                <div class="bg_black50 img_{{y.function}}">
-                    <h2 class="shadow" style="margin-left: 1rem;"> <a ng-href="#!equip/{{y.id}}"><i
-                                ng-class='equipStyleIcon[e.majorGroup]' ng-style='equipStyleColor[e.majorGroup]'></i>
-                            {{y.id}}</a></h2>
+                <div class="bg_black50 img_{{y.function}} equipInfoAssetHeader">
+                    <h4 class="shadow"> <a ng-href="#!equip/{{y.id}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                ng-style='equipStyleColor[e.majorGroup]'></i>
+                            {{y.id}}</a></h4>
                 </div>
 
                 <drill-down-header shift="{{shift}}" equip="y" style-group="flex flex-wrap" style-item="equipSmallInfo">
@@ -26,10 +26,10 @@
         <div ng-repeat="y in equipToShow" class="jumbogriditem">
             <div class="" ng-init="e = getEquipmentLastEvent(y)">
 
-                <div class="bg_black50 img_{{y.function}}">
-                    <h2 class="shadow" style="margin-left: 1rem;"> <a ng-href="#!equip/{{y.id}}"><i
-                                ng-class='equipStyleIcon[e.majorGroup]' ng-style='equipStyleColor[e.majorGroup]'></i>
-                            {{y.id}}</a></h2>
+                <div class="bg_black50 img_{{y.function}} equipInfoAssetHeader">
+                    <h4 class="shadow"> <a ng-href="#!equip/{{y.id}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                ng-style='equipStyleColor[e.majorGroup]'></i>
+                            {{y.id}}</a></h4>
                 </div>
 
                 <drill-down-header shift="{{shift}}" equip="y" style-group="flex flex-wrap" style-item="equipSmallInfo">
@@ -37,19 +37,19 @@
             </div>
 
             <div>
-                <h2 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
+                <h4 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h4>
                 <div ng-repeat="(key, value) in y.shiftData[ShiftIndex()].metricData" class="center flex underline"
                     ng-if="value.total != 0"
                     ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
                     <div class="left">
-                        <h4> {{value.name}}</h4>
+                        <h5> {{value.name}}</h5>
                         <p class="light">({{value.site}}) {{value.activity}}</p>
                     </div>
-                    <h2>{{value.total | number }}</h2>
+                    <h4>{{value.total | number:0 }}</h4>
                 </div>
             </div>
 
-            <div>
+            <div style="height: 250px" ;>
                 <drill-down-chart name="Availability & Utilisation" chart="{{y.id}}">
                 </drill-down-chart>
             </div>

@@ -43,138 +43,149 @@
     <!-- ------------------------------------------------------------------------------------- -->
 
     <div class="siteContentGrid">
-        <div class="siteColumn">
-            <!-- <h2 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
+
+        <!-- <h2 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
             </br> -->
 
 
-            <!-- {{ summary }} -->
-            <div ng-if="summary != undefined">
-                <h2 class="underline"><i class="fas fa-chart-bar"></i> Summary</h2>
-                <div ng-repeat="x in summary" class="flex overline">
-                    <h3 class="light">{{x[0]}}</h3>
-                    <h1 class="right">{{x[1] | number : 0}}</h1>
-                </div>
+        <div class="siteContentSummary" ng-if="summary != undefined">
+            <h2 class="underline"><i class="fas fa-chart-bar"></i> Summary</h2>
+            <div ng-repeat="x in summary" class="flex overline">
+                <h3 class="light">{{x[0]}}</h3>
+                <h1 class="right">{{x[1] | number : 0}}</h1>
+            </div>
+            <br />
+            <h2 class="underline"><i class="fas fa-weight-hanging"></i> Materials</h2>
+            <div ng-repeat="x in summaryMaterials">
                 <br />
-                <h2 class="underline"><i class="fas fa-weight-hanging"></i> Materials</h2>
-                <div ng-repeat="x in summaryMaterials">
+                <div class="flex underline">
+                    <h4 class="light">{{x[0]}}</h4>
+                    <h2 class="right">{{x[1] | number : 0}}</h2>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="siteContentSummary" ng-if="summary == undefined">
+            <div class="">
+                <div class="flex">
+                    <div>
+                        <h4 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Tonnes</h4>
+                        <div class="flex flex-start">
+                            <!-- <h5 class="light right"><i class="fas fa-chart-line"></i> Average</h5> -->
+                            <h3 class="left">{{shiftData.productionTonnes.average | number : 0}}/hr</h3>
+                        </div>
+                    </div>
+                    <h1 class="right"> {{shiftData.productionTonnes.total| number:0}}</h1>
+                </div>
+            </div>
+            <div class="">
+                <div class="flex">
+                    <div>
+                        <h4 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Metres</h4>
+                        <div class="flex flex-start">
+                            <!-- <h5 class="light right"><i class="fas fa-chart-line"></i> Average</h5> -->
+                            <h3 class="right">{{shiftData.productionMetres.average | number : 0}}/hr</h3>
+                        </div>
+                    </div>
+                    <h1 class="right"> {{shiftData.productionMetres.total| number:0}}</h1>
+
+                </div>
+            </div>
+
+            </br>
+            <h2 class="underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
+            </br>
+            <div ng-repeat="(key, value) in shiftData.metricData" class="center flex overline " ng-if="value.total != 0"
+                ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
+                <div class="left">
+                    <h4> {{value.name}}</h4>
+                    <p class="light">{{value.activity}}</p>
+                </div>
+                <h2>{{value.total | number:0}}</h2>
+            </div>
+        </div>
+
+
+
+
+        <!-- Bar Chart -->
+        <drill-down-chart name="{{site.name}} Tonnes" chart="siteTPH"></drill-down-chart>
+
+
+
+        <!-- Sankey  -->
+        <drill-down-chart name="Material Movements" chart="sankey"></drill-down-chart>
+
+
+
+
+
+        <!-- Timeline -->
+        <div class="chartCard">
+            <div class="charthead">
+                <div class="chartheadtxt left">
+                    <h5 class="bold">Asset Timeline</h5>
+                </div>
+            </div>
+            <div class="chartdivcontent {{$root.backGroundClassBlur}} siteDivMargin">
+                <div ng-repeat="(key, value) in site.equipmentByFunction" class="">
+                    <div class="overline">
+                        <h5>{{ functionMapping[key] }}</h5>
+                    </div>
+                    <div ng-repeat="y in value" ng-init="e = getEquipmentLastEvent(equipment[y])" id="">
+                        <div class="equipFlatUsageSite">
+                            <h5 class="left"><a ng-href="#!equip/{{y}}"><i ng-class='equipStyleIcon[e.majorGroup]'
+                                        ng-style='equipStyleColor[e.majorGroup]'></i> {{equipment[y].id}}</a></h5>
+                            <!-- This class just helps the JS find all of class for the charts -->
+                            <div class="equip-flat-usage" id="{{equipment[y].id}}">
+                                <chart-loading></chart-loading>
+                            </div>
+                        </div>
+                    </div>
                     <br />
-                    <div class="flex underline">
-                        <h4 class="light">{{x[0]}}</h4>
-                        <h2 class="right">{{x[1] | number : 0}}</h2>
-                    </div>
                 </div>
             </div>
-
-
-            <div class="" ng-if="summary == undefined">
-                <div class="">
-                    <div class="flex">
-                        <div>
-                            <h4 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Tonnes</h4>
-                            <div class="flex flex-start">
-                                <!-- <h5 class="light right"><i class="fas fa-chart-line"></i> Average</h5> -->
-                                <h3 class="left">{{shiftData.productionTonnes.average | number : 0}}/hr</h3>
-                            </div>
-                        </div>
-                        <h1 class="right"> {{shiftData.productionTonnes.total| number:0}}</h1>
-                    </div>
-                </div>
-                <div class="">
-                    <div class="flex">
-                        <div>
-                            <h4 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Metres</h4>
-                            <div class="flex flex-start">
-                                <!-- <h5 class="light right"><i class="fas fa-chart-line"></i> Average</h5> -->
-                                <h3 class="right">{{shiftData.productionMetres.average | number : 0}}/hr</h3>
-                            </div>
-                        </div>
-                        <h1 class="right"> {{shiftData.productionMetres.total| number:0}}</h1>
-
-                    </div>
-                </div>
-
-                </br>
-                <h2 class="underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
-                </br>
-                <div ng-repeat="(key, value) in shiftData.metricData" class="center flex overline "
-                    ng-if="value.total != 0"
-                    ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
-                    <div class="left">
-                        <h4> {{value.name}}</h4>
-                        <p class="light">{{value.activity}}</p>
-                    </div>
-                    <h2>{{value.total | number:0}}</h2>
-                </div>
-            </div>
-
-
-
-
-        </div>
-
-        <!-- ------------------------------------------------------------------------------------- -->
-
-
-
-
-
-
-
-
-        <!-- ------------------------------------------------------------------------------------- -->
-
-        <div class="siteColumn">
-
-            <!-- <h2 class="center underline"><i class="fas fa-chart-line"></i> Progress</h2>
-            </br> -->
-
-
-
-            <div class="siteTPH">
-                <drill-down-chart name="{{site.name}} Tonnes" chart="siteTPH"></drill-down-chart>
-            </div>
-
-            <br />
-
-
-            <div ng-repeat="(key, value) in site.equipmentByFunction" class="siteCardShd">
-                <div class="underline">
-                    <h5>{{ functionMapping[key] }}</h5>
-                </div>
-                <div ng-repeat="y in value" ng-init="e = getEquipmentLastEvent(equipment[y])" id="">
-                    <div class="equipFlatUsageSite">
-                        <h5 class="left"><a ng-href="#!equip/{{y}}"><i ng-class='equipStyleIcon[e.majorGroup]'
-                                    ng-style='equipStyleColor[e.majorGroup]'></i> {{equipment[y].id}}</a></h5>
-                        <!-- This class just helps the JS find all of class for the charts -->
-                        <div class="equip-flat-usage" id="{{equipment[y].id}}">
-                            <chart-loading></chart-loading>
-                        </div>
-                    </div>
-                </div>
-                </br>
-            </div>
-
-
-
         </div>
 
 
 
 
 
+
+
+
+
         <!-- ------------------------------------------------------------------------------------- -->
-        <div class="siteColumn">
 
 
-            <div class="siteSankey">
-                <drill-down-chart name="Material Movements" chart="sankey"></drill-down-chart>
+
+
+
+        <div class="chartCard">
+            <div class="charthead">
+                <div class="chartheadtxt left">
+                    <h5 class="bold">TUM Metrics</h5>
+                </div>
             </div>
-            <br />
+            <div class="chartdivcontent {{$root.backGroundClassBlur}} siteDivMargin">
 
+                <div ng-repeat="(key, value) in site.equipmentByFunction" class="overline">
+                    <div>
+                        <h5 class="">{{ functionMapping[key] }}</h5>
+                    </div>
+                    <div class="flex" style="height: 60px;">
+                        <div class="gauge h100pc w100pc" id="{{key}}_gA">AAA</div>
+                        <div class="gauge h100pc w100pc" id="{{key}}_gUofA">AAA</div>
+                        <div class="gauge h100pc w100pc" id="{{key}}_gE">AAA</div>
+                        <div class="gauge h100pc w100pc" id="{{key}}_gAU">AAA</div>
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
 
-
-            <div ng-repeat="(key, value) in site.equipmentByFunction" style="height: 100px;">
+        <!-- <div ng-repeat="(key, value) in site.equipmentByFunction" style="height: 100px;">
 
                 <div style="height: 100%; width: 100%; background-color: blueviolet;" ;>
 
@@ -194,9 +205,9 @@
 
                 </div>
                 <br />
-            </div>
+            </div> -->
 
-        </div>
+
 
     </div>
 </div>

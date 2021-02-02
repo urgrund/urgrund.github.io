@@ -191,18 +191,10 @@ class ChartStyleContainer {
             }
         ]
 
-        // this.TUMColorsByCategory = {
-        //     'Unplanned Breakdown': this.TUMColors[0],
-        //     'Planned Maintenance': this.TUMColors[1],
-
-        //     'Unplanned Standby': this.TUMColors[2],
-        //     'Operating Standby': this.TUMColors[3],
-
-        //     'Secondary Operating': this.TUMColors[4],
-        //     'Primary Operating': this.TUMColors[5],
-        // }
         // ----------------------------------------------------------
 
+        // For bar charts, so as to 
+        // not have big fat bars 
         this.barMaxWidth = '15';
     }
 

@@ -662,5 +662,11 @@ class SimpleGaugeData {
         this.value = 0;
         this.fontSize = 60;
         this.color = ChartStyles.TUMColors[2];
+        this.subText = "";
+        this.subTextLineHeight = 0;
+        this.titleBottom = 25;
+        this.center = [50, 80];
+        this.maxRadius = 120;
+        this.radiusThickness = 20;
     }
 }

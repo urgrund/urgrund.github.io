@@ -154,14 +154,6 @@ function SecondsToHoursAndMinutes(d, showSeconds = false) {
     return hDisplay + mDisplay + (showSeconds ? sDisplay : "");
 }
 
-// const ChartTPHDisplay = {
-//     TPH: '0',
-//     CUMULATIVE: '1',
-//     BOTH: '2'
-// }
-
-
-
 
 
 // Calculates a Moving Average and
@@ -1162,7 +1154,7 @@ class Charts {
 
                 //var niceName = key.replace("-", "").replace(/ /g, "\n");
                 var niceName = NiceLabel(key);
-                console.log(niceName);
+                //console.log(niceName);
 
                 var tumName = ServerInfo.config.TUM[key];
                 var tumIndex = ServerInfo.config.TUMKeys[tumName];
@@ -1351,6 +1343,7 @@ class Charts {
                         color: ChartStyles.TUMColors[ServerInfo.config.TUMKeys[event.tumCategory]],
                         opacity: 0.85
                     },
+                    animation: false,
                     z: -1,
                     zlevel: -1
                 }
@@ -1516,9 +1509,9 @@ class Charts {
 
         //console.log(_data);
         var strPct = (x) => x.toString().concat("%");
-        var center = ['50%', '80%'];
-        var maxRadius = 120;
-        var radiusThickness = 30;
+        var center = [strPct(_data.center[0]), strPct(_data.center[1])];
+        var maxRadius = _data.maxRadius;
+        var radiusThickness = _data.radiusThickness;
         var radiusPadding = 4;
 
 
@@ -1530,9 +1523,20 @@ class Charts {
 
             title: {
                 text: strPct(value.toFixed()),
-                //subtext: "foo",
+                bottom: strPct(5),
+                subtext: _data.subText,
+                padding: [
+                    0,  // up
+                    0, // right
+                    -20,  // down
+                    0, // left
+                ],
+                subtextStyle: {
+                    color: 'white',
+                    lineHeight: _data.subTextLineHeight
+                },
                 left: 'center',
-                bottom: '13%',
+                bottom: strPct(_data.titleBottom),
                 textStyle: {
                     fontWeight: 60,
                     fontSize: _data.fontSize,
@@ -1565,10 +1569,6 @@ class Charts {
                     startAngle: 180,
                     animationDuration: 5000,
                     z: 0,
-                    // label: {
-                    //     formatter: '{d}%' ,
-                    //     fontSize: ChartStyles.fontSizeAxis
-                    // },
                     label: { show: false },
                     data: [
                         {

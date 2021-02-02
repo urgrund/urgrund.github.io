@@ -178,9 +178,9 @@ app.controller('Reporting', function ($scope, $http, $rootScope, $timeout, uiGri
 
             if (response.data[0] == "No Result") {
                 $scope.noResult = true;
-                $scope.noResultMsg = "<h3><i class='fas fa-info-circle'></i>" + response.data[0] + "</h3><br/>";
+                $scope.noResultMsg = "<h3><i class='fas fa-info-circle'></i> " + response.data[0] + "</h3><br/>";
                 $scope.noResultMsg += "<h4>" + response.data[1] + "</h4><br/>";
-                $scope.noResultMsg += "<h4>" + response.data[2] + "</h4><br/>";
+                $scope.noResultMsg += "<h5>" + response.data[2] + "</h5><br/>";
                 return;
             }
 

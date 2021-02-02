@@ -1,46 +1,39 @@
 .siteContentGrid
 {
   display: grid;
-  grid-template-columns: 2fr 4fr 2fr;
+  grid-template-columns: 4fr 7fr 4fr;
+  grid-template-rows: 6fr 8fr;
   grid-column-gap: 1%;
+  grid-row-gap: 1%;
   margin-top: 0.5rem;
-  min-height: 94%;
+   min-height: 90%;
+}
+.siteContentSummary
+{
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 1;
+  grid-row-end: 3;
 }
 
-
-.siteColumn {
-  /* box-shadow: 4px 6px 8px 0px #000000ba;  
-  background-color: var(--cardColorBG); 
-  margin: 5px;
-  margin-bottom: 50px;
-  padding: 5px;
-  min-height: 650px;  
-  width: 32% ;   */
-}
 
 .siteCardShd {
   box-shadow: 4px 6px 8px 0px #000000ba;  
   background-color: var(--cardColorBG); 
 }
 
-.siteTinyChartGroup
+.siteDivMargin
 {
-  height: 100px;
-  width: 100%;
+  padding: 0.4rem;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
 }
-
-.siteTinyChart
-{
-  height: 70px;
-  width: 100%;
-}
-
-
+/* 
 .siteSankey, .siteTPH
 {
   height: 43%;
   width: 100% ;
-}
+} */
 
 
 

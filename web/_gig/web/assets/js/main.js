@@ -83,6 +83,16 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
 
     $rootScope.config;
 
+
+    // So that it can be used in angular
+    $rootScope.ShiftIndex = function () { return ShiftIndex(); };
+
+
+    $rootScope.siteDataRefreshIntervalSeconds = 60;
+    $rootScope.siteDataLastRefresh = moment();
+    $rootScope.siteDataNextRefresh = moment().add($rootScope.siteDataRefreshIntervalSeconds, 's');
+
+
     //$rootScope.configs = [];
 
     $rootScope.lastResponseError = null;
@@ -172,14 +182,6 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
     };
 
 
-    // So that it can be used in html
-    $rootScope.ShiftIndex = function () { return ShiftIndex(); };
-
-
-    $rootScope.siteDataRefreshIntervalSeconds = 60;
-    $rootScope.siteDataLastRefresh = moment();
-    $rootScope.siteDataNextRefresh = moment().add($rootScope.siteDataRefreshIntervalSeconds, 's');
-
     $rootScope.fetchSiteData = function (_dates, _setAfterFetch = false, _replace = false) {
 
         for (var i = 0; i < _dates.length; i++) {
@@ -229,84 +231,14 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
                 console.error(error);
             });
         }
-        //window.CollectGarbage();
 
-
-        // THIS IS FOR LOCAL OFFLINE DATA, SUCH AS THE ONLINE DEMO
-
-        // for (var i = 0; i < _dates.length; i++) {
-        //     var date = _dates[i];
-
-        //     //var file = 'http://localhost/web/sitedata/' + date + '.json';
-        //     //var file = '//localhost/web/sitedata/' + date + '.json';
-        //     var file = 'sitedata/' + date + '.json';
-
-        //     // console.log(date);console.log(date);
-
-        //     fetch(file)
-        //         .then((response) => {
-        //             return response.json();
-        //         })
-        //         .then((myJson) => {
-
-        //             //console.log(date);
-        //             //console.log(myJson);
-
-        //             // Check if date data already exists
-        //             const { length } = $rootScope.cachedData;
-        //             const found = $rootScope.cachedData.some(el => el[el.length - 1].Date === myJson[el.length - 1].Date);
-
-        //             // It's new so add it 
-        //             if (!found) {
-        //                 $rootScope.cachedData.push(myJson);
-        //             }
-
-        //             // Apply to site if requested
-        //             if (_setAfterFetch) {
-        //                 $rootScope.setNewSiteData(myJson);
-        //             }
-
-        //             // Sort 
-        //             //console.log($rootScope.cachedData);
-        //             $rootScope.cachedData.sort(function (a, b) { return b[b.length - 1]['Date'] - a[a.length - 1]['Date'] });
-        //         });
-        // }
     };
-
-
-    // With real data this should be set to current data
-    //var dates = ['20181010', '20181009', '20181008', '20181007', '20181006', '20181005', '20181004', '20181003'];
-    //$rootScope.fetchSiteData(dates, false);
 
     // ------------------------------------------------------
 
 
 
-    $rootScope.fetchSiteConfigs = function () {
-        var _data = { 'func': 4 };
-        var request = $http({
-            method: 'POST',
-            url: ServerInfo.URL_Admin,
-            data: _data,
-        })
-        request.then(function (response) {
-            console.log(response.data);
-            //if ($rootScope.checkResponseError(response))
-            //  return;
 
-            ServerInfo.config = response.data;
-            ServerInfo.config.TUMIndex = Object.values(ServerInfo.config.TUMIndex);
-            $rootScope.config = response.data;
-
-            //PrepareAllTimeLabels(ServerInfo.config.ShiftStart);
-
-            console.log("[Configs]");
-            console.log(ServerInfo.config);
-
-            $rootScope.$broadcast('configSet');
-        }, function (error) {
-        });
-    }
 
 
     /**
@@ -386,6 +318,17 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         Down: { 'color': ChartStyles.statusColorsFlat[2] }
     };
 
+    /**
+     *  @param {string} _tumEvent */
+    $rootScope.equipStyleTUMColorBG = function (_tumEvent) {
+        var tumCategory = ServerInfo.config.TUM[_tumEvent];
+        var tumColorIndex = ServerInfo.config.TUMKeys[tumCategory];
+        var tumColor = ChartStyles.TUMColors[tumColorIndex].colorStops[1].color;
+        return {
+            'background': 'linear-gradient(0deg,' + tumColor + ', transparent)'
+        };
+    }
+
     $rootScope.backGroundState = true;
 
     /** Background style for each equipment */
@@ -407,6 +350,35 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
     $rootScope.metricProductionColour = "#007260";
 
     // ------------------------------------------------------
+
+
+
+    $rootScope.fetchSiteConfigs = function () {
+        var _data = { 'func': 4 };
+        var request = $http({
+            method: 'POST',
+            url: ServerInfo.URL_Admin,
+            data: _data,
+        })
+        request.then(function (response) {
+            console.log(response.data);
+            //if ($rootScope.checkResponseError(response))
+            //  return;
+
+            ServerInfo.config = response.data;
+            ServerInfo.config.TUMIndex = Object.values(ServerInfo.config.TUMIndex);
+            $rootScope.config = response.data;
+
+            //PrepareAllTimeLabels(ServerInfo.config.ShiftStart);
+
+            console.log("[Configs]");
+            console.log(ServerInfo.config);
+
+            $rootScope.$broadcast('configSet');
+        }, function (error) {
+        });
+        return request;
+    }
 });
 
 
@@ -416,12 +388,23 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
 // ===============================================================================================
 // Main controller
 // ===============================================================================================
-app.controller("myCtrl", function ($scope, $rootScope, $timeout, $route, $location, $interval) {
+app.controller("myCtrl", function ($q, $scope, $rootScope, $timeout, $route, $location, $interval) {
 
     console.log("Starting Mine-Mage...");
 
-    $rootScope.fetchSiteConfigs();
-    $rootScope.fetchAvailableDates();
+    var promises = [$rootScope.fetchSiteConfigs()];
+    var taskCompletion = $q.all(promises);
+
+    //console.log(promises);
+
+    taskCompletion.then(function (responses) {
+        responses.forEach(function (response) {
+            console.log(response)
+        })
+    })
+
+    //$rootScope.fetchSiteConfigs();
+    //$rootScope.fetchAvailableDates();
 
     // ------------------------------------------------------
     // Interval function to update the current days data
