@@ -38,19 +38,21 @@
 
             <div>
                 <h4 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h4>
-                <div ng-repeat="(key, value) in y.shiftData[ShiftIndex()].metricData" class="center flex underline"
-                    ng-if="value.total != 0"
-                    ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
-                    <div class="left">
-                        <h5> {{value.name}}</h5>
-                        <p class="light">({{value.site}}) {{value.activity}}</p>
+                <div class="jumboscroll">
+                    <div ng-repeat="(key, value) in y.shiftData[ShiftIndex()].metricData" class="center flex underline"
+                        ng-if="value.total != 0"
+                        ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
+                        <div class="left">
+                            <h5> {{value.name}}</h5>
+                            <p class="light">({{value.site}}) {{value.activity}}</p>
+                        </div>
+                        <h4>{{value.total | number:0 }}</h4>
                     </div>
-                    <h4>{{value.total | number:0 }}</h4>
                 </div>
             </div>
 
             <div style="height: 250px" ;>
-                <drill-down-chart name="Availability & Utilisation" chart="{{y.id}}">
+                <drill-down-chart name="Metrics Per Hour" chart="{{y.id}}">
                 </drill-down-chart>
             </div>
         </div>

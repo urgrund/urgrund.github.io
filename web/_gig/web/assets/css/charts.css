@@ -438,19 +438,20 @@ input:invalid:required {
 
 
 .jumbogriditem, .jumbogriditemCompact {
-box-shadow: 4px 6px 8px 0px #000000ba;
-background-color: rgba(0, 67, 109, 1);   
-border: 1px solid #4e5e7e;  
-margin: 0.5%;
-margin-bottom: 50px;
-padding: 0px;
+  box-shadow: rgb(0 0 0 / 46%) 6px 8px 5px 0px;
+  background-color: rgba(0, 67, 109, 1);   
+  /* border: 1px solid #4e5e7e;   */
+  margin: 0.5%;
+  margin-bottom: 50px;
+  padding: 0px;
 
-min-height: 250px;  
-width: 19rem;
+  min-height: 250px;  
+  width: 19rem;
 
-display: grid;
-grid-template-columns: 1fr;
-grid-template-rows: 3fr 4fr 5fr;
+  display: grid;
+  grid-template-columns: 1fr;
+  /* grid-template-rows: 3fr 4fr 5fr; */
+  grid-template-rows: 7.8rem 9rem auto;
 }
 
 .jumbogriditemCompact
@@ -458,6 +459,21 @@ grid-template-rows: 3fr 4fr 5fr;
   min-height: 0px;
   height: 7.8rem;
   margin-bottom: 0.2rem;
+}
+
+
+.jumboscroll {
+  overflow-y: scroll;  
+  overflow-x: hidden;
+  /* height: 100%; */
+}
+::-webkit-scrollbar {
+  width: 0px;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+  background: #FF0000;
 }
 
 
@@ -523,7 +539,7 @@ grid-template-rows: 3fr 4fr 5fr;
 
 .bg_imgBlur, .bg_bogBlur, .bg_truckBlur, .bg_drillBlur
 {
-  background: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url(../img/login_blur.jpg) no-repeat center center fixed;
+  background: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url("/web/assets/img/login_blur.jpg") no-repeat center center fixed;
   object-fit: cover;  
   background-size: cover; 
 }
@@ -622,6 +638,12 @@ grid-template-rows: 3fr 4fr 5fr;
 {
   max-width: 110px;
   max-height: 110px;
+  transform: perspective(5cm) rotateX(3deg) rotateY(-11deg);
+}
+.sitePicBig:hover
+{
+  transform: perspective(7cm) rotateX(3deg) rotateY(-11deg);
+  border:1px solid rgb(0, 174, 255);
 }
 
 /* a > .sitePicBig:hover

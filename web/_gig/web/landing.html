@@ -1,50 +1,65 @@
 <div class="landing">
 
     <!-- Top date and time -->
-    <div class="underline">
+    <div class="underline landingTop">
         <div>
             <h2>Welcome...</h2>
         </div>
         <div class="landtime">
-            <div>
-                <h1 style="font-size: 70px" ng-bind="clock | date:'HH:mm'"></h1>
+
+            <div class="landtimetext" ng-bind="clock | date:'HH:mm'">
             </div>
+
             <div>
-                <h4 ng-if="shift==0"><i class='shiftIconDay fas fa-sun'></i> {{shiftTitle}}</h4>
-                <h4 ng-if="shift==1"><i class='shiftIconNight fas fa-moon'></i> {{shiftTitle}}</h4>
-            </div>
-            <div>
-                <h4 ng-bind="dateString"></h4>
+                <div class="flex flex-right">
+                    <h4 ng-if="shift==0"><i class='shiftIconDay fas fa-sun'></i> {{shiftTitle}}</h4>
+                    <h4 ng-if="shift==1"><i class='shiftIconNight fas fa-moon'></i> {{shiftTitle}}</h4>
+                </div>
+                <div class="flex flex-right">
+                    <h4 ng-bind="dateString"></h4>
+                </div>
             </div>
         </div>
-        <!-- <div class="flex">
-            <div class="landtime">
-                <div>
-                    <h3 ng-if="shift==0"><i class='shiftIconDay fas fa-sun'></i> {{shiftTitle}}</h3>
-                    <h3 ng-if="shift==1"><i class='shiftIconNight fas fa-moon'></i> {{shiftTitle}}</h3>
-                </div>
-                <div>
-                    <h3 ng-bind="dateString"></h3>
-                </div>
-            </div>
-            <div>
-                <h1 style="font-size: 70px" ng-bind="clock | date:'HH:mm'"></h1>
-            </div>
-        </div> -->
     </div>
 
     <!-- Site info -->
     <div>
         <div class="landcard" ng-repeat="x in siteData" ng-init="siteIndex = $index">
-            <!-- <a href=#> LDJLAJSD</a> -->
-            <img class="sitePicBig" ng-src="assets/img/site_{{siteIndex%3}}.jpg">
-            <!-- <a class="imgLink" href=#><img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg"> </a> -->
-            <a ng-href="#!site/{{siteIndex}}">
-                <h2 ng-bind="x.name"></h2>
-            </a>
-            <!-- <h4>Target: 13232t</h4>
-            <h4>Actual: 3322t </h4> -->
-            <div class="landCardStats">
+
+            <!-- <img class="sitePicBig" ng-src="assets/img/site_{{siteIndex%3}}.jpg"> -->
+            <!-- <a class="imgLink" href=#><img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg"> </a>
+            <span>
+                <h2><a ng-href="#!site/{{siteIndex}}" ng-bind="x.name">
+                    </a></h2>
+            </span> -->
+
+
+            <a ng-href="#!site/{{siteIndex}}"><img class="sitePicBig"
+                    ng-src="assets/img/site_{{siteIndex}}.jpg" /><span>
+                    <h3 ng-bind="x.name"></h3>
+                </span></a>
+            <br />
+            <br />
+
+            <!-- <h2><a ng-href="#!site/{{siteIndex}}" ng-bind="x.name">
+                </a><img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg"></h2> -->
+
+            <div class="overline underline">
+                <div ng-repeat="(key, value) in siteSummary[siteIndex]">
+                    <div class="center flex">
+                        <div class="left">
+                            <h4><i ng-class="value['icon']"></i> {{key}}</h4>
+                            <p class="light">{{value["details"]}}</p>
+                        </div>
+                        <h2><i style="color: rgb(0, 255, 21);">&#9650;</i>{{value["value"]}}{{value["suffix"]}}</h2>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!-- <div class="landCardStats">
                 <div class="underline">
                     <p class="light"> Spatial Compliance</p>
                     <h2> <i style="color: rgb(0, 255, 21);">&#9650;</i>50%</h2>
@@ -53,8 +68,9 @@
                     <p class="light"> Volumetric Compliance</p>
                     <h2> <i style="color: red;">&#9660;</i>50%</h2>
                 </div>
-            </div>
-            <!-- <h4>Compliance: &#9650;58%</i></h4> -->
+            </div> -->
+
+
             </br>
             <h3 class="underline"><i class="far fa-bell"></i> Alerts</h3>
             <div ng-repeat="alert in alerts">

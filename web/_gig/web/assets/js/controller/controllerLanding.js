@@ -1,4 +1,4 @@
-app.controller('Landing', function ($route, $scope, $timeout) {
+app.controller('Landing', function ($route, $rootScope, $scope, $timeout) {
 
     // Fake data for landing page
     var date = new Date();
@@ -7,6 +7,44 @@ app.controller('Landing', function ($route, $scope, $timeout) {
     var dateMonth = month[date.getMonth()];// "September";
 
     $scope.dateString = dateDay + ", " + date.getDate() + " " + dateMonth + " " + date.getFullYear();
+
+
+
+    $scope.siteSummary = [];
+    $scope.PrepareSiteSummarys = function () {
+        if ($rootScope.siteData == null)
+            return;
+
+        $scope.siteSummary = [];
+        for (var i = 0; i < $rootScope.siteData.length; i++) {
+            $scope.siteSummary.push(
+                {
+                    "Spatial Compliance": { "value": 40, "details": 12345, "suffix": "%", "icon": "fas fa-chart-bar" },
+                    "Volumetric Compliance": { "value": 40, "details": 12345, "suffix": "%", "icon": "fas fa-chart-bar" },
+                    "Tonnes vs TTD": { "value": 40, "details": 12345, "suffix": "%", "icon": "fas fa-weight-hanging" },
+                    "Tonnes vs TTM": { "value": 40, "details": 12345, "suffix": "%", "icon": "fas fa-weight-hanging" }
+                }
+            );
+        }
+
+
+        //console.log($scope.siteSummary);
+    }
+
+
+
+
+    $rootScope.$on('newSiteDataSet', function () {
+        $scope.PrepareSiteSummarys();
+
+    });
+
+
+
+    $scope.$watch('$viewContentLoaded', function () {
+        $scope.PrepareSiteSummarys();
+    });
+
 
 
     // Clock counter

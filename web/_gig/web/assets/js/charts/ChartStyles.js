@@ -1,3 +1,8 @@
+/**
+ * Container for helper functions 
+ * and site wide variables relating
+ * to chart styling
+ */
 class ChartStyleContainer {
 
     constructor() {
@@ -33,11 +38,11 @@ class ChartStyleContainer {
         // -----------------------------------------------------------------------------
         // Status Colours
 
-        // Colors for flat shading status
+        // Colors for flat shading MajorGroup
         this.statusColorsFlat = ['#00ff6a', 'rgb(255,195,0)', 'rgba(255,0,0,1)'];
 
 
-        // Colors for gradient shading status
+        // Colors for gradient shading of Major Group
         this.statusColors = [
             // OPERATING
             {
@@ -82,7 +87,7 @@ class ChartStyleContainer {
         // -----------------------------------------------------------------------------
 
 
-
+        // WIP,  colour array to tint different sites bars
         this.siteColors = [{
             type: 'linear',
             x: 0, y: 0, x2: 0, y2: 1,
@@ -149,41 +154,37 @@ class ChartStyleContainer {
         // Current 6 colours for TUM model
 
         this.TUMColors = [
-            // Unplanned Breakdown
+            // 0 Unplanned Breakdown
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
                 colorStops: [{ offset: 0, color: 'rgb(255,140,0)' }, { offset: 1, color: 'rgb(255,0,0)' }]
             },
-
-            // Planned Maintenance
+            // 1 Planned Maintenance
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
                 colorStops: [{ offset: 0, color: 'rgb(255,255,0)' }, { offset: 1, color: 'rgb(240,169,0)' }]
             },
-
-            //Unplanned Standby
+            // 2 Unplanned Standby
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
                 colorStops: [{ offset: 0, color: '#00b2ff' }, { offset: 1, color: '#000cff' }]
             },
-            // Operating Standby
+            // 3 Operating Standby
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
                 colorStops: [{ offset: 0, color: '#71d4ff' }, { offset: 1, color: '#1a85fe' }]
             },
-
-            // Operating Delay
+            // 4 Operating Delay
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
                 colorStops: [{ offset: 0, color: '#00ff6a' }, { offset: 1, color: '#00b297' }]
             },
-
-            // Primary Operating
+            // 5 Primary Operating
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
@@ -203,7 +204,6 @@ class ChartStyleContainer {
     axisFormatThousands(_value) {
         return (_value > 999) ? (_value / 1000) + "k" : _value;
     }
-
 
 
     toolTipTextStyle() {
@@ -238,7 +238,7 @@ class ChartStyleContainer {
     }
 
 
-    // Helps build the tooltip labels
+    // Helps build the tooltip labels with rich text/css
     toolTipTextTitle(_string) { return "<h5 class='underline bold'>" + _string + "</h5>"; }
     toolTipTextEntry(_string, _class = "") { return "<p class='" + _class + "'>" + _string + "</p>"; }
 
@@ -299,6 +299,8 @@ class ChartStyleContainer {
         }
     }
 
+
+    // Default grid spacing
     gridSpacing() {
         return {
             top: '11%',

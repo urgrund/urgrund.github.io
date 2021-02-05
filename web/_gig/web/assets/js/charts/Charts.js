@@ -1,91 +1,15 @@
 
-
-// Holds all chart instances
-var allCharts = [];
-
-
-// General Array Indexes for time
-// 0 = Day
-// 1 = Night
-// 2 = 24hr
-
 // -----------------------------------------------------------------------
-// Convenience arrays for time labels 
+// Chart management
 
-const secondsInShift = 43200;
-const secondsInDay = 86400;
-
-timeLabelsShift = [];
-timeLabelsShift[0] = GenerateTimeLabels(12, 6);
-timeLabelsShift[1] = GenerateTimeLabels(12, 18);
-timeLabelsShift[2] = GenerateTimeLabels(24, 6);
-
-timeLabels24hr = GenerateTimeLabels(24, 6);
-
-// 'Extra' means it's from, say 6am to 6pm instead of 6am to 5pm
-timeLabelsShiftExtra = [];
-timeLabelsShiftExtra[0] = GenerateTimeLabels(13, 6);
-timeLabelsShiftExtra[1] = GenerateTimeLabels(13, 18);
-timeLabelsShiftExtra[2] = GenerateTimeLabels(25, 6);
-
-// function PrepareAllTimeLabels(_shiftStart) {
-//     timeLabelsShift[0] = GenerateTimeLabels(12, _shiftStart);
-//     timeLabelsShift[1] = GenerateTimeLabels(12, _shiftStart + 12);
-//     timeLabelsShift[2] = GenerateTimeLabels(24, _shiftStart);
-//     timeLabelsShiftExtra[0] = GenerateTimeLabels(13, _shiftStart);
-//     timeLabelsShiftExtra[1] = GenerateTimeLabels(13, _shiftStart + 12);
-//     timeLabelsShiftExtra[2] = GenerateTimeLabels(25, _shiftStart);
-
-//     timeLabels24hr = GenerateTimeLabels(24, shiftStart);
-// }
-// PrepareAllTimeLabels(6);
-
-function GenerateTimeLabels(_count, _offset) {
-    var _array = [];
-    var num;
-    var suf;
-    for (var i = _offset; i < _count + _offset; i++) {
-        var hr = i % 24;
-        if (hr == 0) hr = 12;
-        num = hr > 12 ? hr - 12 : hr;
-        suf = hr > 11 ? "pm" : "am";
-        _array[i - _offset] = num + suf;
-    }
-    return _array;
-}
-
-
-function GenerateDateLabels(_startDate, _numberOfDays, _nice = false) {
-    var d = moment(_startDate);
-    var dateLabels = [];
-    for (var i = 0; i < _numberOfDays; i++) {
-        var label = _nice ? d.format('dddd, DD-MM-YY') : d.format("D-M-YY");
-        dateLabels.push(label);
-        d.add(1, 'd');
-    }
-    return dateLabels;
-}
-
-
-/**
- * @param {string} _string 
- */
-function NiceLabel(_string) {
-    //var len = _string.length;
-    var str = _string.replace("-", "");
-    str = str.replace(" ", "\n");
-    return str;
-    //return _string.replace("-", "").replace(/ /g, "\n");
-}
-
-
-
-
+var allCharts = [];
 
 // Subscribe to resize event to deal with chart resizing
 window.addEventListener('resize', function (event) {
     ResizeAllCharts();
 });
+
+
 
 
 // Call resize on all existing eCharts
@@ -113,11 +37,108 @@ function ClearAllCharts() {
  * and updates the global list of all charts
  */
 function SetOptionOnChart(_option, _chart) {
+
+    //var t0 = performance.now();
     if (_option && typeof _option === "object") {
         _chart.setOption(_option, true);
         allCharts.push(_chart);
     }
+    //console.log("Set Option " + (performance.now() - t0) + " milliseconds.")
 }
+
+
+/**
+ * Find a DOM Element by ID and attempt
+ * to init an echarts instance in it
+ */
+function InitChartFromElementID(_elementID) {
+    var dom = document.getElementById(_elementID);
+    if (dom == null || dom == undefined)
+        return undefined;
+    //var myChart = echarts.init(dom, ChartStyles.baseStyle);
+    var myChart = echarts.init(dom, ChartStyles.baseStyle, { renderer: 'canvas' });
+    return myChart;
+}
+
+
+
+
+// -----------------------------------------------------------------------
+// Helper Functions
+
+const secondsInShift = 43200;
+const secondsInDay = 86400;
+
+// An array of date label arrays
+// for easy use inside the charts
+timeLabelsShift = [];
+timeLabelsShift[0] = GenerateTimeLabels(12, 6);
+timeLabelsShift[1] = GenerateTimeLabels(12, 18);
+timeLabelsShift[2] = GenerateTimeLabels(24, 6);
+
+// 'Extra' means it's from, say 6am to 6pm instead of 6am to 5pm
+timeLabelsShiftExtra = [];
+timeLabelsShiftExtra[0] = GenerateTimeLabels(13, 6);
+timeLabelsShiftExtra[1] = GenerateTimeLabels(13, 18);
+timeLabelsShiftExtra[2] = GenerateTimeLabels(25, 6);
+
+// function PrepareAllTimeLabels(_shiftStart) {
+//     timeLabelsShift[0] = GenerateTimeLabels(12, _shiftStart);
+//     timeLabelsShift[1] = GenerateTimeLabels(12, _shiftStart + 12);
+//     timeLabelsShift[2] = GenerateTimeLabels(24, _shiftStart);
+//     timeLabelsShiftExtra[0] = GenerateTimeLabels(13, _shiftStart);
+//     timeLabelsShiftExtra[1] = GenerateTimeLabels(13, _shiftStart + 12);
+//     timeLabelsShiftExtra[2] = GenerateTimeLabels(25, _shiftStart);
+
+// }
+// PrepareAllTimeLabels(6);
+
+
+/**
+ * Generate an array of formatted TIME lables
+ */
+function GenerateTimeLabels(_count, _offset) {
+    var _array = [];
+    var num;
+    var suf;
+    for (var i = _offset; i < _count + _offset; i++) {
+        var hr = i % 24;
+        if (hr == 0) hr = 12;
+        num = hr > 12 ? hr - 12 : hr;
+        suf = hr > 11 ? "pm" : "am";
+        _array[i - _offset] = num + suf;
+    }
+    return _array;
+}
+
+
+/**
+ * Generate an array of formatted DATE lables
+ */
+function GenerateDateLabels(_startDate, _numberOfDays, _nice = false) {
+    var d = moment(_startDate);
+    var dateLabels = [];
+    for (var i = 0; i < _numberOfDays; i++) {
+        var label = _nice ? d.format('dddd, DD-MM-YY') : d.format("D-M-YY");
+        dateLabels.push(label);
+        d.add(1, 'd');
+    }
+    return dateLabels;
+}
+
+
+/**
+ * Nice label with spaces converted to pagebreaks 
+ * @param {string} _string 
+ */
+function NiceLabel(_string) {
+    var str = _string.replace("-", "");
+    str = str.replace(" ", "\n");
+    return str;
+}
+
+
+
 
 // Time and other functions
 function SecondsToMinutes(_seconds) {
@@ -136,11 +157,6 @@ function RatioToPercent(_value) {
     return (Math.round(_value * 1000) / 10) + "%";
 }
 
-// function _SecondsToHoursAndMinutes(num) {
-//     var hours = Math.floor(num / 3600);
-//     var minutes = Math.trunc(Math.round((num % 60) * 100) / 100);
-//     return (hours > 0 ? hours + "h " : "") + minutes + "m";
-// }
 
 function SecondsToHoursAndMinutes(d, showSeconds = false) {
     d = Number(d);
@@ -156,8 +172,9 @@ function SecondsToHoursAndMinutes(d, showSeconds = false) {
 
 
 
-// Calculates a Moving Average and
-// returns an array of values 
+/**
+ *  Calculate moving average on array of numbers
+ */
 function CalculateMA(dayCount, data) {
     var result = [];
     for (var i = 0, len = data.length; i < len; i++) {
@@ -180,39 +197,15 @@ function CalculateMA(dayCount, data) {
  */
 function ShiftIndex() { return fullDayView ? 2 : shift; }
 
-/**
- * Find a DOM Element by ID and attempt
- * to init an echarts instance in it
- */
-function InitChartFromElementID(_elementID) {
-    var dom = document.getElementById(_elementID);
-    if (dom == null || dom == undefined)
-        return undefined;
-    //var myChart = echarts.init(dom, ChartStyles.baseStyle);
-    var myChart = echarts.init(dom, ChartStyles.baseStyle, { renderer: 'canvas' });
-    return myChart;
-}
+
 
 
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 
-
-
-
-// const TUMNames =
-// {
-//     UnplannedBreakdown: 'Unplanned Breakdown',
-//     PlannedMaintenance: 'Planned Maintenance',
-//     UnplannedStandby: 'Unplanned Standby',
-//     OperatingStandby: 'Operating Standby',
-//     SecondaryOperating: 'Secondary Operating',
-//     PrimaryOperating: 'Primary Operating'
-// }
 
 
 class Charts {
-
 
 
     static CreateWaterfall(_elementID, _data, _calendarTime = -1) {
@@ -380,7 +373,7 @@ class Charts {
                     barMaxWidth: ChartStyles.barMaxWidth,
                     id: m.site,
                     name: m.site,
-                    data: m.mph,
+                    data: m.mph.map(Number),
                     metricIndices: [i],
                     label: { normal: { show: true, position: 'top', distance: 0 } },
                     itemStyle: { color: ChartStyles.siteColors[i % 2] },
@@ -441,15 +434,17 @@ class Charts {
                         var metric = shiftData.metricData[metricIndex];
                         var value = metric.mph[params[0].dataIndex];
                         if (value > 0) {
-                            string += ChartStyles.toolTipTextEntry("(" + metric.site + ") " + metric.name + " : " + metric.mph[params[0].dataIndex]);
+                            string += ChartStyles.toolTipTextEntry("(" + metric.site + ") " + metric.name + " : " + metric.mph[params[0].dataIndex].toFixed());
                         }
                     }
                 }
             }
 
-            // The last params element is the cumulative 
+            // The last params element is the cumulative             
             var index = params.length - 1;
-            string += ChartStyles.toolTipTextEntry(params[index].seriesName + " : " + params[index].value.toFixed(), "bold");
+            if (params[index].seriesName == "Cumulative") {
+                string += ChartStyles.toolTipTextEntry(params[index].seriesName + " : " + parseInt(params[index].value), "bold");
+            }
             return string;
         }
 
@@ -497,212 +492,115 @@ class Charts {
 
 
 
+    static CreateMPHRange(_elementID, _data, _cache) {
 
+        // Create an eCharts instance 
+        var myChart = InitChartFromElementID(_elementID);
+        if (myChart == undefined) return;
 
+        //console.log(_cache);
+        var xAxisNums = ArrayOfNumbers(0, (_cache.length * 24), 0);
 
-    /*
-        static CreateMPH2(_elementID, _data) {
-    
-            // Create an eCharts instance 
-            var myChart = InitChartFromElementID(_elementID);
-            if (myChart == undefined) return;
-    
-    
-    
-    
-            // Grab all the metrics recorded for this equipment 
-            // Only interested if there was any metrics recorded this shift
-            var metrics = [];
-            var hourCount = timeLabelsShift[ShiftIndex()].length;
-            var equipMetricsToAdd = _data.shiftData[ShiftIndex()].metricData;
-    
-            //console.log(equipMetricsToAdd);        
-    
-            // Finalise with Metrics that have > 0 cumulative
-            for (var i = 0; i < equipMetricsToAdd.length; i++) {
-                var metric = equipMetricsToAdd[i];
-    
-                if (fullDayView) {
-                    if (metric.cph[metric.shift == 0 ? 11 : 23] > 0)
-                        metrics.push(metric);
-                }
-                else {
-                    if (metric.cph[11] > 0)
-                        metrics.push(metric);
+        var mph = ArrayOfNumbers(0, (_cache.length * 24), 0);
+
+        var totalAU = [];
+        var availability = [];
+        var efficiency = [];
+
+        //for (var i = _cache.length; i > -1; i--) {
+        for (var i = 0; i < _cache.length; i++) {
+
+            var day = _cache[_cache.length - i - 1];
+            var equip = day[day.length - 2][_data.id];
+            var equipMetrics = equip.shiftData[2].metricData;
+
+            // Asset Utilisation
+            totalAU[i] = equip.shiftData[2].assetUtilisation.totalAU;
+            availability[i] = equip.shiftData[2].assetUtilisation.availability;
+            efficiency[i] = equip.shiftData[2].assetUtilisation.efficiency;
+
+            // Metrics
+            for (var j = 0; j < equipMetrics.length; j++) {
+                for (var k = 0; k < equipMetrics[j].mph.length; k++) {
+                    mph[(i * 24) + k] += equipMetrics[j].mph[k];
                 }
             }
-    
-            var cumulative = ArrayOfNumbers(0, hourCount, 0);
-    
-            // Add all the series together
-            // along with legend info 
-            var seriesArray = [];
-            var legend = [];
-            var perSiteTotals = [];
-            var perHourTotals = ArrayOfNumbers(0, hourCount, 0);
-    
-            for (var i = 0; i < metrics.length; i++) {
-                // Invisible Series
-                seriesArray.push(
-                    {
-                        id: i,
-                        name: metrics[i].site,
-                        yAxisIndex: 0,
-                        type: 'bar',
-                        data: metrics[i].mph,
-                        stack: 'mph',
-                        barGap: '-100%',
-                        itemStyle: { color: 'rgba(0,0,0,0)' }
-                    });
-    
-                // Add this site to the Legend
-                if (!legend.includes(metrics[i].site))
-                    legend.push(metrics[i].site);
-    
-                // Site total
-                // See if a site exists and create clean empty arrays for it
-                if (!(metrics[i].site in perSiteTotals)) {
-                    perSiteTotals[metrics[i].site] = ArrayOfNumbers(0, hourCount, 0);
-                }
-    
-                // Accumulate values into each site
-                for (var j = 0; j < hourCount; j++) {
-                    perSiteTotals[metrics[i].site][j] = perSiteTotals[metrics[i].site][j] + metrics[i].mph[j];
-                    perHourTotals[j] += metrics[i].mph[j];
-                }
-    
-                // Total culmulative starting at 1
-                for (var j = 1; j < hourCount; j++) {
-                    cumulative[j] = cumulative[j - 1] + perHourTotals[j];
-                }
-            }
-    
-    
-            seriesArray.push(
-                {
-                    name: "Invisible",
-                    type: 'bar',
-                    z: 3,
-                    barMaxWidth: '15',
-                    data: perHourTotals,
-                    yAxisIndex: 0,
-                    itemStyle: { color: ChartStyles.siteColors[0] },
-                    label: { normal: { show: true, position: 'top' } },
-                    barGap: '-100%',
-                    itemStyle: { color: 'rgba(0,0,0,0)' }
-                });
-    
-    
-            // ------------------------
-            // Cumulative Line        
-            legend.push("Cumulative");
-            seriesArray.push(
-                {
-                    name: "Cumulative",
-                    yAxisIndex: 1,
-                    z: 2,
-                    type: 'line',
-                    data: cumulative,
-                    itemStyle: { color: ChartStyles.cumulativeColor },
-                    areaStyle: { color: ChartStyles.cumulativeArea },
-                    symbol: 'none',
-                    lineStyle: ChartStyles.lineShadow()
-                });
-            // ------------------------
-    
-    
-    
-    
-    
-            // ------------------------
-            // Add each site data to series
-            for (var key in perSiteTotals) {
-                seriesArray.unshift(
-                    {
-                        name: key,
-                        type: 'bar',
-                        stack: 'aaa',
-                        barMaxWidth: ChartStyles.barMaxWidth,
-                        data: perSiteTotals[key],
-                        itemStyle: { color: ChartStyles.siteColors[0] }//,
-                        //label: { normal: { show: true, position: 'top' } }
-                    });
-            }
-            //console.log(perSiteTotals);
-            //console.log(perHourTotals);
-            // ------------------------
-    
-    
-    
-            // ------------------------
-            // Construct the hover over message
-            function Label(params) {
-                var string = "";
-    
-                // The time 
-                string += ChartStyles.toolTipTextTitle(params[0].name);
-    
-                // Labels for each metric
-                for (var i = 0; i < params.length; i++) {
-                    var metric = metrics[params[i].seriesId];
-                    if (typeof metric !== 'undefined') {
-                        if (params[i].value > 0) {
-                            string += ChartStyles.toolTipTextEntry("(" + metric.site + ") " + metric.name + " : " + params[i].value);
-                        }
-                    }
-                }
-    
-                // The last params element is the cumulative 
-                var index = params.length - 1;
-                string += ChartStyles.toolTipTextEntry(params[index].seriesName + " : " + params[index].value, "bold");
-                return string;
-            }
-            // ------------------------
-    
-    
-            var option = {
-                backgroundColor: ChartStyles.backGroundColor,
-                textStyle: ChartStyles.textStyle,
-                legend: { y: 'top', data: legend },
-                grid: ChartStyles.gridSpacing(),
-                toolbox: ChartStyles.toolBox(myChart.getHeight(), "TPH"),
-                tooltip: {
-                    confine: true,
-                    trigger: 'axis',
-                    textStyle: ChartStyles.toolTipTextStyle(),
-                    axisPointer: ChartStyles.toolTipShadow(),
-                    backgroundColor: ChartStyles.toolTipBackgroundColor(),
-                    formatter: function (params, index) {
-                        return Label(params);
-                    },
-                    showDelay: 0,
-                    transitionDuration: 0
-                },
-                //xAxis: ChartStyles.xAxis(fullDayView ? timeLabels24hr : timeLabelsShift[shift]),
-                xAxis: ChartStyles.xAxis(timeLabelsShift[ShiftIndex()]),
-                yAxis: [{
-                    type: 'value',
-                    splitLine: { show: false },
-                    axisLine: ChartStyles.axisLineGrey,
-                    axisLabel: {
-                        fontSize: ChartStyles.fontSizeSmall
-                    }
-                },
-                {
-                    type: 'value',
-                    splitLine: { show: false },
-                    axisLine: ChartStyles.axisLineGrey,
-                    axisLabel: {
-                        fontSize: ChartStyles.fontSizeSmall
-                    }
-                }],
-                series: seriesArray
-            };
-    
-            SetOptionOnChart(option, myChart);
-            return myChart;
         }
-    */
+
+        var lineSeries = [totalAU, availability, efficiency];
+        var series = [];
+        // Setup line series
+        for (var i = 0; i < lineSeries.length; i++) {
+            series[i] =
+            {
+                name: 'Asset',
+                type: 'line',
+                yAxisIndex: 1,
+                xAxisIndex: 1,
+                itemStyle: { color: ChartStyles.TUMColors[i % 6] },
+                data: lineSeries[i]
+            };
+        }
+
+        series.push({
+            name: 'Metrics',
+            type: 'bar',
+            barWidth: '60%',
+            itemStyle: { color: ChartStyles.siteColors[0] },
+            data: mph
+        });
+
+
+
+
+        //console.log(mph);
+
+        var option = {
+            backgroundColor: ChartStyles.backGroundColor,
+            textStyle: ChartStyles.textStyle,
+            grid: ChartStyles.gridSpacing(),
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                top: '3%',
+                containLabel: true
+            },
+            xAxis:
+                [
+                    {
+                        type: 'category',
+                        data: mph,
+                    },
+                    {
+                        type: 'category',
+                        data: [1, 2, 3, 4, 5, 6, 7]
+                    }
+                ]
+            ,
+            yAxis: [
+                {
+                    type: 'value',
+                    splitLine: { show: false },
+                    axisLine: ChartStyles.axisLineGrey,
+                    axisLabel: { fontSize: ChartStyles.fontSizeSmall }
+                },
+                {
+                    type: 'value', min: 0, max: 1
+                }
+            ],
+            series: series
+        };
+
+        SetOptionOnChart(option, myChart);
+        return myChart;
+    }
 
 
 
@@ -1296,9 +1194,141 @@ class Charts {
     }
 
 
-
-
     static CreateTimeLineFlat(_elementID, _data, _includeTimeLine = false) {
+
+        // Create an eCharts instance 
+        var myChart = InitChartFromElementID(_elementID);
+        if (myChart == undefined) return;
+
+        //console.log(_data);
+        //console.log(ShiftIndex());
+
+        var sortedEvents = [];
+        var equipEventIndices = _data.shiftData[ShiftIndex()].events;
+        for (var i = 0; i < equipEventIndices.length; i++) {
+            sortedEvents.push(_data.events[equipEventIndices[i]]);
+        }
+
+        // And then sort them...  
+        sortedEvents = sortedEvents.sort(function (a, b) {
+            return a.timeStamp - b.timeStamp;
+        });
+
+        var tlData = sortedEvents.map(function (item, index) {
+            return {
+                value: [item.timeStamp, item.timeStamp + item.duration, 1, "A"],
+                itemStyle: {
+                    color: ChartStyles.TUMColors[ServerInfo.config.TUMKeys[item.tumCategory]]
+                }
+            };
+        });
+
+
+        //console.log(sortedEvents);
+
+        function renderItem(params, api, marker) {
+            var yValue = api.value(2);
+            var start = api.coord([api.value(0), yValue]);
+            var size = api.size([api.value(1) - api.value(0), yValue]);
+            var style = api.style();
+
+            return {
+                type: 'rect',
+                shape: {
+                    x: start[0],
+                    y: start[1],
+                    width: marker ? 2 : size[0],
+                    height: size[1]
+                },
+                style: style
+            };
+        }
+
+        var startSeconds = ShiftIndex() == 1 ? (3600 * 12) : 0;
+        var xAxisArray = [{
+            show: false,
+            min: startSeconds,
+            max: startSeconds + (ShiftIndex() == 2 ? secondsInDay : secondsInShift)
+        }];
+
+
+        if (_includeTimeLine) xAxisArray.push(ChartStyles.xAxis(timeLabelsShift[ShiftIndex()]));
+
+
+        var option = {
+            backgroundColor: ChartStyles.backGroundColor,
+            textStyle: ChartStyles.textStyle,
+            animation: false,
+            tooltip: {
+                textStyle: ChartStyles.toolTipTextStyle(),
+                axisPointer: ChartStyles.toolTipShadow(),
+                backgroundColor: ChartStyles.toolTipBackgroundColor(),
+
+                // Display info about the events 
+                formatter: function (params) {
+                    var event = sortedEvents[params.dataIndex];
+                    var text = "";
+                    var startTime = event.timeLabel;
+                    text += ChartStyles.toolTipTextTitle(startTime);
+                    text += ChartStyles.toolTipTextEntry(SecondsToHoursAndMinutes(event.duration));
+                    text += ChartStyles.toolTipTextEntry(event.tumCategory);
+                    text += ChartStyles.toolTipTextEntry(event.status);
+                    return text;
+                },
+
+                // Fast show/hide as there's a LOT of them 
+                hideDelay: 0,
+                showDelay: 0,
+                transitionDuration: 0,
+                confine: true
+            },
+            grid: {
+                top: _includeTimeLine ? '2%' : '0%',
+                bottom: _includeTimeLine ? '2%' : '0%',
+                left: _includeTimeLine ? '1%' : '1%',
+                right: _includeTimeLine ? '2%' : '1%'
+            },
+            xAxis: xAxisArray,
+            yAxis: {
+                show: false
+            },
+            series: [
+                {
+                    xAxisIndex: 0,
+                    type: 'custom',
+                    itemStyle: { normal: { opacity: 0.5 } },
+                    renderItem: function (params, api) { return renderItem(params, api, false); },
+                    label: {
+                        show: false,
+                        position: 'top'
+                    },
+                    //dimensions: ['from', 'to', 'profit'],
+                    encode: { x: [0, 1], y: 2, tooltip: [0, 1, 2], itemName: 3 },
+                    data: tlData
+                },
+                {
+                    // For the Markers
+                    xAxisIndex: 0,
+                    type: 'custom',
+                    itemStyle: { normal: { opacity: 1 } },
+                    renderItem: function (params, api) { return renderItem(params, api, true); },
+                    label: { show: false },
+                    encode: { x: [0, 1], y: 2, tooltip: [0, 1, 2], itemName: 3 },
+                    data: tlData
+                }
+            ]
+        };
+
+        // This function just makes sure 
+        // the chart is added to a total charts list
+        SetOptionOnChart(option, myChart);
+        return myChart;
+    }
+
+
+
+
+    static CreateTimeLineFlat_OLD(_elementID, _data, _includeTimeLine = false) {
 
         // Create an eCharts instance 
         var myChart = InitChartFromElementID(_elementID);
@@ -1323,9 +1353,10 @@ class Charts {
 
         // And then sort them...  
         sortedEvents = sortedEvents.sort(function (a, b) {
-            var c = new Date(a.eventTime.date);
-            var d = new Date(b.eventTime.date);
-            return c - d;
+            //var c = new Date(a.eventTime.date);
+            //var d = new Date(b.eventTime.date);            
+            //return c - d;
+            return a.timeStamp - b.timeStamp;
         });
 
 
@@ -1374,7 +1405,8 @@ class Charts {
                 formatter: function (params) {
                     var event = sortedEvents[params.componentIndex];
                     var text = "";
-                    var startTime = moment(event.eventTime.date).format('h:mm:ss a');//new Date(event.eventTime.date);
+                    //var startTime = moment(event.eventTime.date).format('h:mm:ss a');//new Date(event.eventTime.date);
+                    var startTime = event.timeLabel;
                     text += ChartStyles.toolTipTextTitle(startTime);
                     text += ChartStyles.toolTipTextEntry(SecondsToHoursAndMinutes(event.duration));
                     text += ChartStyles.toolTipTextEntry(event.tumCategory);

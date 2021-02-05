@@ -123,14 +123,12 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             return;
         }
 
-        //console.log(_data);
+        console.log(_data);
+
 
         //var jsonString = JSON.stringify(_data);
         //var newData = JSON.parse(jsonString);
         var newData = Array.from(_data);
-
-        //console.log(newData);
-
 
         // All sites
         $rootScope.siteData = newData;
@@ -143,6 +141,13 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
 
         $rootScope.siteDataDate = $rootScope.convertToNiceDateObject($rootScope.meta.Date);
         $rootScope.functionMapping = $rootScope.meta.EquipmentFunctionMap;
+
+        // Error check the date
+        if ($rootScope.siteData.length < 1) {
+            console.error("No sites with this date...");
+            return;
+        }
+
 
         // Create a $root list of equipment by function
         // use the function mapping table as object keys 
@@ -159,8 +164,10 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         }
         //console.log($rootScope.equipmentByFunction);
 
+        newData = null;
+
         // Debug output
-        if (false) {
+        if (true) {
             console.log("[" + $rootScope.meta.Date + "]");
             console.log("Sites :");
             console.log($rootScope.siteData);
@@ -171,104 +178,17 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             console.log("META :");
             console.log($rootScope.meta);
         }
-        // Update and broadcast message to the app
-        //$rootScope.$apply();
-
-        jsonString = null;
-        newData = null;
 
         $rootScope.$broadcast('newSiteDataSet');
         $route.reload();
     };
 
 
-    $rootScope.fetchSiteData = function (_dates, _setAfterFetch = false, _replace = false) {
-
-        for (var i = 0; i < _dates.length; i++) {
-            var date = _dates[i];
-            //console.log(date);
-
-            var _data = { 'func': 0, 'date': date };
-            var request = $http({
-                method: 'POST',
-                url: ServerInfo.URL_GetSiteData,
-                data: _data
-            })
-            request.then(function (response) {
-
-                //console.log($rootScope.cachedData);
-
-                // Does this exist?
-                var found = false;
-                if ($rootScope.cachedData.length > 0)
-                    found = $rootScope.cachedData.some(el => el[el.length - 1].Date === response.data[response.data.length - 1].Date);
-
-                // It's new so add it 
-                if (!found) {
-                    //console.log("Wasn't found...");
-                    $rootScope.cachedData.push(response.data);
-                }
-
-                if (!true) {
-                    console.log("[" + response.data[response.data.length - 1].Date + "] was added...");
-                    console.log(response.data);
-                    console.log($rootScope.cachedData.length + " days of data in memory");
-                }
-
-                //if (_replace)
-                //  return;
-
-                // Apply to site if requested
-                if (_setAfterFetch) {
-                    $rootScope.setNewSiteData(response.data, _replace);
-                }
-
-                // Sort 
-                $rootScope.cachedData.sort(function (a, b) { return b[b.length - 1]['Date'] - a[a.length - 1]['Date'] });
-
-            }, function (error) {
-                console.error("ERROR FETCHING DATA");
-                console.error(error);
-            });
-        }
-
-    };
-
     // ------------------------------------------------------
 
 
 
 
-
-
-    /**
-     * Get the available data dates from the server and set trailing week
-     */
-    $rootScope.fetchAvailableDates = function (_setTrailingWeek = true) {
-        var _data = { 'func': 1 };
-        var request = $http({
-            method: 'POST',
-            url: ServerInfo.URL_GetSiteData,
-            data: _data,
-        })
-        request.then(function (response) {
-            if ($rootScope.checkResponseError(response))
-                return;
-            //console.log("[Available Dates]");
-            //console.log(response.data);
-            ServerInfo.availableDates = response.data;
-
-            if (_setTrailingWeek) {
-                var trailingWeek = ServerInfo.availableDates.slice(1, 7);
-                $rootScope.fetchSiteData([ServerInfo.availableDates[0]], true);
-                $rootScope.fetchSiteData(trailingWeek, false);
-            }
-
-            $rootScope.$broadcast('availableDatesSet');
-
-        }, function (error) {
-        });
-    }
 
 
     /**
@@ -291,6 +211,8 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
      * Get the last event registered with equipment based on the current shift     
      */
     $rootScope.getEquipmentLastEvent = function (_equip) {
+        if (_equip === undefined)
+            return;
         var len = _equip.shiftData[ShiftIndex()].events.length;
         var index = _equip.shiftData[ShiftIndex()].events[len - 1];
         //console.log(_equip.id + " | " + _equip.events[index].majorGroup);
@@ -353,6 +275,63 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
 
 
 
+
+    $rootScope.fetchSiteData = function (_dates, _setAfterFetch = false, _replace = false) {
+
+        for (var i = 0; i < _dates.length; i++) {
+            var date = _dates[i];
+            //console.log(date);
+
+            var _data = { 'func': 0, 'date': date };
+            var request = $http({
+                method: 'POST',
+                url: ServerInfo.URL_GetSiteData,
+                data: _data
+            })
+            request.then(function (response) {
+
+                //console.log($rootScope.cachedData);
+
+                // Does this exist?
+                var found = false;
+                if ($rootScope.cachedData.length > 0)
+                    found = $rootScope.cachedData.some(el => el[el.length - 1].Date === response.data[response.data.length - 1].Date);
+
+                // It's new so add it 
+                if (!found) {
+                    //console.log("Wasn't found...");
+                    $rootScope.cachedData.push(response.data);
+                }
+
+                // if (!true) {
+                //     console.log("[" + response.data[response.data.length - 1].Date + "] was added...");
+                //     console.log(response.data);
+                //     console.log($rootScope.cachedData.length + " days of data in memory");
+                // }
+
+                //if (_replace)
+                //  return;
+
+                // Apply to site if requested
+                if (_setAfterFetch) {
+                    $rootScope.setNewSiteData(response.data, _replace);
+                }
+
+                // Sort 
+                $rootScope.cachedData.sort(function (a, b) { return b[b.length - 1]['Date'] - a[a.length - 1]['Date'] });
+
+            }, function (error) {
+                console.error("ERROR FETCHING DATA");
+                console.error(error);
+            });
+        }
+
+    };
+
+
+
+
+
     $rootScope.fetchSiteConfigs = function () {
         var _data = { 'func': 4 };
         var request = $http({
@@ -361,7 +340,7 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             data: _data,
         })
         request.then(function (response) {
-            console.log(response.data);
+            //console.log(response.data);
             //if ($rootScope.checkResponseError(response))
             //  return;
 
@@ -379,6 +358,39 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         });
         return request;
     }
+
+
+
+
+    /**
+     * Get the available data dates from the server and set trailing week
+     */
+    $rootScope.fetchAvailableDates = function (_setTrailingWeek = true) {
+        var _data = { 'func': 1 };
+        var request = $http({
+            method: 'POST',
+            url: ServerInfo.URL_GetSiteData,
+            data: _data,
+        })
+        request.then(function (response) {
+            if ($rootScope.checkResponseError(response))
+                return;
+            //console.log("[Available Dates]");
+            //console.log(response.data);
+            ServerInfo.availableDates = response.data;
+
+            // if (_setTrailingWeek) {
+            //     var trailingWeek = ServerInfo.availableDates.slice(1, 7);
+            //     $rootScope.fetchSiteData([ServerInfo.availableDates[0]], true);
+            //     $rootScope.fetchSiteData(trailingWeek, false);
+            // }
+
+            $rootScope.$broadcast('availableDatesSet');
+
+        }, function (error) {
+        });
+        return request;
+    }
 });
 
 
@@ -392,19 +404,23 @@ app.controller("myCtrl", function ($q, $scope, $rootScope, $timeout, $route, $lo
 
     console.log("Starting Mine-Mage...");
 
-    var promises = [$rootScope.fetchSiteConfigs()];
-    var taskCompletion = $q.all(promises);
 
-    //console.log(promises);
+    // Sequence the requests 
+    var promises = [
+        $rootScope.fetchSiteConfigs(),
+        $rootScope.fetchAvailableDates()
+    ];
+    $q.all(promises).then(function (responses) {
+        console.log("Config & Dates ready");
 
-    taskCompletion.then(function (responses) {
-        responses.forEach(function (response) {
-            console.log(response)
-        })
-    })
+        promises = [
+            // Latest date and Trailing week 
+            $rootScope.fetchSiteData([ServerInfo.availableDates[0]], true),
+            $rootScope.fetchSiteData(ServerInfo.availableDates.slice(1, 7), false)
+        ];
+    });
 
-    //$rootScope.fetchSiteConfigs();
-    //$rootScope.fetchAvailableDates();
+
 
     // ------------------------------------------------------
     // Interval function to update the current days data

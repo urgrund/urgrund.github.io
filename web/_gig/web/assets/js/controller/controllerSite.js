@@ -5,7 +5,7 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
     $scope.shiftData = null;
     $scope.siteID = $routeParams.site;
 
-
+    $scope.siteIndex = 0;
 
     $scope.summary = undefined;
     $scope.summaryMaterials = undefined;
@@ -31,12 +31,16 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
 
         // Create flat timelines
         var x = document.getElementsByClassName("equip-flat-usage");
+
+        //var t0 = performance.now()
         for (var i = 0; i < x.length; i++) {
             var equip = $rootScope.equipment[x[i].id];
-            if (equip != 'undefined') {
+            if (equip !== undefined) {
                 Charts.CreateTimeLineFlat(x[i].id, equip);
             }
         }
+        //var t1 = performance.now()
+        //console.log("CreateTimeLineFlat took " + (t1 - t0) + " milliseconds.")
 
 
         // Sankey        
@@ -90,52 +94,65 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
 
 
 
-    $scope.$watch('$viewContentLoaded', function () {
-        //return;
-        // Prepare controller data
-        $timeout(function () {
-            //console.log($routeParams.site);
+
+    $scope.SetDataAndCreateCharts = function () {
+
+        if ($rootScope.siteData != null) {
+            console.log("SDJADJLSD");
             $scope.siteIndex = $routeParams.site;
-            if ($rootScope.siteData != null) {
-                $scope.site = $rootScope.siteData[$scope.siteIndex];
-                $scope.shiftData = $scope.site.shiftData[ShiftIndex()];
-            }
+            $scope.site = $rootScope.siteData[$scope.siteIndex];
+            $scope.shiftData = $scope.site.shiftData[ShiftIndex()];
+            $timeout(function () {
+                $scope.createSiteCharts();
+            }, 10);
+        }
+    }
 
-            //$scope.prepareAssetTotals();
-        }, 5);
 
 
-        // Setup charts 
-        $timeout(function () {
-            $scope.createSiteCharts();
-        }, 10);
+    $scope.$watch('$viewContentLoaded', function () {
+        $scope.SetDataAndCreateCharts();
+        // if ($rootScope.siteData == null)
+        //     return;
+
+        // $scope.siteIndex = $routeParams.site;
+        // if ($rootScope.siteData != null) {
+        //     $scope.site = $rootScope.siteData[$scope.siteIndex];
+        //     $scope.shiftData = $scope.site.shiftData[ShiftIndex()];
+        // }
+
+        // // Setup charts 
+        // $timeout(function () {
+        //     $scope.createSiteCharts();
+        // }, 10);
     });
 
 
 
 
     $rootScope.$on('newSiteDataSet', function () {
-        $timeout(function () {
-            $scope.siteIndex = $routeParams.site;
-            $scope.site = $rootScope.siteData[$scope.siteIndex];
-            $scope.shiftData = $scope.site.shiftData[ShiftIndex()];
-            $scope.createSiteCharts();
-        }, 50);
+        $scope.SetDataAndCreateCharts();
+
+        // $scope.siteIndex = $routeParams.site;
+        // $scope.site = $rootScope.siteData[$scope.siteIndex];
+        // $scope.shiftData = $scope.site.shiftData[ShiftIndex()];
+        // $scope.createSiteCharts();
+
     });
 
 
     $scope.$on('updateShift', function (event, data) {
-        $timeout(function () {
-            $scope.siteIndex = $routeParams.site;
+        $scope.SetDataAndCreateCharts();
 
-            //console.log($scope.siteIndex);
-            //console.log($rootScope.siteData);
 
-            $scope.site = $rootScope.siteData[$scope.siteIndex];
-            $scope.shiftData = $scope.site.shiftData[ShiftIndex()];
-            //console.log($scope.shiftData);
-            $scope.createSiteCharts();
-        }, 10);
+        // if ($rootScope.siteData == null)
+        //     return;
+
+        // $scope.siteIndex = $routeParams.site;
+        // $scope.site = $rootScope.siteData[$scope.siteIndex];
+        // $scope.shiftData = $scope.site.shiftData[ShiftIndex()];
+        // $scope.createSiteCharts();
+
     });
 
 });
