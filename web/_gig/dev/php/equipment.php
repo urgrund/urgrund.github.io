@@ -66,7 +66,19 @@ class Equipment
         $e->majorGroup = Config::MajorGroup($e->tumCategory);
         $e->tumIndex = Config::TUMIndex($e->tumCategory);
 
-        //Debug::Log($e->tumCategory);
+        $diff = $e->eventTime->getTimestamp() - CreateSiteData::DateForData()->getTimestamp();
+        $diff -= (3600 * 6);
+        $e->timeStamp = $diff;
+        $e->timeLabel = date_format($e->eventTime, "H:i:s");
+        //$diff = date_diff($dEnd, $dStart);
+
+
+
+        //Debug::Log(date_format($e->eventTime, "H:i:s"));
+        //Debug::Log(date_format($dEnd, "Y/m/d H:i:s") . "   " . $diff);
+        //Debug::Log($diff); // . "   " . date_format($dEnd, "Y/m/d H:i:s"));
+
+
 
         // In case the status hasn't been 
         // mapped to a TUM category yet
@@ -74,18 +86,10 @@ class Equipment
             //Debug::Log($this->id . " has no TUM for " . $e->status);
             //          $e->tumIndex = -1;
             $e->tumCategory = "NO TUM CATEGORY";
-        } //else
-        //            $e->tumIndex = Config::$instance->TUMKeys[$e->tumCategory];
+        }
 
-        // Which shift does this event belong to?        
-        // Store only the index of this event here
-        //$shiftIndex = $e->shift == "P1" ? 0 : 1;
-        //$shiftIndex = $e->shift;
-        //Debug::Log($e->shift);
-        //$this->shiftData[$shiftIndex]->events[] = count($this->events);
+        // Store the event in the shift arrays
         $this->shiftData[$e->shift]->events[] = count($this->events);
-
-        // Store the event in the 24hr list
         $this->shiftData[2]->events[] = count($this->events);
 
 

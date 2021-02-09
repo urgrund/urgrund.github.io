@@ -1,5 +1,6 @@
 <?php
 
+//include_once('utils.php');
 include_once('header.php');
 //include_once('setDebugOff.php');
 include_once('get_site_data.php');
@@ -14,6 +15,7 @@ $request = json_decode($postdata);
 
 if (is_object($request)) {
     include_once('setDebugOff.php');
+    Debug::DisableForSession();
 
     // Get all the dates and their status
     // Does not generate anything
@@ -40,7 +42,7 @@ if (is_object($request)) {
     return;
 } else {
     //include_once('setDebugOff.php');
-    //Admin::GetAllDateStatus();
+    Admin::GetAllDateStatus();
     //Admin::GetCSVConfigs();
     //Admin::GenerateDataForDate('20181001');
 

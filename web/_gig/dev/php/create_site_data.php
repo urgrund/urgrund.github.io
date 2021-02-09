@@ -1,30 +1,23 @@
 <?php
-
+//include_once('utils.php');
 include_once('header.php');
+
 
 
 // Uncomment this to run directly from this file
 if (Debug::enabled() == true) {
 
-    //$c = new Config();
-    //Debug::Log($c);
-    //$d = new TUMTimings();    
 
-    //$prop = "Operating Standby";
-    //Debug::Log($d->$prop);
-    //Debug::Log(property_exists($d, "Operating Standby"));
-
-
-    //$c = new Config();
-    //Debug::Log($c->TUMKeys);
-    //Debug::Log(Config::CreateDistinctTUMArray());
+    //try {
+    //CreateSiteData::Run(new DateTime('20181231'));
+    //} catch (Error $e) {
+    // Handle error
+    //  echo $e->getMessage(); // Call to a member function method() on string
+    //}
 
     CreateSiteData::Run(new DateTime('20181231'));
-    //CreateSiteData::Run(new DateTime('20201205'));
+    //CreateSiteData::Run(new DateTime('20201206'));
 
-    //$sqlTxt = SQLUtils::FileToQuery(Client::SQLPath() . 'ALL_MetricPerHour.sql');
-    //$sqlTxt = str_replace(SQLUtils::DateVar, "'" . '20201201' . "'", $sqlTxt);
-    //$sqlMetricPerHour = SQLUtils::QueryToText($sqlTxt, "All Metric");
     return;
 }
 
@@ -51,6 +44,7 @@ final class CreateSiteData
         Debug::Log("Using date - " . $_date->format('Ymd'));
         self::$dateTimeForData = $_date;
         self::$date = $_date->format('Ymd');
+        //date_default_timezone_set(Client::GetTimeZone()->getName());
         CreateSiteData::Create();
     }
 
@@ -369,12 +363,14 @@ final class CreateSiteData
 
             // DEBUG
             //if ($key != 'BP019')
-            //  continue;
+            //continue;
 
             self::$e->GenerateMPH();
             self::$e->GenerateUofAFromEvents();
             self::$e->GenerateEventBreakDown();
             self::$e->GenerateShiftCallUps();
+
+            //Debug::Log(self::$e->events);
         }
 
         Debug::EndProfile();

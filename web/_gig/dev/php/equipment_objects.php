@@ -40,6 +40,9 @@ class EquipmentEvent
     var $shift;
     var $tumCategory;       // Time Usage Model category
     var $tumIndex;          // 0-5 index of the Tum category
+
+    var $timeStamp;
+    var $timeLabel;
 }
 
 

@@ -1,11 +1,13 @@
 <?php
-include_once('utils.php');
+//include_once('utils.php');
+include_once('header.php');
+//include_once('client.php');
 
 $isConnected = 0;
 $conn;
-//print($isConnected);
+
 //SQLUtils::OpenConnection();
-//print($isConnected);
+//Debug::Log($conn);
 
 
 final class SQLDBCredentials
@@ -77,9 +79,9 @@ class SQLUtils
 
         if ($conn === false) {
             //echo "Unable to connect.</br>";
-            Debug::Log(sqlsrv_errors());
+            Debug::Log(sqlsrv_errors()[0][2]);
             //die(print_r(sqlsrv_errors(), true));
-            throw new Exception("Mine-Mage cannot connect to SQL Server"); //sqlsrv_errors());
+            //throw new Exception("Mine-Mage cannot connect to SQL Server"); //sqlsrv_errors());
             //trigger_error("Cannot Connect to SQL Server",  sqlsrv_errors());
         } else {
             //Debug::Log("Success");

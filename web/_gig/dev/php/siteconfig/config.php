@@ -63,7 +63,7 @@ class Config
     public array $TUMKeys;
     public array $MajorGroup;
 
-    public int $ShiftStart;
+    public ClientFrontEndData $ClientData;
 
 
     private static $uniqueTUMCategories = [];
@@ -81,7 +81,7 @@ class Config
         $this->CreateTUM();
         Config::CreateUniqueTUMArray();
 
-        $this->ShiftStart = Client::instance()->ShiftStart();
+        $this->ClientData = Client::GetFrontEndData();
 
         Debug::EndProfile();
 

@@ -157,7 +157,8 @@ class Monthly
     {
         //$file = 'ALL_MonthlyProductionData.sql';
         $file = 'ALL_MonthlyProductionDataPlanName.sql';
-        $sqlTxt = SQLUtils::FileToQuery(Utils::GetBackEndRoot() . Client::SQLPath() . $file);
+        //$file = 'ALL_MonthlyProductionDataPlanName.sql';
+        $sqlTxt = SQLUtils::FileToQuery(Utils::GetBackEndRoot() . Client::SQLCorePath() . $file);
         $sqlTxt = str_replace(SQLUtils::YearVar, "'" . $_year . "'", $sqlTxt);
         $sqlTxt = str_replace(SQLUtils::MonthVar, "'" . $_month . "'", $sqlTxt);
 

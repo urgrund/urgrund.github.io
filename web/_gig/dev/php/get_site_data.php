@@ -1,4 +1,6 @@
 <?php
+
+//include_once('utils.php');
 include_once('header.php');
 
 // ----------------------------------------------------------
@@ -29,7 +31,7 @@ if (is_object($request)) {
 } else {
     // Debug path    
     include_once('create_site_data.php');
-    GetSiteData::GetDataForDate('20181010', true);
+    GetSiteData::GetDataForDate('20181011', true);
     //GetSiteData::GetDataForLongTerm();
 
     //Debug::Log(Client::CachePath());
@@ -52,8 +54,8 @@ class GetSiteData
     //private static $_fileDir2 = Client::CachePath();
 
 
-    //private static $_fileExt = ".json";
-    private static $_fileExt = ".mmd";  // Mine Mage Data    
+    private static $_fileExt = ".json";
+    //private static $_fileExt = ".mmd";  // Mine Mage Data    
 
     private static function CacheDir(): string
     {

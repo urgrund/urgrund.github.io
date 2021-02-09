@@ -1,5 +1,5 @@
 <?php
-include_once('sql.php');
+include_once('utils.php');
 
 // This defines the root directory
 // of the client root as well as 
@@ -9,18 +9,27 @@ $clientRoot = "Newcrest";
 //$clientRoot = "MineStar";
 
 
+
+
+
+
 // Includes the client implementation 
-//include_once("..\clients\\" . $clientRoot . "\\" . $clientRoot . ".php");
 include_once(Utils::GetBackEndRoot() .  "..\clients\\" . $clientRoot . "\\" . $clientRoot . ".php");
+
+class ClientFrontEndData
+{
+    public string $name;
+    public float $shiftStart;
+}
 
 abstract class Client
 {
-    // To implement
+    // To implement per-client
     abstract public function Name(): string;
     abstract public function Path(): string;
     abstract public function SQLDBCredentials(): SQLDBCredentials;
     abstract public function TimeZone(): DateTimeZone;
-    abstract public function ShiftStart(): int;
+    abstract public function ShiftStart(): float;
 
 
 
@@ -48,6 +57,9 @@ abstract class Client
         return self::$path . Client::instance()->Path() . self::$sql;
     }
 
+
+    // Public accessors
+
     public static function SQLCorePath(): string
     {
         return  Client::SQLPath() .  self::$coreSQL;
@@ -68,10 +80,14 @@ abstract class Client
         return self::$path . Client::instance()->Path() . self::$cache;
     }
 
+
     /** Get a safe chunk of data about the client
      * to send to the front end */
-    public static function GetFrontEndData(): array
+    public static function GetFrontEndData(): ClientFrontEndData
     {
-        return [];
+        $data = new ClientFrontEndData();
+        $data->name = Client::instance()->Name();
+        $data->shiftStart = Client::instance()->ShiftStart();
+        return $data;
     }
 }

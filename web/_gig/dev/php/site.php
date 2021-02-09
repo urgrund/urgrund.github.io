@@ -27,9 +27,11 @@ class SiteShiftData
             $this->assetUtilisationByFunction[$key] = new AssetUtilisationPerDay(0);
             //Debug::Log($key);
             for ($i = 0; $i < count($value); $i++) {
-                $this->_equipShiftData = $allEquipment[$value[$i]]->shiftData[$shift];
-                $this->assetUtilisationByFunction[$key]->AddTUMValues($this->_equipShiftData->assetUtilisation->tumTimings);
-                $this->assetUtilisationTotal->AddTUMValues($this->_equipShiftData->assetUtilisation->tumTimings);
+                if (array_key_exists($value[$i], $allEquipment)) {
+                    $this->_equipShiftData = $allEquipment[$value[$i]]->shiftData[$shift];
+                    $this->assetUtilisationByFunction[$key]->AddTUMValues($this->_equipShiftData->assetUtilisation->tumTimings);
+                    $this->assetUtilisationTotal->AddTUMValues($this->_equipShiftData->assetUtilisation->tumTimings);
+                }
             }
 
             $this->assetUtilisationByFunction[$key]->GenerateUtilisationFromTUM();
@@ -58,8 +60,8 @@ class SiteSummary
 
 
     public float $TMMExPitTonnes = 0;
-    public float $TotalExpPitOre = 0;
-    public float $TotalExpPitWaste = 0;
+    public float $TotalExPitOre = 0;
+    public float $TotalExPitWaste = 0;
     public float $DrillMeters = 0;
 
     //public array $summary = [];
@@ -76,7 +78,10 @@ class SiteSummary
 
             // Equipment belongs to this site
             $equipCount = 0;
-            if ($eventSite == $site->name) {
+            if (
+                $eventSite == $site->name
+                && array_key_exists($eventAssetID, $sqlMineEquipmentList)
+            ) {
                 $equipCount++;
                 $func = $sqlMineEquipmentList[$eventAssetID][1];
                 $metric = $sqlMetricPerHour[$i][2];
@@ -98,10 +103,10 @@ class SiteSummary
                             if ($second != null) {
                                 $this->TMMExPitTonnes += $val;
                                 if ($second == "Ore") {
-                                    $this->TotalExpPitOre += $val;
+                                    $this->TotalExPitOre += $val;
                                 }
                                 if ($second == "Waste") {
-                                    $this->TotalExpPitWaste += $val;
+                                    $this->TotalExPitWaste += $val;
                                 }
                             }
                         }
@@ -132,8 +137,8 @@ class SiteSummary
         // Add them to the final array 
         // to package for frontend
         $this->TMMExPitTonnes = round($this->TMMExPitTonnes, 2);
-        $this->TotalExpPitOre = round($this->TotalExpPitOre, 2);
-        $this->TotalExpPitWaste = round($this->TotalExpPitWaste, 2);
+        $this->TotalExPitOre = round($this->TotalExPitOre, 2);
+        $this->TotalExPitWaste = round($this->TotalExPitWaste, 2);
         $this->DrillMeters = round($this->DrillMeters, 2);
 
         // Debug::Log($site->name);
@@ -190,19 +195,10 @@ class Site
         // Why have to do this, why can't PHP 
         // initialize with array length?
         for ($i = 0; $i < 24; $i++) {
-
-            //$this->tph24->tph[$i] = 0;
-            //$this->tph24->cumulative[$i] = 0;
-
             array_push($tempOp, 0);
             array_push($tempIdle, 0);
             array_push($tempDown, 0);
         }
-
-        //array_push($this->uoaf24, $tempOp);
-        //array_push($this->uoaf24, $tempIdle);
-        //array_push($this->uoaf24, $tempDown);
-
 
         // Get's the equipment belonging to this site
         $this->equipment = array();
