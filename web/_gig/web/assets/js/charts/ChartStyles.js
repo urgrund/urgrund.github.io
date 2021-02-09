@@ -91,7 +91,7 @@ class ChartStyleContainer {
         this.siteColors = [{
             type: 'linear',
             x: 0, y: 0, x2: 0, y2: 1,
-            colorStops: [{ offset: 0, color: 'rgba(0,178,255,1)' }, { offset: 1, color: 'rgba(0,12,255,1)' }]
+            colorStops: [{ offset: 0, color: '#0078ff' }, { offset: 1, color: 'rgba(0,12,255,1)' }]
         },
         {
             type: 'linear',
@@ -123,15 +123,12 @@ class ChartStyleContainer {
 
 
         this.disabledColor = {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                offset: 0,
-                color: 'grey'
-            }, {
-                offset: 1,
-                color: 'darkgrey'
-            }]),
+            type: 'linear',
+            x: 0, y: 0, x2: 0, y2: 1,
+            colorStops: [{ offset: 0, color: '#647880' }, { offset: 1, color: '#333333' }]
+            //colorStops: [{ offset: 0, color: '#00b2ff' }, { offset: 1, color: '#000cff' }]
         };
-
+        //linear-gradient(0deg, rgb(30 30 30) 0px, rgb(64 65 66) 100%)
 
         this.uofaColor = {
             type: 'linear',

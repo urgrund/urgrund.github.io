@@ -98,7 +98,7 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
     $scope.SetDataAndCreateCharts = function () {
 
         if ($rootScope.siteData != null) {
-            console.log("SDJADJLSD");
+            //console.log("SDJADJLSD");
             $scope.siteIndex = $routeParams.site;
             $scope.site = $rootScope.siteData[$scope.siteIndex];
             $scope.shiftData = $scope.site.shiftData[ShiftIndex()];

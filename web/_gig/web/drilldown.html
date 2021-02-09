@@ -1,16 +1,3 @@
-<!-- <div class="flex">
-    <div style="height: 200px; width: 300px;">
-        <drill-down-chart name="Poo" chart="g"></drill-down-chart>
-    </div>
-    <div style="height: 200px; width: 300px;">
-        <drill-down-chart name="Poo" chart="g2"></drill-down-chart>
-    </div>
-</div> -->
-
-<div style="height: 200px; width: 50%;">
-    <drill-down-chart name="This Week" chart="week"></drill-down-chart>
-</div>
-
 <div class="equipGrid2" ng-cloak ng-if="equip != undefined">
     <div class="equipHeader first underline">
         <div>
@@ -35,7 +22,8 @@
     <drill-down-chart name="Metrics Per Hour" chart="mph"></drill-down-chart>
     <!-- <drill-down-chart name="Time Usage Split" chart="tus"></drill-down-chart> -->
     <drill-down-chart name="Availability & Utilisation" chart="uofa"></drill-down-chart>
-    <drill-down-chart name="Time Usage Model Waterfall" chart="tumwf"></drill-down-chart>
+
+    <drill-down-chart name="This Week" chart="week"></drill-down-chart>
 
     <div class="equipParetoGrid">
         <drill-down-chart name="{{config.TUMIndex[0]}}" chart="p0"></drill-down-chart>
@@ -47,10 +35,29 @@
     </div>
 
     <div class="equipGaugeGrid">
-        <drill-down-chart name="Availability" chart="gA"></drill-down-chart>
+
+        <div class="chartCard">
+            <div class="charthead">
+                <div class="chartheadtxt left">
+                    <h5 class="bold">TUM Metrics</h5>
+                </div>
+            </div>
+            <div class="chartdivcontent {{$root.backGroundClassBlur}} siteDivMargin">
+
+                <div class="flex" style="height: 60px;">
+                    <div class="gauge h100pc w100pc" id="_gA">AAA</div>
+                    <div class="gauge h100pc w100pc" id="_gUofA">AAA</div>
+                    <div class="gauge h100pc w100pc" id="_gE">AAA</div>
+                    <div class="gauge h100pc w100pc" id="_gAU">AAA</div>
+                </div>
+
+            </div>
+        </div>
+        <drill-down-chart name="Time Usage Model Waterfall" chart="tumwf"></drill-down-chart>
+        <!-- <drill-down-chart name="Availability" chart="gA"></drill-down-chart>
         <drill-down-chart name="Utilisation of Availability" chart="gUofA"></drill-down-chart>
         <drill-down-chart name="Efficency" chart="gE"></drill-down-chart>
-        <drill-down-chart name="Total Asset Utilisation" chart="gAU"></drill-down-chart>
+        <drill-down-chart name="Total Asset Utilisation" chart="gAU"></drill-down-chart> -->
     </div>
 
 </div>

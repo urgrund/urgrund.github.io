@@ -353,8 +353,8 @@ input:invalid:required {
 
   grid-column-gap: 1%;
   grid-row-gap: 1%; 
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;  
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 4fr;
 
   justify-content: center;    
   align-content: space-evenly;

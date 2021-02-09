@@ -3,6 +3,7 @@
 // Chart management
 
 var allCharts = [];
+var currentDayData = {};
 
 // Subscribe to resize event to deal with chart resizing
 window.addEventListener('resize', function (event) {
@@ -501,14 +502,17 @@ class Charts {
         //console.log(_cache);
         var xAxisNums = ArrayOfNumbers(0, (_cache.length * 24), 0);
 
-        var mph = ArrayOfNumbers(0, (_cache.length * 24), 0);
+        var mph = [];//ArrayOfNumbers(0, (_cache.length * 24), 0);
 
         var totalAU = [];
         var availability = [];
         var efficiency = [];
+        var uOfa = [];
 
-        //for (var i = _cache.length; i > -1; i--) {
+
         for (var i = 0; i < _cache.length; i++) {
+
+            var isSelectedDate = (currentDayData == _cache[_cache.length - i - 1]);
 
             var day = _cache[_cache.length - i - 1];
             var equip = day[day.length - 2][_data.id];
@@ -518,16 +522,24 @@ class Charts {
             totalAU[i] = equip.shiftData[2].assetUtilisation.totalAU;
             availability[i] = equip.shiftData[2].assetUtilisation.availability;
             efficiency[i] = equip.shiftData[2].assetUtilisation.efficiency;
+            uOfa[i] = equip.shiftData[2].assetUtilisation.uOfa;
 
             // Metrics
             for (var j = 0; j < equipMetrics.length; j++) {
                 for (var k = 0; k < equipMetrics[j].mph.length; k++) {
-                    mph[(i * 24) + k] += equipMetrics[j].mph[k];
+                    // Colour them based on the selected day
+                    if (mph[(i * 24) + k] == undefined) {
+                        mph[(i * 24) + k] = {
+                            'value': 0,
+                            'itemStyle': { color: isSelectedDate ? ChartStyles.siteColors[0] : ChartStyles.disabledColor }
+                        };
+                    }
+                    mph[(i * 24) + k]['value'] += equipMetrics[j].mph[k];
                 }
             }
         }
 
-        var lineSeries = [totalAU, availability, efficiency];
+        var lineSeries = [totalAU, availability, efficiency, uOfa];
         var series = [];
         // Setup line series
         for (var i = 0; i < lineSeries.length; i++) {
@@ -542,12 +554,25 @@ class Charts {
             };
         }
 
+        // Metrics per hour
         series.push({
             name: 'Metrics',
             type: 'bar',
-            barWidth: '60%',
+            barWidth: '100%',
             itemStyle: { color: ChartStyles.siteColors[0] },
             data: mph
+        });
+
+        // Fake bars to register clicks
+        series.push({
+            name: 'Fake',
+            type: 'bar',
+            yAxisIndex: 1,
+            xAxisIndex: 1,
+            barWidth: '100%',
+            itemStyle: { color: 'rgba(0,0,0,0)' },
+            emphasis: { itemStyle: { color: 'rgba(0,0,0,0)' } },
+            data: [1, 1, 1, 1, 1, 1, 1]
         });
 
 
@@ -558,11 +583,21 @@ class Charts {
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
+            tooltip: {
+                confine: true,
+                trigger: 'axis',
+                textStyle: ChartStyles.toolTipTextStyle(),
+                axisPointer: ChartStyles.toolTipShadow(),
+                backgroundColor: ChartStyles.toolTipBackgroundColor(),
+            },
             grid: ChartStyles.gridSpacing(),
             tooltip: {
                 trigger: 'axis',
-                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                axisPointer: {
+                    type: 'shadow',
+                    shadowStyle: {
+                        color: 'rgba(0,0,0,0.2)'
+                    }
                 }
             },
             grid: {
@@ -574,14 +609,8 @@ class Charts {
             },
             xAxis:
                 [
-                    {
-                        type: 'category',
-                        data: mph,
-                    },
-                    {
-                        type: 'category',
-                        data: [1, 2, 3, 4, 5, 6, 7]
-                    }
+                    { type: 'category', data: mph, show: 'false' },
+                    { type: 'category', data: [1, 2, 3, 4, 5, 6, 7] },
                 ]
             ,
             yAxis: [
@@ -591,9 +620,7 @@ class Charts {
                     axisLine: ChartStyles.axisLineGrey,
                     axisLabel: { fontSize: ChartStyles.fontSizeSmall }
                 },
-                {
-                    type: 'value', min: 0, max: 1
-                }
+                { type: 'value', min: 0, max: 1, axisLine: ChartStyles.axisLineGrey, axisLabel: { fontSize: ChartStyles.fontSizeSmall } },
             ],
             series: series
         };

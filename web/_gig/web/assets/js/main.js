@@ -3,7 +3,12 @@
 M I N E   M A G E 
 Front-end web application main entry point
 (c) 2019-2021 Gigworth Pty Ltd
-Written by Matt Bell 
+
+Version     1
+Data        3
+Revision    22
+
+matt@gigworth.com.au
 *************************************** 
 */
 
@@ -125,6 +130,8 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
 
         console.log(_data);
 
+        // For non NG access
+        currentDayData = _data;
 
         //var jsonString = JSON.stringify(_data);
         //var newData = JSON.parse(jsonString);
@@ -378,13 +385,6 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             //console.log("[Available Dates]");
             //console.log(response.data);
             ServerInfo.availableDates = response.data;
-
-            // if (_setTrailingWeek) {
-            //     var trailingWeek = ServerInfo.availableDates.slice(1, 7);
-            //     $rootScope.fetchSiteData([ServerInfo.availableDates[0]], true);
-            //     $rootScope.fetchSiteData(trailingWeek, false);
-            // }
-
             $rootScope.$broadcast('availableDatesSet');
 
         }, function (error) {

@@ -182,25 +182,8 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
 
 
-    // $scope.getConfigs = function () {
-    //     var _url = '../dev/php/admin.php';
-    //     var _data = { 'func': 4 };
-    //     var request = $http({
-    //         method: 'POST',
-    //         url: _url,
-    //         data: _data,
-    //     })
-    //     request.then(function (response) {
-    //         $scope.configFiles = response.data;
-    //         console.log($scope.configFiles);
-    //     }, function (error) {
-    //     });
-    // }
-
-
 
     $scope.getMappedActualsToPlan = function () {
-        //var _url = '../dev/php/monthly/monthly.php';
 
         var _data = {
             'func': 4,
@@ -237,6 +220,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
     $scope.prepareChartData = function () {
         $scope.chartData = [];
+        console.log($rootScope.siteData[$scope.siteIndex]);
         for (var i = 1; i < $scope.mappedPlan[0].length; i++) {
             if ($scope.mappedPlan[0][i][0] == "SLC") {
                 if ($scope.mappedPlan[0][i][3] > 0)
@@ -291,7 +275,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
             // -------------------------------------
             // Entry point for the plan view
             if ($routeParams.func == 1) {
-
+                $scope.siteIndex = $routeParams.site;
             }
         }, 10);
     });

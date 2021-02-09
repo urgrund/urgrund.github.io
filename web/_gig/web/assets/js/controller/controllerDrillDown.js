@@ -60,11 +60,11 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
         // Test 
         var week = Charts.CreateMPHRange("week", $scope.equip, $rootScope.cachedData);
         week.on('click', function (params) {
-            console.log(params);
+            console.log($rootScope.cachedData[params.dataIndex]);
+            var index = $rootScope.cachedData.length - params.dataIndex - 1;
+            $rootScope.setNewSiteData($rootScope.cachedData[index]);
         });
-        week.on('click', 'series.line', function (params) {
-            console.log(params);
-        });
+
 
 
 
@@ -77,27 +77,64 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
 
 
 
+        // var g = new SimpleGaugeData();
+        // g.fontSize = 40;
+
+        // // Total Asset Availability
+        // g.value = shiftData.assetUtilisation.totalAU;
+        // g.color = 'white';
+        // Charts.CreateGauge("gAU", g);
+
+        // // Efficiency
+        // g.value = shiftData.assetUtilisation.efficiency;
+        // g.color = ChartStyles.TUMColors[4];
+        // Charts.CreateGauge("gE", g);
+
+        // // Availablity
+        // g.value = shiftData.assetUtilisation.availability;
+        // g.color = ChartStyles.TUMColors[0];
+        // Charts.CreateGauge("gA", g);
+
+        // g.value = shiftData.assetUtilisation.uOfa;
+        // g.color = ChartStyles.TUMColors[2];
+        // Charts.CreateGauge("gUofA", g);
+
         var g = new SimpleGaugeData();
-        g.fontSize = 40;
+        g.fontSize = 20;
+        g.maxRadius = 160;
+        g.radiusThickness = 30;
+        g.center[1] = 88;
+        g.titleBottom = 15;
+        g.subTextLineHeight = -10;
+        //for (var x in $scope.site.equipmentByFunction) {
+        var assetUtilisation = shiftData.assetUtilisation;
 
         // Total Asset Availability
-        g.value = shiftData.assetUtilisation.totalAU;
+        g.value = assetUtilisation.totalAU;
         g.color = 'white';
-        Charts.CreateGauge("gAU", g);
+        g.subText = "Utilisation";
+        Charts.CreateGauge("_gAU", g);
 
         // Efficiency
-        g.value = shiftData.assetUtilisation.efficiency;
-        g.color = ChartStyles.TUMColors[4];
-        Charts.CreateGauge("gE", g);
+        g.value = assetUtilisation.efficiency;
+        g.color = ChartStyles.TUMColors[5];
+        g.subText = "Efficiency";
+        Charts.CreateGauge("_gE", g);
 
         // Availablity
-        g.value = shiftData.assetUtilisation.availability;
+        g.value = assetUtilisation.availability;
         g.color = ChartStyles.TUMColors[0];
-        Charts.CreateGauge("gA", g);
+        g.subText = "Availabilty";
+        Charts.CreateGauge("_gA", g);
 
-        g.value = shiftData.assetUtilisation.uOfa;
+        g.value = assetUtilisation.uOfa;
         g.color = ChartStyles.TUMColors[2];
-        Charts.CreateGauge("gUofA", g);
+        g.subText = "U of A";
+        Charts.CreateGauge("_gUofA", g);
+        //}
+
+
+
 
 
 
