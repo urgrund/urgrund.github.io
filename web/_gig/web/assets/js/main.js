@@ -391,6 +391,21 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         });
         return request;
     }
+
+
+    $rootScope.checkConnection = function () {
+        var _data = { 'func': 5 };
+        var request = $http({
+            method: 'POST',
+            url: ServerInfo.URL_Admin,
+            data: _data,
+        })
+        request.then(function (response) {
+            //console.log(response.data);
+        }, function (error) {
+        });
+        return request;
+    }
 });
 
 
@@ -402,23 +417,35 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
 // ===============================================================================================
 app.controller("myCtrl", function ($q, $scope, $rootScope, $timeout, $route, $location, $interval) {
 
+    // The start-up sequence 
     console.log("Starting Mine-Mage...");
+    $q.all([$rootScope.checkConnection()]).then(function (responses) {
 
+        if (responses[0].data.length > 0) {
+            // Issues with database connection
+            console.error("Failed to connect to SQL Database");
+        }
+        else {
+            console.log("Connected to DB...");
 
-    // Sequence the requests 
-    var promises = [
-        $rootScope.fetchSiteConfigs(),
-        $rootScope.fetchAvailableDates()
-    ];
-    $q.all(promises).then(function (responses) {
-        console.log("Config & Dates ready");
-
-        promises = [
-            // Latest date and Trailing week 
-            $rootScope.fetchSiteData([ServerInfo.availableDates[0]], true),
-            $rootScope.fetchSiteData(ServerInfo.availableDates.slice(1, 7), false)
-        ];
+            // First fetch the site configs
+            // and available dates
+            var promises = [
+                $rootScope.fetchSiteConfigs(),
+                $rootScope.fetchAvailableDates()
+            ];
+            $q.all(promises).then(function (responses) {
+                // Set the data 
+                console.log("Config & Dates ready");
+                promises = [
+                    // Latest date and Trailing week 
+                    $rootScope.fetchSiteData([ServerInfo.availableDates[0]], true),
+                    $rootScope.fetchSiteData(ServerInfo.availableDates.slice(1, 7), false)
+                ];
+            });
+        }
     });
+
 
 
 
