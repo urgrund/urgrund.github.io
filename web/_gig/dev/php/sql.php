@@ -78,15 +78,12 @@ class SQLUtils
 
 
         if ($conn === false) {
-            //echo "Unable to connect.</br>";
-            Debug::Log(sqlsrv_errors()[0][2]);
+            //SQLUtils::DisplayErrors();
             //die(print_r(sqlsrv_errors(), true));
-            //throw new Exception("Mine-Mage cannot connect to SQL Server"); //sqlsrv_errors());
-            //trigger_error("Cannot Connect to SQL Server",  sqlsrv_errors());
         } else {
-            //Debug::Log("Success");
             $isConnected = true;
         }
+
         return $isConnected;
     }
 
@@ -172,11 +169,17 @@ class SQLUtils
     {
         global $conn;
         global $isConnected;
+
+
         if (!$isConnected)
             SQLUtils::OpenConnection();
 
+
         Debug::StartProfile("SQL " . $debugName);
+        //sqlsrv_configure('WarningsReturnAsErrors', 1);
         $stmt = sqlsrv_query($conn, $sql);
+
+
 
         if ($stmt === false) {
             if (($errors = sqlsrv_errors()) != null) {
@@ -228,8 +231,49 @@ class SQLUtils
             }
         }
 
+        sqlsrv_free_stmt($stmt);
+
         Debug::EndProfile();
 
         return ($json);
+    }
+
+    /* ------------- Error Handling Functions --------------*/
+
+    public static function HasErrors(): bool
+    {
+        return count(sqlsrv_errors(SQLSRV_ERR_ERRORS)) > 0;
+    }
+
+
+    public static function GetErrors(): array
+    {
+        $return = array();
+        $errors = sqlsrv_errors(SQLSRV_ERR_ERRORS);
+        if (!is_null($errors)) {
+            foreach ($errors as $error) {
+                $return[] = $error['message'];
+            }
+            return array_unique($return);
+        } else
+            return [];
+    }
+
+    public static function DisplayErrors()
+    {
+        $errors = sqlsrv_errors(SQLSRV_ERR_ERRORS);
+        foreach ($errors as $error) {
+            echo "\nError: " . $error['message'] . "\n";
+        }
+    }
+
+    public static function DisplayWarnings()
+    {
+        $warnings = sqlsrv_errors(SQLSRV_ERR_WARNINGS);
+        if (!is_null($warnings)) {
+            foreach ($warnings as $warning) {
+                echo "Warning: " . $warning['message'] . "\n";
+            }
+        }
     }
 }

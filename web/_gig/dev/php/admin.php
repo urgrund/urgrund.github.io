@@ -15,7 +15,7 @@ $request = json_decode($postdata);
 
 if (is_object($request)) {
     include_once('setDebugOff.php');
-    Debug::DisableForSession();
+    //Debug::DisableForSession();
 
     // Get all the dates and their status
     // Does not generate anything
@@ -37,12 +37,17 @@ if (is_object($request)) {
     // Get CSV config docs
     else if ($request->func == 4) {
         Admin::GetCSVConfigs();
+    } else if ($request->func == 5) {
+        Admin::CheckConnection();
     }
 
     return;
 } else {
     //include_once('setDebugOff.php');
-    Admin::GetAllDateStatus();
+
+    Admin::CheckConnection();
+
+    //Admin::GetAllDateStatus();
     //Admin::GetCSVConfigs();
     //Admin::GenerateDataForDate('20181001');
 
@@ -57,9 +62,20 @@ if (is_object($request)) {
 
 
 
-
 class Admin
 {
+    public static function CheckConnection()
+    {
+        SQLUtils::OpenConnection();
+
+        global $isConnected;
+        $e = [];
+        if (!$isConnected)
+            $e = SQLUtils::GetErrors();
+
+        Debug::Log($e);
+        echo json_encode($e);
+    }
 
     public static function GetCSVConfigs()
     {

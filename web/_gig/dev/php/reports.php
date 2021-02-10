@@ -40,7 +40,7 @@ if (is_object($request)) {
 
     //Debug::Log(Reports::$_endDate);
 
-    $result = Reports::RunReport('Hauled_Tonnes\\RP_DevelopmentTotalByMineByTime.sql');
+    $result = Reports::RunReport('Bogger_Tonnes\\RP_StockpileTotalByMineByTime.sql');
     //$result = Reports::RunReport('Bogger_Tonnes\\RP_DevelopmentTotalByMineByTime.sql');
     Debug::Log($result);
 
@@ -83,8 +83,7 @@ final class Reports
         $sqlTxt = str_replace(SQLUtils::ReportStartShift, "'" . Reports::$_startShift  . "'", $sqlTxt);
         $sqlTxt = str_replace(SQLUtils::ReportEndShift, "'" . Reports::$_endShift  . "'", $sqlTxt);
 
-        //Debug::Log($sqlTxt);
-
+        //Debug::Log($sqlTxt);        
         $result = SQLUtils::QueryToText($sqlTxt, "Report");
 
         if ($result == null) {
@@ -92,6 +91,8 @@ final class Reports
             $result[] = Reports::FileNameArray($reportFile)[1];
             $result[] = "No data was found for selected date range or shifts...";
         }
+
+
         //Debug::Log($result);
         return $result;
     }

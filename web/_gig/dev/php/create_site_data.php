@@ -15,8 +15,8 @@ if (Debug::enabled() == true) {
     //  echo $e->getMessage(); // Call to a member function method() on string
     //}
 
-    CreateSiteData::Run(new DateTime('20181231'));
-    //CreateSiteData::Run(new DateTime('20201206'));
+    //CreateSiteData::Run(new DateTime('20181231'));
+    CreateSiteData::Run(new DateTime('20201206'));
 
     return;
 }

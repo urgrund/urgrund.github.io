@@ -6,7 +6,6 @@ ini_set('memory_limit', '1024M');
 
 
 // General includes 
-
 include_once('version.php');
 include_once('utils.php');
 
