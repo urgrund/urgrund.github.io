@@ -55,6 +55,42 @@ class Utils
 
 
 
+
+/**
+ * Custom error response struct
+ * */
+class ErrorResponse
+{
+    public int $codeID;
+    public string $codeMsg;
+    public string $message;
+    public array $details;
+    function __construct(
+        int $_codeID,       // Response header code (ie. 404)
+        string $_codeMsg,   // Response header custom messsage
+        string $_message,   // Nice, short message about the error
+        array $_details     // Details collected by exception... etc
+    ) {
+        $this->codeID = $_codeID;
+        $this->codeMsg = $_codeMsg;
+        $this->message = $_message;
+        $this->details = $_details;
+    }
+
+    /** Echo out the details of this error response
+     * to be recieved by the calling http request
+     * */
+    public function Return()
+    {
+        header("HTTP/1.1 " . $this->codeID . " " . $this->codeMsg);
+        echo json_encode([$this->message,  $this->details]);
+    }
+}
+
+
+
+
+
 class Debug
 {
     //private static $_debugOff = false;

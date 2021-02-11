@@ -51,11 +51,10 @@ class SQLUtils
         global $isConnected;
         global $conn;
 
-        //Debug::Log($isConnected);
+
 
         if ($isConnected == true)
             return true;
-
 
 
         /* Establish a Connection to the SQL Server  */
@@ -78,8 +77,19 @@ class SQLUtils
 
 
         if ($conn === false) {
+            $error = (new ErrorResponse(404, "DBError", "Unable to connect", SQLUtils::GetErrors()));
+            Debug::Log($error);
+            $error->Return();
+
+            // $e = SQLUtils::GetErrors();
+            // if ($e != null) {
+            //     $error = (new ErrorResponse(404, "DBError", "Unable to connect", $e));
+            //     Debug::Log($error);
+            //     $error->Return();
+            // }
             //SQLUtils::DisplayErrors();
             //die(print_r(sqlsrv_errors(), true));
+            //(new ErrorResponse(404, "DBError", "Unable to connect", SQLUtils::GetErrors()))->Return();
         } else {
             $isConnected = true;
         }
@@ -176,23 +186,27 @@ class SQLUtils
 
 
         Debug::StartProfile("SQL " . $debugName);
-        //sqlsrv_configure('WarningsReturnAsErrors', 1);
+        sqlsrv_configure('WarningsReturnAsErrors', 1);
         $stmt = sqlsrv_query($conn, $sql);
 
-
-
-        if ($stmt === false) {
-            if (($errors = sqlsrv_errors()) != null) {
-                foreach ($errors as $error) {
-                    //echo "SQLSTATE: " . $error['SQLSTATE'] . "<br />";
-                    //echo "code: " . $error['code'] . "<br />";
-                    //echo "message: " . $error['message'] . "<br />";
-                    Debug::Log("SQLSTATE: " . $error['SQLSTATE']);
-                    Debug::Log("code: " . $error['code']);
-                    Debug::Log("message: " . $error['message']);
-                }
-            }
+        // Query failed
+        if (!$stmt) {
+            $error = (new ErrorResponse(404, "SQL Error", "Error in query", SQLUtils::GetErrors()));
+            Debug::Log($error);
+            $error->Return();
+            die();
         }
+
+
+        // if ($stmt === false) {
+        //     if (($errors = sqlsrv_errors()) != null) {
+        //         foreach ($errors as $error) {                  
+        //             Debug::Log("SQLSTATE: " . $error['SQLSTATE']);
+        //             Debug::Log("code: " . $error['code']);
+        //             Debug::Log("message: " . $error['message']);
+        //         }
+        //     }
+        // }
 
         // Sum up the rows from the query result        
         $json = array();
@@ -231,7 +245,8 @@ class SQLUtils
             }
         }
 
-        sqlsrv_free_stmt($stmt);
+        //if ($stmt !== true || $stmt !== false)
+        //  sqlsrv_free_stmt($stmt);
 
         Debug::EndProfile();
 
@@ -263,7 +278,7 @@ class SQLUtils
     {
         $errors = sqlsrv_errors(SQLSRV_ERR_ERRORS);
         foreach ($errors as $error) {
-            echo "\nError: " . $error['message'] . "\n";
+            Debug::Log("\nError: " . $error['message'] . "\n");
         }
     }
 

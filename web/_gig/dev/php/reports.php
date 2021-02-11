@@ -86,6 +86,11 @@ final class Reports
         //Debug::Log($sqlTxt);        
         $result = SQLUtils::QueryToText($sqlTxt, "Report");
 
+        // Debug::Log("SHOWING ERRORS");
+        // SQLUtils::DisplayErrors();
+        // Debug::Log("SHOWING WARINGS");
+        // SQLUtils::DisplayWarnings();
+
         if ($result == null) {
             $result[] = "No Result";
             $result[] = Reports::FileNameArray($reportFile)[1];

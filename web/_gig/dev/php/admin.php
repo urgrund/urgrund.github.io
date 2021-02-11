@@ -3,7 +3,7 @@
 //include_once('utils.php');
 include_once('header.php');
 //include_once('setDebugOff.php');
-include_once('get_site_data.php');
+//include_once('get_site_data.php');
 
 // ----------------------------------------------------------
 // ----------------------------------------------------------
@@ -14,6 +14,7 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 if (is_object($request)) {
+    include_once('get_site_data.php');
     include_once('setDebugOff.php');
     //Debug::DisableForSession();
 
@@ -68,13 +69,16 @@ class Admin
     {
         SQLUtils::OpenConnection();
 
-        global $isConnected;
-        $e = [];
-        if (!$isConnected)
-            $e = SQLUtils::GetErrors();
+        // global $isConnected;
+        // $e = null;
+        // if (!$isConnected)
+        //     $e = SQLUtils::GetErrors();
 
-        Debug::Log($e);
-        echo json_encode($e);
+        // if ($e != null) {
+        //     $error = (new ErrorResponse(404, "DBError", "Unable to connect", $e));
+        //     Debug::Log($error);
+        //     $error->Return();
+        // }
     }
 
     public static function GetCSVConfigs()
