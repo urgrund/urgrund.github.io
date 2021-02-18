@@ -189,7 +189,9 @@ class SQLUtils
         sqlsrv_configure('WarningsReturnAsErrors', 1);
         $stmt = sqlsrv_query($conn, $sql);
 
+
         // Query failed
+        // Handle error
         if (!$stmt) {
             $error = (new ErrorResponse(404, "SQL Error", "Error in query", SQLUtils::GetErrors()));
             Debug::Log($error);
@@ -197,16 +199,6 @@ class SQLUtils
             die();
         }
 
-
-        // if ($stmt === false) {
-        //     if (($errors = sqlsrv_errors()) != null) {
-        //         foreach ($errors as $error) {                  
-        //             Debug::Log("SQLSTATE: " . $error['SQLSTATE']);
-        //             Debug::Log("code: " . $error['code']);
-        //             Debug::Log("message: " . $error['message']);
-        //         }
-        //     }
-        // }
 
         // Sum up the rows from the query result        
         $json = array();

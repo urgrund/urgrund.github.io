@@ -51,8 +51,8 @@ else {
 
 
 
-    $p = Monthly::MapActualsToPlan('2018', '10');
-    Debug::Log($p[2]);
+    $p = Monthly::MapActualsToPlan('2020', '10');
+    Debug::Log($p[1]);
     //Monthly::MetaData($p);
     //echo 'poo';
 }
@@ -109,49 +109,6 @@ class Monthly
     }
 
 
-    public static function WriteCSV($_data, $_year, $_month)
-    {
-        if ($_data == null)
-            return;
-
-        Monthly::SanitizeCSVData($_data);
-        $fileName = self::$_fileName .  $_year . $_month . self::$_fileExt;
-
-        try {
-            if (is_readable($fileName)) {
-                $file = @fopen($fileName, "w");
-                if (!$file) {
-                    throw new Exception('File open failed for ' . $fileName);
-                }
-
-                foreach ($_data as $line) {
-                    fputcsv($file, $line);
-                }
-                fclose($file);
-            }
-            echo "Wrote file";
-            Debug::Log("Wrote file: " . $fileName);
-        } catch (Exception $e) {
-            Debug::Log($e->getMessage());
-            // Debug::Log($e->getFile());
-            // Debug::LogI(" ln:" . $e->getLine());
-            // Debug::Log($e->getTraceAsString());
-        }
-    }
-
-
-
-    public static function GetCSV($_year, $_month)
-    {
-        $fileName = self::$_fileName .  $_year . $_month . self::$_fileExt;
-        if (file_exists($fileName)) {
-            $csv = array_map('str_getcsv', file($fileName));
-            Monthly::SanitizeCSVData($csv);
-            //Debug::Log($csv);
-            return $csv;
-        }
-    }
-
 
     public static function GetActuals($_year, $_month)
     {
@@ -166,6 +123,81 @@ class Monthly
         //Debug::Log($sqlResult);
         return $sqlResult;
     }
+
+
+    public static function MapActualsToPlan($_year, $_month)
+    {
+        // From the DB
+        $actuals = Monthly::GetActuals($_year, $_month);
+
+        // From the Plan CSV
+        $plan = Monthly::GetCSV($_year, $_month);
+
+        Debug::StartProfile("Map Actuals To Plan");
+
+        $actualsMineIndex = 1;
+        $actualsLocIndex = 2;
+
+        $planMineIndex = 0;
+        $planLocIndex = 1;
+        $planTgtIndex = 3;
+
+
+        // Build associate with totals for month
+        $actualsTotals = [];
+
+        for ($i = 1; $i < count($actuals); $i++) {
+            $actualsDate = substr($actuals[$i][0], 0, 6);
+            $concatDate = $_year . $_month;
+            // If the same date...
+            if ($actualsDate == $concatDate) {
+                //Debug::Log($actualsDate);
+
+                $mine = ($actuals[$i][$actualsMineIndex]);
+                $loc = $actuals[$i][$actualsLocIndex];
+
+                if (!isset($actualsTotals[$mine][$loc]))
+                    $actualsTotals[$mine][$loc] = 0;
+
+                $actualsTotals[$mine][$loc] += $actuals[$i][4];
+            }
+        }
+
+
+        // Set some more headings
+        $plan[0][3] = "ACTUALS";
+        $plan[0][4] = $_month;
+        $plan[0][5] = $_year;
+
+        for ($i = 1; $i < count($plan); $i++) {
+            $mine = ($plan[$i][$planMineIndex]);
+
+            //if ($mine == "WF") {
+            foreach (array_keys($actualsTotals[$mine]) as $id) {
+                $needle = $plan[$i][$planLocIndex];
+                $haystack = $id;
+                if (stripos($haystack, $needle) !== false) {
+                    //Debug::Log("Found!  " . $plan[$i][$planMineIndex] . " " . $needle . "  " . $haystack . "  " . $actualsTotals[$mine][$id]);
+                    if (count($plan[$i]) == 4)
+                        $plan[$i][] = $actualsTotals[$mine][$id];
+                    else
+                        $plan[$i][4] += $actualsTotals[$mine][$id];
+                }
+            }
+            //Debug::Log($plan[$i]);
+            //}
+        }
+
+        $meta = Monthly::MetaData($plan);
+
+        Debug::EndProfile();
+
+        // Pack it up and send it back
+        return [$plan, $meta, $actuals];
+        //Debug::Log($plan);
+    }
+
+
 
 
 
@@ -226,76 +258,61 @@ class Monthly
 
         //Debug::Log($metas);
 
-        return $metas;
-
         Debug::EndProfile();
+        return $metas;
+    }
+    // -----------------------------------------------------------------------------
+
+
+
+
+
+    // -----------------------------------------------------------------------------
+    // CSV Related Stuff
+
+
+
+    public static function WriteCSV($_data, $_year, $_month)
+    {
+        if ($_data == null)
+            return;
+
+        Monthly::SanitizeCSVData($_data);
+        $fileName = self::$_fileName .  $_year . $_month . self::$_fileExt;
+
+        try {
+            if (is_readable($fileName)) {
+                $file = @fopen($fileName, "w");
+                if (!$file) {
+                    throw new Exception('File open failed for ' . $fileName);
+                }
+
+                foreach ($_data as $line) {
+                    fputcsv($file, $line);
+                }
+                fclose($file);
+            }
+            echo "Wrote file";
+            Debug::Log("Wrote file: " . $fileName);
+        } catch (Exception $e) {
+            Debug::Log($e->getMessage());
+            // Debug::Log($e->getFile());
+            // Debug::LogI(" ln:" . $e->getLine());
+            // Debug::Log($e->getTraceAsString());
+        }
     }
 
 
 
-    public static function MapActualsToPlan($_year, $_month)
+    public static function GetCSV($_year, $_month)
     {
-        // From the DB
-        $actuals = Monthly::GetActuals($_year, $_month);
-
-        // From the Plan CSV
-        $plan = Monthly::GetCSV($_year, $_month);
-
-        Debug::StartProfile("Map Actuals To Plan");
-
-        $actualsMineIndex = 1;
-        $actualsLocIndex = 2;
-
-        $planMineIndex = 0;
-        $planLocIndex = 1;
-        $planTgtIndex = 3;
-
-
-        // Build associate with totals for month
-        $actualsTotals = [];
-
-        for ($i = 1; $i < count($actuals); $i++) {
-            $mine = ($actuals[$i][$actualsMineIndex]);
-            $loc = $actuals[$i][$actualsLocIndex];
-
-            if (!isset($actualsTotals[$mine][$loc]))
-                $actualsTotals[$mine][$loc] = 0;
-
-            $actualsTotals[$mine][$loc] += $actuals[$i][4];
+        $fileName = self::$_fileName .  $_year . $_month . self::$_fileExt;
+        if (file_exists($fileName)) {
+            $csv = array_map('str_getcsv', file($fileName));
+            Monthly::SanitizeCSVData($csv);
+            //Debug::Log($csv);
+            return $csv;
         }
-
-
-        // Set some more headings
-        $plan[0][3] = "ACTUALS";
-        $plan[0][4] = $_month;
-        $plan[0][5] = $_year;
-
-        for ($i = 1; $i < count($plan); $i++) {
-            $mine = ($plan[$i][$planMineIndex]);
-
-            //if ($mine == "WF") {
-            foreach (array_keys($actualsTotals[$mine]) as $id) {
-                $needle = $plan[$i][$planLocIndex];
-                $haystack = $id;
-                if (stripos($haystack, $needle) !== false) {
-                    //Debug::Log("Found!  " . $plan[$i][$planMineIndex] . " " . $needle . "  " . $haystack . "  " . $actualsTotals[$mine][$id]);
-                    if (count($plan[$i]) == 4)
-                        $plan[$i][] = $actualsTotals[$mine][$id];
-                    else
-                        $plan[$i][4] += $actualsTotals[$mine][$id];
-                }
-            }
-            //Debug::Log($plan[$i]);
-            //}
-        }
-
-        $meta = Monthly::MetaData($plan);
-
-        Debug::EndProfile();
-
-        // Pack it up and send it back
-        return [$plan, $meta, $actuals];
-        //Debug::Log($plan);
     }
 
 
@@ -331,6 +348,10 @@ class Monthly
         //Debug::Log(($_data[77])); // = intval($_data[$i][$j]);
     }
 }
+
+
+
+
 
 
 

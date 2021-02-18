@@ -16,7 +16,7 @@ if (Debug::enabled() == true) {
     //}
 
     //CreateSiteData::Run(new DateTime('20181231'));
-    CreateSiteData::Run(new DateTime('20201206'));
+    CreateSiteData::Run(new DateTime('20210106'));
 
     return;
 }
@@ -330,14 +330,13 @@ final class CreateSiteData
         Debug::StartProfile("PHP: Material Movements");
         for ($i = 1; $i < count($sqlMaterialMovements); $i++) {
             $siteName = Config::Sites($sqlMaterialMovements[$i][0]);
-            // if ($siteName == null) {
-            //     Debug::Log($siteName . " |  ");
-            //     Debug::LogI($sqlMaterialMovements[$i]);
-            // }
-            if ($siteName !== null || $siteName != '') {
+
+            if ($siteName != NULL || $siteName != '') {
                 $_mm = $sqlMaterialMovements[$i];
+
                 if ($_mm[1] == NULL)
                     Debug::Log($_mm);
+
                 //$allSites[$siteName]->AddMaterialMovements($sqlMaterialMovements[$i]);
                 $allSites[$siteName]->shiftData[$_mm[1] - 1]->materialMovements[] = $_mm;
                 $allSites[$siteName]->shiftData[2]->materialMovements[] = $_mm;

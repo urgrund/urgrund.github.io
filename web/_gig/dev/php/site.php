@@ -332,7 +332,9 @@ class Site
 
                 // If a Production METER
                 // then add this to the production metrics
-                if (strpos($metric->metric, Config::productionMetricMetre()) !== false) {
+                //Debug::Log($metric->metric);
+                //if (strpos($metric->metric, Config::productionMetricMetre()) !== false) {
+                if ($metric->metric == Config::productionMetricMetre()) {
 
                     // The activity is production, this is
                     // what we want to record 

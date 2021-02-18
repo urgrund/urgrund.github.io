@@ -49,9 +49,10 @@ class Config
         "PRODMTRSDRILL" => "Production Metres"
     );
 
-    private static $productionActivity = 'Production';
+
     private static $productionMetricTonne = 'TONNE';
-    private static $productionMetricMetre = 'PROD';
+    private static $productionMetricMetre = 'PRODMTRSDRILL';
+    private static $productionActivity = 'Production';
 
 
 
