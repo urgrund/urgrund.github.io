@@ -27,7 +27,7 @@ class MineStar extends Client
         return new DateTimeZone('Australia/Perth');
     }
 
-    public function ShiftStart(): int
+    public function ShiftStart(): float
     {
         return 6.5;
     }

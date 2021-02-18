@@ -6,12 +6,11 @@ SELECT
 	,case when B.SHIFTTYPE = 0 then 1
 	        else 2 end as 'Shift'
 	,'Ex-Pit Hauling' as 'Category'
-    ,CDB.[Name] as 'Location'
-	,CDB.[Name] as 'Source Labels'
-	,A.[endProcessorName] AS 'Finished Area'
+   	,CDB.[Name] as 'Source Labels'
 	,A.[endProcessorName] AS 'Destination Labels'
-	,A.[endProcessorClassName] as 'Destination Mine'
 	,A.PAYLOAD / 1000 as 'Tonnes'
+	,CDB.[MATERIALGROUPLEVEL1] as 'Material Type'
+	--,CDB.[MATERIAL] as 'Material Type1'
 	   
   FROM [mshist].[dbo].[CYCLE] as A
        Join [mssumm].[dbo].[CYCLE_DIM_BLOCK] as CDB on [GRADEBLOCKOID] = A.[SOURCEBLOCK]

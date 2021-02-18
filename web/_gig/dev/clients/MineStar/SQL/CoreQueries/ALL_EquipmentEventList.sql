@@ -28,21 +28,15 @@ SELECT
 	  ,case when B.SHIFTTYPE = 0 then 1
 			else 2 end as 'Shift'
 
-/*	    ,case when (dateadd(second, -25200,A.[END_TIME_UTC]) between '2020-03-08 02:00:00.000' and '2020-11-01 02:00:00.000') or
-				(dateadd(second, -25200,A.[END_TIME_UTC]) between '2021-03-14 02:00:00.000' and '2021-11-07 02:00:00.000') or
-				(dateadd(second, -25200,A.[END_TIME_UTC]) between '2022-03-13 02:00:00.000' and '2022-11-06 02:00:00.000') or
-				(dateadd(second, -25200,A.[END_TIME_UTC]) between '2023-03-12 02:00:00.000' and '2023-11-05 02:00:00.000') or
-				(dateadd(second, -25200,A.[END_TIME_UTC]) between '2024-03-10 02:00:00.000' and '2024-11-03 02:00:00.000') or
-				(dateadd(second, -25200,A.[END_TIME_UTC]) between '2025-03-09 02:00:00.000' and '2025-11-02 02:00:00.000') or
-				(dateadd(second, -25200,A.[END_TIME_UTC]) between '2026-03-08 02:00:00.000' and '2026-11-01 02:00:00.000') or
-				(dateadd(second, -25200,A.[END_TIME_UTC]) between '2027-03-14 02:00:00.000' and '2027-11-07 02:00:00.000') or
-				(dateadd(second, -25200,A.[END_TIME_UTC]) between '2028-03-12 02:00:00.000' and '2028-11-05 02:00:00.000') or
-				(dateadd(second, -25200,A.[END_TIME_UTC]) between '2029-03-11 02:00:00.000' and '2029-11-04 02:00:00.000') then dateadd(second, -25200,A.[END_TIME_UTC])
-	  else dateadd(second, -28800,A.[END_TIME_UTC]) end as 'End Time'*/
-
 	 ,Row_Number() Over (Partition by B.REPORTING_DATE, B.SHIFTTYPE, C.PRIMARYMACHINENAME order by A.[START_TIME_UTC] ASC ) as 'Start Shift Row Number'
 	 ,Row_Number() Over (Partition by B.REPORTING_DATE, B.SHIFTTYPE, C.PRIMARYMACHINENAME order by A.[END_TIME_UTC] DESC ) as 'End Shift Row Number'
 	 ,Row_Number() Over (Partition by C.PRIMARYMACHINENAME order by A.[START_TIME_UTC] asc ) as 'Equipment Row Number'
+
+	    ,C.[SECONDARYMACHINECATEGORYNAME] as '2nd Category'
+		,C.[SECONDARYMACHINENAME] as '2nd Machine'
+		,C.PAYLOAD /1000 as 'Payload'
+		,c.NOMINALPAYLOAD /1000 as 'Nominal Payload'
+		,C.CYCLE_OID as 'Cycle ID'
 		
   FROM [mshist].[dbo].[CYCLEACTIVITYCOMPONENT] as A
   LEFT JOIN [mshist].[dbo].[CYCLE] as C on C.[CYCLE_OID] = A.[oid]
@@ -67,6 +61,11 @@ Start_of_Shift as (
 		   else [Event Time] end,[Event Time]) as 'Value2'
 		   ,Lag([Event Reason] , 1) OVER(ORDER BY [Equipment],[Equipment Row Number] ASC) as 'Event Reason'
 	,[Shift]
+	,[2nd Category]
+	 ,[2nd Machine]
+	 ,[Payload]
+	 ,[Nominal Payload]
+	 ,[Cycle ID]
 FROM FULLDATA Where [Start Shift Row Number]=1),
 
 End_of_Shift as (
@@ -81,6 +80,11 @@ End_of_Shift as (
 		    else [Event Time] end) as 'Value3' 
 	 ,[Event Reason]
 	 ,[Shift]
+	 ,[2nd Category]
+	 ,[2nd Machine]
+	 ,[Payload]
+	 ,[Nominal Payload]
+	 ,[Cycle ID]
  FROM FULLDATA Where [End Shift Row Number]=1)
  
  --AllData as (
@@ -92,13 +96,18 @@ End_of_Shift as (
 		,[value]
 		,[Event Reason]
 		,[Shift] 
+		,[2nd Category]
+	 ,[2nd Machine]
+	 ,[Payload]
+	 ,[Nominal Payload]
+	 ,[Cycle ID]
  from FULLDATA Where [End Shift Row Number] <> 1 
  Union
  Select * from End_of_Shift 
  Union
  Select * from Start_of_Shift 
  
- --)Select [Equipment],SUM([Value]) from AllData Group by [Equipment] order by [Equipment]
+
  
 
  
