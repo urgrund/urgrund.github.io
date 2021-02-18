@@ -1,16 +1,14 @@
+--Declare @Date as varchar(8)
+--Set @Date = '20181010'
+
 SELECT 
 	RDP.[Source_MineArea_Code] as 'Source Mine'
 	,substring(ats.ShKey,10,1) as 'Shift'
 	,RDP.[Source_Category] as 'Category'
-    ,RDP.[Source_Description_Code] as 'Source Area'
-	,replace(RDP.[Source_Description],'_','') as 'Source Labels'
-	,RDD.[Destination_Description_Code] AS 'Finished Area'
-	,replace(RDD.[Destination_Description],'_','') AS 'Finished Labels'
-	,RDD.[Destination_MineArea_Code] as 'Destination Mine'
+ 	,replace(RDP.[Source_Description],'_','') as 'Source Labels'
+		,replace(RDD.[Destination_Description],'_','') AS 'Finished Labels'
 	,SUM(MTS.[MeasureValue]) AS 'Tonnes'
-	--,count(MTS.[MeasureValue]) AS 'Count'
-	--,case when RDP.[Source_Category] = 'Stockpile' then 1 else 0 end as 'Start position'
-	--,case when RDD.[Destination_Description] in ('U/G Crusher__O', 'M35 Surface Ore Stockpile', 'M35 Surface Waste Stockpile', 'M35 Surface Stope Stockpile') then 3 else case when RDP.[Source_Category] = 'Stockpile' then 2 else 1 end end as 'Finish position'
+	,RDP.[Source_Material] as 'Material Type'
 	FROM [dbo].[ALLOCTNTIMESTAMP]		as ATS 
 	Join [dbo].[MEASURETIMESTAMP]		as MTS on MTS.[TSKey] = ATS.[TSKey]
     Join [dbo].[RD_EQUIPMENT]			as RDE on RDE.[EquipmentCode] = ATS.[Equipment]
@@ -24,4 +22,4 @@ SELECT
 		and RDP.[Source_MineArea_Code] <> 'MISC' 
 		and MTS.[MeasCode] = 'TONNE' 
 		and RDF.[Equipment_FunctionCode] = 'Loading'
-	GROUP BY RDP.[Source_Category], ats.shkey, RDP.[Source_MineArea_Code], RDP.[Source_Description_Code],RDP.[Source_Description], RDD.[Destination_Description_Code],RDD.[Destination_Description], RDD.[Destination_MineArea_Code] 
+	GROUP BY RDP.[Source_Category], ats.shkey, RDP.[Source_MineArea_Code], RDP.[Source_Description], RDD.[Destination_Description], RDP.Source_Material

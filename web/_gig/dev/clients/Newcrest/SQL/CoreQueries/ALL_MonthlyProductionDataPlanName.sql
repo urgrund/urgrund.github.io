@@ -12,16 +12,20 @@ Select
 			  when RDP.[Source_MineArea_Code] = 'WF' then left(ATS.[Location],4) + ' ' + substring(ats.[location],5,3)
 			  when left(RDP.[Source_MineArea_Code],1) = 'M' then rtrim(RDP.[Source_MineArea_Code]) + ' ' + left(ATS.[Location],4) + ' ' + substring(ATS.[Location], CHARINDEX('_', ATS.[Location])-1,1) 
 			  else RDP.[Source_MineArea_Code] End as  'Plan Segment'
+	   --,LEFT(ATS.[SHkey],4) as 'Year'
+	   --,substring(ats.[shkey],5,2) as 'Month' 
 	FROM dbo.ALLOCTNTIMESTAMP AS ATS JOIN
          dbo.MEASURETIMESTAMP AS MTS ON MTS.TSKey = ATS.TSKey
     JOIN dbo.[RD_PARENTLOCATIONS] as RDP on RDP.[SourceCode] = ATS.[Location]
     JOIN dbo.[RD_EQUIPMENT] as RDE on RDE.[EquipmentCode] = ATS.[Equipment]
     JOIN dbo.[RD_EQUIPMENT_MODEL] as RDM on RDM.[Equipment_ModelCode] = RDE.[Equipment_Model_Code]
 	JOIN dbo.[RD_EQUIPMENT_FUNCTION] as RDF on RDF.[Equipment_FunctionCode] = RDM.[Equipment_Model_Function_Code]
-	WHERE substring(ats.[shkey],1,4) = @Year and substring(ats.[shkey],5,2) = @Month and MTS.MeasCode ='TONNE' and RDF.[Equipment_FunctionCode] = 'LOADING' and RDP.[Source_Category] like '%Production%'
-	--WHERE substring(ats.[shkey],1,4) = '2018' and substring(ats.[shkey],5,2) = '11' and MTS.MeasCode ='TONNE' and RDF.[Equipment_FunctionCode] = 'LOADING' and RDP.[Source_Category] like '%Production%' --and RDP.[Source_MineArea_Code] = 'SLC'
+	--WHERE substring(ats.[shkey],1,4) = @Year and substring(ats.[shkey],5,2) = @Month and MTS.MeasCode ='TONNE' and RDF.[Equipment_FunctionCode] = 'LOADING' and RDP.[Source_Category] like '%Production%'
+	WHERE substring(ats.[shkey],1,4) >= '2018' and substring(ats.[shkey],5,2) >  '0' and MTS.MeasCode ='TONNE' and RDF.[Equipment_FunctionCode] = 'LOADING' and RDP.[Source_Category] like '%Production%' --and RDP.[Source_MineArea_Code] = 'SLC'
 	GROUP BY RDP.[Source_MineArea_Code] 
 			,ATS.[Location] 
 			,left(ats. [SHkey],8) 
-			,RDP.[Source_Category] 
-	ORDER BY ats.Location desc,  left(ats. [SHkey],8),  RDP.[Source_MineArea_Code] desc 
+			,RDP.[Source_Category]  
+			,LEFT(ATS.[SHkey],4)
+	   ,substring(ats.[shkey],5,2)
+	ORDER BY left(ats. [SHkey],8), ats.Location desc,  RDP.[Source_MineArea_Code] desc 

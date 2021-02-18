@@ -18,7 +18,7 @@ class Newcrest extends Client
             $_server = "tcp:LAPTOP\SQLDEV, 1433",
             $_uid = "test",
             $_pwd = "gw",
-            $_db = "ug_test"
+            $_db = "UG_Telfer"
             // $_server = "tcp:LAPTOP\SQLEXPRESS, 1433",
             // $_uid = "test",
             // $_pwd = "gigworth",
@@ -31,7 +31,7 @@ class Newcrest extends Client
         return new DateTimeZone('Australia/Perth');
     }
 
-    public function ShiftStart(): int
+    public function ShiftStart(): float
     {
         return 6;
     }
