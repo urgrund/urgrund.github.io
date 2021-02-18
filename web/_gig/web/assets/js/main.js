@@ -80,14 +80,10 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
     $rootScope.shiftTitle = shiftTitle[shift];
 
 
-    // Data that the site will use 
-    // Site data represents the current view
-    // Chached data is the last 7 days for quick access
+    // Data that the site will use     
     $rootScope.siteData = null;
     $rootScope.cachedData = [];
-
     $rootScope.config;
-
 
     // So that it can be used in angular
     $rootScope.ShiftIndex = function () { return ShiftIndex(); };
@@ -112,6 +108,20 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         }
         return false;
     };
+
+
+    $rootScope.errorResponse = null;
+    $rootScope.processErrorResponse = function (error) {
+        // Run the DB connect test to see
+        // if this is a DB issue 
+        $rootScope.checkConnection();
+
+        console.log(error);
+        $rootScope.errorResponse = error.data;
+        $location.path('/error');
+    };
+
+
 
     $rootScope.trustAsHtml = function (html) {
         return $sce.trustAsHtml(html);
@@ -174,7 +184,7 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         newData = null;
 
         // Debug output
-        if (true) {
+        if (false) {
             console.log("[" + $rootScope.meta.Date + "]");
             console.log("Sites :");
             console.log($rootScope.siteData);
@@ -222,7 +232,6 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             return;
         var len = _equip.shiftData[ShiftIndex()].events.length;
         var index = _equip.shiftData[ShiftIndex()].events[len - 1];
-        //console.log(_equip.id + " | " + _equip.events[index].majorGroup);
         return _equip.events[index];
     };
 
@@ -328,11 +337,10 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
                 $rootScope.cachedData.sort(function (a, b) { return b[b.length - 1]['Date'] - a[a.length - 1]['Date'] });
 
             }, function (error) {
-                console.error("ERROR FETCHING DATA");
-                console.error(error);
+                //console.error(error);
+                $rootScope.processErrorResponse(error);
             });
         }
-
     };
 
 
@@ -347,15 +355,10 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             data: _data,
         })
         request.then(function (response) {
-            //console.log(response.data);
-            //if ($rootScope.checkResponseError(response))
-            //  return;
 
             ServerInfo.config = response.data;
             ServerInfo.config.TUMIndex = Object.values(ServerInfo.config.TUMIndex);
             $rootScope.config = response.data;
-
-            //PrepareAllTimeLabels(ServerInfo.config.ShiftStart);
 
             console.log("[Configs]");
             console.log(ServerInfo.config);
@@ -392,6 +395,7 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         return request;
     }
 
+    $rootScope.connectionStatus = new ConnectionStatus();
 
     $rootScope.checkConnection = function () {
         var _data = { 'func': 5 };
@@ -401,8 +405,17 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             data: _data,
         })
         request.then(function (response) {
+            console.log("Connected to DB");
+            $rootScope.connectionStatus.status = 1;
+            $rootScope.connectionStatus.text = "Ok";
+            $rootScope.connectionStatus.messages = "";
+
             //console.log(response.data);
         }, function (error) {
+            console.error("Failed to connect to DB");
+            $rootScope.connectionStatus.status = 0;
+            $rootScope.connectionStatus.text = error.data[0];
+            $rootScope.connectionStatus.messages = error.data[1];
         });
         return request;
     }
@@ -419,32 +432,33 @@ app.controller("myCtrl", function ($q, $scope, $rootScope, $timeout, $route, $lo
 
     // The start-up sequence 
     console.log("Starting Mine-Mage...");
-    $q.all([$rootScope.checkConnection()]).then(function (responses) {
+    //$rootScope.checkConnection();
 
-        if (responses[0].data.length > 0) {
-            // Issues with database connection
-            console.error("Failed to connect to SQL Database");
-        }
-        else {
-            console.log("Connected to DB...");
+    $q.all([$rootScope.checkConnection()]).then(
+        function (responses) {
 
-            // First fetch the site configs
-            // and available dates
-            var promises = [
-                $rootScope.fetchSiteConfigs(),
-                $rootScope.fetchAvailableDates()
-            ];
-            $q.all(promises).then(function (responses) {
-                // Set the data 
-                console.log("Config & Dates ready");
-                promises = [
-                    // Latest date and Trailing week 
-                    $rootScope.fetchSiteData([ServerInfo.availableDates[0]], true),
-                    $rootScope.fetchSiteData(ServerInfo.availableDates.slice(1, 7), false)
+            if ($rootScope.connectionStatus.status == 1) {
+
+                // First fetch the site configs
+                // and available dates
+                var promises = [
+                    $rootScope.fetchSiteConfigs(),
+                    $rootScope.fetchAvailableDates()
                 ];
-            });
+                $q.all(promises).then(function (responses) {
+                    // Set the data 
+                    console.log("Config & Dates ready");
+                    promises = [
+                        // Latest date and Trailing week 
+                        $rootScope.fetchSiteData([ServerInfo.availableDates[0]], true),
+                        $rootScope.fetchSiteData(ServerInfo.availableDates.slice(1, 7), false)
+                    ];
+                });
+            }
         }
-    });
+    ).catch(function (err) {
+        // Failed to connect
+    });;
 
 
 

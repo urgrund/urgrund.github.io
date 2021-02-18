@@ -45,3 +45,10 @@ class ServerInfo {
 }
 
 
+class ConnectionStatus {
+    constructor() {
+        this.status = 0;
+        this.messages = "";
+        this.text = "";
+    }
+}

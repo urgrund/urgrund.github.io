@@ -14,6 +14,7 @@
   /* --cardColorBG: #22558a; */
   --cardColorBG: rgba(0, 67, 109, 1);
   --cardColorFG: rgb(34, 85, 138);
+  --cardColorHov: rgb(68, 104, 143);
   
 
 
@@ -344,17 +345,12 @@ input:invalid:required {
 
 .equipGaugeGrid
 {
-  grid-column-start: 3;
-  grid-column-end: 4;
-  grid-row-start: 4;
-  grid-row-end: 5;
-
   display: grid;
 
   grid-column-gap: 1%;
   grid-row-gap: 1%; 
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 4fr;
+  grid-template-rows: 1fr 3fr;
 
   justify-content: center;    
   align-content: space-evenly;
@@ -640,11 +636,17 @@ input:invalid:required {
   max-height: 110px;
   transform: perspective(5cm) rotateX(3deg) rotateY(-11deg);
 }
+
 .sitePicBig:hover
 {
   transform: perspective(7cm) rotateX(3deg) rotateY(-11deg);
-  border:1px solid rgb(0, 174, 255);
+  border:1px solid #ffffff;
 }
+
+
+
+
+
 
 /* a > .sitePicBig:hover
 {

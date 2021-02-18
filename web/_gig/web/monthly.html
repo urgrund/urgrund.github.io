@@ -55,9 +55,12 @@
         </div>
     </div>
     </br>
-    <!-- </br> -->
+
+
+
+    <!-- Chart types switch depending on user preference -->
+
     <div id="monthlyChart" class="h80pc" ng-if="monthlyViewAsBars"></div>
-    <!-- </div> -->
 
     <div class="jumbogrid" ng-if="!monthlyViewAsBars">
         <div ng-repeat="y in chartData" class="mnth_gauge">

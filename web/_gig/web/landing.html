@@ -34,10 +34,12 @@
             </span> -->
 
 
-            <a ng-href="#!site/{{siteIndex}}"><img class="sitePicBig"
-                    ng-src="assets/img/site_{{siteIndex}}.jpg" /><span>
+            <a ng-href="#!site/{{siteIndex}}"><img class="sitePicBig" ng-src="assets/img/site_{{siteIndex%3}}.jpg" />
+                <span class="sitePicLabel">
                     <h3 ng-bind="x.name"></h3>
-                </span></a>
+                </span>
+            </a>
+
             <br />
             <br />
 

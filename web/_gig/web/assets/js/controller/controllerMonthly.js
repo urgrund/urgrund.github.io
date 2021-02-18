@@ -12,7 +12,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
     $scope.urlMonthly = '../dev/php/monthly/monthly.php';
 
-    $scope.currentPlanYear = '2018';
+    $scope.currentPlanYear = '2020';
     $scope.currentPlanMonth = '10';
 
     //$scope.configFiles;

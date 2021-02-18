@@ -509,6 +509,7 @@ class Charts {
         var efficiency = [];
         var uOfa = [];
 
+        var dateLabels = [];
 
         for (var i = 0; i < _cache.length; i++) {
 
@@ -517,6 +518,10 @@ class Charts {
             var day = _cache[_cache.length - i - 1];
             var equip = day[day.length - 2][_data.id];
             var equipMetrics = equip.shiftData[2].metricData;
+
+            var date = day[day.length - 1]['Day'];
+
+            dateLabels.push(date.substring(0, 3));
 
             // Asset Utilisation
             totalAU[i] = equip.shiftData[2].assetUtilisation.totalAU;
@@ -545,8 +550,9 @@ class Charts {
         for (var i = 0; i < lineSeries.length; i++) {
             series[i] =
             {
-                name: 'Asset',
+                name: lineSeries[i],
                 type: 'line',
+                smooth: 0.5,
                 yAxisIndex: 1,
                 xAxisIndex: 1,
                 itemStyle: { color: ChartStyles.TUMColors[i % 6] },
@@ -558,6 +564,8 @@ class Charts {
         series.push({
             name: 'Metrics',
             type: 'bar',
+            yAxisIndex: 0,
+            xAxisIndex: 0,
             barWidth: '100%',
             itemStyle: { color: ChartStyles.siteColors[0] },
             data: mph
@@ -577,22 +585,17 @@ class Charts {
 
 
 
-
         //console.log(mph);
 
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
+            grid: ChartStyles.gridSpacing(),
             tooltip: {
                 confine: true,
                 trigger: 'axis',
                 textStyle: ChartStyles.toolTipTextStyle(),
-                axisPointer: ChartStyles.toolTipShadow(),
                 backgroundColor: ChartStyles.toolTipBackgroundColor(),
-            },
-            grid: ChartStyles.gridSpacing(),
-            tooltip: {
-                trigger: 'axis',
                 axisPointer: {
                     type: 'shadow',
                     shadowStyle: {
@@ -600,28 +603,30 @@ class Charts {
                     }
                 }
             },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                top: '3%',
-                containLabel: true
-            },
             xAxis:
                 [
-                    { type: 'category', data: mph, show: 'false' },
-                    { type: 'category', data: [1, 2, 3, 4, 5, 6, 7] },
+                    { type: 'category', data: mph, show: false },
+                    { type: 'category', data: dateLabels, position: 'bottom' },
                 ]
             ,
-            yAxis: [
-                {
-                    type: 'value',
-                    splitLine: { show: false },
-                    axisLine: ChartStyles.axisLineGrey,
-                    axisLabel: { fontSize: ChartStyles.fontSizeSmall }
-                },
-                { type: 'value', min: 0, max: 1, axisLine: ChartStyles.axisLineGrey, axisLabel: { fontSize: ChartStyles.fontSizeSmall } },
-            ],
+            yAxis:
+                [
+                    {
+                        type: 'value',
+                        splitLine: { show: false },
+                        axisLine: ChartStyles.axisLineGrey,
+                        axisLabel: { fontSize: ChartStyles.fontSizeSmall }
+                    },
+                    {
+                        type: 'value', min: 0, max: 1, axisLine: ChartStyles.axisLineGrey,
+                        axisLabel:
+                        {
+                            fontSize: ChartStyles.fontSizeSmall,
+                            formatter: function (value, index) { return ((value / 1) * 100).toFixed() + "%"; }
+                        }
+                    },
+                ]
+            ,
             series: series
         };
 
@@ -890,6 +895,7 @@ class Charts {
 
         var labels = ['Availability', 'Utilisation', 'U of A'];
 
+        var smoothness = 0.5;
         var option = {
 
             backgroundColor: ChartStyles.backGroundColor,
@@ -938,6 +944,7 @@ class Charts {
                     type: 'line',
                     symbol: 'none',
                     lineStyle: ChartStyles.lineShadow(),
+                    smooth: smoothness,
                     z: 2
 
                 },
@@ -948,6 +955,7 @@ class Charts {
                     type: 'line',
                     symbol: 'none',
                     lineStyle: ChartStyles.lineShadow(),
+                    smooth: smoothness,
                     z: 1
                 },
                 {
@@ -957,11 +965,13 @@ class Charts {
                     symbol: 'none',
                     lineStyle: ChartStyles.lineShadow(),
                     itemStyle: { color: ChartStyles.uofaColor },
+                    smooth: smoothness,
                     z: 0//,
                     //lineStyle: { type: 'dotted' }
                 }
             ]
         };
+
 
         SetOptionOnChart(option, myChart);
         return myChart;
@@ -1187,14 +1197,20 @@ class Charts {
                 },
                 {
                     id: 1,
+                    show: false,
                     max: durationAsHours,
-                    // max: 0.1,
                     splitLine: { show: false },
+                    axisLine: ChartStyles.axisLineGrey
+                },
+                {
+                    id: 2,
+                    show: true,
+                    min: 0, max: 1,
                     axisLabel: {
                         fontSize: ChartStyles.fontSizeSmall,
-                        formatter: function (value, index) { return ((value / durationAsHours) * 101).toFixed() + "%"; }
+                        formatter: function (value, index) { return ((value / 1) * 100).toFixed() + "%"; }
                     },
-                    axisLine: ChartStyles.axisLineGrey
+                    splitLine: { show: false }, axisLine: ChartStyles.axisLineGrey
                 }
             ],
             series: [
@@ -1207,7 +1223,7 @@ class Charts {
                 },
                 {
                     type: 'line',
-                    data: barData.length > 1 ? paretoLine : null,
+                    data: barData.length > 1 ? paretoLine : 0,
                     lineStyle: { color: 'red', width: 1.5 },
                     symbol: 'none', // Turn off dots
                     yAxisIndex: 1,
@@ -1219,6 +1235,9 @@ class Charts {
         SetOptionOnChart(option, myChart);
         return myChart;
     }
+
+
+
 
 
     static CreateTimeLineFlat(_elementID, _data, _includeTimeLine = false) {
@@ -1279,7 +1298,8 @@ class Charts {
         }];
 
 
-        if (_includeTimeLine) xAxisArray.push(ChartStyles.xAxis(timeLabelsShift[ShiftIndex()]));
+        if (_includeTimeLine)
+            xAxisArray.push(ChartStyles.xAxis(timeLabelsShift[ShiftIndex()]));
 
 
         var option = {
@@ -1310,8 +1330,8 @@ class Charts {
                 confine: true
             },
             grid: {
-                top: _includeTimeLine ? '2%' : '0%',
-                bottom: _includeTimeLine ? '2%' : '0%',
+                top: _includeTimeLine ? '2%' : '10%',
+                bottom: _includeTimeLine ? '2%' : '10%',
                 left: _includeTimeLine ? '1%' : '1%',
                 right: _includeTimeLine ? '2%' : '1%'
             },
@@ -1519,7 +1539,7 @@ class Charts {
             textStyle: ChartStyles.textStyle,
             grid: {
                 top: '0%',
-                bottom: '0%',
+                bottom: '3%',
                 left: '1%',
                 right: '5%'
             },
@@ -1528,13 +1548,14 @@ class Charts {
                 show: true,
                 min: 0,
                 max: timeLabelsShiftExtra[ShiftIndex()].length - 1,
-                position: 'bottom',
+                //position: 'bottom',
                 data: timeLabelsShiftExtra[ShiftIndex()],
                 boundaryGap: false,
-                minInterval: 0,
-                maxInterval: 0,
+                //minInterval: 2,
+                //maxInterval: 24,
+                axisLine: ChartStyles.axisLineGrey,
                 axisLabel: {
-                    padding: [-15, 0, -20, 0],
+                    //padding: [-15, 0, -20, 0],
                     inside: true,
                     rotate: 45,
                     formatter: '{value}',
@@ -1552,6 +1573,7 @@ class Charts {
         };
         SetOptionOnChart(option, myChart);
     }
+
 
 
     /**

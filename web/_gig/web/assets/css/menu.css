@@ -250,7 +250,7 @@
 
   .util .dropdown-content {
     margin-left: 0px;
-    width: 390px;
+    min-width: 280px;
     right: 0%;
     display: flex;    
     flex-direction: column;
@@ -342,19 +342,20 @@
   display: inline-block;
 }
 
-#site_body a span {    
+ #site_body a span {    
     position: absolute;
     top: 59%;
     left: 0%;    
     margin-left: -50%;
     width: 200%;    
     box-shadow: 3px 7px 7px 0px #0000007a;
-    /* border-bottom: 1px solid #505fa0; */
     background-color: var(--cardColorBG);
-}​
+}​ 
+
  
 
-  #site_body a:hover {    
+#site_body a:hover
+{    
   /* text-decoration: none;   */
   color: #8db3ff;   
   cursor: pointer;

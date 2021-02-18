@@ -71,10 +71,10 @@
                         <h4 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Tonnes</h4>
                         <div class="flex flex-start">
                             <!-- <h5 class="light right"><i class="fas fa-chart-line"></i> Average</h5> -->
-                            <h3 class="left">{{shiftData.productionTonnes.average | number : 0}}/hr</h3>
+                            <h3 class="left">{{(shiftData.productionTonnes.average | number : 0)||0}}/hr</h3>
                         </div>
                     </div>
-                    <h1 class="right"> {{shiftData.productionTonnes.total| number:0}}</h1>
+                    <h1 class="right"> {{(shiftData.productionTonnes.total| number:0) || 0}}</h1>
                 </div>
             </div>
             <div class="">
@@ -83,10 +83,10 @@
                         <h4 class="light"><i class="fas fa-weight-hanging"></i></i> Total Production Metres</h4>
                         <div class="flex flex-start">
                             <!-- <h5 class="light right"><i class="fas fa-chart-line"></i> Average</h5> -->
-                            <h3 class="right">{{shiftData.productionMetres.average | number : 0}}/hr</h3>
+                            <h3 class="right">{{(shiftData.productionMetres.average | number : 0)||0}}/hr</h3>
                         </div>
                     </div>
-                    <h1 class="right"> {{shiftData.productionMetres.total| number:0}}</h1>
+                    <h1 class="right"> {{(shiftData.productionMetres.total| number:0)||0}}</h1>
 
                 </div>
             </div>
@@ -182,29 +182,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- <div ng-repeat="(key, value) in site.equipmentByFunction" style="height: 100px;">
-
-                <div style="height: 100%; width: 100%; background-color: blueviolet;" ;>
-
-                    <div class="chartCard">
-                        <div class="charthead">
-                            <div class="chartheadtxt left">
-                                <h5 class="bold">{{functionMapping[key]}}</h5>
-                            </div>
-                        </div>
-                        <div class="chartdivcontent {{$root.backGroundClassBlur}} flex">
-                            <div class="gauge h60 w100pc" id="{{key}}_gA">AAA</div>
-                            <div class="gauge h60 w100pc" id="{{key}}_gUofA">AAA</div>
-                            <div class="gauge h60 w100pc" id="{{key}}_gE">AAA</div>
-                            <div class="gauge h60 w100pc" id="{{key}}_gAU">AAA</div>
-                        </div>
-                    </div>
-
-                </div>
-                <br />
-            </div> -->
-
 
 
     </div>

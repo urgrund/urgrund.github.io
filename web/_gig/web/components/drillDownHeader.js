@@ -19,7 +19,11 @@ app.component("drillDownHeader", {
                 return;
 
             this.lastEvent = $rootScope.getEquipmentLastEvent(this.equip);
+            if (this.lastEvent == undefined)
+                return;
 
+            this.TUMStyle = $rootScope.equipStyleTUMColorBG(this.lastEvent.status);
+            console.log(this.TUMStyle);
 
             // Below could be PHP instead?
             // But it's more about the difference in time

@@ -12,6 +12,8 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
 
     $scope.createSiteCharts = function () {
 
+
+        //
         if ($scope.site.summary != undefined) {
             $scope.summary = [];
             for (const property in $scope.site.summary) {
@@ -112,47 +114,14 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
 
     $scope.$watch('$viewContentLoaded', function () {
         $scope.SetDataAndCreateCharts();
-        // if ($rootScope.siteData == null)
-        //     return;
-
-        // $scope.siteIndex = $routeParams.site;
-        // if ($rootScope.siteData != null) {
-        //     $scope.site = $rootScope.siteData[$scope.siteIndex];
-        //     $scope.shiftData = $scope.site.shiftData[ShiftIndex()];
-        // }
-
-        // // Setup charts 
-        // $timeout(function () {
-        //     $scope.createSiteCharts();
-        // }, 10);
     });
-
-
-
 
     $rootScope.$on('newSiteDataSet', function () {
         $scope.SetDataAndCreateCharts();
-
-        // $scope.siteIndex = $routeParams.site;
-        // $scope.site = $rootScope.siteData[$scope.siteIndex];
-        // $scope.shiftData = $scope.site.shiftData[ShiftIndex()];
-        // $scope.createSiteCharts();
-
     });
-
 
     $scope.$on('updateShift', function (event, data) {
         $scope.SetDataAndCreateCharts();
-
-
-        // if ($rootScope.siteData == null)
-        //     return;
-
-        // $scope.siteIndex = $routeParams.site;
-        // $scope.site = $rootScope.siteData[$scope.siteIndex];
-        // $scope.shiftData = $scope.site.shiftData[ShiftIndex()];
-        // $scope.createSiteCharts();
-
     });
 
 });

@@ -1,10 +1,15 @@
 <div class="errorpage">
     <div>
-        <h2><i ng-class='equipStyleIcon.DOWN' ng-style='equipStyleColor.DOWN'></i>
+        <h2><i class="fas fa-exclamation-circle" ng-style="equipStyleColor['Down']"></i>
             An error has occured...</h2>
         </br>
 
-        <div ng-bind-html="trustAsHtml(lastResponseError)">
+        <div class="smallInfo">
+            <h4>{{errorResponse[0]}}</h4>
+            <h5>{{errorResponse[1]}}</h5>
         </div>
+
+        <!-- <div ng-bind-html="trustAsHtml(lastResponseError)">
+        </div> -->
     </div>
 </div>

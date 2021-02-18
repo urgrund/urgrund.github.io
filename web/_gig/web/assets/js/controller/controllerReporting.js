@@ -171,8 +171,8 @@ app.controller('Reporting', function ($scope, $http, $rootScope, $timeout, uiGri
             data: _data
         })
         request.then(function (response) {
-            if ($rootScope.checkResponseError(response))
-                return;
+            //if ($rootScope.checkResponseError(response))
+            //  return;
 
             console.log(response.data);
 
@@ -227,7 +227,7 @@ app.controller('Reporting', function ($scope, $http, $rootScope, $timeout, uiGri
 
 
         }, function (error) {
-            console.error(error);
+            $rootScope.processErrorResponse(error);
         });
     }
 

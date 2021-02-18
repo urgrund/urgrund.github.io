@@ -57,8 +57,10 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
         var shiftData = $scope.equip.shiftData[ShiftIndex()];
 
 
-        // Test 
+        // Trailing week bar chart
         var week = Charts.CreateMPHRange("week", $scope.equip, $rootScope.cachedData);
+
+        // Link it to load up the site data for that day
         week.on('click', function (params) {
             console.log($rootScope.cachedData[params.dataIndex]);
             var index = $rootScope.cachedData.length - params.dataIndex - 1;
@@ -67,37 +69,10 @@ app.controller('DrillDown', function ($scope, $rootScope, $routeParams, $timeout
 
 
 
-
-
-
         //var t0 = performance.now()
         timeline = Charts.CreateTimeLineFlat("timeline", $scope.equip, _includeTimeLine = true);
         //var t1 = performance.now()
         //console.log("CreateTimeLineFlat took " + (t1 - t0) + " milliseconds.")
-
-
-
-        // var g = new SimpleGaugeData();
-        // g.fontSize = 40;
-
-        // // Total Asset Availability
-        // g.value = shiftData.assetUtilisation.totalAU;
-        // g.color = 'white';
-        // Charts.CreateGauge("gAU", g);
-
-        // // Efficiency
-        // g.value = shiftData.assetUtilisation.efficiency;
-        // g.color = ChartStyles.TUMColors[4];
-        // Charts.CreateGauge("gE", g);
-
-        // // Availablity
-        // g.value = shiftData.assetUtilisation.availability;
-        // g.color = ChartStyles.TUMColors[0];
-        // Charts.CreateGauge("gA", g);
-
-        // g.value = shiftData.assetUtilisation.uOfa;
-        // g.color = ChartStyles.TUMColors[2];
-        // Charts.CreateGauge("gUofA", g);
 
         var g = new SimpleGaugeData();
         g.fontSize = 20;

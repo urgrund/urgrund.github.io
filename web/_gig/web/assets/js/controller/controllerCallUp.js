@@ -22,7 +22,7 @@ app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $ti
         var callUpEvent = JSON.stringify(_equip.events[eventIndex]);
 
         if (callUpEvent == undefined) {
-            console.log("Event was null " + _equip);
+            //console.log("Event was null " + _equip);
             return;
         }
 
