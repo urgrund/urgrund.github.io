@@ -16,45 +16,38 @@ $request = json_decode($postdata);
 if (is_object($request)) {
     include_once('..\setDebugOff.php');
 
+    echo json_encode(Monthly::GenerateMonthlyPlanData());
 
-    new Config();
+    // new Config();
 
 
-    if ($request->func == 0) {
-        Monthly::WriteCSV($request->data, $request->year, $request->month);
-    }
+    // if ($request->func == 0) {
+    //     Monthly::WriteCSV($request->data, $request->year, $request->month);
+    // }
 
-    if ($request->func == 1) {
-        echo json_encode(Monthly::GetCSV($request->year, $request->month));
-    }
+    // if ($request->func == 1) {
+    //     echo json_encode(Monthly::GetCSV($request->year, $request->month));
+    // }
 
-    if ($request->func == 3) {
-        echo json_encode(Monthly::GetActuals($request->year, $request->month));
-    }
+    // if ($request->func == 3) {
+    //     echo json_encode(Monthly::GetActuals($request->year, $request->month));
+    // }
 
-    if ($request->func == 4) {
-        echo json_encode(Monthly::MapActualsToPlan($request->year, $request->month));
-    }
+    // if ($request->func == 4) {
+    //     echo json_encode(Monthly::MapActualsToPlan($request->year, $request->month));
+    // }
 }
 // ----------------------------------------------------------
 // ----------------------------------------------------------
 // ----------------------------------------------------------
 else {
 
-    new Config();
+    Monthly::GenerateMonthlyPlanData();
+}
 
-    //$data = Monthly::GetCSV('2018', '11', true);
-    //Monthly::WriteCSV($data, '2018', '10');
-
-    //include_once('..\setDebugOff.php');    
-    //Debug::Log(Monthly::GetActuals('2018', '11'));
-
-
-
-    $p = Monthly::MapActualsToPlan('2020', '10');
-    Debug::Log($p[1]);
-    //Monthly::MetaData($p);
-    //echo 'poo';
+function compareDeepValue($val1, $val2)
+{
+    return strcmp($val1['value'], $val2['value']);
 }
 // ----------------------------------------------------------
 
@@ -62,206 +55,255 @@ else {
 class MonthlyMeta
 {
     var $totalMetricTarget = 0;
-    var $totalMetricActual;
+    var $totalMetricActual = 0;
 
-    var $averageCurrent;
-    var $averageRequired;
+    var $averageCurrent = 0;
+    var $averageRequired = 0;
 
-    var $complianceSpatial;
-    var $complianceVolumetric;
+    var $complianceSpatial = 0;
+    var $complianceVolumetric = 0;
 
-    var $timeRemaining;
-    var $timePassedInMonth;
+    var $timeRemaining = 0;
+    var $timePassedInMonth = 0;
 }
+
+
+
+class MonthlyEntry
+{
+    public array $meta = [];
+    public array $plan;
+
+    public array $mapped;
+
+    public float $timeRemaining = 0;
+    public float $timePassedInMonth = 0;
+
+    private array $_sql;
+    private string $_date;
+
+
+
+    private MonthlyMeta $tmpMeta;
+
+    function __construct($_planFile, $_sql)
+    {
+        $this->plan = Monthly::PlanAsObject($_planFile);
+        $this->_sql = $_sql;
+        $this->_date = substr($_planFile, 0, 6);
+
+        //Debug::Log($this->_date);
+        //Debug::Log($this->plan[0]);
+
+        for ($i = 0; $i < count($this->plan); $i++) {
+            $site = Config::Sites($this->plan[$i][0]);
+            //Debug::Log($site);
+            if (!isset($this->meta[$site]) && $site != NULL)
+                $this->meta[$site] = new MonthlyMeta();
+        }
+
+        $this->CalculateCalendarTime();
+        $this->MapSQLToPlan();
+        $this->CalculateMeta();
+    }
+
+    private function CalculateCalendarTime()
+    {
+        //Debug::Log($this->_date);
+        $year = substr($this->_date, 0, 4);
+        $month = substr($this->_date, 4, 2);
+
+        // $year
+        $d = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+
+        $cdate = mktime(0, 0, 0, $month, $d, $year);
+        $today = time();
+
+        $difference = doubleval($cdate - $today);
+        // if ($difference < 0) {
+        //     $difference = 0;
+        // }
+        //Debug::Log($difference = ($cdate - $today));
+        Debug::Log(($difference));
+
+
+        $this->timeRemaining = max($difference, 0);
+        $this->timePassedInMonth = 1 - (floor($difference / 60 / 60 / 24) / $d);
+
+        // $meta->timeRemaining = $difference;
+        // $meta->timePassedInMonth = 1 - (floor($difference / 60 / 60 / 24) / $d);
+    }
+
+    private function MapSQLToPlan()
+    {
+
+        // Plan Index helper
+        // 3 = Target
+        // 5 = Will be actuals
+
+        Debug::StartProfile("Map SQL");
+
+        for ($i = 0; $i < count($this->plan); $i++) {
+            //Debug::Log($this->plan[$i][4]);           
+            $this->plan[$i][5] = 0;
+            $this->plan[$i][6] = 0;
+
+            // Make it a number
+            $this->plan[$i][3] = intval($this->plan[$i][3]);
+
+            $p = $this->plan[$i][4];
+            for ($j = 0; $j < count($this->_sql); $j++) {
+
+                if (substr($this->_sql[$j][0], 0, 6) === $this->_date) {
+                    //Debug::Log($this->_sql[$j][0]);
+                    $s = $this->_sql[$j][5];
+                    if ($p === $s) {
+                        $this->plan[$i][5] += $this->_sql[$j][4];
+                    }
+                }
+            }
+
+            // Add Spatial / Volumetric            
+            if ($this->plan[$i][5] != 0)
+                $this->plan[$i][6] = $this->plan[$i][3] / $this->plan[$i][5];
+
+            $this->plan[$i][7] = Config::Sites($this->plan[$i][0]);
+        }
+
+        Debug::EndProfile();
+
+
+        Debug::Log("Plan");
+        Debug::Log($this->plan[0]);
+
+        Debug::Log("sQ");
+        Debug::Log($this->_sql[0]);
+        //Debug::Log($this->plan);
+    }
+
+
+    private function CalculateMeta()
+    {
+        //foreach ($this->meta as $key => $value) {
+        //  Debug::Log($key);
+        //$this->tmpMeta = $key;
+        //$key = $this->tmpMeta;
+        for ($j = 0; $j < count($this->plan); $j++) {
+            // Use the site name to index the meta
+            $this->tmpMeta = $this->meta[$this->plan[$j][7]];
+            $k = $this->tmpMeta;
+
+            $k->totalMetricTarget += intval($this->plan[$j][3]);
+            $k->totalMetricActual += intval($this->plan[$j][5]);
+            //Debug::Log($j . " | " . intval($this->plan[$j][3]));
+            //$site = Config::Sites($this->plan[$j][0]);
+            //Debug::Log($site);
+
+        }
+        //$m->complianceSpatial = min($m->totalMetricTarget, $m->totalMetricActual) / $m->totalMetricTarget;
+        //$m->complianceVolumetric = $m->totalMetricActual / $m->totalMetricTarget;
+        //}
+    }
+
+
+
+
+    /** Similar to IComparable in C# **/
+    //$result = array_intersect($this->_sql, $this->plan);
+    function ComparePlanSegments($a, $b)
+    {
+        return strcmp($a['value'][4], $b['value'][5]);
+    }
+}
+
+
+
+
+
 
 
 class Monthly
 {
-    private static $_fileDir = "";
-    private static $_fileName = "Plan_";
-    private static $_fileExt = ".csv";
+    //private static $_fileName = "Plan_";
+    private const FILE_EXT = ".csv";
+
+    private const SQL_QUERY = "ALL_MonthlyProductionDataPlanName.sql";
+
+    private const INDEX_DATE = 0;
+    private const INDEX_MINE = 1;
+    private const INDEX_LOC = 2;
+    private const INDEX_VALUE = 4;
+    private const INDEX_SEGMENT = 5;
 
 
-    private const INDEX_LOC = 3;
-    private const INDEX_SEGMENT = 2;
-    private const INDEX_VALUE = 5;
-
-
-    public static function GetActualsArray($_year, $_month)
+    // -----------------------------------------------------------------------------
+    private static MonthlyEntry $_tempEntry;
+    public static function GenerateMonthlyPlanData()
     {
-        // THIS IS GOING TO SPLIT OUT THE MONTLY
-        // INTO DATA FOR BASIC BAR CHARTS
-        $arr = array();
-        $actuals = Monthly::GetActuals($_year, $_month);
-        for ($i = 1; $i < count($actuals); $i++) {
+        new Config();
 
-            $siteName = Config::Sites($actuals[$i][1]);
-            if (!isset($arr[$siteName]))
-                $arr[$siteName] = [];
+        $plans = Monthly::GetAvailablePlans();
+        $sql = Monthly::GetSQLData();
+        $output = [];
 
-            if (!isset($arr[$siteName][$actuals[$i][0]]))
-                $arr[$siteName][$actuals[$i][0]] = 0;
+        Debug::StartProfile("Generate");
 
-            $arr[$siteName][$actuals[$i][0]] += $actuals[$i][4];
+        // For each plan, march through the 
+        // actuals and see if there's a match up
+        for ($i = 0; $i < count($plans); $i++) {
+            $plan = $plans[$i];
+            $planDate =  substr($plan, 0, 6);
+
+            // This is where the big work happens
+            $output[$planDate] =  new MonthlyEntry($plan, $sql);
         }
-        //Debug::Log($actuals[0]);
-        Debug::Log($arr);
+
+        return $output;
+        Debug::EndProfile();
     }
 
 
 
-    public static function GetActuals($_year, $_month)
-    {
-        //$file = 'ALL_MonthlyProductionData.sql';
-        $file = 'ALL_MonthlyProductionDataPlanName.sql';
-        //$file = 'ALL_MonthlyProductionDataPlanName.sql';
-        $sqlTxt = SQLUtils::FileToQuery(Utils::GetBackEndRoot() . Client::SQLCorePath() . $file);
-        $sqlTxt = str_replace(SQLUtils::YearVar, "'" . $_year . "'", $sqlTxt);
-        $sqlTxt = str_replace(SQLUtils::MonthVar, "'" . $_month . "'", $sqlTxt);
 
+
+    public static function GetAvailablePlans(): array
+    {
+        Debug::StartProfile("Get Available Plans");
+        $path = Utils::GetBackEndRoot() . "/monthly";
+        $files = array_diff(scandir($path), array('.', '..'));
+        $files = array_values($files);
+        $plans = [];
+        for ($i = 0; $i < count($files); $i++) {
+            if (strpos($files[$i], Monthly::FILE_EXT) !== false) {
+                $plans[] = $files[$i];
+            }
+        }
+        Debug::EndProfile();
+        return $plans;
+    }
+
+    public static function GetSQLData()
+    {
+        $sqlTxt = SQLUtils::FileToQuery(Utils::GetBackEndRoot() . Client::SQLCorePath() . Monthly::SQL_QUERY);
         $sqlResult = SQLUtils::QueryToText($sqlTxt, "Get Monthly Actuals");
-        //Debug::Log($sqlResult);
+
+        // Kock off the headings 
+        array_shift($sqlResult);
         return $sqlResult;
     }
 
 
-    public static function MapActualsToPlan($_year, $_month)
+    public static function PlanAsObject(string $_fileName)
     {
-        // From the DB
-        $actuals = Monthly::GetActuals($_year, $_month);
-
-        // From the Plan CSV
-        $plan = Monthly::GetCSV($_year, $_month);
-
-        Debug::StartProfile("Map Actuals To Plan");
-
-        $actualsMineIndex = 1;
-        $actualsLocIndex = 2;
-
-        $planMineIndex = 0;
-        $planLocIndex = 1;
-        $planTgtIndex = 3;
-
-
-        // Build associate with totals for month
-        $actualsTotals = [];
-
-        for ($i = 1; $i < count($actuals); $i++) {
-            $actualsDate = substr($actuals[$i][0], 0, 6);
-            $concatDate = $_year . $_month;
-            // If the same date...
-            if ($actualsDate == $concatDate) {
-                //Debug::Log($actualsDate);
-
-                $mine = ($actuals[$i][$actualsMineIndex]);
-                $loc = $actuals[$i][$actualsLocIndex];
-
-                if (!isset($actualsTotals[$mine][$loc]))
-                    $actualsTotals[$mine][$loc] = 0;
-
-                $actualsTotals[$mine][$loc] += $actuals[$i][4];
-            }
-        }
-
-
-        // Set some more headings
-        $plan[0][3] = "ACTUALS";
-        $plan[0][4] = $_month;
-        $plan[0][5] = $_year;
-
-        for ($i = 1; $i < count($plan); $i++) {
-            $mine = ($plan[$i][$planMineIndex]);
-
-            //if ($mine == "WF") {
-            foreach (array_keys($actualsTotals[$mine]) as $id) {
-                $needle = $plan[$i][$planLocIndex];
-                $haystack = $id;
-                if (stripos($haystack, $needle) !== false) {
-                    //Debug::Log("Found!  " . $plan[$i][$planMineIndex] . " " . $needle . "  " . $haystack . "  " . $actualsTotals[$mine][$id]);
-                    if (count($plan[$i]) == 4)
-                        $plan[$i][] = $actualsTotals[$mine][$id];
-                    else
-                        $plan[$i][4] += $actualsTotals[$mine][$id];
-                }
-            }
-            //Debug::Log($plan[$i]);
-            //}
-        }
-
-        $meta = Monthly::MetaData($plan);
-
-        Debug::EndProfile();
-
-        // Pack it up and send it back
-        return [$plan, $meta, $actuals];
-        //Debug::Log($plan);
-    }
-
-
-
-
-
-    private static function MetaData($_mappedActuals)
-    {
-        Debug::StartProfile("Meta");
-
-        // To hold all the metadata
-        $metas = [];
-
-        $meta = new MonthlyMeta();
-
-        // Get the days remaining 
-        $d = cal_days_in_month(CAL_GREGORIAN, $_mappedActuals[0][4], $_mappedActuals[0][5]);
-
-        $cdate = mktime(0, 0, 0, $_mappedActuals[0][4], $d, $_mappedActuals[0][5]);
-        $today = time();
-        //        $today = mktime(0, 0, 0, $_mappedActuals[0][4], 20, $_mappedActuals[0][5]);
-        $difference = $cdate - $today;
-        if ($difference < 0) {
-            $difference = 0;
-        }
-        //$difference = floor($difference / 60 / 60 / 24);
-
-
-        $meta->timeRemaining = $difference;
-        $meta->timePassedInMonth = 1 - (floor($difference / 60 / 60 / 24) / $d);
-
-        for ($i = 1; $i < count($_mappedActuals); $i++) {
-            // Total site 
-            $meta->totalMetricTarget += $_mappedActuals[$i][3];
-            if (isset($_mappedActuals[$i][4]))
-                $meta->totalMetricActual += $_mappedActuals[$i][4];
-            // Per mine
-            $siteName = Config::Sites($_mappedActuals[$i][0]);
-            if (!isset($metas[$siteName]))
-                $metas[$siteName] = new MonthlyMeta();
-            $metas[$siteName]->totalMetricTarget += $_mappedActuals[$i][3];
-            if (isset($_mappedActuals[$i][4]))
-                $metas[$siteName]->totalMetricActual += $_mappedActuals[$i][4];
-        }
-
-        // Totals
-        $meta->averageRequired = $meta->totalMetricTarget / $d;
-        $meta->averageCurrent = $meta->totalMetricActual / ($d * $meta->timePassedInMonth);
-        $meta->complianceSpatial = 0.5;
-        $meta->complianceVolumetric = 0.5;
-
-        // For each mine
-        foreach ($metas as $m) {
-            $m->timeRemaining = $meta->timeRemaining;
-            $m->timePassedInMonth = $meta->timePassedInMonth;
-            $m->averageRequired = $m->totalMetricTarget / $d;
-            $m->averageCurrent = $m->totalMetricActual / ($d * $m->timePassedInMonth);
-            $m->complianceSpatial = min($m->totalMetricTarget, $m->totalMetricActual) / $m->totalMetricTarget;
-            $m->complianceVolumetric = $m->totalMetricActual / $m->totalMetricTarget;
-        }
-
-        //Debug::Log($metas);
-
-        Debug::EndProfile();
-        return $metas;
+        $year = substr($_fileName, 0, 4);
+        $month = substr($_fileName, 4, 2);
+        $csv = Monthly::GetCSV($year, $month);
+        array_shift($csv);
+        return $csv;
     }
     // -----------------------------------------------------------------------------
+
+
 
 
 
@@ -269,6 +311,19 @@ class Monthly
 
     // -----------------------------------------------------------------------------
     // CSV Related Stuff
+
+
+    public static function GetCSV($_year, $_month)
+    {
+        $fileName = $_year . $_month . Monthly::FILE_EXT;
+        //Debug::Log($fileName);
+        if (file_exists($fileName)) {
+            $csv = array_map('str_getcsv', file($fileName));
+            //Monthly::SanitizeCSVData($csv);
+            //Debug::Log($csv);
+            return $csv;
+        }
+    }
 
 
 
@@ -296,24 +351,11 @@ class Monthly
             Debug::Log("Wrote file: " . $fileName);
         } catch (Exception $e) {
             Debug::Log($e->getMessage());
-            // Debug::Log($e->getFile());
-            // Debug::LogI(" ln:" . $e->getLine());
-            // Debug::Log($e->getTraceAsString());
         }
     }
 
 
 
-    public static function GetCSV($_year, $_month)
-    {
-        $fileName = self::$_fileName .  $_year . $_month . self::$_fileExt;
-        if (file_exists($fileName)) {
-            $csv = array_map('str_getcsv', file($fileName));
-            Monthly::SanitizeCSVData($csv);
-            //Debug::Log($csv);
-            return $csv;
-        }
-    }
 
 
     /** Check that there are no erronous cells 
@@ -342,10 +384,7 @@ class Monthly
                 // Attempt int conversion
                 $_data[$i][3] = intval($_data[$i][3]);
             }
-            //unset($array[1]);
-
         }
-        //Debug::Log(($_data[77])); // = intval($_data[$i][$j]);
     }
 }
 
