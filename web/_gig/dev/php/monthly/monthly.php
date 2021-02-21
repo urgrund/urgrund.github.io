@@ -16,7 +16,9 @@ $request = json_decode($postdata);
 if (is_object($request)) {
     include_once('..\setDebugOff.php');
 
-    echo json_encode(Monthly::GenerateMonthlyPlanData());
+    if ($request->func == 0) {
+        echo json_encode(Monthly::GenerateMonthlyPlanData());
+    }
 
     // new Config();
 
@@ -52,39 +54,41 @@ function compareDeepValue($val1, $val2)
 // ----------------------------------------------------------
 
 
-class MonthlyMeta
+class MonthlySite
 {
-    var $totalMetricTarget = 0;
-    var $totalMetricActual = 0;
+    public float $totalMetricTarget = 0;
+    public float $totalMetricActual = 0;
 
-    var $averageCurrent = 0;
-    var $averageRequired = 0;
+    public float $averageCurrent = 0;
+    public float $averageRequired = 0;
 
-    var $complianceSpatial = 0;
-    var $complianceVolumetric = 0;
+    public float $complianceSpatial = 0;
+    public float $complianceVolumetric = 0;
 
-    var $timeRemaining = 0;
-    var $timePassedInMonth = 0;
+    /** 0 = Plan,  1 = Actual */
+    public array $planSegments = [];
+    public array $dailyTotals = [];
+
+    function __construct()
+    {
+    }
 }
 
 
 
 class MonthlyEntry
 {
-    public array $meta = [];
+    public array $sites = [];
     public array $plan;
 
     public array $mapped;
 
     public float $timeRemaining = 0;
     public float $timePassedInMonth = 0;
+    public float $daysInMonth = 0;
 
     private array $_sql;
     private string $_date;
-
-
-
-    private MonthlyMeta $tmpMeta;
 
     function __construct($_planFile, $_sql)
     {
@@ -96,16 +100,64 @@ class MonthlyEntry
         //Debug::Log($this->plan[0]);
 
         for ($i = 0; $i < count($this->plan); $i++) {
+
+            // Make the target a number
+            $this->plan[$i][3] = intval($this->plan[$i][3]);
+
             $site = Config::Sites($this->plan[$i][0]);
+            $segment = $this->plan[$i][4];
             //Debug::Log($site);
-            if (!isset($this->meta[$site]) && $site != NULL)
-                $this->meta[$site] = new MonthlyMeta();
+
+            // Add new MonthlySite and get
+            // distinct list of plan segments
+            if ($site != NULL) {
+                if (!isset($this->sites[$site]))
+                    $this->sites[$site] = new MonthlySite();
+
+                if (!isset($this->sites[$site]->planSegments[$segment]))
+                    $this->sites[$site]->planSegments[$segment] = [0, 0];
+
+                $this->sites[$site]->planSegments[$segment][0] += $this->plan[$i][3];
+            }
+        }
+
+        // For each entry in the SQL results, see if a plan segment 
+        // matches up with a sites Plan segment and add the value
+        for ($i = 0; $i < count($this->_sql); $i++) {
+            // Check same date as this Month entry
+            $sqlDate = $this->_sql[$i][0];
+
+            if (substr($sqlDate, 0, 6) == $this->_date) {
+                $sqlSegment = $this->_sql[$i][5];
+                $sqlSite = Config::Sites($this->_sql[$i][1]);
+
+                // Totals for the month per-segment
+                foreach ($this->sites as $key => $value) {
+                    if (isset($value->planSegments[$sqlSegment]))
+                        $value->planSegments[$sqlSegment][1] += $this->_sql[$i][4];
+                }
+
+                // Totals for each day for the entire site
+                //Debug::Log($sqlSite);
+                if ($sqlSite != NULL) {
+                    if (!isset($this->sites[$sqlSite]->dailyTotals[$sqlDate]))
+                        $this->sites[$sqlSite]->dailyTotals[$sqlDate] = 0;
+                    $this->sites[$sqlSite]->dailyTotals[$sqlDate] += $this->_sql[$i][4];
+                }
+            }
         }
 
         $this->CalculateCalendarTime();
-        $this->MapSQLToPlan();
         $this->CalculateMeta();
+
+        // Debug::Log("Plan");
+        // Debug::Log($this->plan[0]);
+
+        // Debug::Log("sQ");
+        // Debug::Log($this->_sql[0]);
     }
+
+
 
     private function CalculateCalendarTime()
     {
@@ -117,99 +169,55 @@ class MonthlyEntry
         $d = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 
         $cdate = mktime(0, 0, 0, $month, $d, $year);
-        $today = time();
+        //$today = time();
+        $today = mktime(0, 0, 0, $month, 30, $year);
+        //Debug::Log($today);
 
         $difference = doubleval($cdate - $today);
         // if ($difference < 0) {
         //     $difference = 0;
         // }
         //Debug::Log($difference = ($cdate - $today));
-        Debug::Log(($difference));
+        //Debug::Log(($difference));
 
-
+        $this->daysInMonth = $d;
         $this->timeRemaining = max($difference, 0);
-        $this->timePassedInMonth = 1 - (floor($difference / 60 / 60 / 24) / $d);
-
-        // $meta->timeRemaining = $difference;
-        // $meta->timePassedInMonth = 1 - (floor($difference / 60 / 60 / 24) / $d);
-    }
-
-    private function MapSQLToPlan()
-    {
-
-        // Plan Index helper
-        // 3 = Target
-        // 5 = Will be actuals
-
-        Debug::StartProfile("Map SQL");
-
-        for ($i = 0; $i < count($this->plan); $i++) {
-            //Debug::Log($this->plan[$i][4]);           
-            $this->plan[$i][5] = 0;
-            $this->plan[$i][6] = 0;
-
-            // Make it a number
-            $this->plan[$i][3] = intval($this->plan[$i][3]);
-
-            $p = $this->plan[$i][4];
-            for ($j = 0; $j < count($this->_sql); $j++) {
-
-                if (substr($this->_sql[$j][0], 0, 6) === $this->_date) {
-                    //Debug::Log($this->_sql[$j][0]);
-                    $s = $this->_sql[$j][5];
-                    if ($p === $s) {
-                        $this->plan[$i][5] += $this->_sql[$j][4];
-                    }
-                }
-            }
-
-            // Add Spatial / Volumetric            
-            if ($this->plan[$i][5] != 0)
-                $this->plan[$i][6] = $this->plan[$i][3] / $this->plan[$i][5];
-
-            $this->plan[$i][7] = Config::Sites($this->plan[$i][0]);
-        }
-
-        Debug::EndProfile();
-
-
-        Debug::Log("Plan");
-        Debug::Log($this->plan[0]);
-
-        Debug::Log("sQ");
-        Debug::Log($this->_sql[0]);
-        //Debug::Log($this->plan);
+        $this->timePassedInMonth = min(1 - (floor($difference / 60 / 60 / 24) / $d), 1);
     }
 
 
+
+    private MonthlySite $tmpMeta;
     private function CalculateMeta()
     {
-        //foreach ($this->meta as $key => $value) {
-        //  Debug::Log($key);
-        //$this->tmpMeta = $key;
-        //$key = $this->tmpMeta;
-        for ($j = 0; $j < count($this->plan); $j++) {
-            // Use the site name to index the meta
-            $this->tmpMeta = $this->meta[$this->plan[$j][7]];
-            $k = $this->tmpMeta;
+        foreach ($this->sites as $key => $value) {
+            // Annoying hack to type cast 
+            $this->tmpMeta = $value;
+            $m = $this->tmpMeta;
 
-            $k->totalMetricTarget += intval($this->plan[$j][3]);
-            $k->totalMetricActual += intval($this->plan[$j][5]);
-            //Debug::Log($j . " | " . intval($this->plan[$j][3]));
-            //$site = Config::Sites($this->plan[$j][0]);
-            //Debug::Log($site);
+            foreach ($m->planSegments as $k => $segment) {
+                $m->totalMetricTarget += $segment[0];
+                $m->totalMetricActual += $segment[1];
+            }
 
+            $m->averageCurrent = $m->totalMetricActual / floatval($this->daysInMonth * $this->timePassedInMonth);
+            $m->averageRequired = $m->totalMetricTarget / $this->daysInMonth;
+
+            if ($m->totalMetricTarget > 0) {
+                $m->complianceSpatial = min($m->totalMetricTarget, $m->totalMetricActual) / $m->totalMetricTarget;
+                $m->complianceVolumetric = $m->totalMetricActual / $m->totalMetricTarget;
+            }
+
+            // Turn the daily totals back to indexed array
+            $value->dailyTotals = array_values($value->dailyTotals);
         }
-        //$m->complianceSpatial = min($m->totalMetricTarget, $m->totalMetricActual) / $m->totalMetricTarget;
-        //$m->complianceVolumetric = $m->totalMetricActual / $m->totalMetricTarget;
-        //}
     }
-
-
 
 
     /** Similar to IComparable in C# **/
     //$result = array_intersect($this->_sql, $this->plan);
+    // This might be interesting for custom comparing
+    // for an array merge/sort
     function ComparePlanSegments($a, $b)
     {
         return strcmp($a['value'][4], $b['value'][5]);
@@ -224,16 +232,8 @@ class MonthlyEntry
 
 class Monthly
 {
-    //private static $_fileName = "Plan_";
     private const FILE_EXT = ".csv";
-
     private const SQL_QUERY = "ALL_MonthlyProductionDataPlanName.sql";
-
-    private const INDEX_DATE = 0;
-    private const INDEX_MINE = 1;
-    private const INDEX_LOC = 2;
-    private const INDEX_VALUE = 4;
-    private const INDEX_SEGMENT = 5;
 
 
     // -----------------------------------------------------------------------------
@@ -246,7 +246,7 @@ class Monthly
         $sql = Monthly::GetSQLData();
         $output = [];
 
-        Debug::StartProfile("Generate");
+        Debug::StartProfile("PHP Generate");
 
         // For each plan, march through the 
         // actuals and see if there's a match up
@@ -258,8 +258,9 @@ class Monthly
             $output[$planDate] =  new MonthlyEntry($plan, $sql);
         }
 
-        return $output;
         Debug::EndProfile();
+
+        return $output;
     }
 
 
