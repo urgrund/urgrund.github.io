@@ -39,42 +39,6 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
 
 
-    $scope.onFileReadComplete = function ($contents) {
-        if ($contents == undefined) {
-            console.log("File data was undefined...");
-            return;
-        }
-        $scope.fileContent = null;
-        $scope.fileContent = $contents;
-        $scope.filterFileContent();
-        console.log($scope.fileContent);
-
-        $scope.createUniqueSiteNames();
-        $scope.$apply();
-    }
-
-
-
-    $scope.filterFileContent = function () {
-
-        // Remove 1 sized rows
-        var temp = [];
-        for (var i = 0; i < $scope.fileContent.length; i++) {
-            if ($scope.fileContent[i].length > 1)
-                temp.push($scope.fileContent[i]);
-            else
-                console.log("Cleaned row " + i);
-        }
-        $scope.fileContent = temp;
-
-        // Clear out null values
-        $scope.fileContent = $scope.fileContent.filter(function (el) {
-            if (el != null || el != undefined)
-                return (el[0] != null);
-            return el != null;
-        });
-    }
-
 
 
     $scope.createUniqueSiteNames = function () {
@@ -87,135 +51,109 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
 
 
-    $scope.uploadMonthlyPlan = function () {
-        //var _url = '../dev/php/monthly/monthly.php';
-
-        //console.log(($scope.fileContent));
-        //return;        
-
-        var _data = {
-            'func': 0,
-            'data': ($scope.fileContent),
-            'year': $scope.currentPlanYear,
-            'month': $scope.currentPlanMonth
-        };
-
-        var request = $http({
-            method: 'POST',
-            url: $scope.urlMonthly,
-            data: _data,
-        })
-        request.then(function (response) {
-            $scope.response = response;
-            console.log(response);
-        }, function (error) {
-            $scope.response = error;
-            console.log(error);
-        });
-    }
 
 
+    // $scope.getMonthlyPlan = function () {
+    //     // var _url = '../dev/php/monthly/monthly.php';
 
+    //     var _data = {
+    //         'func': 1,
+    //         'year': $scope.currentPlanYear,
+    //         'month': $scope.currentPlanMonth
+    //     };
+    //     var request = $http({
+    //         method: 'POST',
+    //         url: $scope.urlMonthly,
+    //         data: _data,
+    //     })
+    //     request.then(function (response) {
 
-    $scope.getMonthlyPlan = function () {
-        // var _url = '../dev/php/monthly/monthly.php';
+    //         console.log(response);
+    //         //$scope.fileContent = Papa.unparse(response.data);
+    //         $scope.fileContent = response.data;
 
-        var _data = {
-            'func': 1,
-            'year': $scope.currentPlanYear,
-            'month': $scope.currentPlanMonth
-        };
-        var request = $http({
-            method: 'POST',
-            url: $scope.urlMonthly,
-            data: _data,
-        })
-        request.then(function (response) {
+    //         $scope.fileContent = [];
+    //         for (var i = 0; i < response.data.length; i++) {
+    //             // Check if each property in 
+    //             // the object can be converted to number
+    //             var obj = response.data[i];
+    //             for (var prop in obj) {
+    //                 if (obj.hasOwnProperty(prop) && !isNaN(obj[prop])) {
+    //                     obj[prop] = +obj[prop];
+    //                     obj[prop] = +parseFloat(obj[prop]).toFixed(0);
+    //                 }
+    //             }
 
-            console.log(response);
-            //$scope.fileContent = Papa.unparse(response.data);
-            $scope.fileContent = response.data;
+    //             // Push to the content array
+    //             $scope.fileContent.push(response.data[i]);
+    //         }
+    //         $scope.createUniqueSiteNames();
 
-            $scope.fileContent = [];
-            for (var i = 0; i < response.data.length; i++) {
-                // Check if each property in 
-                // the object can be converted to number
-                var obj = response.data[i];
-                for (var prop in obj) {
-                    if (obj.hasOwnProperty(prop) && !isNaN(obj[prop])) {
-                        obj[prop] = +obj[prop];
-                        obj[prop] = +parseFloat(obj[prop]).toFixed(0);
-                    }
-                }
-
-                // Push to the content array
-                $scope.fileContent.push(response.data[i]);
-            }
-            $scope.createUniqueSiteNames();
-
-        }, function (error) {
-            console.log(error);
-        });
-    }
+    //     }, function (error) {
+    //         console.log(error);
+    //     });
+    // }
 
 
 
-    $scope.getMonthlyActuals = function () {
-        //var _url = '../dev/php/monthly/monthly.php';
+    // $scope.getMonthlyActuals = function () {
+    //     //var _url = '../dev/php/monthly/monthly.php';
 
-        var _data = {
-            'func': 3,
-            'year': $scope.currentPlanYear,
-            'month': $scope.currentPlanMonth
-        };
-        var request = $http({
-            method: 'POST',
-            url: $scope.urlMonthly,
-            data: _data,
-        })
-        request.then(function (response) {
-            console.log(response);
-        }, function (error) {
-            console.log(error);
-        });
-    }
+    //     var _data = {
+    //         'func': 3,
+    //         'year': $scope.currentPlanYear,
+    //         'month': $scope.currentPlanMonth
+    //     };
+    //     var request = $http({
+    //         method: 'POST',
+    //         url: $scope.urlMonthly,
+    //         data: _data,
+    //     })
+    //     request.then(function (response) {
+    //         console.log(response);
+    //     }, function (error) {
+    //         console.log(error);
+    //     });
+    // }
 
 
 
 
-    $scope.getMappedActualsToPlan = function () {
+    // $scope.getMappedActualsToPlan = function () {
 
-        var _data = {
-            'func': 4,
-            'year': $scope.currentPlanYear,
-            'month': $scope.currentPlanMonth
-        };
-        var request = $http({
-            method: 'POST',
-            url: $scope.urlMonthly,
-            data: _data,
-        })
-        request.then(function (response) {
+    //     var _data = {
+    //         'func': 4,
+    //         'year': $scope.currentPlanYear,
+    //         'month': $scope.currentPlanMonth
+    //     };
+    //     var request = $http({
+    //         method: 'POST',
+    //         url: $scope.urlMonthly,
+    //         data: _data,
+    //     })
+    //     request.then(function (response) {
 
-            if ($rootScope.checkResponseError(response))
-                return;
+    //         if ($rootScope.checkResponseError(response))
+    //             return;
 
-            $scope.mappedPlan = response.data;
+    //         $scope.mappedPlan = response.data;
 
-            console.log("[Mapped Actuals to Plan]");
-            console.log($scope.mappedPlan);
+    //         console.log("[Mapped Actuals to Plan]");
+    //         console.log($scope.mappedPlan);
 
-            // Create the data needed for charts
-            // and force a switch view to create charts
-            if ($routeParams.func == 0) {
-                $scope.prepareChartData();
-                $scope.switchView($rootScope.monthlyViewAsBars);
-            }
+    //         // Create the data needed for charts
+    //         // and force a switch view to create charts
+    //         if ($routeParams.func == 0) {
+    //             $scope.prepareChartData();
+    //             $scope.switchView($rootScope.monthlyViewAsBars);
+    //         }
 
-        }, function (error) {
-            console.log(error);
-        });
-    }
+    //     }, function (error) {
+    //         console.log(error);
+    //     });
+    // }
+
+
 
 
     $scope.prepareChartData = function () {
@@ -260,6 +198,11 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
     // the plan or to view the chart
 
     //$scope.getConfigs();
+    $scope.$on('monthlySet', function (event, data) {
+        console.log("MONTHLY HAS BEEN SET");
+        //$route.reload();
+    });
+
 
 
     $scope.$watch('$viewContentLoaded', function () {
@@ -267,16 +210,17 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
             // -------------------------------------
             // Entry point for the chart view
-            if ($routeParams.func == 0) {
-                $scope.site = $rootScope.siteData[$scope.siteIndex];
-                $scope.getMappedActualsToPlan();
-            }
+            //if ($routeParams.func == 0) {
+            //  $scope.site = $rootScope.siteData[$scope.siteIndex];
+            //                $scope.getMappedActualsToPlan();
+            //          }
 
-            // -------------------------------------
-            // Entry point for the plan view
-            if ($routeParams.func == 1) {
-                $scope.siteIndex = $routeParams.site;
-            }
+
+            // MOVE THIS TO DIFFERENT CONTROLLER
+
+            //if ($routeParams.func == 1) {
+            //  $scope.siteIndex = $routeParams.site;
+            //}
         }, 10);
     });
     // ----------------------------------------------------
@@ -290,50 +234,126 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
     // ----------------------------------------------------
     // For the input side of monthly targets
-    $scope.getLockClass = function ($index) {
-        if ($scope.entry[$index] != undefined) {
-            if ($scope.entry[$index].lock == true) {
-                return "fas fa-lock locked"
-            } else {
-                return "fas fa-lock-open unlocked";
-            }
-        }
-        return "";
-    }
+    // $scope.getLockClass = function ($index) {
+    //     if ($scope.entry[$index] != undefined) {
+    //         if ($scope.entry[$index].lock == true) {
+    //             return "fas fa-lock locked"
+    //         } else {
+    //             return "fas fa-lock-open unlocked";
+    //         }
+    //     }
+    //     return "";
+    // }
 
 
-    $scope.toggleLock = function ($event, $index) {
-        //console.log($index);
-        //console.log($scope.biglock);
-        //
-        //$scope.biglock == '0'
-        if ($index == -1) {
-            for (var i = 0; i < $scope.entry.length; i++) {
-                $scope.entry[i].lock = $scope.biglock == 0 ? true : false;
-            }
-        }
-        else {
-            if ($scope.biglock == 1)
-                if ($scope.entry[$index] != undefined)
-                    $scope.entry[$index].lock = !$scope.entry[$index].lock;
-        }
-    }
+    // $scope.toggleLock = function ($event, $index) {
+    //     //console.log($index);
+    //     //console.log($scope.biglock);
+    //     //
+    //     //$scope.biglock == '0'
+    //     if ($index == -1) {
+    //         for (var i = 0; i < $scope.entry.length; i++) {
+    //             $scope.entry[i].lock = $scope.biglock == 0 ? true : false;
+    //         }
+    //     }
+    //     else {
+    //         if ($scope.biglock == 1)
+    //             if ($scope.entry[$index] != undefined)
+    //                 $scope.entry[$index].lock = !$scope.entry[$index].lock;
+    //     }
+    // }
 
 
-    // Targets Adjustment 
-    if ($routeParams.func == 1) {
-        $scope.entry = [];
-        for (var key in $scope.data) {
-            $scope.entry.push({ lock: false, data: $scope.data[key][2] });
-        }
+    // // Targets Adjustment 
+    // if ($routeParams.func == 1) {
+    //     $scope.entry = [];
+    //     for (var key in $scope.data) {
+    //         $scope.entry.push({ lock: false, data: $scope.data[key][2] });
+    //     }
 
 
-        $scope.gridOptions = {};
-        $scope.gridOptions.data = JSON.stringify($scope.entry);
+    //     $scope.gridOptions = {};
+    //     $scope.gridOptions.data = JSON.stringify($scope.entry);
 
-        //console.log($scope.entry);
-    }
+    //     //console.log($scope.entry);
+    // }
     // ----------------------------------------------------
 
+
+
+
+
+
+
+    // ----------------------------------------------------
+    // ----------------------------------------------------
+    // P L A N   U P L O A D I N G   S T U F F 
+
+
+    $scope.onFileReadComplete = function ($contents) {
+        if ($contents == undefined) {
+            console.log("File data was undefined...");
+            return;
+        }
+        $scope.fileContent = null;
+        $scope.fileContent = $contents;
+        $scope.filterFileContent();
+        console.log($scope.fileContent);
+
+        $scope.createUniqueSiteNames();
+        $scope.$apply();
+    }
+
+
+
+    $scope.filterFileContent = function () {
+
+        // Remove 1 sized rows
+        var temp = [];
+        for (var i = 0; i < $scope.fileContent.length; i++) {
+            if ($scope.fileContent[i].length > 1)
+                temp.push($scope.fileContent[i]);
+            else
+                console.log("Cleaned row " + i);
+        }
+        $scope.fileContent = temp;
+
+        // Clear out null values
+        $scope.fileContent = $scope.fileContent.filter(function (el) {
+            if (el != null || el != undefined)
+                return (el[0] != null);
+            return el != null;
+        });
+    }
+
+
+
+
+    $scope.uploadMonthlyPlan = function () {
+        //var _url = '../dev/php/monthly/monthly.php';
+
+        //console.log(($scope.fileContent));
+        //return;        
+
+        var _data = {
+            'func': 0,
+            'data': ($scope.fileContent),
+            'year': $scope.currentPlanYear,
+            'month': $scope.currentPlanMonth
+        };
+
+        var request = $http({
+            method: 'POST',
+            url: $scope.urlMonthly,
+            data: _data,
+        })
+        request.then(function (response) {
+            $scope.response = response;
+            console.log(response);
+        }, function (error) {
+            $scope.response = error;
+            console.log(error);
+        });
+    }
 
 });

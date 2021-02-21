@@ -8,6 +8,8 @@ class ServerInfo {
     static URL_Admin = '../dev/php/admin.php';
     static URL_Longterm = '../dev/php/longterm.php';
     static URL_Reporting = '../dev/php/reports.php';
+    static URL_Monthly = '../dev/php/monthly/monthly.php';
+
 
     static config = undefined;
     static availableDates = undefined;

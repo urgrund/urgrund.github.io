@@ -84,10 +84,12 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
     $rootScope.siteData = null;
     $rootScope.cachedData = [];
     $rootScope.config;
+    $rootScope.monthly = null;
+
+
 
     // So that it can be used in angular
     $rootScope.ShiftIndex = function () { return ShiftIndex(); };
-
 
     $rootScope.siteDataRefreshIntervalSeconds = 60;
     $rootScope.siteDataLastRefresh = moment();
@@ -395,8 +397,9 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         return request;
     }
 
-    $rootScope.connectionStatus = new ConnectionStatus();
 
+
+    $rootScope.connectionStatus = new ConnectionStatus();
     $rootScope.checkConnection = function () {
         var _data = { 'func': 5 };
         var request = $http({
@@ -419,6 +422,24 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         });
         return request;
     }
+
+
+
+    $rootScope.fetchMonthlyData = function () {
+
+        var request = $http({
+            method: 'POST',
+            url: ServerInfo.URL_Monthly,
+            data: { 'func': 0 }
+        })
+        request.then(function (response) {
+            console.log(response.data);
+            $rootScope.monthly = response.data;
+            $rootScope.$broadcast('monthlySet');
+        }, function (error) {
+        });
+        return request;
+    }
 });
 
 
@@ -432,26 +453,31 @@ app.controller("myCtrl", function ($q, $scope, $rootScope, $timeout, $route, $lo
 
     // The start-up sequence 
     console.log("Starting Mine-Mage...");
-    //$rootScope.checkConnection();
 
+    // First up... can we connect to the DB?
     $q.all([$rootScope.checkConnection()]).then(
         function (responses) {
 
             if ($rootScope.connectionStatus.status == 1) {
 
-                // First fetch the site configs
+                // Fetch the site configs
                 // and available dates
                 var promises = [
                     $rootScope.fetchSiteConfigs(),
                     $rootScope.fetchAvailableDates()
                 ];
+
+                // Everything looks good to this point... 
                 $q.all(promises).then(function (responses) {
                     // Set the data 
                     console.log("Config & Dates ready");
                     promises = [
                         // Latest date and Trailing week 
                         $rootScope.fetchSiteData([ServerInfo.availableDates[0]], true),
-                        $rootScope.fetchSiteData(ServerInfo.availableDates.slice(1, 7), false)
+                        $rootScope.fetchSiteData(ServerInfo.availableDates.slice(1, 7), false),
+
+                        // Monthly report data
+                        $rootScope.fetchMonthlyData()
                     ];
                 });
             }

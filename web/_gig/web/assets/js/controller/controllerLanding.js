@@ -19,10 +19,10 @@ app.controller('Landing', function ($route, $rootScope, $scope, $timeout) {
         for (var i = 0; i < $rootScope.siteData.length; i++) {
             $scope.siteSummary.push(
                 {
+                    "Tonnes vs Daily Target": { "value": 40, "details": 12345, "suffix": "%", "icon": "fas fa-weight-hanging" },
+                    "Tonnes vs Monthly Target": { "value": 40, "details": 12345, "suffix": "%", "icon": "fas fa-weight-hanging" },
                     "Spatial Compliance": { "value": 40, "details": 12345, "suffix": "%", "icon": "fas fa-chart-bar" },
-                    "Volumetric Compliance": { "value": 40, "details": 12345, "suffix": "%", "icon": "fas fa-chart-bar" },
-                    "Tonnes vs TTD": { "value": 40, "details": 12345, "suffix": "%", "icon": "fas fa-weight-hanging" },
-                    "Tonnes vs TTM": { "value": 40, "details": 12345, "suffix": "%", "icon": "fas fa-weight-hanging" }
+                    "Volumetric Compliance": { "value": 40, "details": 12345, "suffix": "%", "icon": "fas fa-chart-bar" }
                 }
             );
         }
