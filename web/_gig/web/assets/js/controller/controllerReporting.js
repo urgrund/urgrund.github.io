@@ -283,8 +283,8 @@ app.controller('Reporting', function ($scope, $http, $rootScope, $timeout, uiGri
             defaultDate: [rangeStart, maxDate],
             // On Click of a new date
             onChange: function (selectedDates, dateStr, instance) {
-                $scope.reportGenStartDate = moment(selectedDates[0]).format('YYYYMMDD').toString();;
-                $scope.reportGenEndDate = moment(selectedDates[1]).format('YYYYMMDD').toString();;
+                $scope.reportGenStartDate = moment(selectedDates[0]).format('YYYYMMDD').toString();
+                $scope.reportGenEndDate = moment(selectedDates[1]).format('YYYYMMDD').toString();
 
                 // console.log("_____________________");
                 // console.log($scope.reportGenStartDate);

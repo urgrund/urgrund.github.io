@@ -1,15 +1,7 @@
 <div class="cup">
-    <!-- <div class="flex flex-center">
-        <img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg">
-    </div> -->
-    <div class="underline flex">
-        <!-- <div class="flex flex-center">
-            <img class="sitePic" ng-src="assets/img/site_{{siteIndex}}.jpg">
-        </div> -->
-        <!-- <div class="flex flex-center"> -->
-        <!-- <div class="sitePicMargin">
-                <img class="sitePicSmall" ng-src="assets/img/site_{{siteIndex}}.jpg">
-            </div> -->
+
+    <!-- <div class="underline flex">
+
         <div>
             <div class="flex">
                 <div class="sitePicMargin">
@@ -32,9 +24,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- </div> -->
-    </div>
+    </div> -->
 
 
 
@@ -65,6 +55,16 @@
 
 
         <div class="siteContentSummary" ng-if="summary == undefined">
+
+            <div class="flex flex-start">
+                <div class="sitePicMargin">
+                    <img class="sitePicSmall" ng-src="assets/img/site_{{siteIndex%3}}.jpg">
+                </div>
+                <div class="flex flex-column">
+                    <h2 class="center">{{site.name}}</h2>
+                </div>
+            </div>
+
             <div class="">
                 <div class="flex">
                     <div>

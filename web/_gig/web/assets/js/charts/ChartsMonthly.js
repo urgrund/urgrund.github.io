@@ -302,35 +302,23 @@ class ChartsMonthly {
         // 3 - plan
         // 4 - actuals
 
+        var planSegments = _data[0].sites[_data[1]].planSegments;
+        //console.log(planSegments);
+        console.log(_data);
 
-        var locationData = [];
         var markerData = [];
-        for (var i = 0; i < _data.length; i++) {
-            var d = new MonthlyChartDataForLocation(_data[i]);
-            locationData.push(d);
-            markerData.push(
-                {
-                    name: '',
-                    value: '',//d.percentOfTargetToDate,
-                    xAxis: i,
-                    yAxis: d.percentOfTargetToDate,
-                    itemStyle: { color: 'white' }
-                }
-            );
-        }
-
-
         var newData = [[], [], [], [], []];
-        for (var i = 0; i < _data.length; i++) {
-            var target = parseInt(_data[i][3]);
-            var actual = parseInt(_data[i][4]);
 
-            //console.log(actual);
+        var tmpIndex = 0;
+        for (const [key, value] of Object.entries(planSegments)) {
+
+            var target = parseInt(value[0]);
+            var actual = parseInt(value[1]);
 
             // Add location
-            newData[0].push(_data[i][1]);
+            newData[0].push(key);
 
-            // Current progress related to the target           
+            // Current actual related to the target           
             newData[1].push(Math.min(actual, target));
 
             // Overmined
@@ -341,10 +329,19 @@ class ChartsMonthly {
 
             // Label, this is a 'dummy' bar to position the label 
             // by stacking nothing (0) on top of the other values
-            newData[4].push({ value: 0, label: { formatter: String(_data[i][4]) } });
-        }
+            newData[4].push({ value: 0, label: { formatter: String(actual) } });
 
-        //console.log(newData);
+            markerData.push(
+                {
+                    name: '',
+                    value: '',//d.percentOfTargetToDate,
+                    xAxis: tmpIndex,
+                    yAxis: target * _data[0].timePassedInMonth,
+                    itemStyle: { color: 'white' }
+                }
+            );
+            tmpIndex++;
+        }
 
 
 
@@ -365,7 +362,7 @@ class ChartsMonthly {
                 x: 'center',
                 y: 'top',
                 selectedMode: false,
-                data: ['Tonnes', 'Over', 'Target']
+                data: ['Tonnes', 'Unplanned', 'Target']
             },
             tooltip: {
                 trigger: 'axis',
@@ -380,8 +377,10 @@ class ChartsMonthly {
                     label += ChartStyles.toolTipTextTitle(params[0].name)
                         + ChartStyles.toolTipTextEntry("Target : " + target)
                         + ChartStyles.toolTipTextEntry("Mined  : " + mined + (target > 0 ? " (" + RatioToPercent(mined / target) + ")" : ""));
+
+
                     if (over > 0 && target > 0)
-                        label += ChartStyles.toolTipTextEntry("Over: " + params[1].value + " (" + RatioToPercent(params[1].value / target) + ")", 'cup-redwarn');
+                        label += ChartStyles.toolTipTextEntry("Unplanned: " + params[1].value + " (" + RatioToPercent(params[1].value / target) + ")", 'cup-redwarn');
                     return label;
                 },
                 axisPointer: ChartStyles.toolTipShadow(),
@@ -437,21 +436,21 @@ class ChartsMonthly {
                     // barGap: '-100%',
                     // barWidth: 10,
                     animationEasing: 'linear',
-                    animationDuration: 500,
+                    animationDuration: 200,
                     animationDelay: 0
                 },
                 {
                     data: newData[2],
                     type: 'bar',
                     stack: 'stack',
-                    name: 'Over',
+                    name: 'Unplanned',
                     itemStyle: { color: ChartStyles.statusColors[2], barBorderRadius: borderRadius },
                     // barGap: '50%',
                     barWidth: barWidth,
 
                     animationEasing: 'linear',
-                    animationDuration: 500,
-                    animationDelay: 500,
+                    animationDuration: 200,
+                    animationDelay: 200,
                     z: 5
                 }
                 ,
@@ -537,8 +536,8 @@ class ChartsMonthly {
                     },
                     data: [
                         {
-                            value: data.progress,
-                            name: 'Progress',
+                            value: data.actual,
+                            name: 'actual',
                             itemStyle: { color: ChartStyles.siteColors[0] }
                         },
                         {
@@ -637,22 +636,22 @@ class ChartsMonthly {
 class MonthlyChartDataForLocation {
     constructor(_data) {
         this.location = _data[1];
-        this.progress = _data[4];
-        this.target = _data[3];
+        this.actual = _data[1];
+        this.target = _data[0];
         this.monthPassed = 75;
 
         this.percentOfTargetToDate = this.target * (this.monthPassed / 100);
-        this.bias = this.progress - this.percentOfTargetToDate;
+        this.bias = this.actual - this.percentOfTargetToDate;
 
         this.under = Math.abs(Math.min(0, this.bias));
         this.over = Math.abs(Math.max(0, this.bias));
 
-        // Clamp progress
-        this.progress = Math.min(Math.min(this.progress, this.percentOfTargetToDate), this.target);
+        // Clamp actual
+        this.actual = Math.min(Math.min(this.actual, this.percentOfTargetToDate), this.target);
 
-        var overDiff = Math.max(0, (this.progress + this.over) - this.target);
+        var overDiff = Math.max(0, (this.actual + this.over) - this.target);
         this.overForChart = this.over - overDiff;
-        this.targetForChart = this.target - Math.min(this.target, this.progress + this.under + this.overForChart);
+        this.targetForChart = this.target - Math.min(this.target, this.actual + this.under + this.overForChart);
     }
 }
 

@@ -1,31 +1,36 @@
 <div class="cup">
 
     <div class="flex flex-start underline">
-        <div class="sitePicMargin">
-            <img class="sitePicTiny" ng-src="assets/img/site_{{siteIndex}}.jpg">
-        </div>
-        <h2 class="left">{{site.name }} - Adjust Monthly Targets</h2>
+        <h2 class="left">Upload Plan</h2>
         <div>
         </div>
     </div>
     </br>
     <div class="mines-center {{$parent.backGroundClassBlur}}">
 
-        <!-- <input type="file" accept=".csv" on-read-file callback-fn="onFileReadComplete(arg1)" />
-        <div my-directive callback-fn="ctrlFn(arg1)"></div> -->
 
-        <!-- <button id="myBtn" ng-click="getConfigs()">Get Configs</button> -->
         <div class="center">
-
             <input type="file" accept=".csv" file-reader callback-fn="onFileReadComplete(arg1)" />
             <button id="myBtn" ng-click="uploadMonthlyPlan()">Upload</button>
             <button id="myBtn" ng-click="getMonthlyPlan()">Get</button>
             <button id="myBtn" ng-click="getMonthlyActuals()">Actuals</button>
             <button id="myBtn" ng-click="getMappedActualsToPlan()">Mapped</button>
-            <input type="text" id="test">
 
             <!-- <div>{{fileContent[1]}}</div>
             <div>{{distinctNames}}</div> -->
+            <br />
+            <div class="jumbogrid">
+                <div ng-repeat="(key, value) in planDisplay">
+                    <h3 class="underline">{{key}}</h3>
+                    <div ng-repeat="x in value" class="mnth_target_grid">
+                        <p class="left" ng-repeat="y in x">{{y}}</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+
 
             <div class="jumbogrid">
                 <div ng-repeat="(key, value) in distinctNames track by $index">

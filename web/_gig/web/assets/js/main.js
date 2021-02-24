@@ -84,8 +84,6 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
     $rootScope.siteData = null;
     $rootScope.cachedData = [];
     $rootScope.config;
-    $rootScope.monthly = null;
-
 
 
     // So that it can be used in angular
@@ -198,6 +196,7 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             console.log($rootScope.meta);
         }
 
+        SetActiveMonth();
         $rootScope.$broadcast('newSiteDataSet');
         $route.reload();
     };
@@ -425,6 +424,24 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
 
 
 
+
+    $rootScope.monthly = null;
+    $rootScope.monthlyActive = null;
+    function SetActiveMonth() {
+
+        if ($rootScope.monthly == null
+            || $rootScope.meta == undefined
+            || $rootScope.siteData == undefined)
+            return;
+        // 
+        console.log("Set active month...");
+        var monthDate = ($rootScope.meta.Date).substr(0, 6);
+        if (monthDate in $rootScope.monthly) {
+            $rootScope.monthlyActive = $rootScope.monthly[monthDate];
+            console.log($rootScope.monthlyActive);
+        }
+    }
+
     $rootScope.fetchMonthlyData = function () {
 
         var request = $http({
@@ -433,8 +450,10 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             data: { 'func': 0 }
         })
         request.then(function (response) {
+            console.log("Monthly Data received");
             console.log(response.data);
             $rootScope.monthly = response.data;
+            SetActiveMonth();
             $rootScope.$broadcast('monthlySet');
         }, function (error) {
         });
@@ -687,9 +706,7 @@ app.config(
                 controller: 'Productivity'
             })
             .when("/monthly/:site/:func", {
-                templateUrl: function (params) {
-                    return params.func == 0 ? 'monthly.html' : 'monthlyAdjust.html';
-                },
+                templateUrl: 'monthly.html',
                 controller: 'Monthly'
             })
             .when("/reports/", {
@@ -707,6 +724,10 @@ app.config(
             .when("/site/:site", {
                 templateUrl: 'site.html',
                 controller: 'Site'
+            })
+            .when("/uploadPlan/", {
+                templateUrl: 'uploadPlan.html',
+                controller: 'UploadPlan'
             })
             .when("/error/", {
                 templateUrl: 'error.html',

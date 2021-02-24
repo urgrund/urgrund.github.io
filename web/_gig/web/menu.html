@@ -75,10 +75,13 @@
             <div class="dropdown-content">
                 <div class="droplist">
                     <div ng-repeat="x in siteData" ng-init="siteIndex = $index">
-                        <h3>{{x.name}}</h3>
-                        <a ng-href="#!monthly/{{siteIndex}}/0">Plan vs Compliance</a> <br />
-                        <a ng-href="#!monthly/{{siteIndex}}/1">Adjust Target Inputs</a>
+                        <!-- <h3>{{x.name}}</h3> -->
+                        <a ng-href="#!monthly/{{siteIndex}}/0">{{x.name}}</a> <br />
+                        <!-- <a ng-href="#!monthly/{{siteIndex}}/1">Adjust Target Inputs</a> -->
                     </div>
+
+                    <br />
+                    <a ng-href="#!uploadPlan">Upload Plan</a>
                 </div>
 
             </div>

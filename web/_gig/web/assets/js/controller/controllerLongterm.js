@@ -76,7 +76,7 @@ app.controller('LongTerm', function ($scope, $rootScope, $timeout, $http) {
     }
 
 
-    $scope.updateAssetSelection = function () {
+    $scope.updateSelectionList = function () {
         $scope.asset = $scope.data[0][$scope.selectedName];
         $scope.createCharts();
     }

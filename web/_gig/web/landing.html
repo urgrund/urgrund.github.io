@@ -46,32 +46,19 @@
             <!-- <h2><a ng-href="#!site/{{siteIndex}}" ng-bind="x.name">
                 </a><img class="sitePicBig" ng-src="assets/img/site_{{siteIndex}}.jpg"></h2> -->
 
-            <div class="overline underline">
-                <div ng-repeat="(key, value) in siteSummary[siteIndex]">
+            <div class="overline">
+                <div ng-repeat="(key, value) in siteSummary[siteIndex]" class="underline">
                     <div class="center flex">
                         <div class="left">
-                            <h4><i ng-class="value['icon']"></i> {{key}}</h4>
+                            <h5><i ng-class="value['icon']"></i> {{key}}</h5>
                             <p class="light">{{value["details"]}}</p>
                         </div>
-                        <h2><i style="color: rgb(0, 255, 21);">&#9650;</i>{{value["value"]}}{{value["suffix"]}}</h2>
+                        <h3 ng-class="{'cup-redwarn': (value['value'] < 100)}">{{value["value"]}}{{value["suffix"]}}
+                        </h3>
                     </div>
                 </div>
             </div>
-
-
-
-
-            <!-- <div class="landCardStats">
-                <div class="underline">
-                    <p class="light"> Spatial Compliance</p>
-                    <h2> <i style="color: rgb(0, 255, 21);">&#9650;</i>50%</h2>
-                </div>
-                <div class="underline">
-                    <p class="light"> Volumetric Compliance</p>
-                    <h2> <i style="color: red;">&#9660;</i>50%</h2>
-                </div>
-            </div> -->
-
+            <!-- <i style="color: rgb(0, 255, 21);">&#9650;</i> -->
 
             </br>
             <h3 class="underline"><i class="far fa-bell"></i> Alerts</h3>

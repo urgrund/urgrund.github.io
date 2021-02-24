@@ -1,9 +1,8 @@
-.mnth_target_grid {    
-    margin: 0.5%;
-    padding: 5px;  
+.mnth_target_grid {        
+    padding: 2px;  
     width: 350px;    
     display: grid;
-    grid-template-columns: 3fr 2fr 1fr;    
+    grid-template-columns: 1fr 1fr 1fr 1fr;         
   }
 
 .mnth_target_grid:hover {

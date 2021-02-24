@@ -43,8 +43,9 @@
 .cup-redwarn
 {
   /* background: #33000082; */
-  font-weight:normal;
-  color: #ff2929;
+  /* font-weight:normal; */
+  /*color: #ff2929;*/
+  color:var(--redWarnA);
   -webkit-animation: color-change 2s infinite;
   -moz-animation: color-change 2s infinite;
   -o-animation: color-change 2s infinite;
@@ -53,27 +54,27 @@
 }
 
 @-webkit-keyframes color-change {
-  0% { color: red; }
-  50% { color: orange; }
-  100% { color: red; }
+  0% { color: var(--redWarnA); }
+  50% { color: var(--redWarnB); }
+  100% { color: var(--redWarnA); }
 }
 @-moz-keyframes color-change {
-  0% { color: red; }
-  50% { color: orange; }
-  100% { color: red; }
+  0% { color: var(--redWarnA); }
+  50% { color: var(--redWarnB); }
+  100% { color: var(--redWarnA); }
 }
 @-ms-keyframes color-change {
-  0% { color: red; }
-  50% { color: orange; }
-  100% { color: red; }
+  0% { color: var(--redWarnA); }
+  50% { color: var(--redWarnB); }
+  100% { color: var(--redWarnA); }
 }
 @-o-keyframes color-change {
-  0% { color: red; }
-  50% { color: orange; }
-  100% { color: red; }
+  0% { color: var(--redWarnA); }
+  50% { color: var(--redWarnB); }
+  100% { color: var(--redWarnA); }
 }
 @keyframes color-change {
-  0% { color: red; }
-  50% { color: orange; }
-  100% { color: red; }
+  0% { color: var(--redWarnA); }
+  50% { color: var(--redWarnB); }
+  100% { color: var(--redWarnA); }
 }
