@@ -98,15 +98,10 @@
 }
 
 .mines-center
-{    
-    /* background: linear-gradient(25deg, #141f33, #4d6f8b);
-    box-shadow: 5px 5px 12px 1px #000000bf; */
-
+{   
     padding:1%;
-    height: 90%;
+    /* height: 90%; */
 
-    /* background: var(--bgBlur); */
-    /* background: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url(../img/login_blur.jpg) no-repeat center center fixed; */
     object-fit: cover;
     background-position: center;
     background-repeat: no-repeat;

@@ -34,7 +34,10 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
     }
 
     function GetStartingMonth() {
-        return '201901';
+        if ($rootScope.monthly == undefined)
+            return '201901';
+
+
     }
 
 

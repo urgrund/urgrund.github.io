@@ -83,6 +83,7 @@ timeLabelsShiftExtra[0] = GenerateTimeLabels(13, 6);
 timeLabelsShiftExtra[1] = GenerateTimeLabels(13, 18);
 timeLabelsShiftExtra[2] = GenerateTimeLabels(25, 6);
 
+
 // function PrepareAllTimeLabels(_shiftStart) {
 //     timeLabelsShift[0] = GenerateTimeLabels(12, _shiftStart);
 //     timeLabelsShift[1] = GenerateTimeLabels(12, _shiftStart + 12);
@@ -93,6 +94,45 @@ timeLabelsShiftExtra[2] = GenerateTimeLabels(25, 6);
 
 // }
 // PrepareAllTimeLabels(6);
+
+
+
+
+// Variables used outside of particular NG scopes  (ie. charts)
+var shift = 0;
+var fullDayView = 0;
+
+const shiftTitle = ['Day Shift', 'Night Shift', '24hr'];
+
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const month = new Array();
+month[0] = "January";
+month[1] = "February";
+month[2] = "March";
+month[3] = "April";
+month[4] = "May";
+month[5] = "June";
+month[6] = "July";
+month[7] = "August";
+month[8] = "September";
+month[9] = "October";
+month[10] = "November";
+month[11] = "December";
+
+const monthShort = new Array();
+monthShort[0] = "Jan";
+monthShort[1] = "Feb";
+monthShort[2] = "Mar";
+monthShort[3] = "Apr";
+monthShort[4] = "May";
+monthShort[5] = "Jun";
+monthShort[6] = "Jul";
+monthShort[7] = "Aug";
+monthShort[8] = "Sep";
+monthShort[9] = "Oct";
+monthShort[10] = "Nov";
+monthShort[11] = "Dec";
+
 
 
 /**

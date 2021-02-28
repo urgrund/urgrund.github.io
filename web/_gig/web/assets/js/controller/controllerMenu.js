@@ -41,7 +41,7 @@ app.controller('Menu', function ($scope, $routeParams, $rootScope, $timeout) {
             onChange: function (selectedDates, dateStr, instance) {
                 var date = dateStr.replace("-", "");
                 date = date.replace("-", "");
-                console.log(date);
+                //console.log(date);
                 $rootScope.fetchSiteData([date], true);
             }
         });
@@ -92,7 +92,7 @@ app.controller('Menu', function ($scope, $routeParams, $rootScope, $timeout) {
 
     $scope.$on('updateShift', function (event, data) {
         $timeout(function () {
-            console.log("Menu Update Shift");
+            //console.log("Menu Update Shift");
             $scope.setupMenu();
         }, 100);
     });

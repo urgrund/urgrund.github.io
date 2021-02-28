@@ -21,7 +21,7 @@ app.controller('Landing', function ($route, $rootScope, $scope, $timeout) {
 
         $scope.siteSummary = [];
 
-        var noPlan = "No Plan found...  (" + moment($rootScope.meta.Date).format('MMM YYYY') + ")";
+        var noPlan = "No Plan...";// found...  (" + moment($rootScope.meta.Date).format('MMM YYYY') + ")";
         // For each site, prepare a summary to display
         for (var i = 0; i < $rootScope.siteData.length; i++) {
 
@@ -77,7 +77,7 @@ app.controller('Landing', function ($route, $rootScope, $scope, $timeout) {
 
     $scope.$on('monthlySet', function () {
         //console.log("MONTHLY HAS BEEN SET");
-        console.log("ASJDJSDLK");
+        //console.log("ASJDJSDLK");
         $scope.PrepareSiteSummarys();
     });
 

@@ -4,9 +4,7 @@ M I N E   M A G E
 Front-end web application main entry point
 (c) 2019-2021 Gigworth Pty Ltd
 
-Version     1
-Data        3
-Revision    22
+Version     1.3.22
 
 matt@gigworth.com.au
 *************************************** 
@@ -14,42 +12,6 @@ matt@gigworth.com.au
 
 //console.log = function () { }
 
-
-
-// Variables used outside of particular NG scopes  (ie. charts)
-var shift = 0;
-var fullDayView = 0;
-
-const shiftTitle = ['Day Shift', 'Night Shift', '24hr'];
-
-const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const month = new Array();
-month[0] = "January";
-month[1] = "February";
-month[2] = "March";
-month[3] = "April";
-month[4] = "May";
-month[5] = "June";
-month[6] = "July";
-month[7] = "August";
-month[8] = "September";
-month[9] = "October";
-month[10] = "November";
-month[11] = "December";
-
-const monthShort = new Array();
-monthShort[0] = "Jan";
-monthShort[1] = "Feb";
-monthShort[2] = "Mar";
-monthShort[3] = "Apr";
-monthShort[4] = "May";
-monthShort[5] = "Jun";
-monthShort[6] = "Jul";
-monthShort[7] = "Aug";
-monthShort[8] = "Sep";
-monthShort[9] = "Oct";
-monthShort[10] = "Nov";
-monthShort[11] = "Dec";
 
 
 
@@ -434,10 +396,14 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             || $rootScope.siteData == undefined)
             return;
         // 
-        console.log("Set active month...");
+
         var monthDate = ($rootScope.meta.Date).substr(0, 6);
+
+        console.log("Set active month..." + monthDate);
+
         if (monthDate in $rootScope.monthly) {
             $rootScope.monthlyActive = $rootScope.monthly[monthDate];
+            //$rootScope.monthlyActive = $rootScope.monthly['201901'];
             console.log($rootScope.monthlyActive);
         }
     }
@@ -450,8 +416,9 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             data: { 'func': 0 }
         })
         request.then(function (response) {
-            console.log("Monthly Data received");
-            console.log(response.data);
+            //console.log("Monthly Data received");
+            //console.log(response.data);
+
             $rootScope.monthly = response.data;
             SetActiveMonth();
             $rootScope.$broadcast('monthlySet');

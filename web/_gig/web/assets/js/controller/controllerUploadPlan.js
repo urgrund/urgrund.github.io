@@ -1,14 +1,13 @@
-
 app.controller('UploadPlan', function ($scope, $routeParams, $rootScope, $http, $interval, $timeout) {
 
-
-
-
-
-
-
+    // To display
     $scope.planDisplay = null;
 
+    // To upload    
+    $scope.fileContent = null;
+    $scope.uploadDate = Date.now();
+
+    var modal = document.getElementById("myModal");
 
     // ----------------------------------------------------
     // ----------------------------------------------------
@@ -22,13 +21,12 @@ app.controller('UploadPlan', function ($scope, $routeParams, $rootScope, $http, 
         }
         $scope.fileContent = null;
         $scope.fileContent = $contents;
-        //$scope.filterFileContent();
-        //console.log($scope.fileContent);
-        $scope.createDisplayArrays();
+        $scope.filterFileContent();
 
-        //$scope.createUniqueSiteNames();
-        //$scope.$apply();
+        $scope.createDisplayArrays();
     }
+
+
 
 
     $scope.createDisplayArrays = function () {
@@ -42,13 +40,25 @@ app.controller('UploadPlan', function ($scope, $routeParams, $rootScope, $http, 
                 if (!(siteName in sites))
                     sites[siteName] = [];
 
-                var entry = $scope.fileContent[i];
-                $scope.fileContent[i].shift();
+                var row = $scope.fileContent[i];
+
+                // Only interested to 
+                // display three columns
+                var entry =
+                    [
+                        row[1],
+                        row[3],
+                        row[4]
+                    ];
+                //$scope.fileContent[i].shift();
+
+                //if(entry[2] == null || entry[2] == undefined
+                entry[1] = Number(entry[1]);
+                //console.log(entry);
                 sites[siteName].push(entry);
             }
         }
         $scope.planDisplay = sites;
-        console.log(sites);
     }
 
 
@@ -75,45 +85,67 @@ app.controller('UploadPlan', function ($scope, $routeParams, $rootScope, $http, 
 
 
 
+    $scope.setupCalendar = function () {
+        flatpickr('.calendar', {
 
-    $scope.uploadMonthlyPlan = function () {
-        //var _url = '../dev/php/monthly/monthly.php';
+            defaultDate: $scope.uploadDate,//todaysMonth,
+            plugins: [
+                new monthSelectPlugin({
+                })
+            ],
 
-        //console.log(($scope.fileContent));
-        //return;        
-
-        var _data = {
-            'func': 0,
-            'data': ($scope.fileContent),
-            'year': $scope.currentPlanYear,
-            'month': $scope.currentPlanMonth
-        };
-
-        var request = $http({
-            method: 'POST',
-            url: $scope.urlMonthly,
-            data: _data,
-        })
-        request.then(function (response) {
-            $scope.response = response;
-            console.log(response);
-        }, function (error) {
-            $scope.response = error;
-            console.log(error);
+            // On Click of a new date
+            onChange: function (selectedDates, dateStr, instance) {
+                var date = moment(selectedDates[0]).format('YYYYMM').toString();
+                //console.log(date);
+            }
         });
     }
 
 
+
+
+    $scope.uploadMonthlyPlan = function () {
+        //console.log("Upload");
+
+        // Nothing to upload yet
+        if ($scope.planDisplay == null) {
+            console.error("Invalid plan...");
+            return;
+        }
+
+
+        var _data = {
+            'func': 1,
+            'data': [$scope.fileContent, $scope.uploadDate]
+        };
+
+        //console.log(_data);
+
+        var request = $http({
+            method: 'POST',
+            url: ServerInfo.URL_Monthly,
+            data: _data,
+        })
+        request.then(function (response) {
+            //console.log(response);
+            console.log("Upload successful");
+        }, function (error) {
+            $rootScope.processErrorResponse(error);
+        });
+    }
+
+
+
+
     $scope.$on('monthlySet', function (event, data) {
-        //console.log("MONTHLY HAS BEEN SET");
-        //$route.reload();
+
     });
 
 
 
     $scope.$watch('$viewContentLoaded', function () {
-        $timeout(function () {
-        }, 10);
+        $scope.setupCalendar();
     });
 
 
