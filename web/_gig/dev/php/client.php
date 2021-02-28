@@ -80,6 +80,11 @@ abstract class Client
         return self::$path . Client::instance()->Path() . self::$cache;
     }
 
+    public static function MonthlyPlanPath(): string
+    {
+        return Utils::GetBackEndRoot() . "\\monthly\\";
+    }
+
 
     /** Get a safe chunk of data about the client
      * to send to the front end */

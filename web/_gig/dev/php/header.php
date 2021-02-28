@@ -21,3 +21,6 @@ include_once('siteMetaData.php');
 include_once('equipment.php');
 include_once('equipment_objects.php');
 include_once('site.php');
+
+// Monthly
+include_once('monthly\monthlyObjects.php');
