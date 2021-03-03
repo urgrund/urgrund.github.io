@@ -30,48 +30,60 @@ class MonthlySite
 class MonthlyEntry
 {
     public array $sites = [];
-    public array $plan;
+    public array $plan = [];
 
-    public array $mapped;
+    //public array $mapped;
 
     public float $timeRemaining = 0;
     public float $timePassedInMonth = 0;
     public float $daysInMonth = 0;
+    public int $month = 0;
+    public int $year = 0;
 
     private array $_sql;
     private string $_date;
 
     function __construct($_planFile, $_sql)
     {
-        $this->plan = Monthly::PlanAsObject($_planFile);
-        $this->_sql = $_sql;
-        $this->_date = substr($_planFile, 0, 6);
+        if ($_planFile != null) {
+            $this->plan = Monthly::PlanAsObject($_planFile);
+            $this->_date = substr($_planFile, 0, 6);
+        } else
+            $this->_date = substr($_sql[0][0], 0, 6);
 
+        $this->_sql = $_sql;
         $this->CalculateCalendarTime();
         //Debug::Log($this->_date);
         //Debug::Log($this->plan[0]);
 
-        for ($i = 0; $i < count($this->plan); $i++) {
+        if ($_planFile != null) {
+            for ($i = 0; $i < count($this->plan); $i++) {
 
-            // Make the target a number
-            $this->plan[$i][3] = intval($this->plan[$i][3]);
+                // Make the target a number
+                $this->plan[$i][3] = intval($this->plan[$i][3]);
 
-            $site = Config::Sites($this->plan[$i][0]);
-            $segment = $this->plan[$i][4];
-            //Debug::Log($site);
+                $site = Config::Sites($this->plan[$i][0]);
+                $segment = $this->plan[$i][4];
+                //Debug::Log($site);
 
-            // Add new MonthlySite and get
-            // distinct list of plan segments
-            if ($site != NULL) {
-                if (!isset($this->sites[$site]))
-                    $this->sites[$site] = new MonthlySite($this->_date, $this->daysInMonth);
+                // Add new MonthlySite and get
+                // distinct list of plan segments
+                if ($site != NULL) {
+                    if (!isset($this->sites[$site]))
+                        $this->sites[$site] = new MonthlySite($this->_date, $this->daysInMonth);
 
-                if (!isset($this->sites[$site]->planSegments[$segment]))
-                    $this->sites[$site]->planSegments[$segment] = [0, 0];
+                    if (!isset($this->sites[$site]->planSegments[$segment]))
+                        $this->sites[$site]->planSegments[$segment] = [0, 0];
 
-                $this->sites[$site]->planSegments[$segment][0] += $this->plan[$i][3];
+                    $this->sites[$site]->planSegments[$segment][0] += $this->plan[$i][3];
+                }
             }
         }
+
+
+        // foreach ($this->sites as $key => $value) {
+        //     Debug::Log($key);
+        // }
 
         // For each entry in the SQL results, see if a plan segment 
         // matches up with a sites Plan segment and add the value
@@ -84,16 +96,26 @@ class MonthlyEntry
                 $sqlSite = Config::Sites($this->_sql[$i][1]);
 
                 // Totals for the month per-segment
+                // If it exists, add to it,  if not 
+                // create a new one based on the SQL segment with 0 target                
                 foreach ($this->sites as $key => $value) {
                     if (isset($value->planSegments[$sqlSegment]))
                         $value->planSegments[$sqlSegment][1] += $this->_sql[$i][4];
+                    else if ($key === $sqlSite)
+                        $value->planSegments[$sqlSegment] = [0, $this->_sql[$i][4]];
                 }
 
                 // Totals for each day for the entire site
-                //Debug::Log($sqlSite);
+
                 if ($sqlSite != NULL) {
+                    if (!isset($this->sites[$sqlSite]))
+                        $this->sites[$sqlSite] = new MonthlySite($this->_date, $this->daysInMonth);
+
                     if (!isset($this->sites[$sqlSite]->dailyTotals[$sqlDate]))
                         $this->sites[$sqlSite]->dailyTotals[$sqlDate] = 0;
+
+                    //Debug::Log($sqlSite . "  " .  $this->_date);
+                    //Debug::Log( "  " .  $this->_date);
                     $this->sites[$sqlSite]->dailyTotals[$sqlDate] += $this->_sql[$i][4];
                 }
             }
@@ -122,7 +144,7 @@ class MonthlyEntry
 
         $cdate = mktime(0, 0, 0, $month, $d, $year);
         //$today = time();
-        $today = mktime(0, 0, 0, $month, 15, $year);
+        $today = mktime(0, 0, 0, $month, 9, $year);
         //Debug::Log($today);
 
         $difference = doubleval($cdate - $today);
@@ -133,13 +155,15 @@ class MonthlyEntry
         //Debug::Log(($difference));
 
         $this->daysInMonth = $d;
+        $this->month = $month;
+        $this->year = $year;
         $this->timeRemaining = max($difference, 0);
         $this->timePassedInMonth = min(1 - (floor($difference / 60 / 60 / 24) / $d), 1);
     }
 
 
 
-    private MonthlySite $tmpMeta;
+    //private MonthlySite $tmpMeta;
     private function CalculateMeta()
     {
         // Segment data
@@ -147,18 +171,24 @@ class MonthlyEntry
 
         foreach ($this->sites as $key => $value) {
             // Annoying hack to type cast 
-            $this->tmpMeta = $value;
-            $m = $this->tmpMeta;
+            //$this->tmpMeta = $value;
+            $m = $value; //$this->tmpMeta;
 
             $spatialTotals = 0;
             foreach ($m->planSegments as $k => $segment) {
                 $m->totalMetricTarget += $segment[0];
-                $m->totalMetricActual += $segment[1];
 
                 // Get fractionals of segment progress
                 if ($segment[0] > 0)
                     $spatialTotals += min($segment[1] / $segment[0], 1) * $segment[0];
             }
+
+            // Turn the daily totals into indexed array
+            $value->dailyTotals = array_values($value->dailyTotals);
+
+            // Sum daily totals
+            $m->totalMetricActual = array_sum($value->dailyTotals);
+
 
             if ($m->totalMetricTarget > 0) {
                 //$m->complianceSpatial = min($m->totalMetricTarget, $m->totalMetricActual) / $m->totalMetricTarget;
@@ -171,9 +201,6 @@ class MonthlyEntry
             $daysRemaining = floatval($this->daysInMonth * (1 - $this->timePassedInMonth));
             $m->averageCurrent = $m->totalMetricActual / $daysSoFar;
             $m->averageRequired = max(0, $m->totalMetricTarget - $spatialTotals) / $daysRemaining;
-
-            // Turn the daily totals back to indexed array
-            $value->dailyTotals = array_values($value->dailyTotals);
         }
     }
 

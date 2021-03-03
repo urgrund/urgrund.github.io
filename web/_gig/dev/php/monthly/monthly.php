@@ -16,25 +16,30 @@ $request = json_decode($postdata);
 if (is_object($request)) {
     include_once('..\setDebugOff.php');
 
-    if ($request->func == 0) {
-        echo json_encode(Monthly::GenerateMonthlyPlanData());
-    }
+    try {
+        if ($request->func == 0) {
+            echo json_encode(Monthly::GenerateMonthlyPlanData());
+        }
 
-    if ($request->func == 1) {
-        //$date = new DateTime($request->data[1]);
-        //echo json_encode($date);
-        //echo date("Y-m-d H:i:s", substr($request->data[1], 0, 10));
-        //echo json_encode($request->data[1]);
-        //echo json_encode($request->data[0][2]);
-        echo json_encode(Monthly::WriteMonthlyPlanData($request->data));
+        if ($request->func == 1) {
+            echo json_encode(Monthly::WriteMonthlyPlanData($request->data));
+        }
+    } catch (Exception $e) {
+        $error = (new ErrorResponse(
+            404,
+            "Montly Plan",
+            "Error in file read write for Plan",
+            array($e->getMessage())
+        ));
+        $error->Return();
     }
 }
 // ----------------------------------------------------------
 // ----------------------------------------------------------
 // ----------------------------------------------------------
 else {
-    $foo =        Monthly::GenerateMonthlyPlanData();
-    Debug::Log($foo['202102']->sites["M-Reefs"]);
+    $foo = Monthly::GenerateMonthlyPlanData();
+    //Debug::Log($foo['202102']->sites["M-Reefs"]);
     //Monthly::WriteMonthlyPlanData($dummyData);
 }
 
@@ -66,6 +71,17 @@ class Monthly
 
         Debug::StartProfile("PHP Generate");
 
+        $temp = [];
+        for ($i = 0; $i < count($sql); $i++) {
+            // Check same date as this Month entry
+            $sqlDate = substr($sql[$i][0], 0, 6);
+            if (!isset($temp[$sqlDate]))
+                $temp[$sqlDate] = null;
+        }
+
+        //Debug::Log($temp);
+        $output = $temp;
+
         // For each plan, march through the 
         // actuals and see if there's a match up
         for ($i = 0; $i < count($plans); $i++) {
@@ -73,7 +89,16 @@ class Monthly
             $planDate =  substr($plan, 0, 6);
 
             // This is where the big work happens
-            $output[$planDate] =  new MonthlyEntry($plan, $sql);
+            $output[$planDate] = new MonthlyEntry($plan, $sql);
+        }
+
+        // There may not have been plans created
+        // for all the SQL data, so fill out the null ones
+        foreach ($output as $key => $value) {
+            if ($value == null) {
+                //Debug::Log($key);
+                $output[$key] =  new MonthlyEntry(null, $sql);
+            }
         }
 
         // NEED TO SANITIZE
