@@ -76,7 +76,7 @@
                 <div class="droplist">
                     <div ng-repeat="x in siteData" ng-init="siteIndex = $index">
                         <!-- <h3>{{x.name}}</h3> -->
-                        <a ng-href="#!monthly/{{siteIndex}}/0">{{x.name}}</a> <br />
+                        <a ng-href="#!monthly/{{siteIndex}}/{{mmData.monthView}}">{{x.name}}</a> <br />
                         <!-- <a ng-href="#!monthly/{{siteIndex}}/1">Adjust Target Inputs</a> -->
                     </div>
 

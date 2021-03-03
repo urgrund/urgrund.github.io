@@ -1,71 +1,103 @@
 <div class="cup">
 
+    <div class="sectionTitle">
+        <div class="flex underline" ng-cloak>
+            <div class="left">
+                <h2 class="left"><i class="far fa-calendar-alt"></i> {{ siteName }} Plan Compliance</h2>
+            </div>
+            <div class="right">
+                <!-- <h3>{{ siteName }}</h3> -->
 
-    <!-- <div class="page-header"> -->
-    <!-- <div class="flex flex-start underline">
-        <div class="sitePicMargin">
-            <img class="sitePicTiny" ng-src="assets/img/site_{{siteIndex}}.jpg">
-        </div>
-        <h2 class="left">{{site.name}} - <span class="light">Monthly Plan vs. Compliance</span></h2>
+                <div class="flex">
+                    <div class="sitePicMargin">
+                        <div class="light"><i class="far fa-calendar-alt"></i> Select Month</div>
+                        <!-- <select ng-model="$parent.$parent.selectedName" ng-options="x for x in $parent.$parent.names"
+                                ng-change="$parent.$parent.updateSelectionList()">
+                            </select> -->
+                        <input class="calendar" placeholder="Loading dates..." readonly="readonly">
+                    </div>
 
-        <div>
+                    <div class="sitePicMargin">
+                        <div class="light"><i class="fas fa-binoculars"></i> Change View</div>
+                        <label class="switch"><input ng-init="state= monthlyViewAsBars" ng-model="state"
+                                ng-change="switchView(state)" type="checkbox" id="togBtn" checked>
+                            <div class="slider round" switch-on="Buckets" switch-off="Dials"></div>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
-    </br> -->
 
-    <section-title icon="far fa-calendar-alt" title="{{site.name}} Monthly Plan vs. Compliance" right="" page="MONTHLY">
-    </section-title>
-
+    <!-- <section-title icon="far fa-calendar-alt" title="Plan Compliance" right="" page="MONTHLY">
+    </section-title> -->
 
     <!-- <div class="mines-center {{$parent.backGroundClassBlur}}"> -->
+    <!-- <div ng-if="dataForSite == null" class="center">
+        <br />
+        <br />
+        <h3 class="center">No plan data found {{selectedMonth}}</h3>
+    </div> -->
+    <!-- <div ng-if="dataForSite != null" class="h100pc"> -->
+    <div class="h100pc">
+        <div class="flex">
 
-    <div class="flex">
+            <div class="underline">
+                <h5 class="light"><i class="fas fa-weight-hanging"></i> Target Tonnes</h5>
+                <h3 class="underline">{{ dataForSite.totalMetricTarget | number : 0}}</h3>
+                <h5 class="light"><i class="fas fa-chart-line"></i></i> Required Average</h5>
+                <h3>{{ dataForSite.averageRequired | number:0}}</h3>
+            </div>
 
-        <div class="underline">
-            <h5 class="light"><i class="fas fa-weight-hanging"></i> Target Tonnes</h5>
-            <h3 class="underline">{{ dataForSite.totalMetricTarget | number : 0}}</h3>
-            <h5 class="light"><i class="fas fa-chart-line"></i></i> Current Average</h5>
-            <h3> {{ dataForSite.averageCurrent | number:0}}</h3>
+            <div class="underline">
+                <h5 class="light"><i class="fas fa-weight-hanging"></i> Actual Tonnes</h5>
+                <h3 class="underline">{{ dataForSite.totalMetricActual | number: 0}}</h3>
+                <h5 class="light"><i class="fas fa-chart-line"></i></i> Current Average</h5>
+                <h3> {{ dataForSite.averageCurrent | number:0}}</h3>
+            </div>
+
+            <div>
+                <h4 class="light">Spatial Compliance</h4>
+                <h1 style="text-align: center">
+                    {{ dataForSite.complianceSpatial*100 | number : 0}}%</h1>
+            </div>
+
+            <div>
+                <h4 class="light">Volumetric Compliance</h4>
+                <h1 style="text-align: center">
+                    {{ dataForSite.complianceVolumetric*100 | number : 0}}%</h1>
+            </div>
+
+            <div class="underline">
+                <h5 class="light"><i class="fas fa-clock"></i> Hours Remaining</h5>
+                <h3 class="underline">{{dataForMonth.timeRemaining/3600 | number :0}}</h3>
+                <h5 class=" light"><i class="fas fa-clock"></i></i> Month Passed</h5>
+                <h3>{{ dataForMonth.timePassedInMonth * 100 | number : 0 }}%</h3>
+            </div>
         </div>
+        </br>
 
-        <div class="underline">
-            <h5 class="light"><i class="fas fa-weight-hanging"></i> Actual Tonnes</h5>
-            <h3 class="underline">{{ dataForSite.totalMetricActual | number: 0}}</h3>
-            <h5 class="light"><i class="fas fa-chart-line"></i></i> Required Average</h5>
-            <h3>{{ dataForSite.averageRequired | number:0}}</h3>
-        </div>
 
-        <div>
-            <h4 class="light">Spatial Compliance</h4>
-            <h1 style="text-align: center">
-                {{ dataForSite.complianceSpatial*100 | number : 0}}%</h1>
-        </div>
 
-        <div>
-            <h4 class="light">Volumetric Compliance</h4>
-            <h1 style="text-align: center">
-                {{ dataForSite.complianceVolumetric*100 | number : 0}}%</h1>
-        </div>
+        <!-- Bar or Gauge -->
+        <!-- Chart types switch depending on user preference -->
+        <div id="monthlyChart" class="h60pc" ng-if="monthlyViewAsBars"></div>
 
-        <div class="underline">
-            <h5 class="light"><i class="fas fa-clock"></i> Hours Remaining</h5>
-            <h3 class="underline">{{dataForMonth.timeRemaining/3600 | number :0}}</h3>
-            <h5 class=" light"><i class="fas fa-clock"></i></i> Month Passed</h5>
-            <h3>{{ dataForMonth.timePassedInMonth * 100 | number : 0 }}%</h3>
+        <div class="jumbogrid" ng-if="!monthlyViewAsBars">
+            <div ng-repeat="x in gaugeChartNames" class="mnth_gauge">
+                <!-- <h1>{{ x }}</h1> -->
+                <drill-down-chart name="{{x}}" chart="{{x}}"></drill-down-chart>
+            </div>
         </div>
+        <!-- /Bar or Gauge -->
+
+        <div id="monthlyLean" class="h60pc"></div>
+        <div id="monthlyDate" class="h60pc"></div>
+
+
+
     </div>
-    </br>
 
-
-
-    <!-- Chart types switch depending on user preference -->
-
-    <div id="monthlyChart" class="h60pc" ng-if="monthlyViewAsBars"></div>
-
-    <div class="jumbogrid" ng-if="!monthlyViewAsBars">
-        <div ng-repeat="y in chartData" class="mnth_gauge">
-            <drill-down-chart name="{{y[1]}}" chart="{{y[1]}}"></drill-down-chart>
-        </div>
-    </div>
 
 </div>

@@ -7,6 +7,8 @@ app.controller('UploadPlan', function ($scope, $routeParams, $rootScope, $http, 
     $scope.fileContent = null;
     $scope.uploadDate = Date.now();
 
+    $scope.uploadSuccess = 0;
+
     var modal = document.getElementById("myModal");
 
     // ----------------------------------------------------
@@ -19,8 +21,9 @@ app.controller('UploadPlan', function ($scope, $routeParams, $rootScope, $http, 
             console.log("File data was undefined...");
             return;
         }
-        $scope.fileContent = null;
+
         $scope.fileContent = $contents;
+        $scope.uploadSuccess = 0;
         $scope.filterFileContent();
 
         $scope.createDisplayArrays();
@@ -129,6 +132,7 @@ app.controller('UploadPlan', function ($scope, $routeParams, $rootScope, $http, 
         })
         request.then(function (response) {
             //console.log(response);
+            $scope.uploadSuccess = 1;
             console.log("Upload successful");
         }, function (error) {
             $rootScope.processErrorResponse(error);

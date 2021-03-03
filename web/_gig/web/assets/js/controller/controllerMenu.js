@@ -1,8 +1,9 @@
-app.controller('Menu', function ($scope, $routeParams, $rootScope, $timeout) {
+app.controller('Menu', function ($scope, $rootScope, $timeout, mmData) {
 
     //console.log("MENU CONTROLLER");
 
     $scope.equipList = null;
+    $scope.mmData = mmData;
 
     $scope.setupMenu = function () {
 

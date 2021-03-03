@@ -390,22 +390,21 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
     $rootScope.monthly = null;
     $rootScope.monthlyActive = null;
     function SetActiveMonth() {
-
         if ($rootScope.monthly == null
             || $rootScope.meta == undefined
             || $rootScope.siteData == undefined)
             return;
-        // 
 
         var monthDate = ($rootScope.meta.Date).substr(0, 6);
-
-        console.log("Set active month..." + monthDate);
+        //console.log($rootScope.monthly);
 
         if (monthDate in $rootScope.monthly) {
             $rootScope.monthlyActive = $rootScope.monthly[monthDate];
-            //$rootScope.monthlyActive = $rootScope.monthly['201901'];
-            console.log($rootScope.monthlyActive);
+            //console.log("Set active month..." + monthDate);
+            //console.log($rootScope.monthlyActive);
         }
+        else
+            console.log("No plan data found for month... " + monthDate);
     }
 
     $rootScope.fetchMonthlyData = function () {
@@ -423,6 +422,7 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             SetActiveMonth();
             $rootScope.$broadcast('monthlySet');
         }, function (error) {
+            $rootScope.processErrorResponse(error);
         });
         return request;
     }
@@ -672,7 +672,7 @@ app.config(
                 templateUrl: 'productivity.html',
                 controller: 'Productivity'
             })
-            .when("/monthly/:site/:func", {
+            .when("/monthly/:site/:month", {
                 templateUrl: 'monthly.html',
                 controller: 'Monthly'
             })
@@ -708,7 +708,15 @@ app.config(
 
 // =====================================================================================
 
+// Commonly held variables across the site 
 
+class MineMageSiteData {
+    constructor(_data) {
+        this.dateView = "";
+        this.monthView = moment().format('YYYYMM');
+    }
+}
+app.value("mmData", new MineMageSiteData());
 
 
 
@@ -718,14 +726,6 @@ app.config(
 // =====================================================================================
 // Components
 // TODO: Move this into component files
-
-
-
-
-
-
-
-
 /// ----------------------------------------
 /// Report Item
 /// ----------------------------------------
@@ -743,11 +743,4 @@ app.component("reportItem", {
     }
 });
 /// ----------------------------------------
-
-
-
-
-
-
-
 // =====================================================================================

@@ -1,5 +1,5 @@
 
-app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $interval, $timeout) {
+app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $interval, $timeout, mmData) {
 
     // Set the view choice in the root so its 
     // persistent with page reloads and equip filter
@@ -8,37 +8,31 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
     }
 
     $scope.siteIndex = $routeParams.site;
-    $scope.siteName = null;
+    $scope.siteName;
+
+    $scope.selectedMonth;
 
     $scope.dataForMonth = null;
     $scope.dataForSite = null;
 
-    $scope.switchView = function (_state) {
-        $rootScope.monthlyViewAsBars = _state;
-        ClearAllCharts();
-        if (_state)
-            $scope.createMonthlyComplianceBars();
-        else
-            $scope.createMonthlyComplianceGauges();
-    }
 
+    $scope.gaugeChartNames = [];
 
+    // $scope.createMenuOptions = function (_object) {
+    //     $scope.names = Object.keys(_object);
+    //     $scope.selectedName = $scope.names[0];
+    // }
 
-    $scope.createMenuOptions = function (_object) {
-        $scope.names = Object.keys(_object);
-        $scope.selectedName = $scope.names[0];
-    }
+    // $scope.updateSelectionList = function () {
+    //     $scope.prepareChartData($scope.selectedName);
+    // }
 
-    $scope.updateSelectionList = function () {
-        $scope.prepareChartData($scope.selectedName);
-    }
-
-    function GetStartingMonth() {
-        if ($rootScope.monthly == undefined)
-            return '201901';
-
-
-    }
+    //function GetStartingMonth() {
+    //if ($rootScope.monthlyActive == undefined)
+    //return '201901';
+    //else
+    //  return $rootScope.monthlyActive;
+    //}
 
 
     $scope.prepareChartData = function (_month) {
@@ -46,53 +40,109 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
         if ($rootScope.monthly == undefined)
             return;
 
-        $scope.createMenuOptions($rootScope.monthly);
+
+        $scope.selectedMonth = _month;
+
+        $scope.dataForMonth = null;
+        $scope.dataForSite = null;
+        //ClearAllCharts();
+        //$scope.createMenuOptions($rootScope.monthly);
 
         $scope.siteName = $rootScope.siteData[$scope.siteIndex].name;
-        //console.log(siteName);
+        //console.log($scope.siteName);
+        //console.log($scope.selectedMonth);
 
-        // Temp for now
-        $scope.dataForMonth = $rootScope.monthly[_month];
-        $scope.dataForSite = $scope.dataForMonth.sites[$scope.siteName];
+        //console.log(_month);
+        //console.log($rootScope.monthly);
+        if (_month in $rootScope.monthly) {
 
-        //$scope.dataForMonth.timeRemaining = moment.duration(80000).format("h:mm:ss");
-        //$scope.dataForMonth.timeRemaining = ($scope.dataForMonth.timeRemaining / 3600).toFixed();
-        console.log($scope.dataForMonth);
+            //ClearAllCharts();
 
-        $scope.switchView($rootScope.monthlyViewAsBars);
+            $scope.dataForMonth = $rootScope.monthly[_month];
+            $scope.dataForSite = $scope.dataForMonth.sites[$scope.siteName];
+
+            $scope.gaugeChartNames = [];
+            for (const [key, value] of Object.entries($scope.dataForSite.planSegments)) {
+                $scope.gaugeChartNames.push(key);
+            }
+
+            //console.log("Data for " + $scope.siteName + " : " + $scope.dataForSite);
+
+
+            if ($scope.dataForSite == undefined)
+                return;
+            //$scope.dataForMonth.timeRemaining = moment.duration(80000).format("h:mm:ss");
+            //$scope.dataForMonth.timeRemaining = ($scope.dataForMonth.timeRemaining / 3600).toFixed();            
+
+            // Create charts depending on switch
+            //$scope.switchView($rootScope.monthlyViewAsBars);
+            if ($rootScope.monthlyViewAsBars)
+                $scope.createMonthlyComplianceBars();
+            else
+                $scope.createMonthlyComplianceGauges();
+
+            // Create other charts 
+            // Little data pack for the chart
+            var dataForChart =
+                [
+                    $scope.dataForSite,
+                    $scope.selectedMonth,
+                    $scope.dataForMonth.daysInMonth
+                ];
+
+            ChartsMonthly.CreateMonthlyLean("monthlyLean", dataForChart);
+            ChartsMonthly.CreateMonthlyDateChart("monthlyDate", dataForChart);
+        }
+    }
+
+
+
+
+    // --------------------------------------------------
+    $scope.switchView = function (_state) {
+        $rootScope.monthlyViewAsBars = _state;
+        $scope.prepareChartData(mmData.monthView);
     }
 
 
     $scope.createMonthlyComplianceBars = function () {
         $timeout(function () {
             ChartsMonthly.CreateMonthlyComplianceBars("monthlyChart", [$scope.dataForMonth, $scope.siteName]);
-        }, 1);
+        }, 100);
     }
 
 
     $scope.createMonthlyComplianceGauges = function () {
         $timeout(function () {
+            //return;
             var elements = document.getElementsByClassName("chartdivcontent");
-
-            for (const [key, value] of Object.entries($scope.dataForSite.planSegments)) {
-                ChartsMonthly.CreateMonthlyComplianceGauge(elements[i].id, [$scope.dataForMonth, [key, value]]);
+            for (var i = 0; i < elements.length; i++) {
+                //console.log(elements[i]);
+                var plan = $scope.dataForSite.planSegments[elements[i].id];
+                //console.log(plan);
+                ChartsMonthly.CreateMonthlyComplianceGauge(elements[i].id, [$scope.dataForMonth, plan]);
             }
-
-
-            //for (var i = 0; i < $scope.chartData.length; i++) {
-            //  ChartsMonthly.CreateMonthlyComplianceGauge(elements[i].id, $scope.chartData[i]);
+            //for (const [key, value] of Object.entries($scope.dataForSite.planSegments)) {
+            //  ChartsMonthly.CreateMonthlyComplianceGauge(elements[i].id, [$scope.dataForMonth, [key, value]]);
             //}
+
         }, 100);
     }
-
+    // --------------------------------------------------
 
 
 
     $scope.setupCalendar = function () {
+        if ($rootScope.monthly == undefined)
+            return;
 
-        var dates = Object.values($rootScope.monthly);
-        var minDate = moment(String(dates[0] + "01")).format('YYYY-MM-DD').toString();
-        var maxDate = moment(String(dates[10] + "01")).format('YYYY-MM-DD').toString();
+        //console.log("Setting up calendar");
+
+        //var dates = Object.values($rootScope.monthly);
+        //var minDate = moment(String(dates[0] + "01")).format('YYYY-MM-DD').toString();
+        //var maxDate = moment(String(dates[10] + "01")).format('YYYY-MM-DD').toString();
+
+        var d = new Date($routeParams.month.substr(0, 4), $routeParams.month.substr(5, 6), 0, 0, 0, 0, 0);
 
         flatpickr('.calendar', {
             // enable: [
@@ -101,6 +151,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
             //         to: "2021-01-01"
             //     }
             // ],
+            defaultDate: d,// Date($routeParams.month),//Date.now(),
             plugins: [
                 new monthSelectPlugin({
                     //shorthand: true, //defaults to false
@@ -112,185 +163,29 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
             // On Click of a new date
             onChange: function (selectedDates, dateStr, instance) {
                 var date = moment(selectedDates[0]).format('YYYYMM').toString();
-                console.log(date);
-                if (date in $rootScope.monthly)
-                    $scope.prepareChartData(date);
-
-
+                //console.log("Selected - " + date);
+                mmData.monthView = date;
+                $scope.prepareChartData(date);
             }
         });
     }
 
-
     // ----------------------------------------------------
     $scope.$on('monthlySet', function () {
         $scope.setupCalendar();
-
-        //console.log("MONTHLY HAS BEEN SET");
-        $scope.prepareChartData(GetStartingMonth());
+        $scope.prepareChartData($routeParams.month);
     });
 
 
     $scope.$watch('$viewContentLoaded', function () {
-        $timeout(function () {
-            $scope.prepareChartData(GetStartingMonth());
-        }, 10);
+        //$timeout(function () {
+        $scope.setupCalendar();
+        $scope.prepareChartData($routeParams.month);
+        //}, 10);
     });
+
+
+    $scope.setupCalendar();
     // ----------------------------------------------------
-
-
-
-
-
-
-
-    // ----------------------------------------------------
-    // For the input side of monthly targets
-    // $scope.getLockClass = function ($index) {
-    //     if ($scope.entry[$index] != undefined) {
-    //         if ($scope.entry[$index].lock == true) {
-    //             return "fas fa-lock locked"
-    //         } else {
-    //             return "fas fa-lock-open unlocked";
-    //         }
-    //     }
-    //     return "";
-    // }
-
-
-    // $scope.toggleLock = function ($event, $index) {
-    //     //console.log($index);
-    //     //console.log($scope.biglock);
-    //     //
-    //     //$scope.biglock == '0'
-    //     if ($index == -1) {
-    //         for (var i = 0; i < $scope.entry.length; i++) {
-    //             $scope.entry[i].lock = $scope.biglock == 0 ? true : false;
-    //         }
-    //     }
-    //     else {
-    //         if ($scope.biglock == 1)
-    //             if ($scope.entry[$index] != undefined)
-    //                 $scope.entry[$index].lock = !$scope.entry[$index].lock;
-    //     }
-    // }
-
-
-    // // Targets Adjustment 
-    // if ($routeParams.func == 1) {
-    //     $scope.entry = [];
-    //     for (var key in $scope.data) {
-    //         $scope.entry.push({ lock: false, data: $scope.data[key][2] });
-    //     }
-
-
-    //     $scope.gridOptions = {};
-    //     $scope.gridOptions.data = JSON.stringify($scope.entry);
-
-    //     //console.log($scope.entry);
-    // }
-
-
-    // $scope.getMonthlyPlan = function () {
-    //     // var _url = '../dev/php/monthly/monthly.php';
-
-    //     var _data = {
-    //         'func': 1,
-    //         'year': $scope.currentPlanYear,
-    //         'month': $scope.currentPlanMonth
-    //     };
-    //     var request = $http({
-    //         method: 'POST',
-    //         url: $scope.urlMonthly,
-    //         data: _data,
-    //     })
-    //     request.then(function (response) {
-
-    //         console.log(response);
-    //         //$scope.fileContent = Papa.unparse(response.data);
-    //         $scope.fileContent = response.data;
-
-    //         $scope.fileContent = [];
-    //         for (var i = 0; i < response.data.length; i++) {
-    //             // Check if each property in 
-    //             // the object can be converted to number
-    //             var obj = response.data[i];
-    //             for (var prop in obj) {
-    //                 if (obj.hasOwnProperty(prop) && !isNaN(obj[prop])) {
-    //                     obj[prop] = +obj[prop];
-    //                     obj[prop] = +parseFloat(obj[prop]).toFixed(0);
-    //                 }
-    //             }
-
-    //             // Push to the content array
-    //             $scope.fileContent.push(response.data[i]);
-    //         }
-    //         $scope.createUniqueSiteNames();
-
-    //     }, function (error) {
-    //         console.log(error);
-    //     });
-    // }
-
-
-
-    // $scope.getMonthlyActuals = function () {
-    //     //var _url = '../dev/php/monthly/monthly.php';
-
-    //     var _data = {
-    //         'func': 3,
-    //         'year': $scope.currentPlanYear,
-    //         'month': $scope.currentPlanMonth
-    //     };
-    //     var request = $http({
-    //         method: 'POST',
-    //         url: $scope.urlMonthly,
-    //         data: _data,
-    //     })
-    //     request.then(function (response) {
-    //         console.log(response);
-    //     }, function (error) {
-    //         console.log(error);
-    //     });
-    // }
-
-
-
-
-    // $scope.getMappedActualsToPlan = function () {
-
-    //     var _data = {
-    //         'func': 4,
-    //         'year': $scope.currentPlanYear,
-    //         'month': $scope.currentPlanMonth
-    //     };
-    //     var request = $http({
-    //         method: 'POST',
-    //         url: $scope.urlMonthly,
-    //         data: _data,
-    //     })
-    //     request.then(function (response) {
-
-    //         if ($rootScope.checkResponseError(response))
-    //             return;
-
-    //         $scope.mappedPlan = response.data;
-
-    //         console.log("[Mapped Actuals to Plan]");
-    //         console.log($scope.mappedPlan);
-
-    //         // Create the data needed for charts
-    //         // and force a switch view to create charts
-    //         if ($routeParams.func == 0) {
-    //             $scope.prepareChartData();
-    //             $scope.switchView($rootScope.monthlyViewAsBars);
-    //         }
-
-    //     }, function (error) {
-    //         console.log(error);
-    //     });
-    // }
-    // ----------------------------------------------------
-
 
 });

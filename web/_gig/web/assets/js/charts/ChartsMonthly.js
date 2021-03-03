@@ -303,8 +303,9 @@ class ChartsMonthly {
         // 4 - actuals
 
         var planSegments = _data[0].sites[_data[1]].planSegments;
+
         //console.log(planSegments);
-        console.log(_data);
+
 
         var markerData = [];
         var newData = [[], [], [], [], []];
@@ -329,7 +330,11 @@ class ChartsMonthly {
 
             // Label, this is a 'dummy' bar to position the label 
             // by stacking nothing (0) on top of the other values
-            newData[4].push({ value: 0, label: { formatter: String(actual) } });
+            newData[4].push({
+                value: Math.max(0, target - actual),
+                label: { formatter: String(actual) },
+                itemStyle: { color: 'rgba(0, 0, 0, 0)' }
+            });
 
             markerData.push(
                 {
@@ -390,7 +395,7 @@ class ChartsMonthly {
             grid: {
                 top: '0%',
                 bottom: '0%',
-                left: '3%',
+                left: '4%',
                 right: '3%',
                 containLabel: true
             },
@@ -402,7 +407,7 @@ class ChartsMonthly {
                         show: true,
                         interval: 0,
                         rotate: 90,
-                        fontSize: ChartStyles.fontSizeAxis
+                        fontSize: 14//ChartStyles.fontSizeAxis
                     },
                     axisLine: { show: false, lineStyle: { color: '#71a3c5' } },
                     axisTick: {
@@ -419,8 +424,8 @@ class ChartsMonthly {
                 nameTextStyle: {
                     fontSize: ChartStyles.fontSizeLarge
                 },
-                nameGap: 40,
-                axisLabel: { fontSize: ChartStyles.fontSizeAxis },
+                nameGap: 60,
+                axisLabel: { fontSize: 14 },// ChartStyles.fontSizeAxis },
                 splitLine: {
                     show: true,
                     lineStyle: { color: 'rgba(126, 134, 136, 0.33)', width: 1 }
@@ -495,7 +500,45 @@ class ChartsMonthly {
         var myChart = InitChartFromElementID(_elementID);
         if (myChart == undefined) return;
 
-        var data = new MonthlyChartDataForLocation(_data);
+        if (_data[1][0] == 0) {
+            console.log("No plan target for " + _elementID);
+            return;
+        }
+        //var data = new MonthlyChartDataForLocation(_data);
+
+        console.log(_data);
+
+        var daysInMonth = _data[0].daysInMonth;
+        var month = _data[0].month - 1;
+        var timePassedInMonth = _data[0].timePassedInMonth;
+
+
+        var target = _data[1][0];
+        var actual = Math.min(target, _data[1][1]);
+
+        var toMonthTarget = target * timePassedInMonth;
+        var gaugeActual = Math.min(actual, toMonthTarget);
+
+        //var actualPadding = target - gaugeActual;// Math.min(0, target - actual);
+
+        var actualUnder = Math.max(0, toMonthTarget - actual);
+        var actualOver = Math.max(0, actual - toMonthTarget);
+        var actualPadding = target - toMonthTarget - actualOver; //(actualOver + actualUnder + toMonthTarget);
+
+        //console.log(_elementID + " | " + actualOver + "   " + actualUnder);
+        if (_elementID == "4540 D15") {
+            //console.log(_elementID + " | " + gaugeActual + " " + actualOver + " " + actualUnder);
+            console.log(" | " + _elementID + " | ");
+            console.log("GAct | " + gaugeActual);
+            console.log("ToMn | " + toMonthTarget);
+            console.log("Act | " + actual);
+            console.log("Tgt | " + target);
+            console.log("Und | " + actualUnder);
+            console.log("Ovr | " + actualOver);
+            console.log("Pad | " + actualPadding);
+        }
+
+
 
         //console.log(_data);
         var strPct = (x) => x.toString().concat("%");
@@ -536,28 +579,28 @@ class ChartsMonthly {
                     },
                     data: [
                         {
-                            value: data.actual,
+                            value: gaugeActual,
                             name: 'actual',
                             itemStyle: { color: ChartStyles.siteColors[0] }
                         },
                         {
-                            value: data.under,
+                            value: actualUnder,
                             name: 'Under',
                             itemStyle: { color: ChartStyles.TUMColors[0] }
                         },
                         {
-                            value: data.overForChart,
+                            value: actualOver,
                             name: 'Over',
                             itemStyle: { color: ChartStyles.TUMColors[5] }
                         },
                         {
-                            value: data.targetForChart,
+                            value: actualPadding,
                             name: 'Target',
                             itemStyle: { color: 'rgba(0,0,0,0)' }
                         }
                         ,
                         {
-                            value: data.target,
+                            value: target,
                             name: 'Invisible',
                             itemStyle: { color: 'rgba(0,0,0,0)' }
                         }
@@ -598,7 +641,11 @@ class ChartsMonthly {
                         show: false,
                         lineStyle: {
                             width: 0,
-                            color: [[1, '#02b3ff']]
+                            color: [[1, '#b5c6ce']],
+                            shadowBlur: {
+                                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                shadowBlur: 10
+                            }
                         }
                     },
                     splitLine: { show: false },
@@ -613,15 +660,15 @@ class ChartsMonthly {
                         padding: [0, 0, -15, 0],
                         formatter: function (v) {
                             switch (v + '') {
-                                case '0': return ('1st ' + monthShort[10]);
-                                case '100': return ('30th ' + monthShort[10]);
+                                case '0': return ('1 ' + monthShort[month]);
+                                case '100': return (daysInMonth + " " + monthShort[month]);
                                 default: return '';
                             }
                         },
                         fontSize: ChartStyles.fontSizeSmall
                     },
                     detail: { show: false },
-                    data: [{ value: data.monthPassed, name: '' }]
+                    data: [{ value: (timePassedInMonth * 100), name: '' }]
                 }
             ]
 
@@ -631,7 +678,302 @@ class ChartsMonthly {
         return myChart;
     }
 
+
+
+
+
+
+
+    static CreateMonthlyLean(_elementID, _data) {
+
+        // Create an eCharts instance 
+        var myChart = InitChartFromElementID(_elementID);
+        if (myChart == undefined) return;
+
+        var monthData = _data[0];
+        //console.log(monthData);
+        var dailyAverageTarget = [];
+        var theDate = [];
+        var maxYaxis = Math.round((Math.max(...monthData.dailyTotals) / 1000) + 1) * 1000;
+
+        for (var i = 0; i < monthData.dailyTotals.length; i++) {
+            dailyAverageTarget.push(Math.round((monthData.totalMetricTarget / _data[2]) * 1) / 1);
+            theDate.push(_data[1] + (i < 9 ? "0" : "") + (i + 1));
+        }
+        //console.log(dailyAverageTarget);
+
+        var monthDateLabelsSTR = [];
+        var month = _data[1];
+        var daysInMonth = _data[2]
+        monthDateLabelsSTR = GenerateDateLabels(month + "01", daysInMonth);
+        var belowVariance = [];
+        var aboveVariance = [];
+        var clearAbove = [];
+        var clearBelow = [];
+        for (let j = 0; j < monthData.dailyTotals.length; j++) {
+            if (dailyAverageTarget[j] > monthData.dailyTotals[j]) {
+                let tmp = dailyAverageTarget[j] - monthData.dailyTotals[j];
+                belowVariance[j] = Math.round(tmp * 10) / 10;
+                let tmp2 = dailyAverageTarget[j] + -belowVariance[j];
+                clearBelow[j] = Math.round(tmp2 * 10) / 10;
+                aboveVariance[j] = null;
+                clearAbove[j] = 0;
+            }
+            else {
+                let tmp3 = monthData.dailyTotals[j] - dailyAverageTarget[j];
+                aboveVariance[j] = Math.round(tmp3 * 10) / 10;
+                clearAbove[j] = dailyAverageTarget[j];
+                belowVariance[j] = null;
+                clearBelow[j] = 0;
+            }
+        }
+
+        var emphasisStyle = {
+            itemStyle: {
+                barBorderWidth: 1,
+                shadowBlur: 1,
+                shadowOffsetX: 0,
+                shadowOffsetY: 0,
+                shadowColor: 'rgba(0,0,0,0.5)'
+            }
+        };
+
+        var option = {
+            backgroundColor: ChartStyles.backGroundColor,
+            textStyle: ChartStyles.textStyle,
+            //grid: ChartStyles.monthGridSpacing(),
+            legend: {
+                data: ['Below Variance', 'Above Variance', '3MRF Target Line'],
+                itemGap: 25,
+                left: 10
+            },
+            tooltip: {
+                confine: true,
+                trigger: 'axis',
+                textStyle: ChartStyles.toolTipTextStyle(),
+                axisPointer: ChartStyles.toolTipShadow(),
+                backgroundColor: ChartStyles.toolTipBackgroundColor(),
+                showDelay: 0,
+                transitionDuration: 0,
+                formatter: function (params, index) {
+                    var dailyTotal = (params[0].data + params[1].data + params[2].data + params[3].data);
+                    var string = "";
+                    string += ChartStyles.toolTipTextEntry('Daily Total: ' + dailyTotal);
+                    string += ChartStyles.toolTipTextEntry('Daily Target: ' + params[4].data);
+                    if (params[2].data == '0')
+                        string += ChartStyles.toolTipTextEntry('Above Variance: ' + params[3].data);
+                    else string += ChartStyles.toolTipTextEntry('Below Variance: ' + params[2].data);
+                    return string;
+                },
+            },
+            xAxis: ChartStyles.xAxis(monthDateLabelsSTR),
+            yAxis: {
+                name: 'Daily Tonnes',
+                nameLocation: 'middle',
+                nameTextStyle: {
+                    padding: [0, 0, 26, 0]
+                },
+                inverse: false,
+                splitArea: { show: false },
+                min: 0,
+                max: maxYaxis,
+                splitLine: { show: false },
+                axisLine: ChartStyles.axisLineGrey,
+                axisLabel: { fontSize: ChartStyles.fontSizeSmall }
+            },
+
+            series: [
+                {
+                    name: 'Clear Below',
+                    type: 'bar',
+                    stack: 'one',
+                    emphasis: { color: 'rgba(0,0,0,0)' },
+                    data: clearBelow,
+                    itemStyle: { color: 'rgba(0,0,0,0)' }
+                },
+                {
+                    name: 'Clear Above',
+                    type: 'bar',
+                    stack: 'one',
+                    emphasis: emphasisStyle,
+                    data: clearAbove,
+                    itemStyle: { color: 'rgba(0,0,0,0)' }
+                },
+                {
+                    name: 'Below Variance',
+                    type: 'bar',
+                    stack: 'one',
+                    animationEasing: 'bounceOut',
+                    emphasis: emphasisStyle,
+                    data: belowVariance,
+                    label: { normal: { show: true, position: 'bottom', distance: 5 } },  // need to add the formatter here
+                    itemStyle: {
+                        color: ChartStyles.TUMColors[0]
+                    }
+                },
+                {
+                    name: 'Above Variance',
+                    type: 'bar',
+                    stack: 'one',
+                    animationEasing: 'bounceIn',
+                    emphasis: emphasisStyle,
+                    data: aboveVariance,
+                    label: { normal: { show: true, position: 'top', distance: 5 } },
+                    itemStyle: {
+                        color: ChartStyles.TUMColors[5]
+                    }
+
+                },
+
+                {
+                    name: '3MRF Target Line',
+                    type: 'line',
+                    step: 'middle',
+                    lineStyle: { width: '2' },
+                    //boundaryGap: ['95%', '95%'],
+                    //emphasis: emphasisStyle,
+                    emphasis: {
+                        //focus: 'none',
+                        // blurScope: 'coordinateSystem',
+                        lineStyle: { width: '6' },
+                    },
+                    symbol: "none",
+                    data: dailyAverageTarget,
+                    itemStyle: { color: 'rgba(255,255,255,1)' }
+                }
+            ]
+        };
+
+        SetOptionOnChart(option, myChart);
+        return myChart;
+    }
+
+    static CreateMonthlyDateChart(_elementID, _data) {
+
+        // Create an eCharts instance 
+        var myChart = InitChartFromElementID(_elementID);
+        if (myChart == undefined) return;
+
+        var monthData = _data[0];
+        var dailyAverageTarget = [];
+        var theDate = [];
+        var maxYaxis = Math.round((Math.max(...monthData.dailyTotals) / 1000) + 1) * 1000;
+
+        for (var i = 0; i < monthData.dailyTotals.length; i++) {
+            dailyAverageTarget.push(Math.round((monthData.totalMetricTarget / _data[2]) * 10) / 10);
+            theDate.push(_data[1] + (i < 9 ? "0" : "") + (i + 1));
+        }
+
+        var monthDateLabelsSTR = [];
+        var month = _data[1];
+        var daysInMonth = _data[2]
+        var monthDateLabelsSTR = GenerateDateLabels(month + "01", daysInMonth);
+
+        //CUMULATIVE ACTUALS AND DAILY TARGET
+        var monthCumulativeValues = [];
+        var cumulativeTargetArray = [];
+
+        for (var i = 0; i < monthData.dailyTotals.length; i++) {
+            if (i != 0) {
+                monthCumulativeValues[i] = monthCumulativeValues[i - 1] + monthData.dailyTotals[i];
+                cumulativeTargetArray[i] = Math.round((cumulativeTargetArray[i - 1] + dailyAverageTarget[i]) * 10) / 10;
+            } else {
+                monthCumulativeValues[i] = monthData.dailyTotals[i];
+                cumulativeTargetArray[i] = Math.round(dailyAverageTarget[i] * 10) / 10;
+            }
+        }
+
+        var option = {
+            backgroundColor: ChartStyles.backGroundColor,
+            textStyle: ChartStyles.textStyle,
+            //grid: ChartStyles.monthGridSpacing(),
+            legend: {
+                data: ['Daily Tonnes', 'Cumulative Tonnes', 'Cumulative Daily Average Target'],
+                itemGap: 25,
+                left: 10
+            },
+            tooltip: {
+                confine: true,
+                trigger: 'axis',
+                textStyle: ChartStyles.toolTipTextEntry(),
+                axisPointer: ChartStyles.toolTipShadow(),
+                backgroundColor: ChartStyles.toolTipBackgroundColor(),
+                showDelay: 0,
+                transitionDuration: 0,
+            },
+            xAxis: ChartStyles.xAxis(monthDateLabelsSTR),
+            yAxis: [{
+                name: 'Daily Tonnes',
+                nameLocation: 'middle',
+                nameTextStyle: {
+                    padding: [0, 0, 26, 0]
+                },
+                type: 'value',
+                inverse: false,
+                splitArea: { show: false },
+                min: 0,
+                max: maxYaxis,
+                splitLine: { show: false },
+                axisLine: ChartStyles.axisLineGrey,
+                axisLabel: { fontSize: ChartStyles.fontSizeSmall }
+            },
+            {
+                name: 'Cumulative Tonnes',
+                nameLocation: 'middle',
+                nameTextStyle: {
+                    padding: [32, 0, 0, 0]
+                },
+                type: 'value',
+                inverse: false,
+                splitArea: { show: false },
+                min: 0,
+                splitLine: { show: false },
+                axisLine: ChartStyles.axisLineGrey,
+                axisLabel: { fontSize: ChartStyles.fontSizeSmall }
+            }],
+
+
+
+            series: [
+                {
+                    name: 'Daily Tonnes',
+                    data: monthData.dailyTotals,
+                    type: 'bar',
+                    yAxisIndex: 0,
+                    itemStyle: { color: ChartStyles.siteColors[0] },
+                    label: { normal: { show: true, position: 'top', distance: 5 } }
+                },
+                {
+                    name: 'Cumulative Daily Average Target',
+                    data: cumulativeTargetArray,
+                    type: 'line',
+                    yAxisIndex: 1,
+                    symbol: 'none',
+                    itemStyle: { color: 'rgba(192,192,192,0.5)' },
+                    areaStyle: { color: ChartStyles.cumulativeArea }
+                },
+                {
+                    name: 'Cumulative Tonnes',
+                    data: monthCumulativeValues,
+                    type: 'line',
+                    yAxisIndex: 1,
+                    symbol: 'none',
+                    itemStyle: { color: 'rgba(50,205,50,0.5)' },
+                    areaStyle: { color: ChartStyles.cumulativeArea }
+                }
+
+            ]
+        };
+
+        SetOptionOnChart(option, myChart);
+        return myChart;
+    };
+
+
+
 }
+
+
 
 class MonthlyChartDataForLocation {
     constructor(_data) {

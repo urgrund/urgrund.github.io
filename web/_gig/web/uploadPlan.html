@@ -28,6 +28,10 @@
                 <i class="fas fa-file-upload"></i> Upload</button>
         </div>
 
+        <div class="sitePicMargin" ng-if="uploadSuccess==1">
+            <h4><i ng-style="equipStyleColor['Operating']" class="far fa-check-circle"></i> Success!</h4>
+        </div>
+
     </div>
 
     <div class="mines-center {{$parent.backGroundClassBlur}}">
@@ -53,7 +57,9 @@
             </div>
         </div>
     </div>
-
+    <br />
+    <br />
+    <br />
 </div>
 
 
