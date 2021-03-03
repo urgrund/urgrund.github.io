@@ -138,6 +138,19 @@ app.controller('myCtrl', function ($scope, $http, $timeout) {
         });
     }
 
+    $scope.monthly = function () {
+        var _data = { 'func': 0 };
+        var request = $http({
+            method: 'POST',
+            url: '../php/monthly/monthly.php',
+            data: _data,
+        })
+        request.then(function (response) {
+            console.log(response.data);
+        }, function (error) {
+        });
+    }
+
 
     $scope.getListOfDates();
 });
