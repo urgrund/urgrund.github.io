@@ -78,22 +78,40 @@
         </div>
         </br>
 
+        <!-- <div id="cal" style="width: 300px; height: 300px;"></div> -->
+        </br>
+        <div class="jumbogrid">
+            <div ng-repeat="x in calendarChartMonths" class="flex">
+                <div id="{{x}}" style="width: 300px; height: 300px;"></div>
+            </div>
+        </div>
 
 
         <!-- Bar or Gauge -->
         <!-- Chart types switch depending on user preference -->
-        <div id="monthlyChart" class="h60pc" ng-if="monthlyViewAsBars"></div>
+        <!-- <div id=" monthlyChart" class="h60pc" ng-if="monthlyViewAsBars"></div> -->
+        <div id="monthlyChart" class="h60pc" ng-show="monthlyViewAsBars"></div>
 
-        <div class="jumbogrid" ng-if="!monthlyViewAsBars">
+        <div class="jumbogrid" ng-show="!monthlyViewAsBars">
             <div ng-repeat="x in gaugeChartNames" class="mnth_gauge">
-                <!-- <h1>{{ x }}</h1> -->
                 <drill-down-chart name="{{x}}" chart="{{x}}"></drill-down-chart>
             </div>
         </div>
         <!-- /Bar or Gauge -->
 
-        <div id="monthlyLean" class="h60pc"></div>
-        <div id="monthlyDate" class="h60pc"></div>
+        </br></br>
+
+        <div class="h50pc w60pc">
+            <drill-down-chart name="Daily Variance to Target" chart="monthlyLean" class="h20pc">
+            </drill-down-chart>
+        </div>
+        </br>
+        <div class="h50pc w60pc">
+            <drill-down-chart name="Daily Totals" chart="monthlyDate" class="h40pc"></drill-down-chart>
+        </div>
+
+        <!-- <div id="monthlyLean" class="h60pc"></div>
+        <div id="monthlyDate" class="h60pc"></div> -->
 
 
 

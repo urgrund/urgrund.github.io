@@ -579,7 +579,10 @@ input:invalid:required {
 .h100pc{ height: 100%;}
 .h80pc{ height: 80%;}
 .h60pc{ height: 60%;}
+.h50pc{ height: 50%;}
+.h40pc{ height: 40%;}
 .h33pc{ height: 33%;}
+.h30pc{ height: 30%;}
 .h25pc{ height: 25%;}
 .h20pc{ height: 20%;}
 .h15pc{ height: 15%;}
@@ -588,6 +591,9 @@ input:invalid:required {
 .w100pc { width: 100%}
 .w60pc {width:60%}
 .w50pc {width:50%}
+.w40pc {width:40%}
+.w30pc {width:30%}
+.w20pc {width:20%}
 
 
 /* Colours */

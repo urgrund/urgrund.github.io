@@ -105,6 +105,8 @@ var fullDayView = 0;
 const shiftTitle = ['Day Shift', 'Night Shift', '24hr'];
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const daysShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
 const month = new Array();
 month[0] = "January";
 month[1] = "February";

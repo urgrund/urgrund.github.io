@@ -11,6 +11,7 @@ class ChartStyleContainer {
         this.backGroundColor = 'rgba(0, 0, 0, 0)';
 
         this.textColor = 'rgba(1, 1, 1, 1)';
+        this.shadowColor = 'rgba(0, 0, 0, 0.5)';
 
         this.fontSizeAxis = 10;
         this.fontSizeSmall = 10;
@@ -308,6 +309,15 @@ class ChartStyleContainer {
         }
     }
 
+    gridSpacingMonth() {
+        return {
+            top: '11%',
+            bottom: '2%',
+            left: '5%',
+            right: '5%',
+            containLabel: true
+        }
+    }
 
     createTitle(_content) {
         return {
