@@ -1,5 +1,5 @@
 
-app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $interval, $timeout, mmData) {
+app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $location, $timeout) {
 
     // Set the view choice in the root so its 
     // persistent with page reloads and equip filter
@@ -23,31 +23,19 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
         if ($rootScope.monthly == undefined)
             return;
         var months = [];
-        var offset = 6;  // This needs to be min 1 for zero indexed months
+        var debugOffset = 6;
+        var monthCount = 12;
         $scope.calendarChartMonths = [];
+
+        //console.log($rootScope.monthly);
         for (const [key, value] of Object.entries($rootScope.monthly)) {
             months.push(key);
         }
-        for (var i = months.length - 1; i > (months.length - 12); i--)
+        for (var i = months.length - 1 - debugOffset; i > (months.length - monthCount - debugOffset); i--)
             $scope.calendarChartMonths.push(months[i]);
     }
 
 
-    // $scope.createMenuOptions = function (_object) {
-    //     $scope.names = Object.keys(_object);
-    //     $scope.selectedName = $scope.names[0];
-    // }
-
-    // $scope.updateSelectionList = function () {
-    //     $scope.prepareChartData($scope.selectedName);
-    // }
-
-    //function GetStartingMonth() {
-    //if ($rootScope.monthlyActive == undefined)
-    //return '201901';
-    //else
-    //  return $rootScope.monthlyActive;
-    //}
 
 
     $scope.prepareChartData = function (_month) {
@@ -71,56 +59,58 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
         //console.log(_month);
         //console.log($rootScope.monthly);
-        if (_month in $rootScope.monthly) {
+        $timeout(function () {
+            if (_month in $rootScope.monthly) {
+                console.log("ASLDASDLASDLLADSJ");
+                ClearAllCharts();
 
-            ClearAllCharts();
+                $scope.dataForMonth = $rootScope.monthly[_month];
+                $scope.dataForSite = $scope.dataForMonth.sites[$scope.siteName];
 
-            $scope.dataForMonth = $rootScope.monthly[_month];
-            $scope.dataForSite = $scope.dataForMonth.sites[$scope.siteName];
+                $scope.gaugeChartNames = [];
+                for (const [key, value] of Object.entries($scope.dataForSite.planSegments)) {
+                    $scope.gaugeChartNames.push(key);
+                }
 
-            $scope.gaugeChartNames = [];
-            for (const [key, value] of Object.entries($scope.dataForSite.planSegments)) {
-                $scope.gaugeChartNames.push(key);
-            }
-
-            //console.log("Data for " + $scope.siteName + " : " + $scope.dataForSite);
-
-
-            if ($scope.dataForSite == undefined)
-                return;
+                //console.log("Data for " + $scope.siteName + " : " + $scope.dataForSite);
 
 
-            //console.log("HSDASDS");
-
-            // Create charts depending on switch
-            //$scope.switchView($rootScope.monthlyViewAsBars);
-            //if ($rootScope.monthlyViewAsBars)
-            $scope.createMonthlyComplianceBars();
-            //else
-            $scope.createMonthlyComplianceGauges();
+                if ($scope.dataForSite == undefined)
+                    return;
 
 
+                //console.log("HSDASDS");
 
-
-            // -----------------------------------------
-            // Multi Calendar View
-            console.log("The Months")
-            console.log($scope.calendarChartMonths);
+                // Create charts depending on switch
+                //$scope.switchView($rootScope.monthlyViewAsBars);
+                //if ($rootScope.monthlyViewAsBars)
+                $scope.createMonthlyComplianceBars();
+                //else
+                $scope.createMonthlyComplianceGauges();
 
 
 
-            if (!true) {
-                var calMonth = '202101';
-                var dataForCal =
-                    [
-                        $rootScope.monthly[calMonth].sites[$scope.siteName],
-                        calMonth,
-                        $rootScope.monthly[calMonth].daysInMonth
-                    ];
-                ChartsMonthly.CreateCalendarChart2("cal", dataForCal);
-            }
-            else {
-                $timeout(function () {
+
+                // -----------------------------------------
+                // Multi Calendar View
+                //console.log("The Months")
+                //console.log($scope.calendarChartMonths);
+
+                if (!true) {
+                    // DUMMY TEST
+                    var calMonth = '202006';
+                    //var calMonth = '201902';
+                    console.log($rootScope.monthly['202006']);
+                    var dataForCal =
+                        [
+                            $rootScope.monthly[calMonth].sites[$scope.siteName],
+                            calMonth,
+                            $rootScope.monthly[calMonth].daysInMonth
+                        ];
+                    ChartsMonthly.CreateCalendarChart2("cal", dataForCal);
+                }
+                else {
+                    // For the list of calendars to display
                     for (var i = 0; i < $scope.calendarChartMonths.length; i++) {
                         var calMonth = $scope.calendarChartMonths[i];
                         dataForCal =
@@ -131,31 +121,46 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
                             ];
                         ChartsMonthly.CreateCalendarChart2(calMonth, dataForCal);
                     }
+
+                }
+                // -----------------------------------------
+
+
+
+
+                var dataForChart =
+                    [
+                        $scope.dataForSite,
+                        $scope.selectedMonth,
+                        $scope.dataForMonth.daysInMonth
+                    ];
+
+                // The two bar graphs,  connect them when done
+                var lean = ChartsMonthly.CreateMonthlyLean("monthlyLean", dataForChart);
+                var date = ChartsMonthly.CreateMonthlyDateChart("monthlyDate", dataForChart);
+                $timeout(function () {
+                    if (lean != undefined && date != undefined) {
+                        lean.group = 'a';
+                        date.group = 'a';
+                        echarts.connect('a');
+
+                        lean.on('click', function (params) {
+                            console.log("Click!");
+
+                            console.log(params.dataIndex);
+                            console.log($scope.selectedMonth);
+
+                            var date = $scope.selectedMonth + (Number(params.dataIndex) + 1);
+                            var url = "site/" + String($scope.siteIndex);
+                            $rootScope.fetchSiteData([date], true);
+                            $location.path(url);
+                            //var index = $rootScope.cachedData.length - params.dataIndex - 1;
+                            //$rootScope.setNewSiteData($rootScope.cachedData[index]);
+                        });
+                    }
                 }, 200);
             }
-            // -----------------------------------------
-
-
-
-
-            var dataForChart =
-                [
-                    $scope.dataForSite,
-                    $scope.selectedMonth,
-                    $scope.dataForMonth.daysInMonth
-                ];
-
-            // The two bar graphs,  connect them when done
-            var lean = ChartsMonthly.CreateMonthlyLean("monthlyLean", dataForChart);
-            var date = ChartsMonthly.CreateMonthlyDateChart("monthlyDate", dataForChart);
-            $timeout(function () {
-                if (lean != undefined && date != undefined) {
-                    lean.group = 'a';
-                    date.group = 'a';
-                    echarts.connect('a');
-                }
-            }, 200);
-        }
+        }, 200);
     }
 
 
@@ -168,7 +173,8 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
         //$scope.createMonthlyComplianceBars();
         //else
         //$scope.createMonthlyComplianceGauges();
-        $scope.prepareChartData(mmData.monthView);
+        //$scope.prepareChartData(mmData.monthView);
+        $scope.prepareChartData($rootScope.monthlyActiveAsDate);
     }
 
 
@@ -209,7 +215,9 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
             onChange: function (selectedDates, dateStr, instance) {
                 var date = moment(selectedDates[0]).format('YYYYMM').toString();
                 //console.log("Selected - " + date);
-                mmData.monthView = date;
+                //console.log($rootScope.monthlyActiveAsDate());
+                //mmData.monthView = date;
+                $rootScope.monthlyActiveAsDate = date;
                 $scope.prepareChartData(date);
             }
         });
@@ -221,24 +229,13 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $in
 
 
     // ----------------------------------------------------
-    $scope.$on('monthlySet', function () {
-        mmData.monthView = $routeParams.month;
-        $scope.createMonthsForCalendarChart();
-        $scope.setupCalendar();
-        $scope.prepareChartData($routeParams.month);
-    });
-
-
-    $scope.$watch('$viewContentLoaded', function () {
-        //$timeout(function () {
-        mmData.monthView = $routeParams.month;
-        $scope.createMonthsForCalendarChart();
-        $scope.setupCalendar();
-        $scope.prepareChartData($routeParams.month);
-        //}, 10);
-    });
-
+    $scope.$on('monthlySet', function () { Ready(); });
+    $scope.$watch('$viewContentLoaded', function () { Ready(); });
     function Ready() {
+        //mmData.monthView = $routeParams.month;
+        $scope.createMonthsForCalendarChart();
+        $scope.setupCalendar();
+        $scope.prepareChartData($routeParams.month);
     }
 
     $scope.setupCalendar();

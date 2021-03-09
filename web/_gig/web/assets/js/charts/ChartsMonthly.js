@@ -588,12 +588,12 @@ class ChartsMonthly {
                         {
                             value: actualUnder,
                             name: 'Under',
-                            itemStyle: { color: ChartStyles.TUMColors[0] }
+                            itemStyle: { color: ChartStyles.TUMColors[5] }
                         },
                         {
                             value: actualOver,
                             name: 'Over',
-                            itemStyle: { color: ChartStyles.TUMColors[5] }
+                            itemStyle: { color: ChartStyles.TUMColors[0] }
                         },
                         {
                             value: actualPadding,
@@ -1156,6 +1156,10 @@ class ChartsMonthly {
 
 
 
+
+
+
+
     static CreateCalendarChart2(_elementID, _data) {
 
         // Create an eCharts instance 
@@ -1163,35 +1167,58 @@ class ChartsMonthly {
         if (myChart == undefined) return;
 
         //console.log(_data);
+        //        console.log(_data[1]);
 
         var monthData = _data[0];
         var date = _data[1];
         var daysInMonth = _data[2];
         var monthSplit = date.substring(0, 4) + "-" + date.substring(4, 6);
         var cellSize = [40, 40];
-        var dailyAvgTarget = Math.round((monthData.totalMetricTarget / daysInMonth) * 10) / 10;
-        var maxYaxis = Math.round((Math.max(...monthData.dailyTotals) / 1000)) * 1000;
-        var minYaxis = Math.round((Math.min(...monthData.dailyTotals) / 1000)) * 1000;
 
-        //console.log(date);
-
-
-        function createData(year) {
-            var date = +echarts.number.parseDate(year + '-' + '01');
-            var end = +echarts.number.parseDate(year + '-' + daysInMonth);
-            var dayTime = 3600 * 24 * 1000;
-            var data = [];
-            var i = 0;
-            for (var time = date; time <= end; time += dayTime) {
-                data.push([
-                    echarts.format.formatTime('yyyy-MM-dd', time),
-                    monthData.dailyTotals[i]
-                ]);
-                i++;
-            }
-            //console.log(data);
-            return data;
+        var dailyAvgTarget = -1;
+        var maxYaxis = -1;
+        var minYaxis = -1;
+        if (monthData != undefined) {
+            dailyAvgTarget = Math.round((monthData.totalMetricTarget / daysInMonth) * 10) / 10;
+            maxYaxis = Math.round((Math.max(...monthData.dailyTotals) / 1000)) * 1000;
+            minYaxis = Math.round((Math.min(...monthData.dailyTotals) / 1000)) * 1000;
         }
+
+
+
+        // Creates the data for the heatmap/calendar
+        function createData(year) {
+            if (monthData != undefined) {
+                var date = +echarts.number.parseDate(year + '-' + '01');
+                var end = +echarts.number.parseDate(year + '-' + daysInMonth);
+                var dayTime = 3600 * 24 * 1000;
+                var data = [];
+                var i = 0;
+                for (var time = date; time <= end; time += dayTime) {
+                    data.push([
+                        echarts.format.formatTime('yyyy-MM-dd', time),
+                        monthData.dailyTotals[i]
+                    ]);
+                    i++;
+                }
+                //console.log(data);
+                return data;
+            }
+        }
+        var calData = createData(monthSplit);
+
+
+        // Crates visual map properties
+        // { min: ((dailyAvgTarget + maxYaxis) / 2), color: ChartStyles.TUMColors[4] },
+        // { min: dailyAvgTarget, max: ((dailyAvgTarget + maxYaxis) / 2), color: ChartStyles.TUMColors[5] },
+        // { max: (dailyAvgTarget - 1), color: ChartStyles.TUMColors[0] },
+        //{ min: dailyAvgTarget, color: ChartStyles.TUMColors[4] },
+        //{ max: (dailyAvgTarget - 1), color: ChartStyles.TUMColors[0] },
+        //{ max: minYaxis, min: maxYaxis, color: ChartStyles.TUMColors[3] },
+        var vmProps = {};
+        vmProps.show = true;
+        vmProps.pieces = [{ min: dailyAvgTarget, color: ChartStyles.TUMColors[4] }, { max: dailyAvgTarget, color: ChartStyles.TUMColors[0] }];
+
 
         //console.log("ALSKJDLKSJD ---   " + Number(date.substring(4, 6)));
 
@@ -1225,7 +1252,7 @@ class ChartsMonthly {
             visualMap: {
                 type: 'piecewise',
                 //type: 'continuous',
-                //show: false,
+                show: vmProps.show,
                 min: minYaxis,
                 max: maxYaxis,
                 orient: 'horizontal',
@@ -1236,16 +1263,9 @@ class ChartsMonthly {
                 realtime: true,
                 seriesIndex: [0],
                 textStyle: ChartStyles.textStyle,
-                pieces: [
-                    // { min: ((dailyAvgTarget + maxYaxis) / 2), color: ChartStyles.TUMColors[4] },
-                    // { min: dailyAvgTarget, max: ((dailyAvgTarget + maxYaxis) / 2), color: ChartStyles.TUMColors[5] },
-                    // { max: (dailyAvgTarget - 1), color: ChartStyles.TUMColors[0] },
-                    { min: dailyAvgTarget, color: ChartStyles.TUMColors[4] },
-                    { max: (dailyAvgTarget - 1), color: ChartStyles.TUMColors[0] },
-                ],
-
+                pieces: vmProps.pieces,
                 outOfRange: {
-                    color: ['rgba(0,0,0,1)']
+                    color: ['rgba(0,0,1,1)']
                 }
 
                 // inRange: {
@@ -1305,6 +1325,7 @@ class ChartsMonthly {
                     show: true
                 },
                 itemStyle: {
+                    color: ChartStyles.TUMColors[2],
                     emphasis: {
                         borderColor: 'white',
                         borderWidth: 0.5,
@@ -1312,7 +1333,7 @@ class ChartsMonthly {
                         shadowColor: ChartStyles.shadowColor
                     }
                 },
-                data: createData(monthSplit)
+                data: calData//createData(monthSplit)
             }
         };
 

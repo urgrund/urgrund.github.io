@@ -37,12 +37,14 @@ app.controller('Landing', function ($route, $rootScope, $scope, $timeout) {
                 var site = $rootScope.monthlyActive.sites[$scope.siteName];
                 // Setup the values to display
                 if (site != undefined) {
+                    //console.log(site);
                     spatial = (site.complianceSpatial * 100).toFixed();
                     volume = (site.complianceVolumetric * 100).toFixed();
 
-                    tVSdt[0] = ((site.averageCurrent / site.averageRequired) * 100).toFixed();
+                    tVSdt[0] = site.averageRequired > 0 ? ((site.averageCurrent / site.averageRequired) * 100).toFixed() : 0;
                     tVSdt[1] = String(site.averageCurrent.toFixed() + " / " + site.averageRequired.toFixed());
-                    tVSmt[0] = ((site.totalMetricActual / site.totalMetricTarget) * 100).toFixed();
+
+                    tVSmt[0] = site.averageRequired > 0 ? ((site.totalMetricActual / site.totalMetricTarget) * 100).toFixed() : 0;
                     tVSmt[1] = String(site.totalMetricActual.toFixed() + " actual / " + site.totalMetricTarget.toFixed() + " plan");
 
                     spatialDetails = String(spatial + "% of " + site.totalMetricTarget.toFixed() + " mined");

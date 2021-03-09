@@ -76,7 +76,7 @@
                 <div class="droplist">
                     <div ng-repeat="x in siteData" ng-init="siteIndex = $index">
                         <!-- <h3>{{x.name}}</h3> -->
-                        <a ng-href="#!monthly/{{siteIndex}}/{{mmData.monthView}}">{{x.name}}</a> <br />
+                        <a ng-href="#!monthly/{{siteIndex}}/{{monthlyActiveAsDate}}">{{x.name}}</a> <br />
                         <!-- <a ng-href="#!monthly/{{siteIndex}}/1">Adjust Target Inputs</a> -->
                     </div>
 
@@ -257,17 +257,16 @@
 
 
 
-
         <!-- Active Date for Site Data -->
         <div class="dropdown">
             <div class="dropbtn">
-                <h5><i class="far fa-calendar-alt"></i> {{siteDataDate.SHORT}}</h5>
+                <h5><i class="fas fa-database"></i> {{siteDataDate.SHORT}}</h5>
             </div>
             <div class="dropdown-content">
                 <div class="droplist">
 
                     <!-- Select any date to load.. -->
-                    <h3><i class="far fa-calendar-alt"></i> Active Date</h3>
+                    <h3><i class="fas fa-database"></i> Active Date</h3>
                     <div>
                         <h4>{{siteDataDate.SHORT}}</h4>
                     </div>

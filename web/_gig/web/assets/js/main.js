@@ -386,9 +386,21 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
 
 
 
+    // ----------------------------------------------------------------------------------
+    // Stuff for monthly related data
 
-    $rootScope.monthly = null;
-    $rootScope.monthlyActive = null;
+    $rootScope.monthly = null;                  // All the data for each month
+    $rootScope.monthlyActive = null;            // The current active month data
+    $rootScope.monthlyActiveAsDate = null;      // The current active month as a date (YYYYMM)
+    // = function () {
+    //     if ($rootScope.monthlyActive != null) {
+    //         var month = $rootScope.monthlyActive.month;
+    //         if (month < 10)
+    //             month = String('0' + month);
+    //         return $rootScope.monthlyActive.year + month;
+    //     }
+    // }
+
     function SetActiveMonth() {
         if ($rootScope.monthly == null
             || $rootScope.meta == undefined
@@ -400,7 +412,8 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
 
         if (monthDate in $rootScope.monthly) {
             $rootScope.monthlyActive = $rootScope.monthly[monthDate];
-            //console.log("Set active month..." + monthDate);
+            $rootScope.monthlyActiveAsDate = monthDate;
+            console.log("Set active month..." + monthDate);
             //console.log($rootScope.monthlyActive);
         }
         else
@@ -426,6 +439,7 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         });
         return request;
     }
+    // ----------------------------------------------------------------------------------
 });
 
 
