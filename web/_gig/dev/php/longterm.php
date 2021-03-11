@@ -12,12 +12,25 @@ $request = json_decode($postdata);
 
 if (is_object($request)) {
     include_once('setDebugOff.php');
+
     if ($request->func == 0) {
-        echo LongTerm::Get(new DateTime(), new DateTime());
+        $start = new DateTime('20190101');
+        $end = new DateTime('20210101');
+        echo  json_encode(LongTerm::Get($start, $end));
     }
 } else {
-    $result = LongTerm::Get(new DateTime(), new DateTime());
+
+    //$result = LongTerm::Get(new DateTime(), new DateTime());
+    ini_set('memory_limit', '2048M');
+
+    $start = new DateTime('20190101');
+    $end = new DateTime('20210501');
+    $result = LongTerm::Get($start, $end);
+    if (file_put_contents("D:\\test.json", json_encode($result))) {
+    }
     //Debug::Log($result);
+    //Debug::Log($d);
+
 }
 // ----------------------------------------------------------
 // ----------------------------------------------------------
@@ -111,11 +124,18 @@ class LongTerm
 
         $numberOfDays = iterator_count($period);
         $sqlTxt = SQLUtils::FileToQuery(Client::SQLCorePath() . "ALL_EquipmentEventListRange.sql");
+
+        $sqlTxt = str_replace('@StartDate', "'" . $_startDate->format('Ymd') . "'", $sqlTxt);
+        $sqlTxt = str_replace('@EndDate', "'" . $_endDate->format('Ymd') . "'", $sqlTxt);
+
         $sqlEquipEventList = SQLUtils::QueryToText($sqlTxt, "Event List Range");
 
+
+
+        //Debug::Log($sqlTxt);
         if ($sqlEquipEventList == NULL)
             return;
-        //Debug::Log($sqlEquipEventList);
+
 
 
         $allEquip = [];
@@ -140,13 +160,16 @@ class LongTerm
         $totals->GenerateUtilisationFromTUM();
         $totals->assetUtilisation = array_values($totals->assetUtilisation);
 
+
         Debug::EndProfile();
 
         $result = [];
         $result[] = $allEquip;
         $result[] = $totals;
 
-        return json_encode($result);
+        Debug::Log(memory_get_usage() / pow(10, 6));
+
+        return ($result);
     }
 
 
