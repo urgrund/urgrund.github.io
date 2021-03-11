@@ -1,3 +1,10 @@
+/** A stripped down version of event list with range variables **/
+
+-- Declare @StartDate as varchar(8)
+-- Set @StartDate = '20190101'
+-- Declare @EndDate as varchar(8)
+-- Set @EndDate = '20210101'
+
 Select
 	ATS.[Equipment] 'Equipment'
 		--,RDO.[Operator_Description] AS 'Operator'
@@ -20,4 +27,4 @@ FROM [dbo].[ALLOCTNTIMESTAMP] as ATS
 	Join [dbo].[RD_EQUIPMENT_FUNCTION] as RDF on RDF.[Equipment_FunctionCode] = RDM.[Equipment_Model_Function_Code]
 --Join [dbo].[RD_PARENTLOCATIONS] as RDP on RDP.[SourceCode] = ATS.[Location]
 
-WHERE MTS.MeasCode = 'SECONDS' and RDF.[Equipment_FunctionCode] in ('LOADING','HAULING','P','D') and left(ats.[shkey],8) BETWEEN '20181001' AND '20181231'
+WHERE MTS.MeasCode = 'SECONDS' and RDF.[Equipment_FunctionCode] in ('LOADING','HAULING','P','D') and left(ats.[shkey],8) BETWEEN @StartDate AND @EndDate
