@@ -1,6 +1,8 @@
 <?php
 include_once('header.php');
 
+// Big stuff happens with longterm
+ini_set('memory_limit', '2048M');
 
 // ----------------------------------------------------------
 // ----------------------------------------------------------
@@ -15,19 +17,32 @@ if (is_object($request)) {
 
     if ($request->func == 0) {
         $start = new DateTime('20190101');
-        $end = new DateTime('20210101');
-        echo  json_encode(LongTerm::Get($start, $end));
+        $end = new DateTime('20200101');
+        //$end = new DateTime('20210101');
+        $data =  json_encode(LongTerm::Get($start, $end));
+        $gzdata = gzencode($data, 9);
+        //echo $gzdata;
+        echo $data;
     }
 } else {
 
     //$result = LongTerm::Get(new DateTime(), new DateTime());
-    ini_set('memory_limit', '2048M');
+
 
     $start = new DateTime('20190101');
-    $end = new DateTime('20210501');
-    $result = LongTerm::Get($start, $end);
-    if (file_put_contents("D:\\test.json", json_encode($result))) {
+    $end = new DateTime('20200101');
+    //$end = new DateTime('20210501');
+
+    $data = json_encode(LongTerm::Get($start, $end));
+
+    if (file_put_contents("D:\\test.json", $data)) {
     }
+
+    $gzdata = gzencode($data, 9);
+    $fp = fopen("D:\\bigfile.txt.gz", "w");
+    fwrite($fp, $gzdata);
+    fclose($fp);
+
     //Debug::Log($result);
     //Debug::Log($d);
 

@@ -270,7 +270,6 @@ final class CreateSiteData
             if ($eSiteName != '')
                 $tempEquip[$eID]->sites[] = $eSiteName;
 
-            //if ($eID == 'TH057')
             $tempEquip[$eID]->AddEvent($sqlEquipEventList[$i]);
         }
 
@@ -351,6 +350,13 @@ final class CreateSiteData
     // Annoying, just to get intellisense to work
     private static Equipment $e;
 
+    static function sortById($x, $y)
+    {
+        return ($x->timeStamp - $y->timeStamp);
+    }
+
+
+
     // ------------------------------------------------------------------
     private static function CreateDataForAllEquip()
     {
@@ -362,14 +368,18 @@ final class CreateSiteData
 
             // DEBUG
             //if ($key != 'BP019')
-            //continue;
+            //  continue;
 
+            self::$e->SortEventsAndAllocateToShifts();
             self::$e->GenerateMPH();
             self::$e->GenerateUofAFromEvents();
             self::$e->GenerateEventBreakDown();
             self::$e->GenerateShiftCallUps();
 
+
+            //usort(self::$e->events, array('CreateSiteData', 'sortById'));
             //Debug::Log(self::$e->events);
+            //eventFirstOp
         }
 
         Debug::EndProfile();

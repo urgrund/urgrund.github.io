@@ -4,7 +4,6 @@
 /**
  * Equipment Class - deals with an equipment asset
  * storing its shift data & metrics 
- * @author Matt Bell
  */
 class Equipment
 {
@@ -37,7 +36,16 @@ class Equipment
         }
     }
 
-    function AddEvent($_eventDataRow)
+
+    private function GetSecondsInHour($dateTime)
+    {
+        return (intval($dateTime->format('i')) * 60) + (intval($dateTime->format('s')));
+    }
+
+
+
+
+    public function AddEvent($_eventDataRow)
     {
         //global $date;
 
@@ -60,7 +68,8 @@ class Equipment
         $e->mineArea = $_eventDataRow[4];
         $e->duration = $_eventDataRow[5];
         $e->status = $_eventDataRow[6];
-        $e->shift = $_eventDataRow[7] - 1;
+        $e->shift = strval(intval($_eventDataRow[7] - 1));
+        //$e->shift = $_eventDataRow[7]; //strval(intval($_eventDataRow[7] - 1));
 
         $e->tumCategory = Config::TUM($e->status);
         $e->majorGroup = Config::MajorGroup($e->tumCategory);
@@ -89,22 +98,44 @@ class Equipment
         }
 
         // Store the event in the shift arrays
-        $this->shiftData[$e->shift]->events[] = count($this->events);
-        $this->shiftData[2]->events[] = count($this->events);
+        //Debug::Log($e->shift);
+        //intval 
+        //$s = intval($_eventDataRow[7]); // + intval(1);
+        //$s = $_eventDataRow;
+        //$a = intval(strval(intval($s - 1)));
+        //Debug::Log($a);
 
-
+        //$this->shiftData[$e->shift]->events[] = count($this->events);
+        //$this->shiftData[2]->events[] = count($this->events);
 
         // Store the full event details 
         $this->events[] = $e;
     }
 
 
-    private function GetSecondsInHour($dateTime)
+
+    private function SortByTimeStamp($x, $y)
     {
-        return (intval($dateTime->format('i')) * 60) + (intval($dateTime->format('s')));
+        return ($x->timeStamp - $y->timeStamp);
     }
 
-    function GenerateUofAFromEvents()
+    /**
+     * Sort the array events by time stamps and 
+     * allocate via index to the shifts 
+     * */
+    public function SortEventsAndAllocateToShifts()
+    {
+        usort($this->events, array($this, 'SortByTimeStamp'));
+        for ($i = 0; $i < count($this->events); $i++) {
+            $this->shiftData[$this->events[$i]->shift]->events[] = $i;
+            $this->shiftData[2]->events[] = $i;
+        }
+    }
+
+
+
+
+    public function GenerateUofAFromEvents()
     {
         // For each shift... 
         for ($q = 0; $q < 2; $q++) {
@@ -236,48 +267,6 @@ class Equipment
 
 
 
-    /**
-     * From an array of events this function will
-     * split out the categories, minor events and 
-     * the total time spent in each of these to see
-     * how many of each type of event may have occurred
-     * 
-     * @param array $_eventsArray
-     **/
-    /*private function GetBreakDownOfEventsArray($_eventsArray)
-    {
-        $breakDown = [];
-        //Debug::Log($_eventsArray);
-        for ($i = 0; $i < count($_eventsArray); $i++) {
-
-            $event = $this->events[$_eventsArray[$i]];
-            // Check if major group is already set...   
-            // if or if not,  set the event details 
-            if (!isset($breakDown[strval($event->majorGroup)])) {
-                $e = new EventBreakDown();
-                $e->majorGroup = strval($event->majorGroup);
-                $e->duration += $event->duration;
-                $e->categories[($event->status)] = $event->duration; // 1;
-                $e->eventCount++;
-
-                $breakDown[strval($event->majorGroup)] = $e;
-            } else {
-
-                $e = $breakDown[strval($event->majorGroup)];
-                $e->duration += $event->duration;
-                $e->eventCount++;
-
-                // If a sub-category doesn't exist then add it
-                // otherwise increment its count 
-                if (!isset($e->categories[($event->status)])) {
-                    $e->categories[($event->status)] = $event->duration; //1;
-                } else
-                    $e->categories[($event->status)] += $event->duration;
-            }
-        }
-        return $breakDown;
-    }*/
-
 
 
     private function GetTUMBreakDownOfEvents()
@@ -336,10 +325,8 @@ class Equipment
 
     // Generate the event breakdowns for both shifts
     private EquipmentShiftData $_equipTempShiftData;
-    function GenerateEventBreakDown()
+    public function GenerateEventBreakDown()
     {
-        //$this->shiftData[0]->eventBreakDown = $this->GetBreakDownOfEventsArray($this->shiftData[0]->events);
-        //$this->shiftData[1]->eventBreakDown = $this->GetBreakDownOfEventsArray($this->shiftData[1]->events);
         $this->GetTUMBreakDownOfEvents();
         for ($i = 0; $i < count($this->shiftData); $i++) {
             $this->_equipTempShiftData = $this->shiftData[$i];
@@ -351,7 +338,7 @@ class Equipment
     // TODO - THIS STILL SEEMS BUGGY ON FRONTEND
     /** For each shift, get the indices for
      * first call ups and last call up events */
-    function GenerateShiftCallUps()
+    public function GenerateShiftCallUps()
     {
         for ($i = 0; $i < count($this->shiftData); $i++) {
             for ($j = 0; $j < count($this->shiftData[$i]->events); $j++) {

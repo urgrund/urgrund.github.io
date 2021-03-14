@@ -88,6 +88,17 @@ class ErrorResponse
 }
 
 
+/**
+ * Code to categorise the error response
+ **/
+class ErrorResponseCode
+{
+    public static $MONTLY = "Monthly";
+    public static $CREATE_SITE_DATA = "";
+}
+
+
+
 
 
 

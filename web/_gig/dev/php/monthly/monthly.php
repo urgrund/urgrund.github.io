@@ -112,15 +112,17 @@ class Monthly
     public static function WriteMonthlyPlanData($_data)
     {
         //$date = $_data[1]; //date("Y-m-d H:i:s", substr($_data[1], 0, 10));
-        $date = date("Y-m", substr($_data[1], 0, 10));
-        $year = substr($date, 0, 4);
-        $month = substr($date, 5, 7);
+        //$date = date("Ym", substr($_data[1], 0, 10));
+        //$year = substr($date, 0, 4);
+        //$month = substr($date, 5, 7) + 1;
+        //if ($month < 10)
+        //$month = "0" + strval($month);
 
         //Debug::Log($year . $month);
         //Debug::Log($_data[0]);
 
-        Monthly::WriteCSV($_data[0], $year, $month);
-        return  [$year, $month];
+        //        Monthly::WriteCSV($_data[0], $_data[1]);
+        return Monthly::WriteCSV($_data[0], $_data[1]);
     }
 
     // -----------------------------------------------------------------------------
@@ -161,6 +163,7 @@ class Monthly
         $year = substr($_fileName, 0, 4);
         $month = substr($_fileName, 4, 2);
         $csv = Monthly::GetCSV($year, $month);
+        Debug::Log($year . $month);
         array_shift($csv);
         return $csv;
     }
@@ -190,13 +193,13 @@ class Monthly
 
 
 
-    private static function WriteCSV($_data, $_year, $_month)
+    private static function WriteCSV($_data, $_date)
     {
         if ($_data == null)
-            return;
+            return false;
 
         //Monthly::SanitizeCSVData($_data);
-        $fileName = Client::MonthlyPlanPath() . $_year . $_month . Monthly::FILE_EXT;
+        $fileName = Client::MonthlyPlanPath() . $_date . Monthly::FILE_EXT;
 
         try {
             //if (is_readable($fileName)) {
@@ -211,11 +214,8 @@ class Monthly
 
             fclose($file);
             Debug::Log("Wrote file: " . $fileName);
-
-            //throw new Exception("Test exception");
+            return true;
         } catch (Exception $e) {
-            //Debug::Log($e->getMessage());
-            //Debug::Log($e);
             $error = (new ErrorResponse(
                 404,
                 "Plan Upload",
