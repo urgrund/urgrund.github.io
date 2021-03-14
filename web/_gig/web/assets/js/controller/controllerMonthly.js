@@ -12,8 +12,19 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
 
     $scope.selectedMonth;
 
-    $scope.dataForMonth = null;
+
     $scope.dataForSite = null;
+    $scope.dataForMonth =
+    {
+        totalMetricTarget: 0,
+        averageRequired: 0,
+        totalMetricActual: 0,
+        averageCurrent: 0,
+        complianceSpatial: 0,
+        complianceVolumetric: 0,
+        timeRemaining: 0,
+        timePassedInMonth: 0,
+    };
 
 
     $scope.gaugeChartNames = [];
@@ -31,7 +42,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
         for (const [key, value] of Object.entries($rootScope.monthly)) {
             months.push(key);
         }
-        for (var i = months.length - 1 - debugOffset; i > (months.length - monthCount - debugOffset); i--)
+        for (var i = months.length - 1 - debugOffset; i > (months.length - (monthCount + 1) - debugOffset); i--)
             $scope.calendarChartMonths.push(months[i]);
     }
 
@@ -61,7 +72,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
         //console.log($rootScope.monthly);
         $timeout(function () {
             if (_month in $rootScope.monthly) {
-                console.log("ASLDASDLASDLLADSJ");
+                //console.log("ASLDASDLASDLLADSJ");
                 ClearAllCharts();
 
                 $scope.dataForMonth = $rootScope.monthly[_month];
@@ -119,9 +130,14 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
                                 calMonth,
                                 $rootScope.monthly[calMonth].daysInMonth
                             ];
-                        ChartsMonthly.CreateCalendarChart2(calMonth, dataForCal);
+                        var cal = ChartsMonthly.CreateCalendarChart2(calMonth, dataForCal);
+                        cal.on('click', function (params) {
+                            var d = params.data[0].replace(/-/g, "");
+                            $rootScope.fetchSiteData([d], true);
+                            $location.path("site/" + String($scope.siteIndex));
+                        }
+                        );
                     }
-
                 }
                 // -----------------------------------------
 
@@ -144,19 +160,8 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
                         date.group = 'a';
                         echarts.connect('a');
 
-                        lean.on('click', function (params) {
-                            console.log("Click!");
-
-                            console.log(params.dataIndex);
-                            console.log($scope.selectedMonth);
-
-                            var date = $scope.selectedMonth + (Number(params.dataIndex) + 1);
-                            var url = "site/" + String($scope.siteIndex);
-                            $rootScope.fetchSiteData([date], true);
-                            $location.path(url);
-                            //var index = $rootScope.cachedData.length - params.dataIndex - 1;
-                            //$rootScope.setNewSiteData($rootScope.cachedData[index]);
-                        });
+                        lean.on('click', function (params) { ClickedOnChart(params); });
+                        date.on('click', function (params) { ClickedOnChart(params); });
                     }
                 }, 200);
             }
@@ -164,7 +169,16 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
     }
 
 
+    function ClickedOnChart(params) {
+        //console.log("Click!");
+        //console.log(params.dataIndex);
+        //console.log($scope.selectedMonth);
 
+        var date = $scope.selectedMonth + (Number(params.dataIndex) + 1);
+        var url = "site/" + String($scope.siteIndex);
+        $rootScope.fetchSiteData([date], true);
+        $location.path(url);
+    }
 
     // --------------------------------------------------
     $scope.switchView = function (_state) {
@@ -206,7 +220,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
 
         flatpickr('.calendar', {
 
-            defaultDate: d,// Date($routeParams.month),//Date.now(),
+            defaultDate: d,
             plugins: [
                 new monthSelectPlugin({
                 })

@@ -1,3 +1,4 @@
+
 class ServerInfo {
 
     constructor() {
@@ -14,6 +15,7 @@ class ServerInfo {
     static config = undefined;
     static availableDates = undefined;
 
+    static dailyRefreshRate = (5 * 1000);
 
 
     static shiftTargetAgressiveScalar = (1.0 / 0.85);

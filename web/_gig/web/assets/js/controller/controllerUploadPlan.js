@@ -99,8 +99,10 @@ app.controller('UploadPlan', function ($scope, $routeParams, $rootScope, $http, 
 
             // On Click of a new date
             onChange: function (selectedDates, dateStr, instance) {
-                var date = moment(selectedDates[0]).format('YYYYMM').toString();
-                //console.log(date);
+                //var date = moment(selectedDates[0]).format('YYYYMM').toString();
+                var date = moment(selectedDates[0]).format('YYYYMM');
+                $scope.uploadDate = date;
+                console.log(date);
             }
         });
     }
@@ -123,7 +125,7 @@ app.controller('UploadPlan', function ($scope, $routeParams, $rootScope, $http, 
             'data': [$scope.fileContent, $scope.uploadDate]
         };
 
-        //console.log(_data);
+        console.log(_data);
 
         var request = $http({
             method: 'POST',
@@ -134,6 +136,7 @@ app.controller('UploadPlan', function ($scope, $routeParams, $rootScope, $http, 
             //console.log(response);
             $scope.uploadSuccess = 1;
             console.log("Upload successful");
+            console.log(response);
         }, function (error) {
             $rootScope.processErrorResponse(error);
         });

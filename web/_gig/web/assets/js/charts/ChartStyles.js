@@ -40,7 +40,9 @@ class ChartStyleContainer {
         // Status Colours
 
         // Colors for flat shading MajorGroup
-        this.statusColorsFlat = ['#00ff6a', 'rgb(255,195,0)', 'rgba(255,0,0,1)'];
+
+        this.statusColorsFlat = ['#00ff6a', '#2b93ff', 'rgba(255,0,0,1)'];
+        //this.statusColorsFlat = ['#00ff6a', 'rgb(255,195,0)', 'rgba(255,0,0,1)'];
 
 
         // Colors for gradient shading of Major Group

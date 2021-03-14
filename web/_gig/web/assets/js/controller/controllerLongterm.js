@@ -179,14 +179,14 @@ app.controller('LongTerm', function ($scope, $rootScope, $timeout, $http) {
 
         //console.log(String(startDate));
 
-        l1 = ChartsMonthly.CreateLongTerm("lt_tau", sumTotalAU, 2, startDate);
-        l2 = ChartsMonthly.CreateLongTerm("lt_avail", sumAvailability, 4, startDate);
-        l3 = ChartsMonthly.CreateLongTerm("lt_uofa", sumUofA, 3, startDate);
-        l4 = ChartsMonthly.CreateLongTerm("lt_eff", sumEff, 1, startDate);
+        l1 = ChartsLong.CreateLongTerm("lt_tau", sumTotalAU, 2, startDate);
+        l2 = ChartsLong.CreateLongTerm("lt_avail", sumAvailability, 4, startDate);
+        l3 = ChartsLong.CreateLongTerm("lt_uofa", sumUofA, 3, startDate);
+        l4 = ChartsLong.CreateLongTerm("lt_eff", sumEff, 1, startDate);
 
         wf = Charts.CreateWaterfall("lt_wf", asset.totalAssetUtilisation.tumTimings, asset.totalAssetUtilisation.calendarTime);
 
-        var zoom = ChartsMonthly.CreateLongTermZoomTime("lt_zoom", sumTotalAU, startDate);
+        var zoom = ChartsLong.CreateLongTermZoomTime("lt_zoom", sumTotalAU, startDate);
 
         // Link all charts so the zoom together
         //zoom.group = 'group1';
@@ -248,6 +248,8 @@ app.controller('LongTerm', function ($scope, $rootScope, $timeout, $http) {
     // -------------------------------------------------
     // Server request
     $scope.getLongTermData = function () {
+
+        return;
 
         var date = '201811%%';
         var _data = { 'func': 0, 'date': date };

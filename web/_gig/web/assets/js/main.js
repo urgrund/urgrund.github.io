@@ -1,5 +1,5 @@
 /*
-***************************************
+*****************************************************
 M I N E   M A G E 
 Front-end web application main entry point
 (c) 2019-2021 Gigworth Pty Ltd
@@ -7,11 +7,11 @@ Front-end web application main entry point
 Version     1.3.22
 
 matt@gigworth.com.au
-*************************************** 
+***************************************************** 
 */
 
-//console.log = function () { }
-
+console.log("%c     Mine-Mage\u2122      ", 'background :#00436d; font-size:12pt');
+//console.log = function () { } 
 
 
 
@@ -51,7 +51,7 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
     // So that it can be used in angular
     $rootScope.ShiftIndex = function () { return ShiftIndex(); };
 
-    $rootScope.siteDataRefreshIntervalSeconds = 60;
+    $rootScope.siteDataRefreshIntervalSeconds = 5;
     $rootScope.siteDataLastRefresh = moment();
     $rootScope.siteDataNextRefresh = moment().add($rootScope.siteDataRefreshIntervalSeconds, 's');
 
@@ -89,83 +89,6 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         return $sce.trustAsHtml(html);
     }
 
-    // ------------------------------------------------------
-
-    /** Set the data object that the core of the SIC
-     * tool will interface with. */
-    $rootScope.setNewSiteData = function (_data, _test = false) {
-
-        if (_data == undefined) {
-            console.log("Trying to set unassigned data");
-            return;
-        }
-
-        console.log(_data);
-
-        // For non NG access
-        currentDayData = _data;
-
-        //var jsonString = JSON.stringify(_data);
-        //var newData = JSON.parse(jsonString);
-        var newData = Array.from(_data);
-
-        // All sites
-        $rootScope.siteData = newData;
-
-        // Meta data is last
-        $rootScope.meta = $rootScope.siteData.pop();
-
-        // All equip next
-        $rootScope.equipment = $rootScope.siteData.pop();
-
-        $rootScope.siteDataDate = $rootScope.convertToNiceDateObject($rootScope.meta.Date);
-        $rootScope.functionMapping = $rootScope.meta.EquipmentFunctionMap;
-
-        // Error check the date
-        if ($rootScope.siteData.length < 1) {
-            console.error("No sites with this date...");
-            return;
-        }
-
-
-        // Create a $root list of equipment by function
-        // use the function mapping table as object keys 
-        // then iterate over site data to populate
-        $rootScope.equipmentByFunction = {};
-        for (var key in $rootScope.functionMapping) {
-            $rootScope.equipmentByFunction[key] = [];
-        }
-
-        for (var key in $rootScope.equipment) {
-            var asset = $rootScope.equipment[key];
-            if (asset.function in $rootScope.equipmentByFunction)
-                $rootScope.equipmentByFunction[asset.function].push(key);
-        }
-        //console.log($rootScope.equipmentByFunction);
-
-        newData = null;
-
-        // Debug output
-        if (false) {
-            console.log("[" + $rootScope.meta.Date + "]");
-            console.log("Sites :");
-            console.log($rootScope.siteData);
-
-            console.log("Equipment :");
-            console.log($rootScope.equipment);
-
-            console.log("META :");
-            console.log($rootScope.meta);
-        }
-
-        SetActiveMonth();
-        $rootScope.$broadcast('newSiteDataSet');
-        $route.reload();
-    };
-
-
-    // ------------------------------------------------------
-
 
 
 
@@ -177,7 +100,7 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
     $rootScope.convertToNiceDateObject = function (_date) {
 
         var newDateObject = {
-            // TEMP ADD OF 20 MONTHS FOR DEMO
+            // TEMP ADD 20 MONTHS FOR DEMO
             //LONG: moment(_date).add(20, 'months').format('dddd, DD-MM-YY'),
             //SHORT: moment(_date).add(20, 'months').format('ddd DD MMM YYYY'),
             LONG: moment(_date).format('dddd, DD-MM-YY'),
@@ -224,10 +147,14 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
     $rootScope.equipStyleTUMColorBG = function (_tumEvent) {
         var tumCategory = ServerInfo.config.TUM[_tumEvent];
         var tumColorIndex = ServerInfo.config.TUMKeys[tumCategory];
-        var tumColor = ChartStyles.TUMColors[tumColorIndex].colorStops[1].color;
-        return {
-            'background': 'linear-gradient(0deg,' + tumColor + ', transparent)'
-        };
+        var tumColor = ChartStyles.TUMColors[tumColorIndex];
+        if (tumColor != undefined) {
+            var tumColorStop = ChartStyles.TUMColors[tumColorIndex].colorStops[1].color;
+            return {
+                'background': 'linear-gradient(0deg,' + tumColorStop + ', transparent)'
+            };
+        }
+        return "";
     }
 
     $rootScope.backGroundState = true;
@@ -255,7 +182,92 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
 
 
 
-    $rootScope.fetchSiteData = function (_dates, _setAfterFetch = false, _replace = false) {
+
+    // ---------------------------------------------------------------------------------------
+    // Setting And Fetching Dates
+
+    /** Set the data object that the core of the SIC
+     * tool will interface with. */
+    $rootScope.setNewSiteData = function (_data) {
+
+        if (_data == undefined) {
+            console.log("Trying to set unassigned data");
+            return;
+        }
+
+        console.log(_data);
+
+        // For non NG access
+        currentDayData = _data;
+
+        //var jsonString = JSON.stringify(_data);
+        //var newData = JSON.parse(jsonString);
+        var newData = Array.from(_data);
+
+        // All sites
+        $rootScope.siteData = newData;
+
+        // Check the date
+        if ($rootScope.siteData.length < 1) {
+            console.error("No sites with this date...");
+            return;
+        }
+
+        // Meta data is last
+        $rootScope.meta = $rootScope.siteData.pop();
+
+        // All equip next
+        $rootScope.equipment = $rootScope.siteData.pop();
+
+        $rootScope.siteDataDate = $rootScope.convertToNiceDateObject($rootScope.meta.Date);
+        $rootScope.functionMapping = $rootScope.meta.EquipmentFunctionMap;
+
+
+        // -----------------------------------------------
+        // THIS SHOULD BE DONE IN PHP 
+
+        // Create a $root list of equipment by function
+        // use the function mapping table as object keys 
+        // then iterate over site data to populate
+
+        $rootScope.equipmentByFunction = {};
+        for (var key in $rootScope.functionMapping) {
+            $rootScope.equipmentByFunction[key] = [];
+        }
+
+        for (var key in $rootScope.equipment) {
+            var asset = $rootScope.equipment[key];
+            if (asset.function in $rootScope.equipmentByFunction)
+                $rootScope.equipmentByFunction[asset.function].push(key);
+        }
+        //console.log($rootScope.equipmentByFunction);
+        // -----------------------------------------------
+
+        newData = null;
+
+        // Debug output
+        if (false) {
+            console.log("[ Data : " + $rootScope.meta.Date + "]");
+            console.log("Sites :");
+            console.log($rootScope.siteData);
+
+            console.log("Equipment :");
+            console.log($rootScope.equipment);
+
+            console.log("META :");
+            console.log($rootScope.meta);
+        }
+
+        SetActiveMonth();
+
+        $rootScope.$broadcast('newSiteDataSet');
+        $route.reload();
+    };
+
+
+
+    // Attempts to get data from an array of dates     
+    $rootScope.fetchSiteData = function (_dates, _setAfterFetch = false, _addToCache = false) {
 
         for (var i = 0; i < _dates.length; i++) {
             var date = _dates[i];
@@ -269,35 +281,31 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             })
             request.then(function (response) {
 
-                //console.log($rootScope.cachedData);
 
-                // Does this exist?
-                var found = false;
-                if ($rootScope.cachedData.length > 0)
-                    found = $rootScope.cachedData.some(el => el[el.length - 1].Date === response.data[response.data.length - 1].Date);
+                // If this date data is to be added to the cache
+                // for example the trailing week 
+                if (_addToCache) {
+                    //console.log($rootScope.cachedData);
+                    // Does this exist?
+                    var found = false;
+                    if ($rootScope.cachedData.length > 0)
+                        found = $rootScope.cachedData.some(el => el[el.length - 1].Date === response.data[response.data.length - 1].Date);
 
-                // It's new so add it 
-                if (!found) {
-                    //console.log("Wasn't found...");
-                    $rootScope.cachedData.push(response.data);
+                    // It's new so add it 
+                    if (!found) {
+                        //console.log("Wasn't found...");
+                        $rootScope.cachedData.push(response.data);
+                        $rootScope.cachedData.sort(function (a, b) { return b[b.length - 1]['Date'] - a[a.length - 1]['Date'] });
+                    }
                 }
 
-                // if (!true) {
-                //     console.log("[" + response.data[response.data.length - 1].Date + "] was added...");
-                //     console.log(response.data);
-                //     console.log($rootScope.cachedData.length + " days of data in memory");
-                // }
-
-                //if (_replace)
-                //  return;
 
                 // Apply to site if requested
                 if (_setAfterFetch) {
-                    $rootScope.setNewSiteData(response.data, _replace);
+                    $rootScope.setNewSiteData(response.data);
                 }
 
-                // Sort 
-                $rootScope.cachedData.sort(function (a, b) { return b[b.length - 1]['Date'] - a[a.length - 1]['Date'] });
+                return response.data;
 
             }, function (error) {
                 //console.error(error);
@@ -305,6 +313,10 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             });
         }
     };
+
+    // ---------------------------------------------------------------------------------------
+
+
 
 
 
@@ -451,9 +463,9 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
 // ===============================================================================================
 app.controller("myCtrl", function ($q, $scope, $rootScope, $timeout, $route, $location, $interval) {
 
-    // The start-up sequence 
-    console.log("Starting Mine-Mage...");
 
+    // -----------------------------------------------------------------
+    // The start-up sequence 
     // First up... can we connect to the DB?
     $q.all([$rootScope.checkConnection()]).then(
         function (responses) {
@@ -470,11 +482,11 @@ app.controller("myCtrl", function ($q, $scope, $rootScope, $timeout, $route, $lo
                 // Everything looks good to this point... 
                 $q.all(promises).then(function (responses) {
                     // Set the data 
-                    console.log("Config & Dates ready");
+                    //console.log("Config & Dates ready");
                     promises = [
-                        // Latest date and Trailing week 
-                        $rootScope.fetchSiteData([ServerInfo.availableDates[0]], true),
-                        $rootScope.fetchSiteData(ServerInfo.availableDates.slice(1, 7), false),
+                        // Latest date and Trailing week which get added to the cache 
+                        $rootScope.fetchSiteData([ServerInfo.availableDates[0]], true, true),
+                        $rootScope.fetchSiteData(ServerInfo.availableDates.slice(1, 7), false, true),
 
                         // Monthly report data
                         $rootScope.fetchMonthlyData()
@@ -485,21 +497,35 @@ app.controller("myCtrl", function ($q, $scope, $rootScope, $timeout, $route, $lo
     ).catch(function (err) {
         // Failed to connect
     });;
+    // -----------------------------------------------------------------
 
 
 
 
-    // ------------------------------------------------------
+    // -----------------------------------------------------------------
     // Interval function to update the current days data
     $scope.updateIntervalForTodaysData = function () {
-        //$rootScope.fetchSiteData(['20181003'], true, true);
         console.log("Refreshing todays data...");
+
+        // Check if today exists in the available dates 
+        // otherwise just use the latest date available
+        var nextDate = moment().format('YYYYMMDD');
+        if (!(nextDate in ServerInfo.availableDates)) {
+            nextDate = ServerInfo.availableDates[0];
+        }
+        //console.log(nextDate);
+        $rootScope.fetchSiteData([nextDate], true);
+
+
         $rootScope.siteDataLastRefresh = moment();
         $rootScope.siteDataNextRefresh = moment().add($rootScope.siteDataRefreshIntervalSeconds, 's');
     }
 
-    //$interval(function () { $scope.updateIntervalForTodaysData(); }, $rootScope.siteDataRefreshIntervalSeconds * 1000);
-    // ------------------------------------------------------
+    $interval(function () { $scope.updateIntervalForTodaysData(); }, $rootScope.siteDataRefreshIntervalSeconds * 1000);
+    // -----------------------------------------------------------------
+
+
+
 
 
     // Callback for new data being set

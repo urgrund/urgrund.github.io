@@ -29,9 +29,6 @@ app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $ti
         // And... turn it back into an object...
         callUpEvent = JSON.parse(callUpEvent);
 
-
-        // WHY CAN"T ALL THIS BE IN THE PHP?
-
         // ---------------------------------------------
         // Get time difference from 8am or 8pm
         var date1 = new Date(callUpEvent.eventTime.date);

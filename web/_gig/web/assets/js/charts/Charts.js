@@ -97,6 +97,29 @@ timeLabelsShiftExtra[2] = GenerateTimeLabels(25, 6);
 
 
 
+// -----------------------------------------------------------
+// TODO
+// Start making const objects for related groups
+// of properties/vars 
+
+// const MMShift =
+// {
+//     shift: 0,
+//     fullDayView: 0,
+//     titles: ['Day Shift', 'Night Shift', '24hr'],
+//     foo = function () {
+//         return 1;
+//     }
+// }
+//Object.freeze(MMShift);
+
+//const MMDates = {
+//days: [],
+//daysShort: []
+//};
+//Object.freeze(MMDates);
+// -----------------------------------------------------------
+
 
 // Variables used outside of particular NG scopes  (ie. charts)
 var shift = 0;
@@ -378,12 +401,15 @@ class Charts {
         SetOptionOnChart(option, myChart);
         return myChart;
     }
+    // ----------------------------------------------------------------------------------
 
 
 
 
 
 
+    // ----------------------------------------------------------------------------------
+    //
     static CreateMPH(_elementID, _data) {
 
         // Create an eCharts instance 
@@ -530,11 +556,14 @@ class Charts {
         SetOptionOnChart(option, myChart);
         return myChart;
     }
+    // ----------------------------------------------------------------------------------
 
 
 
 
 
+    // ----------------------------------------------------------------------------------
+    // 
     static CreateMPHRange(_elementID, _data, _cache) {
 
         // Create an eCharts instance 
@@ -545,6 +574,8 @@ class Charts {
         var xAxisNums = ArrayOfNumbers(0, (_cache.length * 24), 0);
 
         var mph = [];//ArrayOfNumbers(0, (_cache.length * 24), 0);
+
+        var mphShift = [];
 
         var totalAU = [];
         var availability = [];
@@ -561,6 +592,9 @@ class Charts {
             var equip = day[day.length - 2][_data.id];
             var equipMetrics = equip.shiftData[2].metricData;
 
+            var metricDS = equip.shiftData[0].metricData;
+            var metricNS = equip.shiftData[1].metricData;
+
             var date = day[day.length - 1]['Day'];
 
             dateLabels.push(date.substring(0, 3));
@@ -571,44 +605,68 @@ class Charts {
             efficiency[i] = equip.shiftData[2].assetUtilisation.efficiency;
             uOfa[i] = equip.shiftData[2].assetUtilisation.uOfa;
 
-            // Metrics
-            for (var j = 0; j < equipMetrics.length; j++) {
-                for (var k = 0; k < equipMetrics[j].mph.length; k++) {
-                    // Colour them based on the selected day
-                    if (mph[(i * 24) + k] == undefined) {
-                        mph[(i * 24) + k] = {
-                            'value': 0,
-                            'itemStyle': { color: isSelectedDate ? ChartStyles.siteColors[0] : ChartStyles.disabledColor }
-                        };
-                    }
-                    mph[(i * 24) + k]['value'] += equipMetrics[j].mph[k];
-                }
-            }
-        }
+            // Metrics every hour every day
+            // for (var j = 0; j < equipMetrics.length; j++) {
+            //     for (var k = 0; k < equipMetrics[j].mph.length; k++) {
+            //         // Colour them based on the selected day
+            //         if (mph[(i * 24) + k] == undefined) {
+            //             mph[(i * 24) + k] = {
+            //                 'value': 0,
+            //                 'itemStyle': { color: ChartStyles.siteColors[0] }
+            //                 //{ color: isSelectedDate ? ChartStyles.siteColors[0] : ChartStyles.disabledColor }
+            //             };
+            //         }
+            //         mph[(i * 24) + k]['value'] += equipMetrics[j].mph[k];
+            //     }
+            // }
 
+            // Metrics pershift            
+            var dsTotal = 0;
+            var nsTotal = 0;
+            for (var k = 0; k < metricDS.length; k++) dsTotal += metricDS[k].total;
+            for (var k = 0; k < metricNS.length; k++) nsTotal += metricNS[k].total;
+            mphShift.push({
+                'value': dsTotal,
+                'itemStyle': { color: ChartStyles.siteColors[1] } // { color: isSelectedDate ? ChartStyles.siteColors[1] : ChartStyles.disabledColor }
+            });
+            mphShift.push({
+                'value': nsTotal,
+                'itemStyle': { color: ChartStyles.siteColors[0] }//{ color: isSelectedDate ? ChartStyles.siteColors[0] : ChartStyles.disabledColor }
+            });
+        }
+        //console.log(_cache.length);
+        //console.log(mphShift);
+        mph = mphShift;
+
+        //mph = [2, 232, 3, 435, 431, 11, 123];
+
+
+        var lineSeriesNames = ["AU", "Availability", "Efficiency", "UofA"];
         var lineSeries = [totalAU, availability, efficiency, uOfa];
         var series = [];
+
         // Setup line series
         for (var i = 0; i < lineSeries.length; i++) {
-            series[i] =
-            {
-                name: lineSeries[i],
-                type: 'line',
-                smooth: 0.5,
-                yAxisIndex: 1,
-                xAxisIndex: 1,
-                itemStyle: { color: ChartStyles.TUMColors[i % 6] },
-                data: lineSeries[i]
-            };
+            series.push(
+                {
+                    name: lineSeriesNames[i],
+                    type: 'line',
+                    smooth: 0.5,
+                    yAxisIndex: 1,
+                    xAxisIndex: 1,
+                    itemStyle: { color: ChartStyles.TUMColors[i % 6] },
+                    data: lineSeries[i]
+                }
+            );
         }
 
-        // Metrics per hour
+        // Metrics per hour        
         series.push({
             name: 'Metrics',
             type: 'bar',
             yAxisIndex: 0,
             xAxisIndex: 0,
-            barWidth: '100%',
+            barWidth: '50%',//ChartStyles.barMaxWidth,
             itemStyle: { color: ChartStyles.siteColors[0] },
             data: mph
         });
@@ -627,17 +685,42 @@ class Charts {
 
 
 
-        //console.log(mph);
+        // For the category buttons
+        var labels = series.map((x) => { return x.name });
+        labels.pop();
+        //console.log(labels);
+
+        function Label(params, index) {
+            var string = "";
+            string += ChartStyles.toolTipTextTitle(params[1].dataIndex);
+            for (var i = 0; i < params.length - 1; i++) {
+                var name = params[i].seriesName;
+                var value = (i == 0) ? params[i].data.value : params[i].data;
+                string += ChartStyles.toolTipTextEntry(params[i].seriesName + "  :  " + value);
+                string += params[i].marker;
+            }
+            //console.log("Selected " + index);
+            //console.log(params);
+            //return "Hello " + params[2].marker;
+            return string;
+        }
+
+
 
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
             textStyle: ChartStyles.textStyle,
             grid: ChartStyles.gridSpacing(),
+            legend: { y: 'top', data: labels },
             tooltip: {
                 confine: true,
                 trigger: 'axis',
                 textStyle: ChartStyles.toolTipTextStyle(),
+                axisPointer: ChartStyles.toolTipShadow(),
                 backgroundColor: ChartStyles.toolTipBackgroundColor(),
+                formatter: function (params, index) {
+                    return Label(params);
+                },
                 axisPointer: {
                     type: 'shadow',
                     shadowStyle: {
@@ -675,241 +758,6 @@ class Charts {
         SetOptionOnChart(option, myChart);
         return myChart;
     }
-
-
-
-
-
-    /*
-        static CreateTimeLine(_elementID, _data) {
-            var dom = document.getElementById(_elementID);
-            if (dom == null || dom == undefined)
-                return;
-            var myChart = echarts.init(dom, ChartStyles.baseStyle);
-    
-            var _d = _data.shiftData[shift];
-    
-    
-            // Helper function for strings
-            //function insert(str, index, value) { return str.substr(0, index) + value + str.substr(index); }
-    
-            var categories = ['Down', 'Idle', 'Operating'];
-            var colorIndex = [2, 1, 0];
-            //var colors = ['red', 'orange', 'green'];
-    
-            var data = [];
-            for (var i = 0; i < _d.events.length; i++) {
-                var event = _data.events[_d.events[i]];
-    
-                var majorGroup = event.majorGroup;// 
-    
-                var groupIndex;
-                if (majorGroup == "OPERATING") groupIndex = 2;
-                if (majorGroup == "IDLE") groupIndex = 1;
-                if (majorGroup == "DOWN") groupIndex = 0;
-    
-    
-                // Convert the date-time to seconds with a 6hr offset
-                var startTime = new Date(event.eventTime.date);
-                var trueTime = startTime.toLocaleTimeString('it-IT');
-    
-                // Convert date to seconds considering 0 as 6am 
-                // and accounting for dates that go into the next day 
-                startTime = (startTime.getHours() * 60 * 60) + (startTime.getMinutes() * 60) + startTime.getSeconds();
-                startTime += 3600 * 24 * event.dayAhead;
-                startTime -= 3600 * (shift == 0 ? 6 : 18); //(3600 * 6);
-    
-                //var duration = _data.events[i].duration;
-                var duration = event.duration;
-    
-                //console.log(i + "  st: " + startTime + "   tt: " + trueTime);
-                data.push({
-                    //name: _data.events[i].status,
-                    name: event.status,
-                    value: [
-                        // these relate to the encode in the custom graph
-                        groupIndex,
-                        startTime,
-                        startTime + duration,
-                        duration,
-                        trueTime
-                    ],
-                    itemStyle: { color: ChartStyles.TUMColorsByCategory[event.tumCategory] }
-                    //itemStyle: {
-                    //  normal: {
-                    //    color: ChartStyles.statusColors[colorIndex[groupIndex]] //colors[groupIndex] //typeItem.color
-                    //}
-                    //}
-                });
-            }
-    
-    
-            //console.log(data);
-    
-    
-    
-            // ----------------------------------------
-            // Custom render for timeline
-            var customTypes = ["Bar", "Box", "Line"];
-            //var customTypeOffsets = [2, 15, 2];//[-0, -25, -50];
-    
-            function renderItem(params, api, customType) {
-                var categoryIndex = api.value(0);
-                var start = api.coord([api.value(1), categoryIndex]);
-                var end = api.coord([api.value(2), categoryIndex]);
-                var height = api.size([0, 1])[1] * 1.1;
-    
-                // This is the canvas rect to clip against
-                var clipRect = { x: params.coordSys.x, y: params.coordSys.y - height * 2, width: params.coordSys.width, height: params.coordSys.height * 2 };
-    
-                // Offset of each bar
-                var hOffset = height / 4;// customTypeOffsets[categoryIndex];
-    
-                if (customType == customTypes[2]) {
-    
-                    var newY = start[1];
-                    var newH = api.size([0, 1])[1];//height / 2;//hOffset;
-    
-                    var rectShape = echarts.graphic.clipRectByRect(
-                        {
-                            x: start[0],
-                            y: newY,
-                            width: 1,
-                            height: newH
-                        }
-                        ,
-                        clipRect
-                    );
-                } else {
-                    var rectShape = echarts.graphic.clipRectByRect(
-                        {
-                            x: start[0],
-                            y: hOffset + start[1] - (customType == customTypes[1] ? height / 2 : height / 2),
-                            width: customType == customTypes[1] ? height / 8 : end[0] - start[0],
-                            height: customType == customTypes[1] ? height / 2 : height / 2
-                        }
-                        ,
-                        clipRect
-                    );
-                }
-    
-                return rectShape && {
-                    type: 'rect',
-                    shape: rectShape,
-                    style: api.style()
-                };
-            }
-            // ----------------------------------------
-    
-    
-            var option = {
-                backgroundColor: ChartStyles.backGroundColor,
-                textStyle: ChartStyles.textStyle,
-                title: ChartStyles.createTitle(_d.events.length + " events"),
-                toolbox: ChartStyles.toolBox(myChart.getHeight(), "Timeline"),
-                tooltip: {
-                    // Display info about the events 
-                    confine: true,
-                    formatter: function (params) {
-                        return ChartStyles.toolTipTextTitle(params.value[4]) + ChartStyles.toolTipTextEntry(params.name + " for " + SecondsToHoursAndMinutes(params.value[3] / 60));
-                    },
-                    textStyle: ChartStyles.toolTipTextStyle(),
-                    axisPointer: ChartStyles.toolTipShadow(),
-                    backgroundColor: ChartStyles.toolTipBackgroundColor()
-                },
-                grid: {
-                    containLabel: true,
-                    top: '2%',
-                    left: '2%',
-                    right: '2%',
-                    bottom: '4%'
-                },
-                xAxis: [
-                    {
-                        // type: 'value',
-                        show: true,
-                        //min: 0,
-                        max: 12,
-                        data: timeLabelsShiftExtra[shift],
-                        boundaryGap: false,
-                        minInterval: 1,
-                        maxInterval: 1,
-                        axisLabel: {
-                            rotate: 45,
-                            fontSize: 10,
-                            formatter: '{value}'
-                        }
-                    },
-                    {
-                        //type: 'category',
-                        show: false,
-                        boundaryGap: false,
-                        interval: 3600,
-                        min: 0,
-                        max: 43200
-                    }
-                ],
-                yAxis: [
-                    {
-                        data: categories
-                    }
-                ],
-                series:
-                    [
-                        {
-                            // Custom Event Bars
-                            type: 'custom',
-                            renderItem: function (params, api) { return renderItem(params, api, customTypes[0]); },//renderItem,
-                            itemStyle: {
-                                normal: {
-                                    opacity: 0.66
-                                }
-                            },
-                            encode: { x: [1, 2], y: 0 },
-                            data: data,
-                            z: 10,
-                            xAxisIndex: 1,
-                            yAxisIndex: 0
-                        }
-                        ,
-                        {
-                            // Custom Event Box
-                            type: 'custom',
-                            renderItem: function (params, api) { return renderItem(params, api, customTypes[1]); },//renderItem,
-                            itemStyle: {
-                                normal: {
-                                    opacity: 1.0
-                                }
-                            },
-                            encode: { x: [1, 2], y: 0 },
-                            data: data,
-                            xAxisIndex: 1,
-                            yAxisIndex: 0
-                        }
-                        // ,
-                        // {
-                        //     // Custom Event Line to Center
-                        //     type: 'custom',
-                        //     renderItem: function (params, api) { return renderItem(params, api, customTypes[2]); },//renderItem,
-                        //     itemStyle: {
-                        //         normal: {
-                        //             opacity: 1.0
-                        //         }
-                        //     },
-                        //     encode: { x: [1, 2], y: 0 },
-                        //     data: data,
-                        //     xAxisIndex: 1,
-                        //     yAxisIndex: 0
-                        // }
-                    ]
-            };
-    
-            SetOptionOnChart(option, myChart);
-            return myChart;
-        }
-    */
-
-
     //---------------------------------------------------------------------------------------------
 
 
@@ -1288,7 +1136,7 @@ class Charts {
         var myChart = InitChartFromElementID(_elementID);
         if (myChart == undefined) return;
 
-        //console.log(_data);
+        //console.log(_data.id);
         //console.log(ShiftIndex());
 
         var sortedEvents = [];
@@ -1375,7 +1223,7 @@ class Charts {
                 top: _includeTimeLine ? '2%' : '10%',
                 bottom: _includeTimeLine ? '2%' : '10%',
                 left: _includeTimeLine ? '1%' : '1%',
-                right: _includeTimeLine ? '2%' : '1%'
+                right: _includeTimeLine ? '2%' : '2%'
             },
             xAxis: xAxisArray,
             yAxis: {
@@ -1385,6 +1233,7 @@ class Charts {
                 {
                     xAxisIndex: 0,
                     type: 'custom',
+                    name: _data.id,
                     itemStyle: { normal: { opacity: 0.5 } },
                     renderItem: function (params, api) { return renderItem(params, api, false); },
                     label: {
@@ -1399,6 +1248,7 @@ class Charts {
                     // For the Markers
                     xAxisIndex: 0,
                     type: 'custom',
+                    name: _data.id,
                     itemStyle: { normal: { opacity: 1 } },
                     renderItem: function (params, api) { return renderItem(params, api, true); },
                     label: { show: false },
@@ -1416,150 +1266,6 @@ class Charts {
 
 
 
-
-    static CreateTimeLineFlat_OLD(_elementID, _data, _includeTimeLine = false) {
-
-        // Create an eCharts instance 
-        var myChart = InitChartFromElementID(_elementID);
-        if (myChart == undefined) return;
-
-
-        // Get the shift data into a smaller variable name
-        var _d = _data.shiftData[ShiftIndex()];
-
-        var series = [];
-        //var data = [];
-        var totalDuration = 0;
-
-
-
-        // As shift data only has index pointers to events
-        // we create an array of the real events here 
-        var sortedEvents = [];
-        for (var i = 0; i < _d.events.length; i++) {
-            sortedEvents.push(_data.events[_d.events[i]]);
-        }
-
-        // And then sort them...  
-        sortedEvents = sortedEvents.sort(function (a, b) {
-            //var c = new Date(a.eventTime.date);
-            //var d = new Date(b.eventTime.date);            
-            //return c - d;
-            return a.timeStamp - b.timeStamp;
-        });
-
-
-        var markerData = [];
-
-        for (var i = 0; i < sortedEvents.length; i++) {
-            var event = sortedEvents[i];
-            totalDuration += event.duration;
-            series.push(
-                {
-                    type: 'bar',
-                    data: [event.duration],
-                    stack: 'stack',
-                    itemStyle: {
-                        color: ChartStyles.TUMColors[ServerInfo.config.TUMKeys[event.tumCategory]],
-                        opacity: 0.85
-                    },
-                    animation: false,
-                    z: -1,
-                    zlevel: -1
-                }
-            );
-
-            markerData.push(
-                {
-                    name: '',
-                    value: '',//d.percentOfTargetToDate,
-                    xAxis: totalDuration,
-                    yAxis: i,
-                    itemStyle: { color: 'white' }
-                }
-            );
-        }
-
-
-        var option = {
-            backgroundColor: ChartStyles.backGroundColor,
-            textStyle: ChartStyles.textStyle,
-            tooltip: {
-
-                textStyle: ChartStyles.toolTipTextStyle(),
-                axisPointer: ChartStyles.toolTipShadow(),
-                backgroundColor: ChartStyles.toolTipBackgroundColor(),
-
-                // Display info about the events 
-                formatter: function (params) {
-                    var event = sortedEvents[params.componentIndex];
-                    var text = "";
-                    //var startTime = moment(event.eventTime.date).format('h:mm:ss a');//new Date(event.eventTime.date);
-                    var startTime = event.timeLabel;
-                    text += ChartStyles.toolTipTextTitle(startTime);
-                    text += ChartStyles.toolTipTextEntry(SecondsToHoursAndMinutes(event.duration));
-                    text += ChartStyles.toolTipTextEntry(event.tumCategory);
-                    text += ChartStyles.toolTipTextEntry(event.status);
-                    return text;
-                },
-
-                // Fast show/hide as there's a LOT of them 
-                hideDelay: 0,
-                showDelay: 0,
-                transitionDuration: 0,
-                confine: true
-            },
-            grid: {
-                top: _includeTimeLine ? '2%' : '0%',
-                bottom: _includeTimeLine ? '2%' : '0%',
-                left: _includeTimeLine ? '1%' : '1%',
-                right: _includeTimeLine ? '2%' : '1%'
-            },
-            xAxis: [
-                {
-                    show: false,
-                    type: 'value',
-                    max: totalDuration,
-                },
-                {
-                    show: _includeTimeLine,
-                    min: 0,
-                    max: timeLabelsShiftExtra[ShiftIndex()].length - 1,
-                    position: 'bottom',
-                    //offset: -5,
-                    data: timeLabelsShiftExtra[ShiftIndex()],
-                    boundaryGap: false,
-                    minInterval: 0,
-                    maxInterval: 0,
-                    axisLabel: {
-                        padding: [-15, 0, -20, 0],
-                        inside: true,
-                        rotate: 35,
-                        formatter: '{value}',
-                        fontFamily: 'Poppins',
-                        fontWeight: '400',
-                        fontSize: 11,
-                        textBorderColor: 'black',
-                        textBorderWidth: 1,
-                        textShadowColor: 'rgba(0,0,0,0.5)',
-                        textShadowBlur: 10,
-                        textShadowOffsetX: 4,
-                        textShadowOffsetY: 4,
-                    },
-                    axisTick: { inside: true }
-                }
-            ],
-            yAxis: {
-                xAxisIndex: 0,
-                type: 'category',
-            },
-            series: series
-            //series: [{ data: data, type: 'bar' }]
-        };
-
-        SetOptionOnChart(option, myChart);
-        return myChart;
-    }
 
 
 
@@ -1583,7 +1289,7 @@ class Charts {
                 top: '0%',
                 bottom: '3%',
                 left: '1%',
-                right: '5%'
+                right: '2%'
             },
             xAxis:
             {
@@ -1748,6 +1454,151 @@ class Charts {
         return myChart;
     }
 
+
+
+    // static CreateTimeLineFlat_OLD(_elementID, _data, _includeTimeLine = false) {
+
+    //     // Create an eCharts instance 
+    //     var myChart = InitChartFromElementID(_elementID);
+    //     if (myChart == undefined) return;
+
+
+    //     // Get the shift data into a smaller variable name
+    //     var _d = _data.shiftData[ShiftIndex()];
+
+    //     var series = [];
+    //     //var data = [];
+    //     var totalDuration = 0;
+
+
+
+    //     // As shift data only has index pointers to events
+    //     // we create an array of the real events here 
+    //     var sortedEvents = [];
+    //     for (var i = 0; i < _d.events.length; i++) {
+    //         sortedEvents.push(_data.events[_d.events[i]]);
+    //     }
+
+    //     // And then sort them...  
+    //     sortedEvents = sortedEvents.sort(function (a, b) {
+    //         //var c = new Date(a.eventTime.date);
+    //         //var d = new Date(b.eventTime.date);            
+    //         //return c - d;
+    //         return a.timeStamp - b.timeStamp;
+    //     });
+
+
+    //     var markerData = [];
+
+    //     for (var i = 0; i < sortedEvents.length; i++) {
+    //         var event = sortedEvents[i];
+    //         totalDuration += event.duration;
+    //         series.push(
+    //             {
+    //                 type: 'bar',
+    //                 data: [event.duration],
+    //                 stack: 'stack',
+    //                 itemStyle: {
+    //                     color: ChartStyles.TUMColors[ServerInfo.config.TUMKeys[event.tumCategory]],
+    //                     opacity: 0.85
+    //                 },
+    //                 animation: false,
+    //                 z: -1,
+    //                 zlevel: -1
+    //             }
+    //         );
+
+    //         markerData.push(
+    //             {
+    //                 name: '',
+    //                 value: '',//d.percentOfTargetToDate,
+    //                 xAxis: totalDuration,
+    //                 yAxis: i,
+    //                 itemStyle: { color: 'white' }
+    //             }
+    //         );
+    //     }
+
+
+    //     var option = {
+    //         backgroundColor: ChartStyles.backGroundColor,
+    //         textStyle: ChartStyles.textStyle,
+    //         tooltip: {
+
+    //             textStyle: ChartStyles.toolTipTextStyle(),
+    //             axisPointer: ChartStyles.toolTipShadow(),
+    //             backgroundColor: ChartStyles.toolTipBackgroundColor(),
+
+    //             // Display info about the events 
+    //             formatter: function (params) {
+    //                 var event = sortedEvents[params.componentIndex];
+    //                 var text = "";
+    //                 //var startTime = moment(event.eventTime.date).format('h:mm:ss a');//new Date(event.eventTime.date);
+    //                 var startTime = event.timeLabel;
+    //                 text += ChartStyles.toolTipTextTitle(startTime);
+    //                 text += ChartStyles.toolTipTextEntry(SecondsToHoursAndMinutes(event.duration));
+    //                 text += ChartStyles.toolTipTextEntry(event.tumCategory);
+    //                 text += ChartStyles.toolTipTextEntry(event.status);
+    //                 return text;
+    //             },
+
+    //             // Fast show/hide as there's a LOT of them 
+    //             hideDelay: 0,
+    //             showDelay: 0,
+    //             transitionDuration: 0,
+    //             confine: true
+    //         },
+    //         grid: {
+    //             top: _includeTimeLine ? '2%' : '0%',
+    //             bottom: _includeTimeLine ? '2%' : '0%',
+    //             left: _includeTimeLine ? '1%' : '1%',
+    //             right: _includeTimeLine ? '2%' : '1%'
+    //         },
+    //         xAxis: [
+    //             {
+    //                 show: false,
+    //                 type: 'value',
+    //                 max: totalDuration,
+    //             },
+    //             {
+    //                 show: _includeTimeLine,
+    //                 min: 0,
+    //                 max: timeLabelsShiftExtra[ShiftIndex()].length - 1,
+    //                 position: 'bottom',
+    //                 //offset: -5,
+    //                 data: timeLabelsShiftExtra[ShiftIndex()],
+    //                 boundaryGap: false,
+    //                 minInterval: 0,
+    //                 maxInterval: 0,
+    //                 axisLabel: {
+    //                     padding: [-15, 0, -20, 0],
+    //                     inside: true,
+    //                     rotate: 35,
+    //                     formatter: '{value}',
+    //                     fontFamily: 'Poppins',
+    //                     fontWeight: '400',
+    //                     fontSize: 11,
+    //                     textBorderColor: 'black',
+    //                     textBorderWidth: 1,
+    //                     textShadowColor: 'rgba(0,0,0,0.5)',
+    //                     textShadowBlur: 10,
+    //                     textShadowOffsetX: 4,
+    //                     textShadowOffsetY: 4,
+    //                 },
+    //                 axisTick: { inside: true }
+    //             }
+    //         ],
+    //         yAxis: {
+    //             xAxisIndex: 0,
+    //             type: 'category',
+    //         },
+    //         series: series
+    //         //series: [{ data: data, type: 'bar' }]
+    //     };
+
+    //     SetOptionOnChart(option, myChart);
+    //     return myChart;
+    // }
 
 
     /*

@@ -3,7 +3,7 @@
     <div class="sectionTitle">
         <div class="flex underline" ng-cloak>
             <div class="left">
-                <h2 class="left"><i class="far fa-calendar-alt"></i> {{ siteName }} Plan Compliance</h2>
+                <h2 class="left"><i class="fas fa-file-contract"></i> {{ siteName }} Plan Compliance</h2>
             </div>
             <div class="right">
                 <!-- <h3>{{ siteName }}</h3> -->
@@ -43,14 +43,14 @@
     <div class="h100pc">
         <div class="flex">
 
-            <div class="underline">
+            <div class="">
                 <h5 class="light"><i class="fas fa-weight-hanging"></i> Target Tonnes</h5>
                 <h3 class="underline">{{ dataForSite.totalMetricTarget | number : 0}}</h3>
                 <h5 class="light"><i class="fas fa-chart-line"></i></i> Required Average</h5>
                 <h3>{{ dataForSite.averageRequired | number:0}}</h3>
             </div>
 
-            <div class="underline">
+            <div class="">
                 <h5 class="light"><i class="fas fa-weight-hanging"></i> Actual Tonnes</h5>
                 <h3 class="underline">{{ dataForSite.totalMetricActual | number: 0}}</h3>
                 <h5 class="light"><i class="fas fa-chart-line"></i></i> Current Average</h5>
@@ -69,51 +69,66 @@
                     {{ dataForSite.complianceVolumetric*100 | number : 0}}%</h1>
             </div>
 
-            <div class="underline">
+            <div class="">
                 <h5 class="light"><i class="fas fa-clock"></i> Hours Remaining</h5>
                 <h3 class="underline">{{dataForMonth.timeRemaining/3600 | number :0}}</h3>
                 <h5 class=" light"><i class="fas fa-clock"></i></i> Month Passed</h5>
                 <h3>{{ dataForMonth.timePassedInMonth * 100 | number : 0 }}%</h3>
             </div>
         </div>
-        </br>
 
 
 
+        <div class="mnth_chart_grid">
+            <div class="mnth_chart_grid_left">
+                <!-- Bar or Gauge -->
+                <!-- Chart types switch depending on user preference -->
 
-        <!-- Bar or Gauge -->
-        <!-- Chart types switch depending on user preference -->
-        <!-- <div id=" monthlyChart" class="h60pc" ng-if="monthlyViewAsBars"></div> -->
-        <div id="monthlyChart" class="h60pc" ng-show="monthlyViewAsBars"></div>
+                <!-- <div id="monthlyChart" class="h60pc" ng-show="monthlyViewAsBars"></div> -->
+                <drill-down-chart name="Location Progress" chart="monthlyChart" ng-show="monthlyViewAsBars">
+                </drill-down-chart>
 
-        <div class="jumbogrid" ng-show="!monthlyViewAsBars">
-            <div ng-repeat="x in gaugeChartNames" class="mnth_gauge">
-                <drill-down-chart name="{{x}}" chart="{{x}}"></drill-down-chart>
+                <div class="jumbogrid" ng-show="!monthlyViewAsBars">
+                    <div ng-repeat="x in gaugeChartNames" class="mnth_gauge">
+                        <drill-down-chart name="{{x}}" chart="{{x}}"></drill-down-chart>
+                    </div>
+                </div>
+                <!-- /Bar or Gauge -->
+
+            </div>
+            <div>
+                <drill-down-chart name="Daily Variance to Target" chart="monthlyLean">
+                </drill-down-chart>
+            </div>
+            <div>
+                <drill-down-chart name="Daily Totals" chart="monthlyDate"></drill-down-chart>
             </div>
         </div>
-        <!-- /Bar or Gauge -->
 
-        </br></br>
 
-        <div class="h50pc w60pc">
-            <drill-down-chart name="Daily Variance to Target" chart="monthlyLean" class="h20pc">
-            </drill-down-chart>
-        </div>
-        </br>
-        <div class="h50pc w60pc">
-            <drill-down-chart name="Daily Totals" chart="monthlyDate" class="h40pc"></drill-down-chart>
-        </div>
-
-        <!-- <div id="monthlyLean" class="h60pc"></div>
-        <div id="monthlyDate" class="h60pc"></div> -->
 
         <!-- <div id="cal" style="width: 300px; height: 300px;"></div> -->
         </br>
-        <div class="jumbogrid">
-            <div ng-repeat="x in calendarChartMonths" class="flex">
-                <div id="{{x}}" style="width: 300px; height: 300px;"></div>
+        <div class="chartCard">
+            <!-- <div class="charthead">
+                <div class="chartheadtxt left">
+                    <h2 class="bold">Asset Timeline</h2>
+                </div>
+            </div> -->
+            <div class="chartdivcontent {{$root.backGroundClassBlur}} siteDivMargin">
+                <h2 class="underline"><i class="far fa-calendar-alt"></i> Trailing Year</h2>
+                </br>
+                <div class="jumbogrid underline">
+                    <div ng-repeat="x in calendarChartMonths" class="flex">
+                        <div id="{{x}}" style="width: 300px; height: 300px;"></div>
+                    </div>
+                </div>
             </div>
         </div>
+
+
+        </br>
+        </br>
 
     </div>
 
