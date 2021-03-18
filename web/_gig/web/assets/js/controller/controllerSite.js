@@ -1,11 +1,11 @@
 
-app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $route) {
+app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $location) {
 
     $scope.site = null;
-    $scope.shiftData = null;
     $scope.siteID = $routeParams.site;
-
     $scope.siteIndex = 0;
+
+    $scope.shiftData = null;
 
     $scope.summary = undefined;
     $scope.summaryMaterials = undefined;
@@ -38,7 +38,10 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
         for (var i = 0; i < x.length; i++) {
             var equip = $rootScope.equipment[x[i].id];
             if (equip !== undefined) {
-                Charts.CreateTimeLineFlat(x[i].id, equip);
+                let chart = Charts.CreateTimeLineFlat(x[i].id, equip);
+                chart.on('click', function (params) {
+                    $location.path("equip/" + String(params.seriesName));
+                });
             }
         }
         //var t1 = performance.now()
@@ -50,8 +53,9 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $ro
             ChartsMines.CreateSankey("sankey", $rootScope.siteData, $scope.siteID);
 
         // Bar
+        //console.log($scope.site);
         if ($scope.shiftData != null)
-            ChartsMines.CreateBar("siteTPH", $scope.shiftData.metricData, "");
+            ChartsMines.CreateBar("siteTPH", [$scope.shiftData.productionTonnes, $rootScope.monthlyActive, $scope.site.name]);
 
 
 

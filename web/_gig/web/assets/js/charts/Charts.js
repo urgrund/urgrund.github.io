@@ -24,10 +24,9 @@ function ResizeAllCharts() {
 function ClearAllCharts() {
     //console.log("Clearing all charts");
     for (var i = 0; i < allCharts.length; i++) {
-        if (allCharts[i] != null) {
+        if (allCharts[i] != null)
             allCharts[i].dispose();
-            allCharts[i] = null;
-        }
+        allCharts[i] = null;
     }
     allCharts = [];
 }
@@ -573,7 +572,7 @@ class Charts {
         //console.log(_cache);
         var xAxisNums = ArrayOfNumbers(0, (_cache.length * 24), 0);
 
-        var mph = [];//ArrayOfNumbers(0, (_cache.length * 24), 0);
+        var mph = [];
 
         var mphShift = [];
 
@@ -590,52 +589,66 @@ class Charts {
 
             var day = _cache[_cache.length - i - 1];
             var equip = day[day.length - 2][_data.id];
-            var equipMetrics = equip.shiftData[2].metricData;
-
-            var metricDS = equip.shiftData[0].metricData;
-            var metricNS = equip.shiftData[1].metricData;
+            //console.log(equip.id);
+            //var equipMetrics = equip.shiftData[2].metricData;
 
             var date = day[day.length - 1]['Day'];
-
             dateLabels.push(date.substring(0, 3));
 
-            // Asset Utilisation
-            totalAU[i] = equip.shiftData[2].assetUtilisation.totalAU;
-            availability[i] = equip.shiftData[2].assetUtilisation.availability;
-            efficiency[i] = equip.shiftData[2].assetUtilisation.efficiency;
-            uOfa[i] = equip.shiftData[2].assetUtilisation.uOfa;
+            // The equipment might not exist for this date
+            if (equip != undefined) {
 
-            // Metrics every hour every day
-            // for (var j = 0; j < equipMetrics.length; j++) {
-            //     for (var k = 0; k < equipMetrics[j].mph.length; k++) {
-            //         // Colour them based on the selected day
-            //         if (mph[(i * 24) + k] == undefined) {
-            //             mph[(i * 24) + k] = {
-            //                 'value': 0,
-            //                 'itemStyle': { color: ChartStyles.siteColors[0] }
-            //                 //{ color: isSelectedDate ? ChartStyles.siteColors[0] : ChartStyles.disabledColor }
-            //             };
-            //         }
-            //         mph[(i * 24) + k]['value'] += equipMetrics[j].mph[k];
-            //     }
-            // }
+                var metricDS = equip.shiftData[0].metricData;
+                var metricNS = equip.shiftData[1].metricData;
 
-            // Metrics pershift            
-            var dsTotal = 0;
-            var nsTotal = 0;
-            for (var k = 0; k < metricDS.length; k++) dsTotal += metricDS[k].total;
-            for (var k = 0; k < metricNS.length; k++) nsTotal += metricNS[k].total;
-            mphShift.push({
-                'value': dsTotal,
-                'itemStyle': { color: ChartStyles.siteColors[1] } // { color: isSelectedDate ? ChartStyles.siteColors[1] : ChartStyles.disabledColor }
-            });
-            mphShift.push({
-                'value': nsTotal,
-                'itemStyle': { color: ChartStyles.siteColors[0] }//{ color: isSelectedDate ? ChartStyles.siteColors[0] : ChartStyles.disabledColor }
-            });
+                // Asset Utilisation
+                totalAU[i] = equip.shiftData[2].assetUtilisation.totalAU;
+                availability[i] = equip.shiftData[2].assetUtilisation.availability;
+                efficiency[i] = equip.shiftData[2].assetUtilisation.efficiency;
+                uOfa[i] = equip.shiftData[2].assetUtilisation.uOfa;
+
+                // Metrics every hour every day
+                // for (var j = 0; j < equipMetrics.length; j++) {
+                //     for (var k = 0; k < equipMetrics[j].mph.length; k++) {
+                //         // Colour them based on the selected day
+                //         if (mph[(i * 24) + k] == undefined) {
+                //             mph[(i * 24) + k] = {
+                //                 'value': 0,
+                //                 'itemStyle': { color: ChartStyles.siteColors[0] }
+                //                 //{ color: isSelectedDate ? ChartStyles.siteColors[0] : ChartStyles.disabledColor }
+                //             };
+                //         }
+                //         mph[(i * 24) + k]['value'] += equipMetrics[j].mph[k];
+                //     }
+                // }
+
+                // Metrics pershift            
+                var dsTotal = 0;
+                var nsTotal = 0;
+                for (var k = 0; k < metricDS.length; k++) dsTotal += metricDS[k].total;
+                for (var k = 0; k < metricNS.length; k++) nsTotal += metricNS[k].total;
+                mphShift.push({
+                    'value': dsTotal,
+                    'itemStyle': { color: ChartStyles.siteColors[1] }
+                });
+                mphShift.push({
+                    'value': nsTotal,
+                    'itemStyle': { color: ChartStyles.siteColors[0] }
+                });
+            } else {
+                console.log(_data.id + " doesn't exist on : " + date);
+                // Add zeroed TUM stuff
+                totalAU[i] = 0;
+                availability[i] = 0;
+                efficiency[i] = 0;
+                uOfa[i] = 0;
+
+                // Add zeroed metrics
+                mphShift.push(0);
+                mphShift.push(0);
+            }
         }
-        //console.log(_cache.length);
-        //console.log(mphShift);
+
         mph = mphShift;
 
         //mph = [2, 232, 3, 435, 431, 11, 123];
@@ -688,24 +701,21 @@ class Charts {
         // For the category buttons
         var labels = series.map((x) => { return x.name });
         labels.pop();
-        //console.log(labels);
+
 
         function Label(params, index) {
-            var string = "";
-            string += ChartStyles.toolTipTextTitle(params[1].dataIndex);
+            let string = "";
+            let _thisCache = _cache[_cache.length - params[1].dataIndex - 1];
+            let _dateTitle = _thisCache[_thisCache.length - 1].Day;
+            string += ChartStyles.toolTipTextTitle(_dateTitle);
             for (var i = 0; i < params.length - 1; i++) {
                 var name = params[i].seriesName;
                 var value = (i == 0) ? params[i].data.value : params[i].data;
-                string += ChartStyles.toolTipTextEntry(params[i].seriesName + "  :  " + value);
-                string += params[i].marker;
+                value = (value == undefined) ? 0 : value;
+                string += ChartStyles.toolTipTextEntry(params[i].seriesName + "  :  " + ((i == 0) ? value.toFixed() : RatioToPercent(value)));
             }
-            //console.log("Selected " + index);
-            //console.log(params);
-            //return "Hello " + params[2].marker;
             return string;
         }
-
-
 
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
@@ -718,9 +728,7 @@ class Charts {
                 textStyle: ChartStyles.toolTipTextStyle(),
                 axisPointer: ChartStyles.toolTipShadow(),
                 backgroundColor: ChartStyles.toolTipBackgroundColor(),
-                formatter: function (params, index) {
-                    return Label(params);
-                },
+                formatter: function (params, index) { return Label(params); },
                 axisPointer: {
                     type: 'shadow',
                     shadowStyle: {
@@ -1166,7 +1174,6 @@ class Charts {
             var yValue = api.value(2);
             var start = api.coord([api.value(0), yValue]);
             var size = api.size([api.value(1) - api.value(0), yValue]);
-            var style = api.style();
 
             return {
                 type: 'rect',
@@ -1176,7 +1183,8 @@ class Charts {
                     width: marker ? 2 : size[0],
                     height: size[1]
                 },
-                style: style
+                style: api.style(),
+                styleEmphasis: api.styleEmphasis()
             };
         }
 
@@ -1188,8 +1196,36 @@ class Charts {
         }];
 
 
-        if (_includeTimeLine)
-            xAxisArray.push(ChartStyles.xAxis(timeLabelsShift[ShiftIndex()]));
+        if (_includeTimeLine) {
+            //xAxisArray.push(ChartStyles.xAxis(timeLabelsShift[ShiftIndex()]));
+            xAxisArray.push({
+                show: _includeTimeLine,
+                min: 0,
+                max: timeLabelsShiftExtra[ShiftIndex()].length - 1,
+                position: 'bottom',
+                data: timeLabelsShiftExtra[ShiftIndex()],
+                boundaryGap: false,
+                minInterval: 0,
+                maxInterval: 0,
+                axisLabel: {
+                    inside: true,
+                    rotate: 45,
+                    formatter: '{value}',
+                    fontFamily: 'Poppins',
+                    fontWeight: 'lighter',
+                    fontSize: ChartStyles.fontSizeSmall,
+                    margin: 8
+                },
+                z: 50,
+                axisTick: {
+                    inside: true, length: 7, lineStyle: {
+                        color: 'white',
+                        opacity: 0.6
+                    }
+                },
+                axisLine: ChartStyles.axisLineGrey
+            });
+        }
 
 
         var option = {
@@ -1234,13 +1270,9 @@ class Charts {
                     xAxisIndex: 0,
                     type: 'custom',
                     name: _data.id,
-                    itemStyle: { normal: { opacity: 0.5 } },
+                    itemStyle: { normal: { opacity: 0.5 }, emphasis: { opacity: 0.75 } },
                     renderItem: function (params, api) { return renderItem(params, api, false); },
-                    label: {
-                        show: false,
-                        position: 'top'
-                    },
-                    //dimensions: ['from', 'to', 'profit'],
+                    label: { show: false },
                     encode: { x: [0, 1], y: 2, tooltip: [0, 1, 2], itemName: 3 },
                     data: tlData
                 },

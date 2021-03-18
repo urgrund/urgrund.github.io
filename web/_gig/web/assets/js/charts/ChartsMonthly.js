@@ -2,11 +2,6 @@
 class ChartsMonthly {
 
 
-
-
-
-
-
     static CreateMonthlyComplianceBars(_elementID, _data) {
 
         // Create an eCharts instance 
@@ -44,7 +39,7 @@ class ChartsMonthly {
             newData[3].push(target);
 
             // Label, this is a 'dummy' bar to position the label 
-            // by stacking nothing (0) on top of the other values
+            // by stacking nothing on top of the other values
             newData[4].push({
                 value: Math.max(0, target - actual),
                 label: { formatter: String(actual) },
@@ -205,6 +200,8 @@ class ChartsMonthly {
 
         SetOptionOnChart(option, myChart);
     }
+
+
 
 
     /**
@@ -399,7 +396,8 @@ class ChartsMonthly {
 
 
 
-    /////////////////MONTHLY LEAN CHART BY DATE////////////////////////////////////
+
+
 
     static CreateMonthlyLean(_elementID, _data) {
 
@@ -592,17 +590,10 @@ class ChartsMonthly {
         return myChart;
     }
 
-    //////////////////END OF MONTHLY LEAN CHART BY DATE////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////
 
 
 
 
-
-
-
-    //////////////////////////////////////////////////////////////////////////////////
-    /////////////////MONTHLY BAR CHART BY DATE////////////////////////////////////////
 
     static CreateMonthlyDateChart(_elementID, _data) {
 
@@ -744,134 +735,6 @@ class ChartsMonthly {
 
 
 
-    // ---------------------------------------------------------------------------------------
-    // Monthly Calendar
-
-    static CreateCalendarChart(_elementID, _data) {
-
-        // Create an eCharts instance 
-        var myChart = InitChartFromElementID(_elementID);
-        if (myChart == undefined) return;
-
-        var monthData = _data[0];
-        var monthAvg = Math.round((monthData.totalMetricTarget / _data[2]) * 10) / 10;
-        var maxYaxis = Math.round((Math.max(...monthData.dailyTotals) / 1000) + 1) * 1000;
-        var minYaxis = Math.round((Math.min(...monthData.dailyTotals) / 1000)) * 1000;
-        var monthDateLabelsSTR = [];
-        var month = _data[1];
-        var cellSize = [40, 40];                //This is an issue as well
-        var daysInMonth = _data[2]
-        var monthDateLabelsSTR = GenerateDateLabels(month + "01", daysInMonth);
-        var realDate = [];
-        var dateMilliSeconds = [];
-        var calendarData = [];
-        var dayLabel = [];
-        var tooltipLabel = [];
-
-        for (var i = 0; i < monthDateLabelsSTR.length; i++) {
-            realDate[i] = new Date(monthDateLabelsSTR[i].substring(0, 4) + "-" + monthDateLabelsSTR[i].substring(4, 6) + "-" + monthDateLabelsSTR[i].substring(6, 8));
-            dateMilliSeconds[i] = Date.parse(realDate[i]);
-            calendarData.push([dateMilliSeconds[i], monthData.dailyTotals[i]]);
-            dayLabel.push(monthDateLabelsSTR[i].substring(4, 6));
-            tooltipLabel.push(monthDateLabelsSTR[i].substring(0, 4) + "-" + monthDateLabelsSTR[i].substring(4, 6) + "-" + monthDateLabelsSTR[i].substring(6, 8));
-        }
-
-        var option = {
-            backgroundColor: ChartStyles.backGroundColor,
-            textStyle: ChartStyles.textStyle,
-            tooltip: {
-                textStyle: ChartStyles.toolTipTextStyle(),
-                axisPointer: ChartStyles.toolTipShadow(),
-                backgroundColor: ChartStyles.toolTipBackgroundColor(),
-                showDelay: 0,
-                transitionDuration: 0,
-                position: 'top',
-                formatter: function (params, index) {
-                    var string = "";
-                    string += ChartStyles.toolTipTextTitle('Date: ' + echarts.format.formatTime('dd-MM-yyyy', params.value[0]));
-                    string += ChartStyles.toolTipTextEntry('Daily Total: ' + Math.round(params.value[1]));
-                    string += ChartStyles.toolTipTextEntry('Daily Target: ' + Math.round(monthAvg));
-                    string += ChartStyles.toolTipTextEntry('Daily Compliance: ' + Math.round((parseInt(params.value[1]) / parseInt(monthAvg)) * 100) + '%');
-                    return string;
-                },
-            },
-
-            visualMap: [
-                {
-                    min: minYaxis,
-                    max: maxYaxis,
-                    range: [minYaxis, maxYaxis],
-                    calculable: true,
-                    realtime: false,
-                    seriesIndex: [0],
-                    orient: 'vertical',
-                    left: '80%',                                                                            //Not sure how this will perform
-                    bottom: '25%',                                                                          //Same here. I think this offset will cause issues
-                    inRange: {
-                        color: ['rgba(255,0,0,1)', 'rgba(50,205,50,1)'],
-                    },
-                    textStyle: ChartStyles.textStyle
-                }
-            ],
-
-            ///THIS iS THE FORMATTING OF THE CHART
-
-            calendar: [
-                {
-                    tooltip: {
-
-                    },
-                    orient: 'vertical', //'horizontal',
-                    yearLabel: {
-                        margin: 50,
-                        fontSize: 16,
-                        fontWeight: 'normal'
-                        //nameMap:  'yyyy-mmm'
-                    },
-                    dayLabel: {
-                        firstDay: 1,
-                        nameMap: 'en',
-                        textStyle: ChartStyles.textStyle,
-                        nameMap: daysShort //['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-                    },
-                    monthLabel: {
-                        nameMap: 'en',
-                        textStyle: {
-                            color: 'white',
-                            fontFamily: 'Poppins',
-                            fontSize: 22,
-                            fontWeight: 'normal'
-                        },
-                        margin: 20
-                    },
-                    cellSize: cellSize,
-                    top: 100,
-                    left: 100,
-                    range: month.substring(0, 4) + "-" + month.substring(4, 6)         // Not sure if we want to make this line better it needs to be 'yyyy-mm'
-                }],
-
-            series: [{
-                type: 'heatmap',
-                coordinateSystem: 'calendar',
-                calendarIndex: 0,
-                data: calendarData,
-                label: {
-                    show: true,
-                    formatter: function (dayLabel) {
-                        return echarts.format.formatTime('dd', dayLabel.value[0]);  //This line may break because of the echarts reference
-                    },
-                    offset: [-cellSize[0] / 2 + 10, -cellSize[1] / 2 + 10],
-                    fontSize: 11
-                },
-            }]
-        };
-
-        SetOptionOnChart(option, myChart);
-        return myChart;
-    };
-    // ---------------------------------------------------------------------------------------
-
-
 
 
 
@@ -882,9 +745,6 @@ class ChartsMonthly {
         // Create an eCharts instance 
         var myChart = InitChartFromElementID(_elementID);
         if (myChart == undefined) return;
-
-        //console.log(_data);
-        //        console.log(_data[1]);
 
         var monthData = _data[0];
         var date = _data[1];
@@ -918,7 +778,6 @@ class ChartsMonthly {
                     ]);
                     i++;
                 }
-                //console.log(data);
                 return data;
             }
         }
@@ -935,9 +794,6 @@ class ChartsMonthly {
         var vmProps = {};
         vmProps.show = true;
         vmProps.pieces = [{ min: dailyAvgTarget, color: ChartStyles.TUMColors[5] }, { max: dailyAvgTarget, color: ChartStyles.TUMColors[0] }];
-
-
-        //console.log("ALSKJDLKSJD ---   " + Number(date.substring(4, 6)));
 
         var option = {
             backgroundColor: ChartStyles.backGroundColor,
@@ -957,7 +813,6 @@ class ChartsMonthly {
                 transitionDuration: 0,
                 position: 'top',
                 formatter: function (params, index) {
-                    //  return "Hello";
                     var string = "";
                     string += ChartStyles.toolTipTextTitle(echarts.format.formatTime('dd-MM-yyyy', params.value[0]));
                     string += ChartStyles.toolTipTextEntry('Daily Total: ' + Math.round(params.value[1]));
@@ -1107,3 +962,137 @@ class SimpleGaugeData {
         this.radiusThickness = 20;
     }
 }
+
+
+
+
+
+
+
+
+    // ---------------------------------------------------------------------------------------
+    // Monthly Calendar
+
+    // static CreateCalendarChart(_elementID, _data) {
+
+    //     // Create an eCharts instance 
+    //     var myChart = InitChartFromElementID(_elementID);
+    //     if (myChart == undefined) return;
+
+    //     var monthData = _data[0];
+    //     var monthAvg = Math.round((monthData.totalMetricTarget / _data[2]) * 10) / 10;
+    //     var maxYaxis = Math.round((Math.max(...monthData.dailyTotals) / 1000) + 1) * 1000;
+    //     var minYaxis = Math.round((Math.min(...monthData.dailyTotals) / 1000)) * 1000;
+    //     var monthDateLabelsSTR = [];
+    //     var month = _data[1];
+    //     var cellSize = [40, 40];                //This is an issue as well
+    //     var daysInMonth = _data[2]
+    //     var monthDateLabelsSTR = GenerateDateLabels(month + "01", daysInMonth);
+    //     var realDate = [];
+    //     var dateMilliSeconds = [];
+    //     var calendarData = [];
+    //     var dayLabel = [];
+    //     var tooltipLabel = [];
+
+    //     for (var i = 0; i < monthDateLabelsSTR.length; i++) {
+    //         realDate[i] = new Date(monthDateLabelsSTR[i].substring(0, 4) + "-" + monthDateLabelsSTR[i].substring(4, 6) + "-" + monthDateLabelsSTR[i].substring(6, 8));
+    //         dateMilliSeconds[i] = Date.parse(realDate[i]);
+    //         calendarData.push([dateMilliSeconds[i], monthData.dailyTotals[i]]);
+    //         dayLabel.push(monthDateLabelsSTR[i].substring(4, 6));
+    //         tooltipLabel.push(monthDateLabelsSTR[i].substring(0, 4) + "-" + monthDateLabelsSTR[i].substring(4, 6) + "-" + monthDateLabelsSTR[i].substring(6, 8));
+    //     }
+
+    //     var option = {
+    //         backgroundColor: ChartStyles.backGroundColor,
+    //         textStyle: ChartStyles.textStyle,
+    //         tooltip: {
+    //             textStyle: ChartStyles.toolTipTextStyle(),
+    //             axisPointer: ChartStyles.toolTipShadow(),
+    //             backgroundColor: ChartStyles.toolTipBackgroundColor(),
+    //             showDelay: 0,
+    //             transitionDuration: 0,
+    //             position: 'top',
+    //             formatter: function (params, index) {
+    //                 var string = "";
+    //                 string += ChartStyles.toolTipTextTitle('Date: ' + echarts.format.formatTime('dd-MM-yyyy', params.value[0]));
+    //                 string += ChartStyles.toolTipTextEntry('Daily Total: ' + Math.round(params.value[1]));
+    //                 string += ChartStyles.toolTipTextEntry('Daily Target: ' + Math.round(monthAvg));
+    //                 string += ChartStyles.toolTipTextEntry('Daily Compliance: ' + Math.round((parseInt(params.value[1]) / parseInt(monthAvg)) * 100) + '%');
+    //                 return string;
+    //             },
+    //         },
+
+    //         visualMap: [
+    //             {
+    //                 min: minYaxis,
+    //                 max: maxYaxis,
+    //                 range: [minYaxis, maxYaxis],
+    //                 calculable: true,
+    //                 realtime: false,
+    //                 seriesIndex: [0],
+    //                 orient: 'vertical',
+    //                 left: '80%',                                                                            //Not sure how this will perform
+    //                 bottom: '25%',                                                                          //Same here. I think this offset will cause issues
+    //                 inRange: {
+    //                     color: ['rgba(255,0,0,1)', 'rgba(50,205,50,1)'],
+    //                 },
+    //                 textStyle: ChartStyles.textStyle
+    //             }
+    //         ],
+
+    //         ///THIS iS THE FORMATTING OF THE CHART
+
+    //         calendar: [
+    //             {
+    //                 tooltip: {
+
+    //                 },
+    //                 orient: 'vertical', //'horizontal',
+    //                 yearLabel: {
+    //                     margin: 50,
+    //                     fontSize: 16,
+    //                     fontWeight: 'normal'
+    //                     //nameMap:  'yyyy-mmm'
+    //                 },
+    //                 dayLabel: {
+    //                     firstDay: 1,
+    //                     nameMap: 'en',
+    //                     textStyle: ChartStyles.textStyle,
+    //                     nameMap: daysShort //['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    //                 },
+    //                 monthLabel: {
+    //                     nameMap: 'en',
+    //                     textStyle: {
+    //                         color: 'white',
+    //                         fontFamily: 'Poppins',
+    //                         fontSize: 22,
+    //                         fontWeight: 'normal'
+    //                     },
+    //                     margin: 20
+    //                 },
+    //                 cellSize: cellSize,
+    //                 top: 100,
+    //                 left: 100,
+    //                 range: month.substring(0, 4) + "-" + month.substring(4, 6)         // Not sure if we want to make this line better it needs to be 'yyyy-mm'
+    //             }],
+
+    //         series: [{
+    //             type: 'heatmap',
+    //             coordinateSystem: 'calendar',
+    //             calendarIndex: 0,
+    //             data: calendarData,
+    //             label: {
+    //                 show: true,
+    //                 formatter: function (dayLabel) {
+    //                     return echarts.format.formatTime('dd', dayLabel.value[0]);  //This line may break because of the echarts reference
+    //                 },
+    //                 offset: [-cellSize[0] / 2 + 10, -cellSize[1] / 2 + 10],
+    //                 fontSize: 11
+    //             },
+    //         }]
+    //     };
+
+    //     SetOptionOnChart(option, myChart);
+    //     return myChart;
+    // };
+    // ---------------------------------------------------------------------------------------

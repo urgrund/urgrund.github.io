@@ -44,7 +44,6 @@
                 <div class="droplist">
 
                     <h3>Reports</h3>
-                    <a ng-href="#!reports">Report Generator</a>
                     <a ng-href="#!longterm">Long Term Data</a>
                     <a ng-href="#!reporting">Reporting</a>
 
@@ -180,7 +179,7 @@
                     <!-- <div>IP</div>
                     <div>{{meta.IP}}</div> -->
 
-                    <div>Connection Status</div>
+                    <div class="light">Status</div>
                     <!-- All good! -->
                     <div ng-if="connectionStatus.status == 1">
                         <h4><i class="far fa-check-circle" ng-style="equipStyleColor['Operating']"></i> Ok!</h4>
@@ -196,10 +195,10 @@
                         </div>
                     </div>
 
-                    <div>Last Data Pull</div>
+                    <div class="light">Last Data Pull</div>
                     <div>{{lastUpdateFormat}}</div>
 
-                    <div>Next Update</div>
+                    <div class="light">Next Update</div>
                     <div>{{nextUpdateIn}}</div>
                 </div>
             </div>

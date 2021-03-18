@@ -12,6 +12,7 @@ app.controller('Landing', function ($route, $rootScope, $scope, $timeout) {
 
     $scope.siteSummary = [];
     $scope.PrepareSiteSummarys = function () {
+
         if ($rootScope.siteData == null)
             return;
 
@@ -35,6 +36,7 @@ app.controller('Landing', function ($route, $rootScope, $scope, $timeout) {
 
             if ($rootScope.monthlyActive != null) {
                 var site = $rootScope.monthlyActive.sites[$scope.siteName];
+                //console.log(site);
                 // Setup the values to display
                 if (site != undefined) {
                     //console.log(site);

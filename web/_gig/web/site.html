@@ -94,8 +94,8 @@
             </br>
             <h2 class="underline"><i class="fas fa-chart-bar"></i> Metrics</h2>
             </br>
-            <div ng-repeat="(key, value) in shiftData.metricData" class="center flex overline " ng-if="value.total != 0"
-                ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
+            <div ng-repeat="(key, value) in shiftData.metricData" class="center flex overline" ng-if="value.total != 0"
+                ng-class="{'prodMetricBG' : value.activity.includes('Production')}">
                 <div class="left">
                     <h4> {{value.name}}</h4>
                     <p class="light">{{value.activity}}</p>
@@ -108,7 +108,7 @@
 
 
         <!-- Bar Chart -->
-        <drill-down-chart name="{{site.name}} Tonnes" chart="siteTPH"></drill-down-chart>
+        <drill-down-chart name="Production Tonnes" chart="siteTPH"></drill-down-chart>
 
 
 
@@ -123,7 +123,7 @@
         <div class="chartCard">
             <div class="charthead">
                 <div class="chartheadtxt left">
-                    <h5 class="bold">Asset Timeline</h5>
+                    <h5>Asset Timeline</h5>
                 </div>
             </div>
             <div class="chartdivcontent {{$root.backGroundClassBlur}} siteDivMargin">
@@ -163,7 +163,7 @@
         <div class="chartCard">
             <div class="charthead">
                 <div class="chartheadtxt left">
-                    <h5 class="bold">TUM Metrics</h5>
+                    <h5>TUM Metrics</h5>
                 </div>
             </div>
             <div class="chartdivcontent {{$root.backGroundClassBlur}} siteDivMargin">

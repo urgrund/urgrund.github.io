@@ -43,7 +43,7 @@ app.controller('Menu', function ($scope, $rootScope, $timeout, mmData) {
                 var date = dateStr.replace("-", "");
                 date = date.replace("-", "");
                 //console.log(date);
-                $rootScope.fetchSiteData([date], true);
+                $rootScope.fetchSiteData(date, true);
             }
         });
     }

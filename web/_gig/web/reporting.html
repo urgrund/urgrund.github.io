@@ -1,7 +1,8 @@
 <div class="cup">
 
     <div class="flex h100pc">
-        <div class="siteCardShd reportCard">
+        <!-- <div class="siteCardShd reportCard"> -->
+        <div class="chartdivcontentNoHead reportCard {{$root.backGroundClassBlur}}">
 
             <!-- Settings for the Report -->
             <h3 class=""><i class="fas fa-cogs"></i> Settings</h3>
@@ -50,15 +51,34 @@
             </div>
         </div>
 
+        <!-- <div ng-hide="noResult == true" ng-bind-html="trustAsHtml(noResultMsg)" class="siteCardShd reportDisplay grid">
+        </div> -->
+        <div class="reportDisplay">
+            <div class="flex">
+                <h2 ng-bind-html="trustAsHtml(noResultMsg)"></h2>
+                <h4 class="light"><i class="fas fa-file-download"></i> Download Report as... </h4>
+                <div class="right flex">
+                    <button class="btn" id="myBtn" ng-click="downloadAs('csv')"><i class="far fa-file-pdf"></i>
+                        .pdf</button>
+                    <button class="btn" id="myBtn" ng-click="downloadAs('csv')"><i class="fas fa-file-csv"></i>
+                        CSV</button>
+                    <button class="btn" id="myBtn" ng-click=""><i class="far fa-file-excel"></i> XLS</button>
+                </div>
+            </div>
+
+            <div id="tabulator"></div>
+        </div>
         <!-- Report Display -->
         <!-- ui-grid-resize-columns ui-grid-auto-fit-columns -->
         <!-- <div ui-grid="gridOptions" ui-grid-auto-fit-columns class="siteCardShd reportDisplay grid"> -->
-        <div ng-if="noResult == true" ng-bind-html="trustAsHtml(noResultMsg)" class="siteCardShd reportDisplay grid">
-        </div>
-        <div ui-grid="gridOptions" ui-grid-auto-fit-columns ui-grid-selection ui-grid-exporter
-            class="siteCardShd reportDisplay grid" ng-if="noResult == false">
-        </div>
+
 
     </div>
+    <!-- <div ng-if="noResult == true" ng-bind-html="trustAsHtml(noResultMsg)" class="siteCardShd reportDisplay grid">
+    </div>
+    <div ui-grid="gridOptions" ui-grid-auto-fit-columns ui-grid-selection ui-grid-exporter
+        class="siteCardShd reportDisplay grid" ng-if="noResult == false">
+    </div> -->
+
 
 </div>

@@ -3,11 +3,13 @@ app.controller("TimeLine", function ($route, $scope, $rootScope, $location, $tim
     $scope.$watch('$viewContentLoaded', function () {
         $timeout(function () {
 
+            // Timeline time
             for (var key in $rootScope.functionMapping) {
                 Charts.CreateTimeLineFlatTime("equip-timeline-time-" + key);
             }
-            var x = document.getElementsByClassName("equip-flat-usage");
 
+            // Timeline charts
+            var x = document.getElementsByClassName("equip-flat-usage");
             for (var i = 0; i < x.length; i++) {
                 var equip = $rootScope.equipment[x[i].id];
                 if (equip != 'undefined') {

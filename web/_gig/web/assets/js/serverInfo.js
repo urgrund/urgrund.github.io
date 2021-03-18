@@ -1,21 +1,20 @@
 
+
+const serverURL = '../dev/php/';
 class ServerInfo {
 
-    constructor() {
-        let baseURL = '../dev/';
-    }
-
-    static URL_GetSiteData = '../dev/php/get_site_data.php';
-    static URL_Admin = '../dev/php/admin.php';
-    static URL_Longterm = '../dev/php/longterm.php';
-    static URL_Reporting = '../dev/php/reports.php';
-    static URL_Monthly = '../dev/php/monthly/monthly.php';
+    static URL_GetSiteData = serverURL + 'get_site_data.php';
+    static URL_Admin = serverURL + 'admin.php';
+    static URL_Longterm = serverURL + 'longterm.php';
+    static URL_Reporting = serverURL + 'reports.php';
+    static URL_Monthly = serverURL + 'monthly/monthly.php';
 
 
     static config = undefined;
     static availableDates = undefined;
 
-    static dailyRefreshRate = (5 * 1000);
+    // Refresh interval in seconds for the days data
+    static dailyRefreshInterval = 5 * 60;
 
 
     static shiftTargetAgressiveScalar = (1.0 / 0.85);

@@ -51,9 +51,9 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
     // So that it can be used in angular
     $rootScope.ShiftIndex = function () { return ShiftIndex(); };
 
-    $rootScope.siteDataRefreshIntervalSeconds = 5;
+    //$rootScope.siteDataRefreshIntervalSeconds = 5;
     $rootScope.siteDataLastRefresh = moment();
-    $rootScope.siteDataNextRefresh = moment().add($rootScope.siteDataRefreshIntervalSeconds, 's');
+    $rootScope.siteDataNextRefresh = moment().add(ServerInfo.dailyRefreshInterval, 's');
 
 
     //$rootScope.configs = [];
@@ -115,7 +115,7 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
      */
     $rootScope.getEquipmentLastEvent = function (_equip) {
         if (_equip === undefined)
-            return;
+            return null;
         var len = _equip.shiftData[ShiftIndex()].events.length;
         var index = _equip.shiftData[ShiftIndex()].events[len - 1];
         return _equip.events[index];
@@ -174,9 +174,6 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
     $rootScope.backGroundClassBlur = $rootScope.backGroundDefault + "Blur";
 
 
-    /** Colour for metrics that are production*/
-    $rootScope.metricProductionColour = "#007260";
-
     // ------------------------------------------------------
 
 
@@ -191,36 +188,73 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
     $rootScope.setNewSiteData = function (_data) {
 
         if (_data == undefined) {
-            console.log("Trying to set unassigned data");
+            console.log("Trying to set undefined data");
             return;
         }
 
         console.log(_data);
 
-        // For non NG access
-        currentDayData = _data;
+        if (true) {
+            // For non NG access
+            currentDayData = {};
+            currentDayData = _data;
 
-        //var jsonString = JSON.stringify(_data);
-        //var newData = JSON.parse(jsonString);
-        var newData = Array.from(_data);
+            let newData = Array.from(_data);
 
-        // All sites
-        $rootScope.siteData = newData;
+            // All sites
+            $rootScope.siteData = newData;
 
-        // Check the date
-        if ($rootScope.siteData.length < 1) {
-            console.error("No sites with this date...");
-            return;
+            // Check the date
+            if ($rootScope.siteData.length < 1) {
+                console.error("No sites with this date...");
+                return;
+            }
+
+            // Meta data is last
+            $rootScope.meta = $rootScope.siteData.pop();
+
+            // All equip next
+            $rootScope.equipment = $rootScope.siteData.pop();
+
+            $rootScope.siteDataDate = $rootScope.convertToNiceDateObject($rootScope.meta.Date);
+            $rootScope.functionMapping = $rootScope.meta.EquipmentFunctionMap;
+        }
+        else {
+            currentDayData = {};
+            currentDayData = _data;
+
+            $rootScope.siteData = null;
+            $rootScope.meta = null;
+            $rootScope.equipment = null;
+            $rootScope.siteDataDate = null;
+            $rootScope.functionMapping = null;
+
+            //let newData = Array.from(_data);
+            for (let i = 0; i < _data.length - 2; i++) {
+                $rootScope.siteData[i] = _data[i];
+            }
+            // Meta data is last
+            $rootScope.meta = _data[_data.length - 1]; //$rootScope.siteData.pop();
+
+            // All equip next
+            $rootScope.equipment = _data[_data.length - 2];
+
+            $rootScope.siteDataDate = $rootScope.convertToNiceDateObject($rootScope.meta.Date);
+            $rootScope.functionMapping = $rootScope.meta.EquipmentFunctionMap;
+
+            // All sites
+            //$rootScope.siteData = newData;
+
+            // Check the date
+            if ($rootScope.siteData.length < 1) {
+                console.error("No sites with this date...");
+                return;
+            }
+
+
         }
 
-        // Meta data is last
-        $rootScope.meta = $rootScope.siteData.pop();
 
-        // All equip next
-        $rootScope.equipment = $rootScope.siteData.pop();
-
-        $rootScope.siteDataDate = $rootScope.convertToNiceDateObject($rootScope.meta.Date);
-        $rootScope.functionMapping = $rootScope.meta.EquipmentFunctionMap;
 
 
         // -----------------------------------------------
@@ -236,7 +270,7 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         }
 
         for (var key in $rootScope.equipment) {
-            var asset = $rootScope.equipment[key];
+            let asset = $rootScope.equipment[key];
             if (asset.function in $rootScope.equipmentByFunction)
                 $rootScope.equipmentByFunction[asset.function].push(key);
         }
@@ -244,6 +278,7 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         // -----------------------------------------------
 
         newData = null;
+        _data = null;
 
         // Debug output
         if (false) {
@@ -267,51 +302,49 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
 
 
     // Attempts to get data from an array of dates     
-    $rootScope.fetchSiteData = function (_dates, _setAfterFetch = false, _addToCache = false) {
+    $rootScope.fetchSiteData = function (_date, _setAfterFetch = false, _addToCache = false) {
 
-        for (var i = 0; i < _dates.length; i++) {
-            var date = _dates[i];
-            //console.log(date);
+        //        for (var i = 0; i < _dates.length; i++) {
+        //var date = _date;
+        //console.log(date);
 
-            var _data = { 'func': 0, 'date': date };
-            var request = $http({
-                method: 'POST',
-                url: ServerInfo.URL_GetSiteData,
-                data: _data
-            })
-            request.then(function (response) {
+        var _data = { 'func': 0, 'date': _date };
+        var request = $http({
+            method: 'POST',
+            url: ServerInfo.URL_GetSiteData,
+            data: _data
+        })
+        request.then(function (response) {
 
 
-                // If this date data is to be added to the cache
-                // for example the trailing week 
-                if (_addToCache) {
-                    //console.log($rootScope.cachedData);
-                    // Does this exist?
-                    var found = false;
-                    if ($rootScope.cachedData.length > 0)
-                        found = $rootScope.cachedData.some(el => el[el.length - 1].Date === response.data[response.data.length - 1].Date);
+            // If this date data is to be added to the cache
+            // for example the trailing week 
+            if (_addToCache) {
 
-                    // It's new so add it 
-                    if (!found) {
-                        //console.log("Wasn't found...");
-                        $rootScope.cachedData.push(response.data);
-                        $rootScope.cachedData.sort(function (a, b) { return b[b.length - 1]['Date'] - a[a.length - 1]['Date'] });
-                    }
+                // Does this exist?
+                var found = false;
+                if ($rootScope.cachedData.length > 0)
+                    found = $rootScope.cachedData.some(el => el[el.length - 1].Date === response.data[response.data.length - 1].Date);
+
+                // It's new so add it 
+                if (!found) {
+                    $rootScope.cachedData.push(response.data);
+                    $rootScope.cachedData.sort(function (a, b) { return b[b.length - 1]['Date'] - a[a.length - 1]['Date'] });
                 }
+            }
 
+            // Apply to site if requested
+            if (_setAfterFetch) {
+                $rootScope.setNewSiteData(response.data);
+            }
 
-                // Apply to site if requested
-                if (_setAfterFetch) {
-                    $rootScope.setNewSiteData(response.data);
-                }
+        }, function (error) {
+            //console.error(error);
+            $rootScope.processErrorResponse(error);
+        });
 
-                return response.data;
-
-            }, function (error) {
-                //console.error(error);
-                $rootScope.processErrorResponse(error);
-            });
-        }
+        return request;
+        // }
     };
 
     // ---------------------------------------------------------------------------------------
@@ -403,15 +436,7 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
 
     $rootScope.monthly = null;                  // All the data for each month
     $rootScope.monthlyActive = null;            // The current active month data
-    $rootScope.monthlyActiveAsDate = null;      // The current active month as a date (YYYYMM)
-    // = function () {
-    //     if ($rootScope.monthlyActive != null) {
-    //         var month = $rootScope.monthlyActive.month;
-    //         if (month < 10)
-    //             month = String('0' + month);
-    //         return $rootScope.monthlyActive.year + month;
-    //     }
-    // }
+    $rootScope.monthlyActiveAsDate = null;      // The current active month as a date (YYYYMM)  
 
     function SetActiveMonth() {
         if ($rootScope.monthly == null
@@ -452,6 +477,8 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         return request;
     }
     // ----------------------------------------------------------------------------------
+
+
 });
 
 
@@ -483,20 +510,18 @@ app.controller("myCtrl", function ($q, $scope, $rootScope, $timeout, $route, $lo
                 $q.all(promises).then(function (responses) {
                     // Set the data 
                     //console.log("Config & Dates ready");
-                    promises = [
-                        // Latest date and Trailing week which get added to the cache 
-                        $rootScope.fetchSiteData([ServerInfo.availableDates[0]], true, true),
-                        $rootScope.fetchSiteData(ServerInfo.availableDates.slice(1, 7), false, true),
+                    //promises = [];
+                    $rootScope.fetchMonthlyData();
+                    $rootScope.fetchSiteData(ServerInfo.availableDates[0], true, true);
+                    for (let i = 1; i < 7; i++)
+                        $rootScope.fetchSiteData(ServerInfo.availableDates[i], false, true);
 
-                        // Monthly report data
-                        $rootScope.fetchMonthlyData()
-                    ];
                 });
             }
         }
     ).catch(function (err) {
         // Failed to connect
-    });;
+    });
     // -----------------------------------------------------------------
 
 
@@ -509,19 +534,35 @@ app.controller("myCtrl", function ($q, $scope, $rootScope, $timeout, $route, $lo
 
         // Check if today exists in the available dates 
         // otherwise just use the latest date available
-        var nextDate = moment().format('YYYYMMDD');
+        let nextDate = moment().format('YYYYMMDD');
         if (!(nextDate in ServerInfo.availableDates)) {
             nextDate = ServerInfo.availableDates[0];
         }
         //console.log(nextDate);
-        $rootScope.fetchSiteData([nextDate], true);
+        $q.all([$rootScope.fetchSiteData(nextDate, false)]).then(
+            function (responses) {
+                //console.log("Reponse...");
+                //console.log(responses[0].data[5].Date);
+                //console.log($rootScope.cachedData[0]);
+                //console.log($rootScope.meta.Date);
+                //console.log(viewingSameDate);
 
+                $rootScope.cachedData[0] = responses[0].data;
+                let viewingSameDate = $rootScope.meta.Date === responses[0].data[5].Date;
+                if (viewingSameDate)
+                    $rootScope.setNewSiteData($rootScope.cachedData[0]);
 
-        $rootScope.siteDataLastRefresh = moment();
-        $rootScope.siteDataNextRefresh = moment().add($rootScope.siteDataRefreshIntervalSeconds, 's');
+                $rootScope.siteDataLastRefresh = moment();
+                $rootScope.siteDataNextRefresh = moment().add(ServerInfo.dailyRefreshInterval, 's');
+
+                viewingSameDate = null;
+                responses = null;
+            }
+        ).catch(function (err) { });
+        nextDate = null;
     }
 
-    $interval(function () { $scope.updateIntervalForTodaysData(); }, $rootScope.siteDataRefreshIntervalSeconds * 1000);
+    $interval(function () { $scope.updateIntervalForTodaysData(); }, ServerInfo.dailyRefreshInterval * 1000);
     // -----------------------------------------------------------------
 
 
@@ -533,14 +574,14 @@ app.controller("myCtrl", function ($q, $scope, $rootScope, $timeout, $route, $lo
 
         // ------------------------------------------------------
         // Fake alerts
-        var alerts = [];
-        $rootScope.alerts = null;
-        for (var i = 0; i < Math.round(Math.random() * 10); i++) {
-            var randSite = Math.floor(Math.random() * ($rootScope.siteData.length - 1));
+        let alerts = [];
+        $rootScope.alerts = [];
+        for (let i = 0; i < Math.round(Math.random() * 10); i++) {
+            let randSite = Math.floor(Math.random() * ($rootScope.siteData.length - 1));
             if ($rootScope.siteData[randSite] == undefined)
                 continue;
 
-            var randEquip = Math.floor(Math.random() * $rootScope.siteData[randSite].equipment.length);
+            let randEquip = Math.floor(Math.random() * $rootScope.siteData[randSite].equipment.length);
             if (Math.random() > 0.5) {
                 alerts[i] = {
                     level: 0,
@@ -715,10 +756,6 @@ app.config(
             .when("/monthly/:site/:month", {
                 templateUrl: 'monthly.html',
                 controller: 'Monthly'
-            })
-            .when("/reports/", {
-                templateUrl: 'reports.html',
-                controller: 'Reports'
             })
             .when("/reporting/", {
                 templateUrl: 'reporting.html',

@@ -3,77 +3,81 @@ class ChartsMines {
 
 
 
-    static CreateBar(_elementID, _data, _title) {
+    static CreateBar(_elementID, _data) {
 
         // Create an eCharts instance 
         var myChart = InitChartFromElementID(_elementID);
         if (myChart == undefined) return;
 
-        //console.log(_data);
+        //console.log(_data[1]);
+
 
         var timeLength = timeLabelsShift[ShiftIndex()].length;
-
-        // The monthly target for this day
-        var monthTarget = 150000;
-        var daysInMonth = 30;
-        var dailyTarget = (monthTarget / daysInMonth) * (ShiftIndex() < 2 ? 0.5 : 1.0);
-        //var agressiveTarget = dailyTarget / ServerInfo.shiftTargetAgressiveScalar;
-
-        //console.log(dailyTarget);
+        var seriesName = "Tonnes";
 
         var plan = [];
         var profiledTarget = [];
-        for (var i = 0; i < timeLength; i++) {
-            var frac = (i / (timeLength - 1)) * dailyTarget;// * (ShiftIndex() < 2 ? 2 : 1);
 
-            plan.push(frac);
-            var profileIndex = i + (ShiftIndex() == 1 ? 12 : 0);
-            var profileScalar = ServerInfo.shiftTargetProductionProfile[profileIndex];
-            profileScalar -= ShiftIndex() == 1 ? ServerInfo.shiftTargetProductionProfile[11] : 0;
+        // ---------------------------------------------
+        // The monthly target for this day
+        if (_data[1] != null) {
+            var monthlySite = _data[1].sites[_data[2]];
+            var dailyTarget = (monthlySite.totalMetricTarget / _data[1].daysInMonth) * (ShiftIndex() < 2 ? 0.5 : 1.0);
 
-            profiledTarget.push(
-                dailyTarget
-                * ServerInfo.shiftTargetAgressiveScalar
-                * profileScalar
-                * (ShiftIndex() < 2 ? 2 : 1)
-            );
+            for (var i = 0; i < timeLength; i++) {
+                // Cumulative target for each hour
+                var frac = (i / (timeLength - 1)) * dailyTarget;
 
+                // Modify the target by the profile
+                plan.push(frac);
+                var profileIndex = i + (ShiftIndex() == 1 ? 12 : 0);
+                var profileScalar = ServerInfo.shiftTargetProductionProfile[profileIndex];
+                profileScalar -= ShiftIndex() == 1 ? ServerInfo.shiftTargetProductionProfile[11] : 0;
+
+                profiledTarget.push(
+                    dailyTarget
+                    * ServerInfo.shiftTargetAgressiveScalar
+                    * profileScalar
+                    * (ShiftIndex() < 2 ? 2 : 1)
+                );
+            }
         }
+        // ---------------------------------------------
 
         // Get all the tonnes data
-        var tph = ArrayOfNumbers(0, timeLength, 0);     // Tonnes
-        var pph = ArrayOfNumbers(0, timeLength, 0);     // Production
-        var cph = ArrayOfNumbers(0, timeLength, 0);     // Cumulative
+        //var tph = ArrayOfNumbers(0, timeLength, 0);     // Tonnes
+        //var pph = ArrayOfNumbers(0, timeLength, 0);     // Production
+        //var cph = _data.cph;// ArrayOfNumbers(0, timeLength, 0);     // Cumulative
 
         // TODO - NEED A CONFIG TO EXPLAIN WHAT PRODUCTION TONNES ARE
-        for (var i = 0; i < _data.length; i++) {
-            //if (_data[i].metric == "TONNE") {
-            for (var j = 0; j < _data[i].mph.length; j++) {
-                cph[j] += _data[i].cph[j];
-                tph[j] += _data[i].mph[j];
-            }
-            //}
-        }
+        // for (var i = 0; i < _data.length; i++) {
+        //     for (var j = 0; j < _data[i].mph.length; j++) {
+        //         cph[j] += _data[i].cph[j];
+        //         tph[j] += _data[i].mph[j];
+        //     }
+        // }
+
 
         // Conditional colour coding for the TPH bars
-        for (var i = 0; i < cph.length; i++) {
-            cph[i] = {
-                value: cph[i],
-                itemStyle: {
-                    color: (cph[i] > profiledTarget[i]) ? ChartStyles.TUMColors[2] : ChartStyles.TUMColors[0]
-                }
-            };
-        }
-
+        var cph;
+        if (_data[0] != null) {
+            cph = [];
+            for (var i = 0; i < _data[0].cph.length; i++) {
+                cph[i] = {
+                    value: _data[0].cph[i],
+                    itemStyle: { color: (_data[0].cph[i] > profiledTarget[i]) ? ChartStyles.TUMColors[2] : ChartStyles.TUMColors[0] }
+                };
+            }
+        } else
+            cph = ArrayOfNumbers(0, timeLength, 0);
+        //console.log(cph);
 
 
 
 
         var option = {
             textStyle: ChartStyles.textStyle,
-            title: ChartStyles.createTitle(_title),
             backgroundColor: ChartStyles.backGroundColor,
-
             tooltip: {
                 confine: true,
                 trigger: 'axis',
@@ -84,27 +88,16 @@ class ChartsMines {
                     var string = ChartStyles.toolTipTextTitle(params[0].name);
                     string += ChartStyles.toolTipTextEntry(params[0].seriesName + ": " + params[0].value.toFixed());
                     string += ChartStyles.toolTipTextEntry(params[1].seriesName + ": " + params[1].value.toFixed());
-                    string += ChartStyles.toolTipTextEntry(params[2].seriesName + ": " + params[2].value.toFixed(), "bold");
+                    string += ChartStyles.toolTipTextEntry(params[2].seriesName + ": " + params[2].value.toFixed());
                     return string;
                 }
             },
             legend: {
                 textStyle: { color: "#fff" },
-                //top: '20%',
-                //left: 10,
-                //align: 'left',
-                //orient: 'vertical',
-                data: ['Tonnes', 'Target', 'Plan']
+                data: [seriesName, 'Target', 'Plan']
             },
             toolbox: ChartStyles.toolBox(myChart.getHeight(), "SiteTPH"),
             grid: ChartStyles.gridSpacing(),
-            // grid: {
-            //     left: '14%',
-            //     right: '0%',
-            //     bottom: '2%',
-            //     top: '2%',
-            //     containLabel: true
-            // },
             xAxis: ChartStyles.xAxis(timeLabelsShift[ShiftIndex()]),
             yAxis: [
                 {
@@ -116,35 +109,16 @@ class ChartsMines {
                         fontSize: ChartStyles.fontSizeSmall,
                         formatter: function (value, index) { return ChartStyles.axisFormatThousands(value); }
                     }
-                },
-                // {
-                //     type: 'value',
-                //     splitLine: { show: false },
-                //     axisLine: ChartStyles.axisLineGrey,
-                //     axisLabel: {
-                //         color: 'white',
-                //         fontSize: ChartStyles.fontSizeSmall,
-                //         formatter: function (value, index) { return ChartStyles.axisFormatThousands(value); }
-                //     }
-                // }
+                }
             ],
             series: [
                 {
-                    name: "Tonnes",
+                    name: seriesName,
                     type: 'bar',
                     barMaxWidth: ChartStyles.barMaxWidth,
-                    stack: "TPH",
                     data: cph,
                     itemStyle: { color: ChartStyles.siteColors[0] }
                 },
-                // {
-                //     name: "Production",
-                //     type: 'bar',
-                //     barMaxWidth: ChartStyles.barMaxWidth,
-                //     stack: "TPH",
-                //     data: pph,
-                //     itemStyle: { color: ChartStyles.TUMColors[1] }
-                // },
                 {
                     name: "Plan",
                     type: 'line',

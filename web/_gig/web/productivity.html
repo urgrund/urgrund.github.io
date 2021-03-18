@@ -40,8 +40,7 @@
                 <h4 class="center underline"><i class="fas fa-chart-bar"></i> Metrics</h4>
                 <div class="jumboscroll">
                     <div ng-repeat="(key, value) in y.shiftData[ShiftIndex()].metricData" class="center flex underline"
-                        ng-if="value.total != 0"
-                        ng-style="(value.activity.includes('Production')) && {'background-color':metricProductionColour}">
+                        ng-if="value.total != 0" ng-class="{'prodMetricBG' : value.activity.includes('Production')}">>
                         <div class="left">
                             <h5> {{value.name}}</h5>
                             <p class="light">({{value.site}}) {{value.activity}}</p>

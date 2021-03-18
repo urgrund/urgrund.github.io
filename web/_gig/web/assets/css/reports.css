@@ -1,5 +1,18 @@
 
 
+.tabulator {
+  position: relative;
+  border-bottom: 5px solid #222; /* the fancy little line under the table */
+  background-color: #fff;	/* the big open space under the table */
+  font-size: 12px;
+  text-align: left;
+  overflow: hidden;
+  -ms-transform: translatez(0);
+  transform: translatez(0);
+  font-family: arial;
+}
+
+
 .reportCalendar
 {
   height: 40px;
@@ -8,10 +21,16 @@
 
 .reportBtn
 {
-  font-size: 8;
-  font-weight: 50;
+  font-size: 8;  
   cursor: pointer;
+  border-left: 1px solid rgb(199, 199, 199, 0); 
 }
+.reportBtn:hover
+{
+  border-left: 1px solid var(--btnHoverColor);
+}
+
+
 
 .reportDateInput
 {
@@ -25,6 +44,7 @@
   width: 19rem;
   height: 99%;
   padding:0.3rem;
+  /* background: var(--menuDropContentBG); */
 }
 
 .reportDisplay
@@ -33,7 +53,7 @@
   width: 100%;
 }
 
-
+/* 
 
 .rCell { color: rgb(201, 201, 201);  background-color: rgba(0, 0, 0, 0) !important; }
 .rHead {
@@ -42,7 +62,7 @@
     color: rgb(255, 254, 254);
     background-color: rgb(23 44 71) !important;   
  }
-
+ */
 
 
 
@@ -67,7 +87,7 @@
   background-size: cover; */
 }
 
-.reportFlex
+/* .reportFlex
 {
   display: flex;
   justify-content: center;
@@ -96,13 +116,12 @@
     position: absolute;
     margin-left: 233px;
     margin-top: -17px;
-    z-index: 0;
-    /* opacity: 0.25; */
+    z-index: 0;    
     background: black;
     border-radius: 15px;
     width: 25px;
     height: 25px;
-}
+} */
 
 /* .reportLayoutGrid
 {
@@ -112,9 +131,8 @@
     width: 100%;
 } */
 
-.reportCSV
-{ 
-    /* height: 100%; */
+/* .reportCSV
+{     
     height: 800px;
     font-size: 8pt;
     color: black;
@@ -129,13 +147,13 @@
   border: none;  
   outline: none;  
   transition: 0.4s;
-}
+} */
 
 /* .active, .accordion:hover {
   
 } */
 
-.panel {
+/* .panel {
   padding: 0 18px;
   max-height: 0;
   overflow: hidden;
@@ -144,25 +162,4 @@
 
 .ui-grid-viewport {
   font-family: sans-serif;
-}
-
- /* Override for datepicker */
-/* .md-datepicker-input {
-  font-size: 16px;
-  box-sizing: border-box;
-  border: none;
-  box-shadow: none;
-  outline: none;
-  min-width: 120px;
-  max-width: 328px;
-  padding: 0px;
-  color:rgb(209, 209, 209);
-  border: 1px solid #6f6f6f00;
-  background-color: #4f677387;
-  box-shadow: inset 1px 3px 6px #00000099;
-}
-
-.md-default-theme .md-datepicker-input-container.md-datepicker-focused, .md-datepicker-input-containt.md-datepicker-focused
-{
-  border-bottom: none;
 } */
