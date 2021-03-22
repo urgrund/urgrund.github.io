@@ -1,8 +1,12 @@
-
+.reportcup
+{ 
+  margin: 0.5% 1% 0% 1%;  
+  height: 98%;
+}
 
 .tabulator {
   position: relative;
-  border-bottom: 5px solid #222; /* the fancy little line under the table */
+  border-bottom: 5px solid #222; /* the little line under the table */
   background-color: #fff;	/* the big open space under the table */
   font-size: 12px;
   text-align: left;
@@ -24,19 +28,31 @@
   font-size: 8;  
   cursor: pointer;
   border-left: 1px solid rgb(199, 199, 199, 0); 
+  padding-left: 2px;
+  transition: 0.1s;
 }
 .reportBtn:hover
 {
+  color: var(--btnHoverColor);
   border-left: 1px solid var(--btnHoverColor);
+  padding-left: 4px;
+  transition: 0.1s;
 }
 
 
+/* Unfortunately necessary until solve switch overflow */
+.reportShiftGrid
+{
+  display: grid;
+  grid-template-columns: 4fr 2fr;
+}
 
 .reportDateInput
 {
   width: 15rem;
   font:inherit;
   color:black;  
+  font-weight: 400;
 }
 
 .reportCard, .reportDisplay
@@ -52,114 +68,3 @@
   margin-left: 0.5rem;
   width: 100%;
 }
-
-/* 
-
-.rCell { color: rgb(201, 201, 201);  background-color: rgba(0, 0, 0, 0) !important; }
-.rHead {
-    font-size: 12px;
-    font-weight: 100;
-    color: rgb(255, 254, 254);
-    background-color: rgb(23 44 71) !important;   
- }
- */
-
-
-
-
-
-
-.reportGrid
-{
-  background:rgb(255, 255, 255) ;
-  height: 95%;
-  overflow: hidden;
-  box-shadow: 9px 11px 13px 0px rgba(0, 0, 0, 0.5);
-
-  /* display: grid;
-  grid-template-rows: 100px auto; */
-
-  /* background: var(--bgBlur); */
-  /* background: linear-gradient(50deg, rgb(15, 18, 22) 0, rgba(40, 84, 126, 0.39) 100%), url(../img/login_blur.jpg) no-repeat center center fixed;
-  object-fit: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover; */
-}
-
-/* .reportFlex
-{
-  display: flex;
-  justify-content: center;
-  flex-flow: wrap;  
-}
-
-.reportFlex > input
-{     
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-.reportPrefText
-{
-  width: 165px;
-  text-align: right;
-}
-
-
-.reportTitle
-{    position: absolute;
-}
-
-.reportIcon
-{
-    position: absolute;
-    margin-left: 233px;
-    margin-top: -17px;
-    z-index: 0;    
-    background: black;
-    border-radius: 15px;
-    width: 25px;
-    height: 25px;
-} */
-
-/* .reportLayoutGrid
-{
-    display: grid;
-    grid-template-rows: 5% 95%;
-    height: 100%;
-    width: 100%;
-} */
-
-/* .reportCSV
-{     
-    height: 800px;
-    font-size: 8pt;
-    color: black;
-}
-
-
-.accordion {  
-  cursor: pointer;
-  padding: 18px;
-  width: 100%;
-  height: 70px;
-  border: none;  
-  outline: none;  
-  transition: 0.4s;
-} */
-
-/* .active, .accordion:hover {
-  
-} */
-
-/* .panel {
-  padding: 0 18px;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.2s ease-out;
-}
-
-.ui-grid-viewport {
-  font-family: sans-serif;
-} */

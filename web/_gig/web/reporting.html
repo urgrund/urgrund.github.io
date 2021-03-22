@@ -1,15 +1,16 @@
-<div class="cup">
+<div class="reportcup">
 
     <div class="flex h100pc">
         <!-- <div class="siteCardShd reportCard"> -->
         <div class="chartdivcontentNoHead reportCard {{$root.backGroundClassBlur}}">
 
             <!-- Settings for the Report -->
-            <h3 class=""><i class="fas fa-cogs"></i> Settings</h3>
+            <div class="siteCardShd">
+                <h4 class=""><i class="fas fa-cogs"></i> Settings</h4>
 
-            <div class="flex ">
-                <div>
-                    <h4>Start Shift </h4>
+
+                <div class="reportShiftGrid">
+                    <h5>Start Shift </h5>
                     <div>
                         <label class="switch"><input ng-init="reportGenStartShift=true" ng-model="reportGenStartShift"
                                 ng-change="" type="checkbox" id="togBtn">
@@ -17,8 +18,8 @@
                         </label>
                     </div>
                 </div>
-                <div>
-                    <h4>End Shift</h4>
+                <div class="reportShiftGrid">
+                    <h5>End Shift</h5>
                     <div>
                         <label class="switch"><input ng-init="reportGenEndShift=false" ng-model="reportGenEndShift"
                                 ng-change="" type="checkbox" id="togBtn" checked>
@@ -26,26 +27,30 @@
                         </label>
                     </div>
                 </div>
-            </div>
 
-            <div class="flex">
-                <div>
-                    <h4>Date Range</h4>
-                    <input class="calendar reportDateInput" placeholder="calendar 1" readonly="readonly">
+
+                <br />
+                <div class="flex">
+                    <div>
+                        <h5>Date Range</h5>
+                        <input class="calendar reportDateInput" placeholder="calendar 1" readonly="readonly">
+                    </div>
                 </div>
+                <br />
             </div>
-
 
             <!-- List all the reports -->
-            <br />
-            <h3 class=""><i class="far fa-file-alt"></i> Reports</h3>
+
+            <!-- <h3 class=""><i class="far fa-file-alt"></i> Reports</h3> -->
             <div ng-repeat="(key, value) in availableReports">
                 <br />
                 <h4 class="underline light"><i class="far fa-folder-open"></i> {{key}}</h4>
                 <div ng-repeat="x in value" class="flex">
-                    <button ng-click="generateReportFromClick(key, x[0])" class="reportBtn">
+                    <!-- <button ng-click="generateReportFromClick(key, x[0])" class="reportBtn">
                         <i class="far fa-file-alt"></i> {{x[1]}}
-                    </button>
+                    </button> -->
+                    <p ng-click="generateReportFromClick(key, x[0])" class="reportBtn"> <i class="far fa-file"></i>
+                        {{x[1]}}</p>
                 </div>
 
             </div>
@@ -55,14 +60,24 @@
         </div> -->
         <div class="reportDisplay">
             <div class="flex">
-                <h2 ng-bind-html="trustAsHtml(noResultMsg)"></h2>
-                <h4 class="light"><i class="fas fa-file-download"></i> Download Report as... </h4>
-                <div class="right flex">
-                    <button class="btn" id="myBtn" ng-click="downloadAs('csv')"><i class="far fa-file-pdf"></i>
-                        .pdf</button>
+                <div>
+                    <h3 ng-bind-html="trustAsHtml(resultMsg)"></h3>
+                    <h5 ng-if="(noResult == true) && (hasEverRunReport == true)"><i class='fas fa-info-circle'></i> No
+                        data was found for the selected
+                        date range or shifts...</h5>
+                </div>
+
+
+                <!-- <h4 class="light"><i class="fas fa-file-download"></i> Download Report as... </h4> -->
+                <div class="right flex" ng-if="noResult != true">
                     <button class="btn" id="myBtn" ng-click="downloadAs('csv')"><i class="fas fa-file-csv"></i>
                         CSV</button>
-                    <button class="btn" id="myBtn" ng-click=""><i class="far fa-file-excel"></i> XLS</button>
+                    <button class="btn" id="myBtn" ng-click="downloadAs('xlsx')"><i class="far fa-file-excel"></i>
+                        XLS</button>
+                    <!-- <button class="btn" id="myBtn" ng-click="downloadAs('pdf')"><i class="far fa-file-pdf"></i>
+                        PDF</button> -->
+                    <button class="btn" id="myBtn" ng-click="print()"><i class="far fa-file-pdf"></i>
+                        Print</button>
                 </div>
             </div>
 

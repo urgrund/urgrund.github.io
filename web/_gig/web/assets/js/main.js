@@ -192,7 +192,7 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
             return;
         }
 
-        console.log(_data);
+        //console.log(_data);
 
         if (true) {
             // For non NG access

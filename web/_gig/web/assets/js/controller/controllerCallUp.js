@@ -4,8 +4,8 @@ app.controller("CallUp", function ($route, $scope, $rootScope, $routeParams, $ti
     $scope.callUpIsFirst = $routeParams.cupPeriod == 0 ? true : false;
     $scope.callUpIsDay = $rootScope.shift ? true : false;
 
-    $scope.calUpTitleFirst = $scope.callUpIsFirst == true ? " First Operating Call-up" : " Last Operating Call-up";
-    $scope.callUpTitleShift = $scope.callUpIsDay == true ? " Day Shift" : " Night Shift";
+    $scope.calUpTitleFirst = $scope.callUpIsFirst == true ? " First Operating Call-up" : " Last Event Call-up";
+    //$scope.callUpTitleShift = $scope.callUpIsDay == true ? " Day Shift" : " Night Shift";
 
 
     /** 

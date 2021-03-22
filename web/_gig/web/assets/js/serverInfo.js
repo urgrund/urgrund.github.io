@@ -14,7 +14,7 @@ class ServerInfo {
     static availableDates = undefined;
 
     // Refresh interval in seconds for the days data
-    static dailyRefreshInterval = 5 * 60;
+    static dailyRefreshInterval = 15 * 60;
 
 
     static shiftTargetAgressiveScalar = (1.0 / 0.85);
