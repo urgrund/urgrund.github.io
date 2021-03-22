@@ -15,23 +15,29 @@ if (is_object($request)) {
     include_once('setDebugOff.php');
     include_once('create_site_data.php');
 
-    if ($request->func == 0) {
-        if (isset($request->date)) {
-            echo (GetSiteData::GetDataForDate($request->date));
+    try {
+        if ($request->func == 0) {
+            if (isset($request->date)) {
+                echo (GetSiteData::GetDataForDate($request->date));
+            }
         }
+
+        if ($request->func == 1) {
+            echo json_encode(GetSiteData::GetAvailableDates());
+        }
+    } catch (Exception $e) {
+        $error = (new ErrorResponse(
+            404,
+            "Get Site Data",
+            "Error in attempting to retrieve site data",
+            array($e->getMessage())
+        ));
+        $error->Return();
     }
-
-    if ($request->func == 1) {
-        echo json_encode(GetSiteData::GetAvailableDates());
-    }
-
-
-
-    return;
 } else {
     // Debug path    
     include_once('create_site_data.php');
-    GetSiteData::GetDataForDate('20181011', true);
+    GetSiteData::GetDataForDate(['20210208'], !true);
     //GetSiteData::GetDataForLongTerm();
 
     //Debug::Log(Client::CachePath());
@@ -113,6 +119,7 @@ class GetSiteData
     public static function CheckGeneratedDataExists($_date)
     {
         GetSiteData::CreateDataFolder();
+
 
         // TODO - sanitise the date input?
         $json = @file_get_contents(self::CacheDir() . $_date . self::$_fileExt);

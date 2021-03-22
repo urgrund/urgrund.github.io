@@ -16,7 +16,7 @@ if (Debug::enabled() == true) {
     //}
 
     //CreateSiteData::Run(new DateTime('20181231'));
-    CreateSiteData::Run(new DateTime('20210106'));
+    CreateSiteData::Run(new DateTime('20210201'));
 
     return;
 }
@@ -367,7 +367,7 @@ final class CreateSiteData
             self::$e = $equip;
 
             // DEBUG
-            //if ($key != 'BP019')
+            //if ($key != 'DD058')
             //  continue;
 
             self::$e->SortEventsAndAllocateToShifts();

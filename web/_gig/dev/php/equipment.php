@@ -75,10 +75,10 @@ class Equipment
         $e->majorGroup = Config::MajorGroup($e->tumCategory);
         $e->tumIndex = Config::TUMIndex($e->tumCategory);
 
-        $diff = $e->eventTime->getTimestamp() - CreateSiteData::DateForData()->getTimestamp();
+        $diff = $_eventDataRow[2]->getTimestamp() - CreateSiteData::DateForData()->getTimestamp();
         $diff -= (3600 * 6);
         $e->timeStamp = $diff;
-        $e->timeLabel = date_format($e->eventTime, "H:i:s");
+        $e->timeLabel = date_format($_eventDataRow[2], "H:i:s");
         //$diff = date_diff($dEnd, $dStart);
 
 
@@ -335,7 +335,7 @@ class Equipment
     }
 
 
-    // TODO - THIS STILL SEEMS BUGGY ON FRONTEND
+
     /** For each shift, get the indices for
      * first call ups and last call up events */
     public function GenerateShiftCallUps()
@@ -343,12 +343,9 @@ class Equipment
         for ($i = 0; $i < count($this->shiftData); $i++) {
             for ($j = 0; $j < count($this->shiftData[$i]->events); $j++) {
                 $event = $this->events[$this->shiftData[$i]->events[$j]];
-                // if ($this->id == 'LH020') {
-                //     Debug::Log($event);
-                // }
                 if ($this->shiftData[$i]->eventFirstOp == null) {
                     if ($event->majorGroup == Config::MajorGroupOperating) {
-                        $this->shiftData[$i]->eventFirstOp = $j;
+                        $this->shiftData[$i]->eventFirstOp = $this->shiftData[$i]->events[$j];
                     }
                 }
             }

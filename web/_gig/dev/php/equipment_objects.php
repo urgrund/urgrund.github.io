@@ -31,7 +31,7 @@ class EquipmentEvent
 {
     var $operator;
     var $dayAhead;          // Is this in the next day (ie. 1am)
-    var $eventTime;         // DT object
+    //var $eventTime;         // DT object
     var $location;          // sub-location
     var $mineArea;
     var $duration;          // duration in seconds

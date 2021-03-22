@@ -46,8 +46,13 @@ class Config
         "TOTGSMTR" => "Ground Support Metres",
         "TOTOTHERMTRS" => "Jumbo Metres",
         "TONNE" => "Tonnes",
-        "PRODMTRSDRILL" => "Production Metres"
+        "PRODMTRSDRILL" => "Production Metres",
+        "CLRHOLES" => "Clear Holes",
+        "TOTDEVADV" => "Development Advance",
+        "TOTFIBSPRAY" => "Fibrecrete Spray"
     );
+    // Clear Holes
+    // Fibrecrete Spraying
 
 
     private static $productionMetricTonne = 'TONNE';
