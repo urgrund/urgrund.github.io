@@ -1,3 +1,6 @@
+--Declare @Date as varchar(8)
+--Set @Date = '20210101'
+
 Select
 		 ATS.[Equipment] 'Equipment'
 		,RDO.[Operator_Description] AS 'Operator'
@@ -20,4 +23,4 @@ FROM [dbo].[ALLOCTNTIMESTAMP] as ATS
     left Join [dbo].[RD_EQUIPMENT_MODEL] as RDM on RDM.[Equipment_ModelCode] = RDE.[Equipment_Model_Code]
     left Join [dbo].[RD_EQUIPMENT_FUNCTION] as RDF on RDF.[Equipment_FunctionCode] = RDM.[Equipment_Model_Function_Code]
     left Join [dbo].[RD_PARENTLOCATIONS] as RDP on RDP.[SourceCode] = ATS.[Location]
-WHERE MTS.MeasCode = 'SECONDS' and RDF.[Equipment_FunctionCode] in ('LOADING','HAULING','P','D') and left(ats.[shkey],8) = @Date
+WHERE MTS.MeasCode = 'SECONDS' and RDF.[Equipment_FunctionCode] in ('LOADING','HAULING','P','D') and RDS.[Status_Description] <> 'Offsite' and left(ats.[shkey],8) = @Date

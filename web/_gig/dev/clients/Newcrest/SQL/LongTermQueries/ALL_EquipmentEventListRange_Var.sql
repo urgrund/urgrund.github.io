@@ -20,4 +20,4 @@ FROM [dbo].[ALLOCTNTIMESTAMP] as ATS
     Join [dbo].[RD_EQUIPMENT_FUNCTION] as RDF on RDF.[Equipment_FunctionCode] = RDM.[Equipment_Model_Function_Code]
     --Join [dbo].[RD_PARENTLOCATIONS] as RDP on RDP.[SourceCode] = ATS.[Location]
 
-	WHERE MTS.MeasCode = 'SECONDS' and RDF.[Equipment_FunctionCode] in ('LOADING','HAULING','P','D') and left(ats.[shkey],8) BETWEEN convert(varchar, getdate() - @Range, 112) AND convert(varchar, getdate()-1, 112)
+	WHERE MTS.MeasCode = 'SECONDS' and RDF.[Equipment_FunctionCode] in ('LOADING','HAULING','P','D') and RDS.[Status_Description] <> 'Offsite' and left(ats.[shkey],8) BETWEEN convert(varchar, getdate() - @Range, 112) AND convert(varchar, getdate()-1, 112)

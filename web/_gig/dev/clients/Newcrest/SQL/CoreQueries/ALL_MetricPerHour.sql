@@ -1,6 +1,6 @@
 
 --Declare @Date as varchar(8)
---Set @Date = '20181010'
+--Set @Date = '20210130'
 
 
 SELECT [Asset ID], [Mine Names], [Metric], [Secondy Activity Type], 
@@ -14,13 +14,14 @@ FROM
 		,MTS.[MeasureValue] as 'values'
 		,datepart(hour, MTS.[EventDateTime]) as 'Timeblock'
 		,RDP.[Source_Category] AS 'Secondy Activity Type'
-		FROM dbo.ALLOCTNTIMESTAMP AS ATS JOIN
-             dbo.MEASURETIMESTAMP AS MTS ON MTS.TSKey = ATS.TSKey
+		FROM dbo.ALLOCTNTIMESTAMP AS ATS 
+		JOIN dbo.MEASURETIMESTAMP AS MTS ON MTS.TSKey = ATS.TSKey
 	    JOIN dbo.[RD_PARENTLOCATIONS] as RDP on RDP.[SourceCode] = ATS.[Location]
 		JOIN dbo.[RD_EQUIPMENT] as RDE on RDE.[EquipmentCode] = ATS.[Equipment]
 		JOIN dbo.[RD_EQUIPMENT_MODEL] as RDM on RDM.[Equipment_ModelCode] = RDE.[Equipment_Model_Code]
 		JOIN dbo.[RD_EQUIPMENT_FUNCTION] as RDF on RDF.[Equipment_FunctionCode] = RDM.[Equipment_Model_Function_Code]
-		WHERE LEFT(ats.[shkey],8) = @Date and MTS.MeasCode in ('FACEMETRE','INSMESHSTROVRLAP','INSMESHGALVL', 'INSMESHGALV', 'TOTALBOLTS', 'TONNE', 'PRODMTRSDRILL', 'TOTGSMTR', 'TOTOTHERMTRS') and RDF.[Equipment_FunctionCode] in ('LOADING','HAULING','P','D') 
+		WHERE LEFT(ats.[shkey],8) = @Date and MTS.MeasCode in ('FACEMETRE','INSMESHSTROVRLAP','INSMESHGALVL', 'INSMESHGALV', 'TOTALBOLTS', 'TONNE', 'PRODMTRSDRILL', 'TOTGSMTR', 'TOTOTHERMTRS','CLRHOLES', 'TOTDEVADV', 'TOTFIBSPRAY') 
+		and RDF.[Equipment_FunctionCode] in ('LOADING','HAULING','P','D','F', 'G') --and ATS.[Equipment] = 'TH094' --left(RDP.[Source_MineArea_Code],1) ='M'
  ) as SC  
   PIVOT  
   (sum(SC.[values])  

@@ -4,7 +4,7 @@ class Newcrest extends Client
 {
     public function Name(): string
     {
-        return "Newcrest";
+        return "Newcrest Telfer";
     }
 
     public function Path(): string

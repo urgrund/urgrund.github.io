@@ -57,7 +57,7 @@ FROM [dbo].[ALLOCTNTIMESTAMP] as ATS
     Join [dbo].[RD_EQUIPMENT_MODEL] as RDM on RDM.[Equipment_ModelCode] = RDE.[Equipment_Model_Code]
     Join [dbo].[RD_EQUIPMENT_FUNCTION] as RDF on RDF.[Equipment_FunctionCode] = RDM.[Equipment_Model_Function_Code]
 	--Join [dbo].[RD_TUM_TABLE] as TUM on TUM.[Fleet_Event_Code] = RDS.[Status_Description] 
-	WHERE MTS.MeasCode = 'SECONDS' and  ats.[shkey] between @StartD_S and @EndD_S   and RDF.[Equipment_FunctionCode] = 'LOADING' 
+	WHERE MTS.MeasCode = 'SECONDS' and  ats.[shkey] between @StartD_S and @EndD_S   and RDF.[Equipment_FunctionCode] = 'LOADING' and RDS.[Status_Description] <> 'Offsite'
 
 	
 
