@@ -281,7 +281,7 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         _data = null;
 
         // Debug output
-        if (false) {
+        if (!false) {
             console.log("[ Data : " + $rootScope.meta.Date + "]");
             console.log("Sites :");
             console.log($rootScope.siteData);
@@ -303,7 +303,10 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
 
     // Attempts to get data from an array of dates     
     $rootScope.fetchSiteData = function (_date, _setAfterFetch = false, _addToCache = false) {
-
+        if (typeof _date !== 'string') {
+            console.log("Non string date passed to fetch data...)");
+            return;
+        }
         //        for (var i = 0; i < _dates.length; i++) {
         //var date = _date;
         //console.log(date);
@@ -451,7 +454,7 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
         if (monthDate in $rootScope.monthly) {
             $rootScope.monthlyActive = $rootScope.monthly[monthDate];
             $rootScope.monthlyActiveAsDate = monthDate;
-            console.log("Set active month..." + monthDate);
+            //console.log("Set active month..." + monthDate);
             //console.log($rootScope.monthlyActive);
         }
         else

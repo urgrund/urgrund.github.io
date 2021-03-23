@@ -120,7 +120,7 @@ app.controller('Site', function ($scope, $routeParams, $rootScope, $timeout, $lo
         $scope.SetDataAndCreateCharts();
     });
 
-    $rootScope.$on('newSiteDataSet', function () {
+    $scope.$on('newSiteDataSet', function () {
         $scope.SetDataAndCreateCharts();
     });
 

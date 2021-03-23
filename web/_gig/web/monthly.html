@@ -41,7 +41,7 @@
     </div> -->
     <!-- <div ng-if="dataForSite != null" class="h100pc"> -->
     <div class="h100pc">
-        <div class="flex">
+        <div class="flex" ng-if="dataExists">
 
             <div class="">
                 <h5 class="light"><i class="fas fa-weight-hanging"></i> Target Tonnes</h5>
@@ -79,7 +79,7 @@
 
 
 
-        <div class="mnth_chart_grid">
+        <div class="mnth_chart_grid" ng-if="dataExists">
             <div class="mnth_chart_grid_left">
                 <!-- Bar or Gauge -->
                 <!-- Chart types switch depending on user preference -->
@@ -106,16 +106,21 @@
         </div>
 
 
+        <!-- Data didn't exist yet... -->
+        <div ng-if="!dataExists">
+            <br />
+            <h3>No data exists for {{siteName}} during this month...</h3>
+        </div>
+        <!-- -------------------      -->
+
+
+
 
         <!-- <div id="cal" style="width: 300px; height: 300px;"></div> -->
         </br>
-        <div class="chartCard">
-            <!-- <div class="charthead">
-                <div class="chartheadtxt left">
-                    <h2 class="bold">Asset Timeline</h2>
-                </div>
-            </div> -->
-            <div class="chartdivcontent {{$root.backGroundClassBlur}} siteDivMargin">
+        <div class="chartCard" ng-if="dataExists">
+
+            <div class="chartdivcontentNoHead {{$root.backGroundClassBlur}} siteDivMargin">
                 <h2 class="underline"><i class="far fa-calendar-alt"></i> Trailing Year</h2>
                 </br>
                 <div class="jumbogrid underline">

@@ -87,8 +87,11 @@ class ChartsMines {
                 formatter: function (params, index) {
                     var string = ChartStyles.toolTipTextTitle(params[0].name);
                     string += ChartStyles.toolTipTextEntry(params[0].seriesName + ": " + params[0].value.toFixed());
-                    string += ChartStyles.toolTipTextEntry(params[1].seriesName + ": " + params[1].value.toFixed());
-                    string += ChartStyles.toolTipTextEntry(params[2].seriesName + ": " + params[2].value.toFixed());
+                    if (params[1] != undefined && params[2] != undefined) {
+                        string += ChartStyles.toolTipTextEntry(params[1].seriesName + ": " + params[1].value.toFixed());
+                        string += ChartStyles.toolTipTextEntry(params[2].seriesName + ": " + params[2].value.toFixed());
+                    }
+                    else string += ChartStyles.toolTipTextEntry("No plan found...", "light");
                     return string;
                 }
             },

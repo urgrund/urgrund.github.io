@@ -1,5 +1,5 @@
 
-app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $location, $timeout) {
+app.controller('Monthly', function ($scope, $routeParams, $rootScope, $q, $http, $location, $timeout) {
 
     // Set the view choice in the root so its 
     // persistent with page reloads and equip filter
@@ -13,6 +13,7 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
     $scope.selectedMonth;
 
 
+    $scope.dataExists = true;
     $scope.dataForSite = null;
     $scope.dataForMonth =
     {
@@ -61,6 +62,8 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
 
         $scope.dataForMonth = null;
         $scope.dataForSite = null;
+        $scope.dataExists = true;
+
         //ClearAllCharts();
         //$scope.createMenuOptions($rootScope.monthly);
 
@@ -72,11 +75,24 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
         //console.log($rootScope.monthly);
         $timeout(function () {
             if (_month in $rootScope.monthly) {
-                //console.log("ASLDASDLASDLLADSJ");
+
                 ClearAllCharts();
 
+                console.log(_month);
                 $scope.dataForMonth = $rootScope.monthly[_month];
+                console.log($scope.dataForMonth);
+                if (!($scope.siteName in $scope.dataForMonth.sites)) {
+                    //console.log($scope.siteName + " doesn't exist in this month");
+                    $scope.dataExists = false;
+                    return;
+                }
                 $scope.dataForSite = $scope.dataForMonth.sites[$scope.siteName];
+
+
+                if ($scope.dataForSite == undefined)
+                    return;
+
+
 
                 $scope.gaugeChartNames = [];
                 for (const [key, value] of Object.entries($scope.dataForSite.planSegments)) {
@@ -85,9 +101,6 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
 
                 //console.log("Data for " + $scope.siteName + " : " + $scope.dataForSite);
 
-
-                if ($scope.dataForSite == undefined)
-                    return;
 
 
                 //console.log("HSDASDS");
@@ -133,9 +146,9 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
                         var cal = ChartsMonthly.CreateCalendarChart2(calMonth, dataForCal);
                         cal.on('click', function (params) {
                             //console.log(params);
-                            //var d = params.data[0].replace(/-/g, "");
-                            //$rootScope.fetchSiteData([d], true);
-                            //$location.path("site/" + String($scope.siteIndex));
+                            var d = params.data[0].replace(/-/g, "");
+                            $rootScope.fetchSiteData([d], true);
+                            $location.path("site/" + String($scope.siteIndex));
                         }
                         );
                     }
@@ -179,20 +192,18 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
         if (day < 10)
             day = "0" + day;
         var date = $scope.selectedMonth + day;
+
         console.log(date);
+
         var url = "site/" + String($scope.siteIndex);
-        $rootScope.fetchSiteData([date], true);
-        $location.path(url);
+        $q.all([$rootScope.fetchSiteData(date, true)]).then(function (responses) {
+            $location.path(url);
+        });
     }
 
     // --------------------------------------------------
     $scope.switchView = function (_state) {
         $rootScope.monthlyViewAsBars = _state;
-        //if ($rootScope.monthlyViewAsBars)
-        //$scope.createMonthlyComplianceBars();
-        //else
-        //$scope.createMonthlyComplianceGauges();
-        //$scope.prepareChartData(mmData.monthView);
         $scope.prepareChartData($rootScope.monthlyActiveAsDate);
     }
 
@@ -221,7 +232,11 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
         if ($rootScope.monthly == undefined)
             return;
 
-        var d = new Date($routeParams.month.substr(0, 4), $routeParams.month.substr(5, 6), 0, 0, 0, 0, 0);
+        var d = new Date($routeParams.month.substr(0, 4), $routeParams.month.substr(4, 6), 0, 0, 0, 0, 0);
+        //console.log($routeParams.month.substr(4, 6));
+        //var dStr = $routeParams.month;
+        //console.log("Cal setup: " + dStr);
+        //console.log(d);
 
         flatpickr('.calendar', {
 
