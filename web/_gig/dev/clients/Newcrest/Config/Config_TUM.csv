@@ -21,7 +21,7 @@ Operating,Primary Operating,Operating,5
 PreCharging,Primary Operating,Operating,5
 Prepping Holes,Secondary Operating,Operating,4
 Production Drilling,Primary Operating,Operating,5
-Re-Entry in Progress,Operating Standby,Idle,3
+Re-Entry in Progress,Controllable Idle,Idle,3
 Service & Refuel Equipment,Primary Operating,Operating,5
 Service Work,Primary Operating,Operating,5
 Spile Drilling,Primary Operating,Operating,5
@@ -41,14 +41,14 @@ Drilling - Re-drill,Secondary Operating,Operating,4
 Dump Fibrecrete or Concrete,Secondary Operating,Operating,4
 Face Inspection,Secondary Operating,Operating,4
 Load Explosives,Secondary Operating,Operating,4
-Machine Check,Operating Standby,Idle,3
-Machine Cleaning,Operating Standby,Idle,3
+Machine Check,Controllable Idle,Idle,3
+Machine Cleaning,Controllable Idle,Idle,3
 Operator Training,Secondary Operating,Operating,4
 OTHER - Recovery Vehicle,Unplanned Breakdown,Down,0
-Planned Firing,Operating Standby,Idle,3
+Planned Firing,Controllable Idle,Idle,3
 Pumping Water,Secondary Operating,Operating,4
-Re-Entry MReef Complete,Operating Standby,Idle,3
-Re-Entry SLC Complete,Operating Standby,Idle,3
+Re-Entry MReef Complete,Controllable Idle,Idle,3
+Re-Entry SLC Complete,Controllable Idle,Idle,3
 Refill Chemicals,Secondary Operating,Operating,4
 Refill Oil & Lubricants,Secondary Operating,Operating,4
 Refuel,Secondary Operating,Operating,4
@@ -59,7 +59,7 @@ Road Work,Secondary Operating,Operating,4
 Scaling,Secondary Operating,Operating,4
 Setup Location,Secondary Operating,Operating,4
 Special Projects Work,Primary Operating,Operating,5
-Swap Operator,Operating Standby,Idle,3
+Swap Operator,Controllable Idle,Idle,3
 Test & Adjust,Secondary Operating,Operating,4
 Tow / Carry / Lift,Secondary Operating,Operating,4
 TRAM FOR DAILY SERVICE,Planned Maintenance,Down,1
@@ -72,70 +72,70 @@ Unload Concrete,Secondary Operating,Operating,4
 Unload Explosives,Secondary Operating,Operating,4
 Unload Fibrecrete,Secondary Operating,Operating,4
 Unplanned Firing,Secondary Operating,Operating,4
-Automine Not Required,Operating Standby,Idle,3
-Blasting - Open Pit,Unplanned Standby,Idle,2
-Blasting - Underground,Unplanned Standby,Idle,2
-Bogging Zone Open,Unplanned Standby,Idle,2
+Automine Not Required,Controllable Idle,Idle,3
+Blasting - Open Pit,Uncontrollable Idle,Idle,2
+Blasting - Underground,Uncontrollable Idle,Idle,2
+Bogging Zone Open,Uncontrollable Idle,Idle,2
 Bowl Clean,Secondary Operating,Operating,4
-Chute Access Blocked,Unplanned Standby,Idle,2
-Chute O/S or Hung Up,Unplanned Standby,Idle,2
-Crib,Operating Standby,Idle,3
-Crusher Surge Bin Low,Operating Standby,Idle,3
-Drilling - Auto Idle,Operating Standby,Idle,3
-Empty Ore Pass,Unplanned Standby,Idle,2
-Equipment Not Called In,Operating Standby,Idle,3
-Equipment Not Required,Unplanned Standby,Idle,2
-Fatigue Break,Unplanned Standby,Idle,2
-Firing Not Required,Unplanned Standby,Idle,2
-Incident,Unplanned Standby,Idle,2
-No Comms,Unplanned Standby,Idle,2
-No Compressed Air,Unplanned Standby,Idle,2
-No Dirt,Unplanned Standby,Idle,2
-No Operator,Operating Standby,Idle,3
-No Power,Unplanned Standby,Idle,2
-No Vent,Unplanned Standby,Idle,2
-No Water,Unplanned Standby,Idle,2
-Not Required,Unplanned Standby,Idle,2
-Ore Pass Low Level,Unplanned Standby,Idle,2
-Other,Unplanned Standby,Idle,2
-Re-Entry,Operating Standby,Idle,3
-Released by  Workshop,Operating Standby,Idle,3
-Released by Newcrest Maintenance,Operating Standby,Idle,3
-Safety Stop,Unplanned Standby,Idle,2
-Shift Change,Operating Standby,Idle,3
-Wait - Agi,Operating Standby,Idle,3
-Wait - Blocked Access,Unplanned Standby,Idle,2
-Wait - Cleanup,Unplanned Standby,Idle,2
-Wait - Consumables,Unplanned Standby,Idle,2
-Wait - Crusher,Unplanned Standby,Idle,2
-Wait - Development,Unplanned Standby,Idle,2
-Wait - Downstream Operational,Unplanned Standby,Idle,2
-Wait - Dusted Out,Unplanned Standby,Idle,2
-Wait - Empty Ore Pass,Unplanned Standby,Idle,2
-Wait - Fibrecrete dry time,Unplanned Standby,Idle,2
-Wait - Geology,Unplanned Standby,Idle,2
-Wait - Loader,Unplanned Standby,Idle,2
-Wait - Location Not Setup,Unplanned Standby,Idle,2
-Wait - Location Setup,Unplanned Standby,Idle,2
-Wait - Mine Services,Unplanned Standby,Idle,2
-Wait - No Fuel,Operating Standby,Idle,3
-Wait - No Heading,Operating Standby,Idle,3
-Wait - Operator,Operating Standby,Idle,3
-Wait - Ore Pass Full,Unplanned Standby,Idle,2
-Wait - Power Interruption,Unplanned Standby,Idle,2
-Wait - Push up bund,Unplanned Standby,Idle,2
-Wait - Re-Entry,Operating Standby,Idle,3
-Wait - Service Crew in Area,Unplanned Standby,Idle,2
-Wait - Servicing,Unplanned Standby,Idle,2
-Wait - Set up Vent,Unplanned Standby,Idle,2
-Wait - Setup sprays,Unplanned Standby,Idle,2
-Wait - Spraymec,Operating Standby,Idle,3
-Wait - Supervisor,Unplanned Standby,Idle,2
-Wait - Technical Services,Unplanned Standby,Idle,2
-Wait - Traffic Management,Unplanned Standby,Idle,2
-Wait - Truck,Unplanned Standby,Idle,2
-Wait - Tub Clean,Unplanned Standby,Idle,2
-Wait - Weather,Unplanned Standby,Idle,2
+Chute Access Blocked,Uncontrollable Idle,Idle,2
+Chute O/S or Hung Up,Uncontrollable Idle,Idle,2
+Crib,Controllable Idle,Idle,3
+Crusher Surge Bin Low,Controllable Idle,Idle,3
+Drilling - Auto Idle,Controllable Idle,Idle,3
+Empty Ore Pass,Uncontrollable Idle,Idle,2
+Equipment Not Called In,Controllable Idle,Idle,3
+Equipment Not Required,Uncontrollable Idle,Idle,2
+Fatigue Break,Uncontrollable Idle,Idle,2
+Firing Not Required,Uncontrollable Idle,Idle,2
+Incident,Uncontrollable Idle,Idle,2
+No Comms,Uncontrollable Idle,Idle,2
+No Compressed Air,Uncontrollable Idle,Idle,2
+No Dirt,Uncontrollable Idle,Idle,2
+No Operator,Controllable Idle,Idle,3
+No Power,Uncontrollable Idle,Idle,2
+No Vent,Uncontrollable Idle,Idle,2
+No Water,Uncontrollable Idle,Idle,2
+Not Required,Uncontrollable Idle,Idle,2
+Ore Pass Low Level,Uncontrollable Idle,Idle,2
+Other,Uncontrollable Idle,Idle,2
+Re-Entry,Controllable Idle,Idle,3
+Released by  Workshop,Controllable Idle,Idle,3
+Released by Newcrest Maintenance,Controllable Idle,Idle,3
+Safety Stop,Uncontrollable Idle,Idle,2
+Shift Change,Controllable Idle,Idle,3
+Wait - Agi,Controllable Idle,Idle,3
+Wait - Blocked Access,Uncontrollable Idle,Idle,2
+Wait - Cleanup,Uncontrollable Idle,Idle,2
+Wait - Consumables,Uncontrollable Idle,Idle,2
+Wait - Crusher,Uncontrollable Idle,Idle,2
+Wait - Development,Uncontrollable Idle,Idle,2
+Wait - Downstream Operational,Uncontrollable Idle,Idle,2
+Wait - Dusted Out,Uncontrollable Idle,Idle,2
+Wait - Empty Ore Pass,Uncontrollable Idle,Idle,2
+Wait - Fibrecrete dry time,Uncontrollable Idle,Idle,2
+Wait - Geology,Uncontrollable Idle,Idle,2
+Wait - Loader,Uncontrollable Idle,Idle,2
+Wait - Location Not Setup,Uncontrollable Idle,Idle,2
+Wait - Location Setup,Uncontrollable Idle,Idle,2
+Wait - Mine Services,Uncontrollable Idle,Idle,2
+Wait - No Fuel,Controllable Idle,Idle,3
+Wait - No Heading,Controllable Idle,Idle,3
+Wait - Operator,Controllable Idle,Idle,3
+Wait - Ore Pass Full,Uncontrollable Idle,Idle,2
+Wait - Power Interruption,Uncontrollable Idle,Idle,2
+Wait - Push up bund,Uncontrollable Idle,Idle,2
+Wait - Re-Entry,Controllable Idle,Idle,3
+Wait - Service Crew in Area,Uncontrollable Idle,Idle,2
+Wait - Servicing,Uncontrollable Idle,Idle,2
+Wait - Set up Vent,Uncontrollable Idle,Idle,2
+Wait - Setup sprays,Uncontrollable Idle,Idle,2
+Wait - Spraymec,Controllable Idle,Idle,3
+Wait - Supervisor,Uncontrollable Idle,Idle,2
+Wait - Technical Services,Uncontrollable Idle,Idle,2
+Wait - Traffic Management,Uncontrollable Idle,Idle,2
+Wait - Truck,Uncontrollable Idle,Idle,2
+Wait - Tub Clean,Uncontrollable Idle,Idle,2
+Wait - Weather,Uncontrollable Idle,Idle,2
 DAILY SERVICE,Planned Maintenance,Down,1
 FIRE SUPPRESSION,Planned Maintenance,Down,1
 INTERVAL SERVICE,Planned Maintenance,Down,1
@@ -274,8 +274,8 @@ TYRES - RE-TORQUE,Unplanned Breakdown,Down,0
 TYRES - TO BE ALLOCATED,Unplanned Breakdown,Down,0
 TYRES - TYRE FAILURE,Unplanned Breakdown,Down,0
 TYRES - WAIT PARTS,Unplanned Breakdown,Down,0
-Wait - Recovery Gear,Operating Standby,Idle,3
-Offsite,Unplanned Standby,Idle,2
+Wait - Recovery Gear,Controllable Idle,Idle,3
+Offsite,Uncontrollable Idle,Idle,2
 Auto Drilling,Primary Operating,Operating,5
 Bogging - 4475 Level/Truck Loading,Primary Operating,Operating,5
 BOGGING,Primary Operating,Operating,5
@@ -293,34 +293,34 @@ Bogging - Other Works = O,Secondary Operating,Operating,4
 Bogging = O,Secondary Operating,Operating,4
 Re-Drill = O,Secondary Operating,Operating,4
 Refill Chemicals = O,Secondary Operating,Operating,4
-Setup sprays,Unplanned Standby,Idle,2
-Setup Vent,Unplanned Standby,Idle,2
-Status,Unplanned Standby,Idle,2
-TBA - Standby,Unplanned Standby,Idle,2
-TO BE ALLOCATED - Standby,Unplanned Standby,Idle,2
-Wait - Blasting Open Pit,Unplanned Standby,Idle,2
-Wait - Fitter,Unplanned Standby,Idle,2
-Wait - Technical,Unplanned Standby,Idle,2
-Wait LHD,Unplanned Standby,Idle,2
-Incident/Emergency = I,Unplanned Standby,Idle,2
-No Dump,Unplanned Standby,Idle,2
-Bathroom,Unplanned Standby,Idle,2
-Bog Shaft Bottom = I,Unplanned Standby,Idle,2
-Bog Sump = O,Unplanned Standby,Idle,2
-Bogged,Unplanned Standby,Idle,2
-Bogged / Broken Rods = I,Unplanned Standby,Idle,2
-Equipment not required = I,Unplanned Standby,Idle,2
-Shift Change/Re-Entry,Operating Standby,Idle,3
-Re-Entry = O,Operating Standby,Idle,3
-No Operator = I,Operating Standby,Idle,3
-No Dewater,Operating Standby,Idle,3
-No Report = I,Operating Standby,Idle,3
-Operating = O,Operating Standby,Idle,3
-(NO REPORT),Operating Standby,Idle,3
-Blast Delay,Operating Standby,Idle,3
-(NO REPORT),Operating Standby,Idle,3
-No LHD,Operating Standby,Idle,3
-No Trucks,Operating Standby,Idle,3
+Setup sprays,Uncontrollable Idle,Idle,2
+Setup Vent,Uncontrollable Idle,Idle,2
+Status,Uncontrollable Idle,Idle,2
+TBA - Standby,Uncontrollable Idle,Idle,2
+TO BE ALLOCATED - Standby,Uncontrollable Idle,Idle,2
+Wait - Blasting Open Pit,Uncontrollable Idle,Idle,2
+Wait - Fitter,Uncontrollable Idle,Idle,2
+Wait - Technical,Uncontrollable Idle,Idle,2
+Wait LHD,Uncontrollable Idle,Idle,2
+Incident/Emergency = I,Uncontrollable Idle,Idle,2
+No Dump,Uncontrollable Idle,Idle,2
+Bathroom,Uncontrollable Idle,Idle,2
+Bog Shaft Bottom = I,Uncontrollable Idle,Idle,2
+Bog Sump = O,Uncontrollable Idle,Idle,2
+Bogged,Uncontrollable Idle,Idle,2
+Bogged / Broken Rods = I,Uncontrollable Idle,Idle,2
+Equipment not required = I,Uncontrollable Idle,Idle,2
+Shift Change/Re-Entry,Controllable Idle,Idle,3
+Re-Entry = O,Controllable Idle,Idle,3
+No Operator = I,Controllable Idle,Idle,3
+No Dewater,Controllable Idle,Idle,3
+No Report = I,Controllable Idle,Idle,3
+Operating = O,Controllable Idle,Idle,3
+(NO REPORT),Controllable Idle,Idle,3
+Blast Delay,Controllable Idle,Idle,3
+(NO REPORT),Controllable Idle,Idle,3
+No LHD,Controllable Idle,Idle,3
+No Trucks,Controllable Idle,Idle,3
 AIR - COMPRESSOR,Unplanned Breakdown,Down,0
 AIR - SOLENOID,Unplanned Breakdown,Down,0
 AIR/WATER - TO BE ALLOCATED,Unplanned Breakdown,Down,0
