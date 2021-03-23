@@ -170,13 +170,13 @@ class ChartStyleContainer {
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
-                colorStops: [{ offset: 0, color: '#00b2ff' }, { offset: 1, color: '#000cff' }]
+                colorStops: [{ offset: 0, color: '#71d4ff' }, { offset: 1, color: '#1a85fe' }]
             },
             // 3 Operating Standby
             {
                 type: 'linear',
                 x: 0, y: 0, x2: 0, y2: 1,
-                colorStops: [{ offset: 0, color: '#71d4ff' }, { offset: 1, color: '#1a85fe' }]
+                colorStops: [{ offset: 0, color: '#00b2ff' }, { offset: 1, color: '#000cff' }]
             },
             // 4 Operating Delay
             {

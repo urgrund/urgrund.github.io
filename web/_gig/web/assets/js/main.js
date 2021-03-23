@@ -441,7 +441,8 @@ app.run(function ($rootScope, $http, $route, $location, $sce) {
     function SetActiveMonth() {
         if ($rootScope.monthly == null
             || $rootScope.meta == undefined
-            || $rootScope.siteData == undefined)
+            || $rootScope.siteData == undefined
+            || $rootScope.meta.Date == undefined)
             return;
 
         var monthDate = ($rootScope.meta.Date).substr(0, 6);

@@ -215,7 +215,7 @@ class ChartsMonthly {
         //console.log(_elementID);
 
         if (_data[1][0] == 0) {
-            console.log("No plan target for " + _elementID);
+            // console.log("No plan target for " + _elementID);
             return;
         }
         //var data = new MonthlyChartDataForLocation(_data);

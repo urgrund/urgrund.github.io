@@ -109,16 +109,16 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
 
                 if (!true) {
                     // DUMMY TEST
-                    var calMonth = '202006';
-                    //var calMonth = '201902';
-                    console.log($rootScope.monthly['202006']);
-                    var dataForCal =
-                        [
-                            $rootScope.monthly[calMonth].sites[$scope.siteName],
-                            calMonth,
-                            $rootScope.monthly[calMonth].daysInMonth
-                        ];
-                    ChartsMonthly.CreateCalendarChart2("cal", dataForCal);
+                    // var calMonth = '202006';
+
+                    // console.log($rootScope.monthly['202006']);
+                    // var dataForCal =
+                    //     [
+                    //         $rootScope.monthly[calMonth].sites[$scope.siteName],
+                    //         calMonth,
+                    //         $rootScope.monthly[calMonth].daysInMonth
+                    //     ];
+                    // ChartsMonthly.CreateCalendarChart2("cal", dataForCal);
                 }
                 else {
                     // For the list of calendars to display
@@ -132,9 +132,10 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
                             ];
                         var cal = ChartsMonthly.CreateCalendarChart2(calMonth, dataForCal);
                         cal.on('click', function (params) {
-                            var d = params.data[0].replace(/-/g, "");
-                            $rootScope.fetchSiteData([d], true);
-                            $location.path("site/" + String($scope.siteIndex));
+                            //console.log(params);
+                            //var d = params.data[0].replace(/-/g, "");
+                            //$rootScope.fetchSiteData([d], true);
+                            //$location.path("site/" + String($scope.siteIndex));
                         }
                         );
                     }
@@ -174,7 +175,11 @@ app.controller('Monthly', function ($scope, $routeParams, $rootScope, $http, $lo
         //console.log(params.dataIndex);
         //console.log($scope.selectedMonth);
 
-        var date = $scope.selectedMonth + (Number(params.dataIndex) + 1);
+        var day = (Number(params.dataIndex) + 1);
+        if (day < 10)
+            day = "0" + day;
+        var date = $scope.selectedMonth + day;
+        console.log(date);
         var url = "site/" + String($scope.siteIndex);
         $rootScope.fetchSiteData([date], true);
         $location.path(url);
