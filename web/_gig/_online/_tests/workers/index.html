@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<script type=" text/javascript" src="demo_worker.js">
+    </script>
+
+<body>
+
+    <p>Count numbers: <output id="result"></output></p>
+    <button onclick="startWorker()">Start Worker</button>
+    <button onclick="stopWorker()">Stop Worker</button>
+
+    <p><strong>Note:</strong> Internet Explorer 9 and earlier versions do not support Web Workers.</p>
+
+    <script>
+        var w1;
+        var w2
+
+        startWorker();
+
+        function sortBigArray(bigArray) {
+            return bigArray.sort((a, b) => a - b);
+        }
+
+        function startWorker() {
+            if (typeof (Worker) !== "undefined") {
+
+                // create some big array
+                const elements = 5000000; // 5 million
+                const maxWorkers = navigator.hardwareConcurrency || 4;
+
+                console.time(`generated ${elements} numbers`);
+                const bigArray = Array(elements)
+                    .fill()
+                    .map(() => 0);
+
+                const bigArray2 = bigArray.slice(0);
+                console.timeEnd(`generated ${elements} numbers`);
+
+                console.log(bigArray.length);
+
+                console.time(`Main Sort`);
+                sortBigArray(bigArray);
+                sortBigArray(bigArray2);
+                console.timeEnd(`Main Sort`);
+
+
+                //for (var c = 0; c < 1; c++) {
+                var worker = new Worker("demo_worker.js");
+                //worker.onmessage = function (event) { console.log(event.data); };
+                worker.onmessage = function (event) { console.log("SLDLAKJSDLKJS"); };
+                worker.postMessage(bigArray);
+                //worker.postMessage(["HELLO"]);
+                //}
+
+            } else {
+                document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Workers...";
+            }
+        }
+
+        function stopWorker() {
+            w1.terminate();
+            w1 = undefined;
+            //w2.terminate();
+            //w2 = undefined;
+        }
+    </script>
+
+</body>
+
+</html>
