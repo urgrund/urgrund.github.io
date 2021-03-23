@@ -15,8 +15,10 @@ if (Debug::enabled() == true) {
     //  echo $e->getMessage(); // Call to a member function method() on string
     //}
 
+    global $allSites;
     //CreateSiteData::Run(new DateTime('20181231'));
-    CreateSiteData::Run(new DateTime('20210201'));
+    CreateSiteData::Run(new DateTime('20210215'));
+    Debug::Log($allSites);
 
     return;
 }

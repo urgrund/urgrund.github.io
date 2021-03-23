@@ -39,7 +39,7 @@ if (is_object($request)) {
 // ----------------------------------------------------------
 else {
     $foo = Monthly::GenerateMonthlyPlanData();
-    //Debug::Log($foo['202102']->sites["M-Reefs"]);
+    //Debug::Log($foo['202006']->sites); //["M-Reefs"]);
     //Monthly::WriteMonthlyPlanData($dummyData);
 }
 
@@ -96,7 +96,7 @@ class Monthly
         // for all the SQL data, so fill out the null ones
         foreach ($output as $key => $value) {
             if ($value == null) {
-                //Debug::Log($key);
+                //Debug::Log($key . " has no plan");
                 $output[$key] =  new MonthlyEntry(null, $sql);
             }
         }
@@ -154,6 +154,13 @@ class Monthly
 
         // Kock off the headings 
         array_shift($sqlResult);
+        //Debug::Log($sqlResult);
+        // for ($i = 0; $i < count($sqlResult); $i++) {
+        //     $st = strval($sqlResult[$i][0]);            
+        //     if (strpos($st, '202006') !== false) {
+        //         Debug::Log($sqlResult[$i][1]);
+        //     }
+        // }
         return $sqlResult;
     }
 
@@ -163,7 +170,7 @@ class Monthly
         $year = substr($_fileName, 0, 4);
         $month = substr($_fileName, 4, 2);
         $csv = Monthly::GetCSV($year, $month);
-        Debug::Log($year . $month);
+        //Debug::Log($year . $month);
         array_shift($csv);
         return $csv;
     }
